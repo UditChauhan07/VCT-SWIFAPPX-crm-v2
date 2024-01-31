@@ -45,6 +45,7 @@ const ProductCategory = lazy(() => import('@/pages/ProductCategory'));
 const Product = lazy(() => import('@/pages/Product'));
 
 const People = lazy(() => import('@/pages/People'));
+const Worker = lazy(() => import('@/pages/Worker'));
 const Company = lazy(() => import('@/pages/Company'));
 
 const About = lazy(() => import('@/pages/About'));
@@ -83,6 +84,10 @@ export default function AppRouter() {
     {
       path: '/people',
       element: <People />,
+    },
+    {
+      path: '/worker',
+      element: <Worker />,
     },
     {
       path: '/company',
