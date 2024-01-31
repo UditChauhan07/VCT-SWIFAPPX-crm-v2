@@ -5,8 +5,9 @@ import { Button, Drawer, Layout, Menu } from 'antd';
 import { useAppContext } from '@/context/appContext';
 
 import useLanguage from '@/locale/useLanguage';
-import logoIcon from '@/style/images/logo-icon.svg';
-import logoText from '@/style/images/logo-text.svg';
+// import logoIcon from '@/style/images/logo-icon.svg';
+import logoIcon from '@/style/images/swif.png';
+// import logoText from '@/style/images/logo-text.svg';
 import { useNavigate } from 'react-router-dom';
 import useResponsive from '@/hooks/useResponsive';
 
@@ -62,6 +63,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'people',
       icon: <UserOutlined />,
       label: <Link to={'/people'}>{translate('people')}</Link>,
+    },
+    {
+      key: 'worker',
+      icon: <UserOutlined />,
+      label: <Link to={'/worker'}>{translate('worker')}</Link>,
     },
     {
       key: 'company',
@@ -208,7 +214,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
         <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
 
-        {!showLogoApp && (
+        {showLogoApp && (
           <img
             src={logoText}
             alt="Logo"
