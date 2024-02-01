@@ -16,6 +16,7 @@ import CustomerPreviewCard from './components/CustomerPreviewCard';
 export default function DashboardModule() {
   const translate = useLanguage();
   const { moneyFormatter } = useMoney();
+  
   const { result: invoiceResult, isLoading: invoiceLoading } = useFetch(() =>
     request.summary({ entity: 'invoice' })
   );
