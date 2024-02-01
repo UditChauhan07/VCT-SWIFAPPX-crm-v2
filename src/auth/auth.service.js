@@ -48,7 +48,6 @@ export const register = async ({ registerData }) => {
 export const verify = async ({ userId, emailToken }) => {
   try {
     const response = await axios.get(API_BASE_URL + `verify/${userId}/${emailToken}`);
-
     const { status, data } = response;
 
     successHandler(

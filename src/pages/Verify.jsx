@@ -18,6 +18,7 @@ function Survey({ current }) {
   const navigate = useNavigate();
 
   async function postData(data) {
+    // console.log('data 111 444 ---- ', data)
     return await request.create({ entity: 'survey', jsonData: data });
   }
 
@@ -184,8 +185,9 @@ function Survey({ current }) {
 const Verify = () => {
   const translate = useLanguage();
   const { userId, emailToken } = useParams();
+  // console.log('112223333 ----- ',{ userId, emailToken })
   const { isLoading, isSuccess, current } = useSelector(selectAuth);
-
+  // console.log('555588888 ----- ',{ isLoading, isSuccess, current })
   const [verfied, setVerified] = useState(false);
 
   const navigate = useNavigate();
