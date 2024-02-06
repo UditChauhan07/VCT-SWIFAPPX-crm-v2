@@ -44,8 +44,15 @@ const Expense = lazy(() => import('@/pages/Expense'));
 const ProductCategory = lazy(() => import('@/pages/ProductCategory'));
 const Product = lazy(() => import('@/pages/Product'));
 
+
+const Roles = lazy(() => import('@/pages/Roles'));
+const RoleCreate = lazy(() => import('@/pages/Roles/RoleCreate'));
+const RoleRead = lazy(() => import('@/pages/Roles/RoleRead'));
+const RoleUpdate = lazy(() => import('@/pages/Roles/RoleUpdate'));
+
 const People = lazy(() => import('@/pages/People'));
 const Worker = lazy(() => import('@/pages/Worker'));
+
 const Company = lazy(() => import('@/pages/Company'));
 
 const About = lazy(() => import('@/pages/About'));
@@ -88,6 +95,22 @@ export default function AppRouter() {
     {
       path: '/worker',
       element: <Worker />,
+    },
+    {
+      path: '/roles',
+      element: <Roles />,
+    },
+    {
+      path: '/roles/create',
+      element: <RoleCreate />,
+    },
+    {
+      path: '/roles/read/:id',
+      element: <RoleRead />,
+    },
+    {
+      path: '/roles/update/:id',
+      element: <RoleUpdate />,
     },
     {
       path: '/company',
