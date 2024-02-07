@@ -12,6 +12,7 @@ import { countryList } from '@/utils/countryList';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
+  console.log('fields', fields);
   return (
     <>
       {Object.keys(fields).map((key) => {

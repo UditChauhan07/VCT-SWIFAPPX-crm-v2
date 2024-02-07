@@ -47,6 +47,7 @@ const Product = lazy(() => import('@/pages/Product'));
 const People = lazy(() => import('@/pages/People'));
 const Worker = lazy(() => import('@/pages/Worker'));
 const Company = lazy(() => import('@/pages/Company'));
+const CompanyPermissions = lazy(() => import('@/pages/CompanyPermissions'));
 
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
@@ -92,6 +93,10 @@ export default function AppRouter() {
     {
       path: '/company',
       element: <Company />,
+    },
+    {
+      path: '/companyPermissions',
+      element: <CompanyPermissions />,
     },
     {
       path: '/expenses',

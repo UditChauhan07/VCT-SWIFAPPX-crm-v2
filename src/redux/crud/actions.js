@@ -45,7 +45,7 @@ export const crud = {
       });
 
       let data = await request.list({ entity, options });
-
+      console.log('data', data);
       if (data.success === true) {
         const result = {
           items: data.result,
@@ -82,6 +82,7 @@ export const crud = {
       } else {
         data = await request.create({ entity, jsonData });
       }
+      console.log('jsonData', jsonData);
 
       if (data.success === true) {
         dispatch({
