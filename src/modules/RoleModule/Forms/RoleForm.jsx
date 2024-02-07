@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, InputNumber, Button, Select, Divider, Row, Col } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Checkbox } from 'antd';
 
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -62,7 +62,7 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={[12, 0]}>
+      <Row gutter={[12, 0]} >
         <Col className="gutter-row" span={24}>
           <Form.Item label={translate('Description')} name="description">
             <TextArea rows={5}/>
@@ -70,6 +70,35 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
         </Col>
       </Row>
       <Divider dashed />
+
+      <Row gutter={[12, 0]}>
+        <Col className="gutter-row" span={24}>
+          {translate('Permissions')}
+        </Col>
+  
+        {translate('SAAS Customer Level')}
+        <Col className="gutter-row" span={12} style={{ margin: '2px' }}>
+
+          <Form.Item label={translate('Description')} name="permissions.saas_customer_list">
+            {/* <input type='checkbox' value={1} name='permission.name'/> */}
+          </Form.Item>
+
+          <Form.Item label={translate('Description')} name="permissions.saas_customer_create">
+           <input type="checkbox" value="1" name="customer.create" id='customer'/> 
+           <input type="checkbox" value="1" name="customer.view" id='customer'/> 
+           <input type="checkbox" value="1" name="customer.update" id='customer'/> 
+           <input type="checkbox" value="1" name="customer.delete" id='customer'/> 
+          </Form.Item>
+          {/* <Checkbox name="saas_customer_list">
+            {translate('List')}
+          </Checkbox>
+          <Checkbox name="saas_customer_create">
+            {translate('Create')}
+          </Checkbox> */}
+        </Col>
+      </Row>
+      <Divider dashed />
+
       <div style={{ position: 'relative', width: ' 100%', float: 'right' }}>
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>

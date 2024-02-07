@@ -38,14 +38,8 @@ export default function ReadRoleItem({ config, selectedItem }) {
 
   const { result: currentResult } = useSelector(selectCurrentItem);
 
- 
-
   // const [itemslist, setItemsList] = useState([]);
   const [currentErp, setCurrentErp] = useState(selectedItem);
-
-
-  console.log('currentErp --- ', currentErp)
-
 
   return (
     <>
