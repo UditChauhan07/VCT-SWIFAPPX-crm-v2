@@ -11,7 +11,6 @@ import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
 export default function CreateForm({ config, formElements, withUpload = false }) {
-  console.log('CreateForm qwqw --- ', config, formElements);
 
   let { entity } = config;
   const dispatch = useDispatch();
