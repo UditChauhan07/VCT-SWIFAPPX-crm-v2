@@ -16,6 +16,6 @@ export default function RoleCreate() {
     entity,
     ...Labels,
   };
-  
+
   return <CreateRoleModule config={configPage} />;
 }

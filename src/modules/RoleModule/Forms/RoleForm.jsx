@@ -22,18 +22,17 @@ import TextArea from 'antd/es/input/TextArea';
 
 export default function RoleForm({ subTotal = 0, current = null }) {
   const { last_offer_number } = useSelector(selectFinanceSettings);
-
-  // if (!last_offer_number) {
-  //   return <></>;
-  // }
-
-  return <LoadRoleForm subTotal={subTotal} current={current} />;
+  return <LoadRoleForm />;
 }
 
 function LoadRoleForm({ subTotal = 0, current = null }) {
   const translate = useLanguage();
   const { dateFormat } = useDate();
   const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
+
+  const [form] = Form.useForm();
+  form.setFieldValue('permissions', 'hi');
+  console.log('jjjjj')
 
   return (
     <>
@@ -42,22 +41,22 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="company_id"
             label={translate('Company')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]}
           >
             <AutoCompleteAsync entity={'company'} displayLabels={['name']} searchFields={'name'} />
           </Form.Item>
         </Col>
-       
+
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Name')} name="name" rules={[
-              {
-                required: true,
-              },
-            ]}>
+            {
+              required: true,
+            },
+          ]}>
             <Input />
           </Form.Item>
         </Col>
@@ -65,38 +64,34 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 0]} >
         <Col className="gutter-row" span={24}>
           <Form.Item label={translate('Description')} name="description">
-            <TextArea rows={5}/>
+            <TextArea rows={5} />
           </Form.Item>
         </Col>
       </Row>
-      <Divider dashed />
 
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={24}>
+
+      <Row gutter={[24, 0]}>
+        <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
           {translate('Permissions')}
         </Col>
-  
-        {translate('SAAS Customer Level')}
-        <Col className="gutter-row" span={12} style={{ margin: '2px' }}>
 
-          <Form.Item label={translate('Description')} name="permissions.saas_customer_list">
-            {/* <input type='checkbox' value={1} name='permission.name'/> */}
+      </Row>
+
+      <Row>
+        <Col className="gutter-row" span={6} style={{ margin: '2px' }}>
+          {translate('SAAS Customer Level')}
+        </Col>
+        <Col className="gutter-row" span={6} style={{ margin: '2px', display: 'flex' }}>
+          <Form.Item label={translate('List')} name={['permissions', 'saas_customer_list']} valuePropName="checked">
+            <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'saas_customer_list'], e.target.checked)} />
           </Form.Item>
 
-          <Form.Item label={translate('Description')} name="permissions.saas_customer_create">
-           <input type="checkbox" value="1" name="customer.create" id='customer'/> 
-           <input type="checkbox" value="1" name="customer.view" id='customer'/> 
-           <input type="checkbox" value="1" name="customer.update" id='customer'/> 
-           <input type="checkbox" value="1" name="customer.delete" id='customer'/> 
+          <Form.Item label={translate('Create')} name={['permissions', 'saas_customer_create']} valuePropName="checked">
+            <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'saas_customer_create'], e.target.checked)} />
           </Form.Item>
-          {/* <Checkbox name="saas_customer_list">
-            {translate('List')}
-          </Checkbox>
-          <Checkbox name="saas_customer_create">
-            {translate('Create')}
-          </Checkbox> */}
         </Col>
       </Row>
+
       <Divider dashed />
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right' }}>
