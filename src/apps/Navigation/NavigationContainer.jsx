@@ -139,6 +139,10 @@ function Sidebar({ collapsible, isMobile = false }) {
           label: <Link to={'/settings'}>{translate('general_settings')}</Link>,
         },
         {
+          key: 'roles',
+          label: <Link to={'/roles'}>{translate('roles')}</Link>,
+        },
+        {
           key: 'expensesCategory',
           label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
         },

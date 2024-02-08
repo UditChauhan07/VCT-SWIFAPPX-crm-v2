@@ -3,6 +3,7 @@ import { UploadOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons'
 import { message, Upload, Button, Switch } from 'antd';
 
 import useLanguage from '@/locale/useLanguage';
+import { useEffect, useState } from 'react';
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -17,6 +18,28 @@ const beforeUpload = (file) => {
 };
 
 export default function AdminForm({ isUpdateForm = false }) {
+  const [roleList, setRoleList] = useState([]);
+  useEffect(() => {
+    GetRoleDataHandler().then((res) => {
+      setRoleList(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetRoleDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch("http://localhost:8001/api/roles/list?page=1&items=10", {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+
+  }
   const translate = useLanguage();
   return (
     <>
@@ -83,11 +106,9 @@ export default function AdminForm({ isUpdateForm = false }) {
         ]}
       >
         <Select>
-          <Select.Option value="admin">{translate('admin_super_admin')}</Select.Option>
-          <Select.Option value="staffAdmin">{translate('staff_admin_crud')}</Select.Option>
-          <Select.Option value="staff">{translate('staff_cru')}</Select.Option>
-          <Select.Option value="createOnly">{translate('create_and_read_only')}</Select.Option>
-          <Select.Option value="readOnly">{translate('read_only')}</Select.Option>
+          {roleList.map((role, rKey) => (
+            <Select.Option value={role._id}>{translate(role.name)}</Select.Option>
+          ))}
         </Select>
       </Form.Item>
       <Form.Item
