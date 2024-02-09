@@ -20,7 +20,6 @@ import { useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import TextArea from 'antd/es/input/TextArea';
 import styles from './styles.module.css'; // Import the CSS module
-import { useNavigate } from 'react-router-dom';
 
 export default function RoleForm({ subTotal = 0, current = null }) {
   const { last_offer_number } = useSelector(selectFinanceSettings);
@@ -32,7 +31,7 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
   const { dateFormat } = useDate();
   const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
   const [form] = Form.useForm();
-  const navigate = useNavigate();
+
   return (
     <>
       <Row gutter={[12, 0]}>
@@ -736,7 +735,7 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>
-              <Button className="text-center" type="primary" icon={<PlusOutlined />} block onClick={() => { navigate("/roles") }}>
+              <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={() => window.location.href = "/roles"}>
                 {translate('Save')}
               </Button>
             </Form.Item>
