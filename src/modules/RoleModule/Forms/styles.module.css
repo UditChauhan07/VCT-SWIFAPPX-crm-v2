@@ -43,5 +43,6 @@
   width: 100px;
 }
 .bold_text {
-  font-weight: 900;
+  /* font-weight: 900; */
+  font-size: larger;
 }

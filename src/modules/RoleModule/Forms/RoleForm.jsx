@@ -154,7 +154,7 @@ function LoadRoleForm() {
           <p className={styles.bold_text}>{translate('Module Name')}</p>
         </Col>
         <Col className={`${styles.custom_col} gutter-row`} span={12}>
-          {translate('Module Actions')}
+          <p className={styles.bold_text}>{translate('Module Actions')}</p>
         </Col >
       </Row >
       {/* Saas Customer Level */}
