@@ -148,9 +148,17 @@ function LoadRoleForm() {
 
       </Row>
       {/* <Divider dashed style={{ margin: 0, borderColor: 'gray' }} /> */}
-
-      {/* Saas Customer Level */}
+      {/* Module Name and Module Actions */}
       <Row align="middle" className={styles.first_row}>
+        <Col className="gutter-row" span={6} >
+          <p className={styles.bold_text}>{translate('Module Name')}</p>
+        </Col>
+        <Col className={`${styles.custom_col} gutter-row`} span={12}>
+          {translate('Module Actions')}
+        </Col >
+      </Row >
+      {/* Saas Customer Level */}
+      <Row align="middle" className={styles.middle_row}>
         <Col className="gutter-row" span={6}>
           {translate('SAAS Customer Module')}
         </Col>
