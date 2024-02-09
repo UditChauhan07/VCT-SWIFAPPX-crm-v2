@@ -108,41 +108,48 @@ export default function DataTable({ config, extra = [] }) {
       title: '',
       key: 'action',
       fixed: 'right',
-      render: (_, record) => (
-        <Dropdown
-          menu={{
-            items,
-            onClick: ({ key }) => {
-              switch (key) {
-                case 'read':
-                  handleRead(record);
-                  break;
-                case 'edit':
-                  handleEdit(record);
-                  break;
-                case 'download':
-                  handleDownload(record);
-                  break;
-                case 'delete':
-                  handleDelete(record);
-                  break;
-                case 'recordPayment':
-                  handleRecordPayment(record);
-                  break;
-                default:
-                  break;
-              }
-              // else if (key === '2')handleCloseTask
-            },
-          }}
-          trigger={['click']}
-        >
-          <EllipsisOutlined
-            style={{ cursor: 'pointer', fontSize: '24px' }}
-            onClick={(e) => e.preventDefault()}
-          />
-        </Dropdown>
-      ),
+      render: (_, record) => {
+        if (entity == "roles") {
+          return (<Button type="primary" onClick={() => handleEdit(record)}>
+            {translate('Edit')}
+          </Button>)
+        }
+        else {
+          return <Dropdown
+            menu={{
+              items,
+              onClick: ({ key }) => {
+                switch (key) {
+                  case 'read':
+                    handleRead(record);
+                    break;
+                  case 'edit':
+                    handleEdit(record);
+                    break;
+                  case 'download':
+                    handleDownload(record);
+                    break;
+                  case 'delete':
+                    handleDelete(record);
+                    break;
+                  case 'recordPayment':
+                    handleRecordPayment(record);
+                    break;
+                  default:
+                    break;
+                }
+                // else if (key === '2')handleCloseTask
+              },
+            }}
+            trigger={['click']}
+          >
+            <EllipsisOutlined
+              style={{ cursor: 'pointer', fontSize: '24px' }}
+              onClick={(e) => e.preventDefault()}
+            />
+          </Dropdown>
+        }
+      }
     },
   ];
 
