@@ -47,7 +47,7 @@ const AuthModule = ({ authContent, AUTH_TITLE }) => {
         <Title level={1}>{translate(AUTH_TITLE)}</Title>
 
         <Divider />
-        <div className="site-layout-content">{authContent}</div>
+        <div className="site-layout-content tt">{authContent}</div>
       </Content>
     </AuthLayout>
   );

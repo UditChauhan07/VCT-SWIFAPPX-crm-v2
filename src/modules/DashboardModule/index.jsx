@@ -16,7 +16,7 @@ import CustomerPreviewCard from './components/CustomerPreviewCard';
 export default function DashboardModule() {
   const translate = useLanguage();
   const { moneyFormatter } = useMoney();
-  
+
   const { result: invoiceResult, isLoading: invoiceLoading } = useFetch(() =>
     request.summary({ entity: 'invoice' })
   );
@@ -46,7 +46,6 @@ export default function DashboardModule() {
       title: translate('Client'),
       dataIndex: ['client', 'name'],
     },
-
     {
       title: translate('Total'),
       dataIndex: 'total',

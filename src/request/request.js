@@ -38,6 +38,7 @@ const request = {
   },
   read: async ({ entity, id }) => {
     try {
+      console.log('data entities --- ', {entity, id});
       const response = await axios.get(entity + '/read/' + id);
       successHandler(response, {
         notifyOnSuccess: false,
@@ -62,6 +63,7 @@ const request = {
   },
   updateAndUpload: async ({ entity, id, jsonData }) => {
     try {
+      console.log({ entity, id, jsonData });
       const response = await axios.patch(entity + '/update/' + id, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -71,7 +73,8 @@ const request = {
         notifyOnSuccess: true,
         notifyOnFailed: true,
       });
-      return response.data;
+      console.log({response});
+      // return response.data;
     } catch (error) {
       return errorHandler(error);
     }

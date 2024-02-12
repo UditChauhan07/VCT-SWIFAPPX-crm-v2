@@ -12,7 +12,7 @@ export default function Role() {
     displayLabels: ['name'],
     searchFields: 'name',
   };
-  const deleteModalLabels = ['number', 'company_id.name'];
+  const deleteModalLabels = ['name'];
   const dataTableColumns = [
     {
       title: translate('Name'),

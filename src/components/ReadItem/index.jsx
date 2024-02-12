@@ -13,6 +13,7 @@ import useLanguage from '@/locale/useLanguage';
 import { useDate } from '@/settings';
 
 export default function ReadItem({ config }) {
+  console.log({ config })
   const { dateFormat } = useDate();
   let { readColumns, fields } = config;
   const translate = useLanguage();
