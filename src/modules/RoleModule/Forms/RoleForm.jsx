@@ -16,22 +16,99 @@ import MoneyInputFormItem from '@/components/MoneyInputFormItem';
 import calculate from '@/utils/calculate';
 import { selectFinanceSettings } from '@/redux/settings/selectors';
 import { useDate } from '@/settings';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import TextArea from 'antd/es/input/TextArea';
 import styles from './styles.module.css'; // Import the CSS module
 
-export default function RoleForm({ subTotal = 0, current = null }) {
+import { useNavigate, useParams } from 'react-router-dom';
+import { selectUpdatedItem } from '@/redux/erp/selectors';
+import { erp } from '@/redux/erp/actions';
+
+
+export default function RoleForm() {
   const { last_offer_number } = useSelector(selectFinanceSettings);
   return <LoadRoleForm />;
 }
 
-function LoadRoleForm({ subTotal = 0, current = null }) {
+function LoadRoleForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const translate = useLanguage();
   const { dateFormat } = useDate();
-  const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
-  const [form] = Form.useForm();
 
+  // const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
+  const [form] = Form.useForm();
+  const { id } = useParams();
+  const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
+  const resetErp = {
+    status: '',
+    client: {
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+    },
+    subTotal: 0,
+    taxTotal: 0,
+    taxRate: 0,
+    total: 0,
+    credit: 0,
+    number: 0,
+    year: 0,
+  };
+  const [currentErp, setCurrentErp] = useState(current ?? resetErp);
+
+  const onSubmit = (fieldsValue) => {
+    let dataToUpdate = { ...fieldsValue };
+    if (fieldsValue) {
+      if (fieldsValue.date || fieldsValue.expiredDate) {
+        dataToUpdate.date = dayjs(fieldsValue.date).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+        dataToUpdate.expiredDate = dayjs(fieldsValue.expiredDate).format(
+          'YYYY-MM-DDTHH:mm:ss.SSSZ'
+        );
+      }
+      if (fieldsValue.items) {
+        let newList = [...fieldsValue.items];
+        newList.map((item) => {
+          item.total = item.quantity * item.price;
+        });
+        dataToUpdate.items = newList;
+      }
+    }
+
+    // dispatch(erp.update({ entity, id, jsonData: dataToUpdate }));
+    // navigate
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      form.resetFields();
+      dispatch(erp.resetAction({ actionType: 'update' }));
+      navigate(`/roles`);
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (current) {
+      setCurrentErp(current);
+      let formData = { ...current };
+      if (formData.date) {
+        formData.date = dayjs(formData.date);
+      }
+      if (formData.expiredDate) {
+        formData.expiredDate = dayjs(formData.expiredDate);
+      }
+      if (!formData.taxRate) {
+        formData.taxRate = 0;
+      }
+
+      const { subTotal } = formData;
+
+
+      form.resetFields();
+      form.setFieldsValue(formData);
+    }
+  }, [current]);
   return (
     <>
       <Row gutter={[12, 0]}>
@@ -76,12 +153,22 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
       </Row>
       {/* <Divider dashed style={{ margin: 0, borderColor: 'gray' }} /> */}
 
-      {/* Saas Customer Level */}
+      {/* Module Name and Module Actions */}
       <Row align="middle" className={styles.first_row}>
+        <Col className="gutter-row" span={6} >
+          <p className={styles.bold_text}>{translate('Module Name')}</p>
+        </Col>
+        <Col className={`${styles.custom_col} gutter-row`} span={12}>
+          <p className={styles.bold_text}>{translate('Module Actions')}</p>
+        </Col >
+      </Row >
+      {/* Saas Customer Level */}
+      <Row align="middle" className={styles.middle_row}>
         <Col className="gutter-row" span={6}>
           {translate('SAAS Customer Module')}
         </Col>
         <Col className={`${styles.custom_col} gutter-row`} span={12}>
+
           <div className={styles['permissions_container']}>
             <p className='m-0'>Check to add Permissions</p>
             <div className={styles['permissions_checkboxes']}>
@@ -735,7 +822,8 @@ function LoadRoleForm({ subTotal = 0, current = null }) {
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>
-              <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={() => window.location.href = "/roles"}>
+              <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={onSubmit}>
+
                 {translate('Save')}
               </Button>
             </Form.Item>

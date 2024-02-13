@@ -160,7 +160,7 @@ export default function DataTable({ config, extra = [] }) {
       controller.abort();
     };
   }, []);
-
+  console.log("dataTableColumns", dataTableColumns, dataSource);
   return (
     <>
       <PageHeader
