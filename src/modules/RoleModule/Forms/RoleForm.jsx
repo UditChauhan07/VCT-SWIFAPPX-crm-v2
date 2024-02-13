@@ -76,13 +76,13 @@ function LoadRoleForm() {
         dataToUpdate.items = newList;
       }
     }
-    // dispatch(erp.update({ entity: 'roles', id, jsonData: dataToUpdate }));
+    dispatch(erp.update({ entity: 'roles', id, jsonData: dataToUpdate }));
     navigate("/roles")
   };
   useEffect(() => {
     if (isSuccess) {
       form.resetFields();
-      // dispatch(erp.resetAction({ actionType: 'update' }));
+      dispatch(erp.resetAction({ actionType: 'update' }));
       navigate(`/roles`);
     }
   }, [isSuccess]);
