@@ -218,7 +218,6 @@ function FormElement({ field, setFeedback }) {
     checkbox: (
       <Checkbox
         onChange={(value) => {
-          console.log('value ---- ', value.target.checked);
           setFeedback(value.target.checked);
         }}
         value={field.value}

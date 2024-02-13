@@ -104,10 +104,10 @@ export default function AppRouter() {
       path: '/roles/create',
       element: <RoleCreate />,
     },
-    {
-      path: '/roles/read/:id',
-      element: <RoleRead />,
-    },
+    // {
+    //   path: '/roles/read/:id',
+    //   element: <RoleRead />,
+    // },
     {
       path: '/roles/update/:id',
       element: <RoleUpdate />,

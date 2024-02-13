@@ -110,9 +110,10 @@ export default function DataTable({ config, extra = [] }) {
       fixed: 'right',
       render: (_, record) => {
         if (entity == "roles") {
-          return (<Button type="primary" onClick={() => handleEdit(record)}>
+          return (<Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)
+          }>
             {translate('Edit')}
-          </Button>)
+          </Button >)
         }
         else {
           return <Dropdown
@@ -140,7 +141,9 @@ export default function DataTable({ config, extra = [] }) {
                 }
                 // else if (key === '2')handleCloseTask
               },
-            }}
+
+            }
+            }
             trigger={['click']}
           >
             <EllipsisOutlined

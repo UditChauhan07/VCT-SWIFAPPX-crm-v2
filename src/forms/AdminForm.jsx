@@ -40,6 +40,9 @@ export default function AdminForm({ isUpdateForm = false }) {
     return data
 
   }
+  // console.log('role --- ', role)
+  // console.log('roleList --- ', roleList)
+
   const translate = useLanguage();
   return (
     <>
@@ -54,6 +57,7 @@ export default function AdminForm({ isUpdateForm = false }) {
       >
         <Input autoComplete="off" />
       </Form.Item>
+
       <Form.Item
         label={translate('last Name')}
         name="surname"
@@ -65,6 +69,7 @@ export default function AdminForm({ isUpdateForm = false }) {
       >
         <Input autoComplete="off" />
       </Form.Item>
+
       <Form.Item
         label={translate('email')}
         name="email"
@@ -93,10 +98,31 @@ export default function AdminForm({ isUpdateForm = false }) {
           <Input.Password autoComplete="new-password" />
         </Form.Item>
       )}
+
       <Form.Item label={translate('enabled')} name="enabled" valuePropName={'checked'}>
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />
       </Form.Item>
-      <Form.Item
+
+
+      {!isUpdateForm && (
+        <Form.Item
+          label={translate('Role')}
+          name="role_id"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select defaultValue="">
+            {roleList.map((role, rKey) => (
+              < Select.Option key={rKey} value={role._id} > {translate(role.name)}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item >
+      )}
+
+      {/* <Form.Item
         label={translate('Role')}
         name="role"
         rules={[
@@ -106,12 +132,15 @@ export default function AdminForm({ isUpdateForm = false }) {
         ]}
       >
         <Select>
-          {roleList.map((role, rKey) => (
-            <Select.Option value={role._id}>{translate(role.name)}</Select.Option>
-          ))}
+          <Select.Option value="admin">{translate('admin_super_admin')}</Select.Option>
+          <Select.Option value="staffAdmin">{translate('staff_admin_crud')}</Select.Option>
+          <Select.Option value="staff">{translate('staff_cru')}</Select.Option>
+          <Select.Option value="createOnly">{translate('create_and_read_only')}</Select.Option>
+          <Select.Option value="readOnly">{translate('read_only')}</Select.Option>
         </Select>
-      </Form.Item>
-      <Form.Item
+      </Form.Item > */}
+
+      {/* <Form.Item
         name="file"
         label={translate('Photo')}
         valuePropName="fileList"
@@ -120,7 +149,7 @@ export default function AdminForm({ isUpdateForm = false }) {
         <Upload beforeUpload={beforeUpload}>
           <Button icon={<UploadOutlined />}>{translate('click_to_upload')}</Button>
         </Upload>
-      </Form.Item>
+      </Form.Item> */}
     </>
   );
 }

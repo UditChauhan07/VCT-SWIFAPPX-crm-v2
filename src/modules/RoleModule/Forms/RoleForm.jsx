@@ -20,9 +20,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import TextArea from 'antd/es/input/TextArea';
 import styles from './styles.module.css'; // Import the CSS module
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUpdatedItem } from '@/redux/erp/selectors';
 import { erp } from '@/redux/erp/actions';
+
 
 export default function RoleForm() {
   const { last_offer_number } = useSelector(selectFinanceSettings);
@@ -34,6 +36,7 @@ function LoadRoleForm() {
   const navigate = useNavigate();
   const translate = useLanguage();
   const { dateFormat } = useDate();
+
   // const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
   const [form] = Form.useForm();
   const { id } = useParams();
@@ -101,6 +104,7 @@ function LoadRoleForm() {
 
       const { subTotal } = formData;
 
+
       form.resetFields();
       form.setFieldsValue(formData);
     }
@@ -148,6 +152,7 @@ function LoadRoleForm() {
 
       </Row>
       {/* <Divider dashed style={{ margin: 0, borderColor: 'gray' }} /> */}
+
       {/* Module Name and Module Actions */}
       <Row align="middle" className={styles.first_row}>
         <Col className="gutter-row" span={6} >
@@ -163,6 +168,7 @@ function LoadRoleForm() {
           {translate('SAAS Customer Module')}
         </Col>
         <Col className={`${styles.custom_col} gutter-row`} span={12}>
+
           <div className={styles['permissions_container']}>
             <p className='m-0'>Check to add Permissions</p>
             <div className={styles['permissions_checkboxes']}>
@@ -817,6 +823,7 @@ function LoadRoleForm() {
           <Col className="gutter-row" span={5}>
             <Form.Item>
               <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={onSubmit}>
+
                 {translate('Save')}
               </Button>
             </Form.Item>
