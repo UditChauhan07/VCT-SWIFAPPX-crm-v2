@@ -71,11 +71,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       },
       // { key: 'order', icon: <ShopOutlined />, label: <Link to={'/'}>Lead</Link> Order },
       // { key: 'inventory', icon: <InboxOutlined />, label: <Link to={'/'}>Lead</Link> Inventory },
-      {
-        key: 'offer',
-        icon: <FileOutlined />,
-        label: <Link to={'/offer'}>{translate('offer')}</Link>,
-      },
+      // {
+      //   key: 'offer',
+      //   icon: <FileOutlined />,
+      //   label: <Link to={'/offer'}>{translate('offer')}</Link>,
+      // },
       {
         key: 'invoice',
         icon: <ContainerOutlined />,
