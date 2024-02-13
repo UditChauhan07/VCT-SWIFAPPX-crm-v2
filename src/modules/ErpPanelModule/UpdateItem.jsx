@@ -101,8 +101,12 @@ export default function UpdateItem({ config, UpdateForm }) {
       form.resetFields();
       setSubTotal(0);
       dispatch(erp.resetAction({ actionType: 'update' }));
-      // navigate(`/${entity.toLowerCase()}/read/${id}`);
-      navigate("/roles")
+      if (entity == "roles") {
+        navigate("/roles")
+      }
+      else {
+        navigate(`/${entity.toLowerCase()}/read/${id}`);
+      }
     }
   }, [isSuccess]);
 
