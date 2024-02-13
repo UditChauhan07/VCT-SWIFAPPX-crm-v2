@@ -1,0 +1,10 @@
+.headings {
+  background-color: #6f42c1;
+  color: white;
+  padding: 5px 0px 5px 10px;
+  margin-bottom: 10px;
+}
+.bold_text {
+  font-size: larger;
+  margin: 0px !important;
+}
