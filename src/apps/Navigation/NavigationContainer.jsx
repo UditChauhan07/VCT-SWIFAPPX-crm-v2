@@ -48,16 +48,16 @@ function Sidebar({ collapsible, isMobile = false }) {
   const translate = useLanguage();
   const navigate = useNavigate();
   const user = JSON.parse(window.localStorage.getItem('auth'))
-  console.log({ user });
+  // console.log({ user });
   const userRole = user.current.role_id
-  console.log({ userRole });
+  // console.log({ userRole });
   const adminLevel = userRole.admin_level
-  console.log({ adminLevel });
+  // console.log({ adminLevel });
 
   let items;
 
   if (adminLevel) {
-    console.log('yyyyyyyyyyyyyy');
+    // console.log('yyyyyyyyyyyyyy');
     items = [
       {
         key: 'dashboard',
@@ -135,7 +135,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     ];
   }
   else {
-    console.log('nnnnnnnnnnnn');
+    // console.log('nnnnnnnnnnnn');
     items = [
       {
         key: 'dashboard',

@@ -3,17 +3,14 @@ import { Form, Divider } from 'antd';
 import dayjs from 'dayjs';
 import { Button, Tag } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
-
 import { useSelector, useDispatch } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import { erp } from '@/redux/erp/actions';
-
 import calculate from '@/utils/calculate';
 import { generate as uniqueId } from 'shortid';
 import { selectUpdatedItem } from '@/redux/erp/selectors';
 import Loading from '@/components/Loading';
 import { tagColor } from '@/utils/statusTagColor';
-
 import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 // import { StatusTag } from '@/components/Tag';
@@ -31,6 +28,7 @@ function SaveForm({ form, translate }) {
 }
 
 export default function UpdateItem({ config, UpdateForm }) {
+
   const translate = useLanguage();
   let { entity } = config;
 
@@ -96,7 +94,6 @@ export default function UpdateItem({ config, UpdateForm }) {
         dataToUpdate.items = newList;
       }
     }
-
     dispatch(erp.update({ entity, id, jsonData: dataToUpdate }));
   };
   useEffect(() => {
@@ -104,7 +101,8 @@ export default function UpdateItem({ config, UpdateForm }) {
       form.resetFields();
       setSubTotal(0);
       dispatch(erp.resetAction({ actionType: 'update' }));
-      navigate(`/${entity.toLowerCase()}/read/${id}`);
+      // navigate(`/${entity.toLowerCase()}/read/${id}`);
+      navigate("/roles")
     }
   }, [isSuccess]);
 

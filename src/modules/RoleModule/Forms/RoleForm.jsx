@@ -76,14 +76,13 @@ function LoadRoleForm() {
         dataToUpdate.items = newList;
       }
     }
-
-    // dispatch(erp.update({ entity, id, jsonData: dataToUpdate }));
-    // navigate
+    // dispatch(erp.update({ entity: 'roles', id, jsonData: dataToUpdate }));
+    navigate("/roles")
   };
   useEffect(() => {
     if (isSuccess) {
       form.resetFields();
-      dispatch(erp.resetAction({ actionType: 'update' }));
+      // dispatch(erp.resetAction({ actionType: 'update' }));
       navigate(`/roles`);
     }
   }, [isSuccess]);
@@ -101,10 +100,7 @@ function LoadRoleForm() {
       if (!formData.taxRate) {
         formData.taxRate = 0;
       }
-
       const { subTotal } = formData;
-
-
       form.resetFields();
       form.setFieldsValue(formData);
     }
@@ -454,23 +450,9 @@ function LoadRoleForm() {
                 </Form.Item>
               </div>
               <div className={styles.w_100px}>
-                <Form.Item name={['permissions', 'rwo_create']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                  <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'rwo_create'], e.target.checked)}>
-                    {translate('Create')}
-                  </Checkbox>
-                </Form.Item>
-              </div>
-              <div className={styles.w_100px}>
                 <Form.Item name={['permissions', 'rwo_edit']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
                   <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'rwo_edit'], e.target.checked)}>
                     {translate('Edit')}
-                  </Checkbox>
-                </Form.Item>
-              </div>
-              <div className={styles.w_100px}>
-                <Form.Item name={['permissions', 'rwo_delete']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                  <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'rwo_delete'], e.target.checked)}>
-                    {translate('Delete')}
                   </Checkbox>
                 </Form.Item>
               </div>
@@ -502,23 +484,9 @@ function LoadRoleForm() {
                 </Form.Item>
               </div>
               <div className={styles.w_100px}>
-                <Form.Item name={['permissions', 'cwo_create']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                  <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'cwo_create'], e.target.checked)}>
-                    {translate('Create')}
-                  </Checkbox>
-                </Form.Item>
-              </div>
-              <div className={styles.w_100px}>
                 <Form.Item name={['permissions', 'cwo_edit']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
                   <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'cwo_edit'], e.target.checked)}>
                     {translate('Edit')}
-                  </Checkbox>
-                </Form.Item>
-              </div>
-              <div className={styles.w_100px}>
-                <Form.Item name={['permissions', 'cwo_delete']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                  <Checkbox onChange={(e) => form.setFieldValue(['permissions', 'cwo_delete'], e.target.checked)}>
-                    {translate('Delete')}
                   </Checkbox>
                 </Form.Item>
               </div>
