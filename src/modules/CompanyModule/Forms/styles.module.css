@@ -8,3 +8,7 @@
   font-size: larger;
   margin: 0px !important;
 }
+.highlightText {
+  /* color: #6f42c1; */
+  color: purple;
+}

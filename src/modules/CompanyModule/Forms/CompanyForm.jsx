@@ -17,6 +17,8 @@ import styles from './styles.module.css'; // Import the CSS module
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUpdatedItem } from '@/redux/erp/selectors';
 import { erp } from '@/redux/erp/actions';
+import CompanySuperAdminDetails from './CompanySuperAdminDetails';
+import CompanyBasicDetails from './CompanyBasicDetails';
 
 
 export default function CompanyForm() {
@@ -33,6 +35,13 @@ function LoadCompanyForm() {
   // const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
   const [form] = Form.useForm();
   const { id } = useParams();
+  const [visible, setVisible] = useState(false);
+
+  const handlePasswordVisibility = () => {
+    setVisible(!visible);
+  };
+
+
   const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
   const resetErp = {
     status: '',
@@ -98,6 +107,7 @@ function LoadCompanyForm() {
       form.setFieldsValue(formData);
     }
   }, [current]);
+
   return (
     <>
       {/* <Row gutter={[12, 0]}>
@@ -125,185 +135,8 @@ function LoadCompanyForm() {
           </Form.Item>
         </Col>
       </Row> */}
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={24}>
-          <div className={styles.headings}>
-            <p className={styles.bold_text}>Company Super Admin Details</p>
-          </div>
-        </Col>
-      </Row>
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            //name="first_name"
-            label={translate('First Name')}
-            rules={[
-              {
-                required: true,
-              },
-              {
-                type: 'string'
-              }
-            ]}
-          ><Input placeholder='Enter Super Admin First Name' />
-          </Form.Item>
-        </Col>
-
-        <Col className="gutter-row" span={12}>
-          <Form.Item label={translate('Address')} //name="name" 
-            rules={[
-              {
-                type: 'string'
-              },
-              // {
-              //   required: true,
-              // },
-            ]}>
-            <Input placeholder='Enter Super Admin Address' />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            //name="first_name"
-            label={translate('LAst Name')}
-            rules={[
-              {
-                type: 'string'
-              },
-              {
-                required: true,
-              },
-            ]}
-          ><Input placeholder='Enter Super Admin Last Name' />
-          </Form.Item>
-        </Col>
-
-        <Col className="gutter-row" span={12}>
-          <Form.Item label={translate('City')} //name="name" 
-            rules={[
-              {
-                type: 'string'
-              },
-              // {
-              //   required: true,
-              // },
-            ]}>
-            <Input placeholder="Enter Super Admin Address's City" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            //name="first_name"
-            label={translate('Profile Picture')}
-            rules={[
-              // {
-              //   required: true,
-              // },
-              // {
-              //   type: 'string'
-              // }
-            ]}
-          ><Input type='file' />
-          </Form.Item>
-        </Col>
-
-        <Col className="gutter-row" span={12}>
-          <Form.Item label={translate('State')} //name="name" 
-            rules={[
-              {
-                type: 'string'
-              },
-              // {
-              //   required: true,
-              // },
-            ]}>
-            <Input placeholder="Enter Super Admin Address's state" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            //name="first_name"
-            label={translate('Contact Number')}
-            rules={[
-              {
-                required: true,
-              },
-              {
-                type: 'phone'
-              }
-            ]}
-          ><Input placeholder="Enter Super Admin Contact Number" />
-          </Form.Item>
-        </Col>
-
-        <Col className="gutter-row" span={12}>
-          <Form.Item label={translate('COuntry')} //name="name" 
-            rules={[
-              {
-                type: 'string'
-              },
-              // {
-              //   required: true,
-              // },
-            ]}>
-            <Input placeholder="Enter Super Admin Address's state" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            //name="first_name"
-            label={translate('Email Address/Username')}
-            rules={[
-              {
-                required: true,
-              },
-              {
-                type: 'email'
-              }
-            ]}
-          ><Input placeholder="Enter Super Admin Email Address/Username" />
-          </Form.Item>
-        </Col>
-
-        <Col className="gutter-row" span={12}>
-          <Form.Item label={translate('ZIP/Postal Code')} //name="name" 
-            rules={[
-              {
-                type: 'number'
-              },
-              // {
-              //   required: true,
-              // },
-            ]}>
-            <Input placeholder="Enter Super Admin Address's Zip" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            //name="first_name"
-            label={translate('Admin Password')}
-            rules={[
-              {
-                required: true,
-                type: 'password'
-              }
-            ]}
-          >
-            <Input type='password' placeholder="Enter SuperAdmin Password" />
-          </Form.Item>
-        </Col>
-
-      </Row>
+      <CompanySuperAdminDetails />
+      <CompanyBasicDetails />
 
 
       {/* <Divider dashed style={{ margin: 0, borderColor: 'gray' }} /> */}
