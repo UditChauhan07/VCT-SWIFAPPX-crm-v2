@@ -1,22 +1,25 @@
-import { countryList } from '@/utils/countryList'
-import { validatePhoneNumber } from '@/utils/helpers'
 import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'; // Import the CSS module
 import useLanguage from '@/locale/useLanguage';
-import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 import { useMoney } from '@/settings';
 import { PlusOutlined } from '@ant-design/icons';
-import ItemRow from '@/modules/ErpPanelModule/ItemRow';
+import CertificateSection from './CertificateSection';
 
 const CompanyBasicDetails = () => {
     const translate = useLanguage();
     const money = useMoney();
     const addField = useRef(false);
     const current = null
+    const [clicked, setClicked] = useState(false);
+
     useEffect(() => {
-        addField.current.click();
-    }, []);
+        if (!clicked) {
+            addField.current.click(); // Click only if not already clicked
+            setClicked(true); // Update clicked state
+        }
+    }, [clicked]); // Add clicked as a dependency
+
     return (
         <>
             <Row gutter={[12, 0]}>
@@ -163,7 +166,11 @@ const CompanyBasicDetails = () => {
                         rules={[
                             {
                                 type: 'string'
-                            }
+                            }, {
+                                pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                                message: 'Only spaces not allowed',
+                                // message: 'Certificate Name must contain alphanumeric or special characters',
+                            },
                         ]}
                     >
                         <Input placeholder='Enter Company Certificate Name' />
@@ -183,21 +190,12 @@ const CompanyBasicDetails = () => {
                     </Form.Item>
                 </Col>
             </Row>
-            <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-                <Col className="gutter-row" span={12}>
-                    <p>{translate('Certificate name')}</p>
-                </Col>
-                <Col className="gutter-row" span={12}>
-                    <p>{translate('Certificate number')}</p>
-                </Col>
-
-            </Row>
             <Form.List name="items">
                 {(fields, { add, remove }) => (
                     <>
-                        {fields.map((field) => (
-                            <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
-                        ))}
+                        {fields.map((field) => {
+                            return <CertificateSection key={field.key} remove={remove} field={field} current={current}></CertificateSection>
+                        })}
                         <Form.Item>
                             <Button
                                 type="dashed"
@@ -206,7 +204,7 @@ const CompanyBasicDetails = () => {
                                 icon={<PlusOutlined />}
                                 ref={addField}
                             >
-                                {translate('Add field')}
+                                {translate('Add More Certificates')}
                             </Button>
                         </Form.Item>
                     </>

@@ -19,6 +19,7 @@ import { selectUpdatedItem } from '@/redux/erp/selectors';
 import { erp } from '@/redux/erp/actions';
 import CompanySuperAdminDetails from './CompanySuperAdminDetails';
 import CompanyBasicDetails from './CompanyBasicDetails';
+import CompanyContactInfo from './CompanyContactInfo';
 
 
 export default function CompanyForm() {
@@ -137,6 +138,7 @@ function LoadCompanyForm() {
       </Row> */}
       <CompanySuperAdminDetails />
       <CompanyBasicDetails />
+      <CompanyContactInfo />
 
 
       {/* <Divider dashed style={{ margin: 0, borderColor: 'gray' }} /> */}
