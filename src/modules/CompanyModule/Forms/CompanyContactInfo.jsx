@@ -1,6 +1,6 @@
 import { countryList } from '@/utils/countryList'
 import { validatePhoneNumber } from '@/utils/helpers'
-import { Col, Form, Input, Row, Select } from 'antd'
+import { Checkbox, Col, Form, Input, Row, Select } from 'antd'
 import React, { useState } from 'react'
 import styles from './styles.module.css'; // Import the CSS module
 import useLanguage from '@/locale/useLanguage';
@@ -26,6 +26,19 @@ const CompanyContactInfo = () => {
                     <div className={styles.headings}>
                         <p className={styles.bold_text}>Company Contact Information</p>
                     </div>
+                </Col>
+            </Row>
+            {/* Checkbox- Use Same Address as Super Admin */}
+            <Row gutter={[12, 0]}>
+                <Col className={`gutter-row ${styles["mt-10"]} ${styles["mb-20"]}`} span={24}>
+                    <Checkbox
+                        onChange={(value) => {
+                            // setFeedback(value.target.checked);
+                        }}
+                    // value={field.value}
+                    >
+                        {translate("Use Same Address as Super Admin")}
+                    </Checkbox>
                 </Col>
             </Row>
             {/* Address line 1 and Company Contact Person  */}

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Checkbox } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Checkbox, Flex } from 'antd';
+import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { DatePicker } from 'antd';
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 import SelectAsync from '@/components/SelectAsync';
@@ -20,6 +20,7 @@ import { erp } from '@/redux/erp/actions';
 import CompanySuperAdminDetails from './CompanySuperAdminDetails';
 import CompanyBasicDetails from './CompanyBasicDetails';
 import CompanyContactInfo from './CompanyContactInfo';
+import OtherCompanySettings from './OtherCompanySettings';
 
 
 export default function CompanyForm() {
@@ -38,9 +39,6 @@ function LoadCompanyForm() {
   const { id } = useParams();
   const [visible, setVisible] = useState(false);
 
-  const handlePasswordVisibility = () => {
-    setVisible(!visible);
-  };
 
 
   const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
@@ -139,25 +137,28 @@ function LoadCompanyForm() {
       <CompanySuperAdminDetails />
       <CompanyBasicDetails />
       <CompanyContactInfo />
+      <OtherCompanySettings />
 
-
-      {/* <Divider dashed style={{ margin: 0, borderColor: 'gray' }} /> */}
+      {/* <Divider style={{ margin: 0, borderColor: 'gray' }} /> */}
 
       {/* <Divider dashed style={{ margin: 20 }} /> */}
 
-      < div style={{ position: 'relative', width: ' 100%', float: 'right', margin: 20 }
-      }>
-        <Row gutter={[12, -5]}>
-          <Col className="gutter-row" span={5}>
-            <Form.Item>
-              {/* <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={onSubmit}>
-
-                {translate('Save')}
-              </Button> */}
-            </Form.Item>
-          </Col>
-        </Row>
-      </div >
+      <Row gutter={[12, 0]} justify="center">
+        <Col className="gutter-row" span={4}>
+          <Form.Item >
+            <Button type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={onSubmit}>
+              {translate('Save')}
+            </Button>
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <Form.Item >
+            <Button htmlType="submit" icon={<CloseCircleOutlined />} block onClick={onSubmit}>
+              {translate('Cancel')}
+            </Button>
+          </Form.Item>
+        </Col>
+      </Row>
     </>
   );
 }
