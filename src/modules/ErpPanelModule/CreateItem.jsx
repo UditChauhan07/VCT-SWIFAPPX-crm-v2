@@ -78,10 +78,11 @@ export default function CreateItem({ config, CreateForm }) {
       setOfferSubTotal(0);
       navigate(`/${entity.toLowerCase()}/read/${result._id}`);
     }
-    return () => {};
+    return () => { };
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
+    console.log({ fieldsValue });
     if (fieldsValue) {
       if (fieldsValue.items) {
         let newList = [...fieldsValue.items];

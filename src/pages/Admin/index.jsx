@@ -19,14 +19,14 @@ export default function Admin() {
     { title: translate('first name'), dataIndex: 'name' },
     { title: translate('last name'), dataIndex: 'surname' },
     { title: translate('Email'), dataIndex: 'email' },
-    { title: translate('role'), dataIndex: 'role' },
+    { title: translate('role'), dataIndex: 'role_id.name' },
   ];
 
   const dataTableColumns = [
     { title: translate('first name'), dataIndex: 'name' },
     { title: translate('last name'), dataIndex: 'surname' },
     { title: translate('Email'), dataIndex: 'email' },
-    { title: translate('role'), dataIndex: 'role' },
+    { title: translate('role'), dataIndex: ['role_id', 'name'] },
     {
       title: translate('enabled'),
       dataIndex: 'enabled',

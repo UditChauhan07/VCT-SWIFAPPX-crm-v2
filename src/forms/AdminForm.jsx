@@ -3,6 +3,7 @@ import { UploadOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons'
 import { message, Upload, Button, Switch } from 'antd';
 
 import useLanguage from '@/locale/useLanguage';
+import { useEffect, useState } from 'react';
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -17,6 +18,31 @@ const beforeUpload = (file) => {
 };
 
 export default function AdminForm({ isUpdateForm = false }) {
+  const [roleList, setRoleList] = useState([]);
+  useEffect(() => {
+    GetRoleDataHandler().then((res) => {
+      setRoleList(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetRoleDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch("http://localhost:8001/api/roles/list?page=1&items=10", {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+
+  }
+  // console.log('role --- ', role)
+  // console.log('roleList --- ', roleList)
+
   const translate = useLanguage();
   return (
     <>
@@ -31,6 +57,7 @@ export default function AdminForm({ isUpdateForm = false }) {
       >
         <Input autoComplete="off" />
       </Form.Item>
+
       <Form.Item
         label={translate('last Name')}
         name="surname"
@@ -42,6 +69,7 @@ export default function AdminForm({ isUpdateForm = false }) {
       >
         <Input autoComplete="off" />
       </Form.Item>
+
       <Form.Item
         label={translate('email')}
         name="email"
@@ -70,10 +98,31 @@ export default function AdminForm({ isUpdateForm = false }) {
           <Input.Password autoComplete="new-password" />
         </Form.Item>
       )}
+
       <Form.Item label={translate('enabled')} name="enabled" valuePropName={'checked'}>
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />
       </Form.Item>
-      <Form.Item
+
+
+      {!isUpdateForm && (
+        <Form.Item
+          label={translate('Role')}
+          name="role_id"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select defaultValue="">
+            {roleList.map((role, rKey) => (
+              < Select.Option key={rKey} value={role._id} > {translate(role.name)}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item >
+      )}
+
+      {/* <Form.Item
         label={translate('Role')}
         name="role"
         rules={[
@@ -89,8 +138,9 @@ export default function AdminForm({ isUpdateForm = false }) {
           <Select.Option value="createOnly">{translate('create_and_read_only')}</Select.Option>
           <Select.Option value="readOnly">{translate('read_only')}</Select.Option>
         </Select>
-      </Form.Item>
-      <Form.Item
+      </Form.Item > */}
+
+      {/* <Form.Item
         name="file"
         label={translate('Photo')}
         valuePropName="fileList"
@@ -99,7 +149,7 @@ export default function AdminForm({ isUpdateForm = false }) {
         <Upload beforeUpload={beforeUpload}>
           <Button icon={<UploadOutlined />}>{translate('click_to_upload')}</Button>
         </Upload>
-      </Form.Item>
+      </Form.Item> */}
     </>
   );
 }

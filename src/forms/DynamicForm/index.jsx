@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
+// import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
+
+import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox } from 'antd';
+
 
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
@@ -11,6 +14,8 @@ import { generate as uniqueId } from 'shortid';
 import { countryList } from '@/utils/countryList';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
+  console.log('DynamicForm fields --- ', fields);
+
   const [feedback, setFeedback] = useState();
   return (
     <>
@@ -209,7 +214,20 @@ function FormElement({ field, setFeedback }) {
         addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
       />
     ),
+
+    checkbox: (
+      <Checkbox
+        onChange={(value) => {
+          setFeedback(value.target.checked);
+        }}
+        value={field.value}
+      >
+        {field.label}
+      </Checkbox>
+    ),
   };
+
+
 
   const filedType = {
     string: 'string',
