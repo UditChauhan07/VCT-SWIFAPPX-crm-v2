@@ -77,8 +77,8 @@ function LoadCompanyForm() {
         dataToUpdate.items = newList;
       }
     }
-    dispatch(erp.update({ entity: 'roles', id, jsonData: dataToUpdate }));
-    navigate("/roles")
+    dispatch(erp.update({ entity: 'company', id, jsonData: dataToUpdate }));
+    navigate("/company")
   };
   useEffect(() => {
     if (isSuccess) {
@@ -135,14 +135,13 @@ function LoadCompanyForm() {
         </Col>
       </Row> */}
       <CompanySuperAdminDetails />
+      {/* <Divider dashed style={{ borderColor: 'gray', marginTop: "0px" }} /> */}
       <CompanyBasicDetails />
+      {/* <Divider dashed style={{ borderColor: 'gray', marginTop: "0px" }} /> */}
       <CompanyContactInfo />
+      {/* <Divider dashed style={{ borderColor: 'gray', marginTop: "0px" }} /> */}
       <OtherCompanySettings />
-
-      {/* <Divider style={{ margin: 0, borderColor: 'gray' }} /> */}
-
-      {/* <Divider dashed style={{ margin: 20 }} /> */}
-
+      <Divider dashed style={{ borderColor: 'gray', marginTop: "0px" }} />
       <Row gutter={[12, 0]} justify="center">
         <Col className="gutter-row" span={4}>
           <Form.Item >
@@ -153,7 +152,7 @@ function LoadCompanyForm() {
         </Col>
         <Col className="gutter-row" span={4}>
           <Form.Item >
-            <Button htmlType="submit" icon={<CloseCircleOutlined />} block onClick={onSubmit}>
+            <Button htmlType="submit" icon={<CloseCircleOutlined />} block onClick={() => navigate("/company")}>
               {translate('Cancel')}
             </Button>
           </Form.Item>
