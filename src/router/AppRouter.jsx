@@ -5,14 +5,12 @@ import { Navigate } from 'react-router-dom';
 
 const Logout = lazy(() => import('@/pages/Logout.jsx'));
 const NotFound = lazy(() => import('@/pages/NotFound.jsx'));
-
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Customer = lazy(() => import('@/pages/Customer'));
 const Inventory = lazy(() => import('@/pages/Inventory'));
 const Order = lazy(() => import('@/pages/Order'));
 const Invoice = lazy(() => import('@/pages/Invoice'));
 const InvoiceCreate = lazy(() => import('@/pages/Invoice/InvoiceCreate'));
-
 const InvoiceRead = lazy(() => import('@/pages/Invoice/InvoiceRead'));
 const InvoiceUpdate = lazy(() => import('@/pages/Invoice/InvoiceUpdate'));
 const InvoiceRecordPayment = lazy(() => import('@/pages/Invoice/InvoiceRecordPayment'));
@@ -38,23 +36,20 @@ const Offer = lazy(() => import('@/pages/Offer/index'));
 const OfferCreate = lazy(() => import('@/pages/Offer/OfferCreate'));
 const OfferRead = lazy(() => import('@/pages/Offer/OfferRead'));
 const OfferUpdate = lazy(() => import('@/pages/Offer/OfferUpdate'));
-
 const ExpenseCategory = lazy(() => import('@/pages/ExpenseCategory'));
 const Expense = lazy(() => import('@/pages/Expense'));
 const ProductCategory = lazy(() => import('@/pages/ProductCategory'));
 const Product = lazy(() => import('@/pages/Product'));
-
-
 const Roles = lazy(() => import('@/pages/Roles'));
 const RoleCreate = lazy(() => import('@/pages/Roles/RoleCreate'));
 const RoleRead = lazy(() => import('@/pages/Roles/RoleRead'));
 const RoleUpdate = lazy(() => import('@/pages/Roles/RoleUpdate'));
-
 const People = lazy(() => import('@/pages/People'));
 const Worker = lazy(() => import('@/pages/Worker'));
-
 const Company = lazy(() => import('@/pages/Company'));
-
+const CompanyCreate = lazy(() => import('@/pages/Company/CompanyCreate'));
+const CompanyRead = lazy(() => import('@/pages/Company/CompanyRead'));
+const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
 
@@ -115,6 +110,14 @@ export default function AppRouter() {
     {
       path: '/company',
       element: <Company />,
+    },
+    {
+      path: '/company/create',
+      element: <CompanyCreate />,
+    },
+    {
+      path: '/company/update/:id',
+      element: <CompanyUpdate />,
     },
     {
       path: '/expenses',

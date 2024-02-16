@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 
-import { EyeOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { EyeOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import { Dropdown, Table, Button } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
 
@@ -14,19 +14,22 @@ import { useMoney, useDate } from '@/settings';
 import { generate as uniqueId } from 'shortid';
 
 import { useCrudContext } from '@/context/crud';
+import { useNavigate } from 'react-router-dom';
 
 function AddNewItem({ config }) {
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
-  const { ADD_NEW_ENTITY } = config;
+  const { ADD_NEW_ENTITY, entity } = config;
+  const navigate = useNavigate();
 
   const handelClick = () => {
-    panel.open();
-    collapsedBox.close();
+    // panel.open();
+    // collapsedBox.close();
+    navigate(`/${entity.toLowerCase()}/create`);
   };
 
   return (
-    <Button onClick={handelClick} type="primary">
+    <Button onClick={handelClick} type="primary" icon={<PlusOutlined />}>
       {ADD_NEW_ENTITY}
     </Button>
   );
@@ -160,7 +163,7 @@ export default function DataTable({ config, extra = [] }) {
       controller.abort();
     };
   }, []);
-  console.log("dataTableColumns", dataTableColumns, dataSource);
+  // console.log("dataTableColumns", dataTableColumns, dataSource);
   return (
     <>
       <PageHeader
