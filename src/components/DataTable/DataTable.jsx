@@ -23,9 +23,13 @@ function AddNewItem({ config }) {
   const navigate = useNavigate();
 
   const handelClick = () => {
-    // panel.open();
-    // collapsedBox.close();
-    navigate(`/${entity.toLowerCase()}/create`);
+    if (entity == 'admin') {
+      panel.open();
+      collapsedBox.close();
+    }
+    else {
+      navigate(`/${entity.toLowerCase()}/create`)
+    }
   };
 
   return (
