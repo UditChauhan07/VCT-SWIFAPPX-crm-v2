@@ -23,6 +23,9 @@ const AdminInfo = ({ config }) => {
   const { ENTITY_NAME } = config;
   const currentAdmin = useSelector(selectCurrentAdmin);
 
+
+  console.log({ currentAdmin });
+
   const [hasPhotoprofile, setHasPhotoprofile] = useState(false);
 
   useEffect(() => {
@@ -92,7 +95,7 @@ const AdminInfo = ({ config }) => {
               {currentAdmin?.surname}
             </Descriptions.Item>
             <Descriptions.Item label={translate('email')}>{currentAdmin?.email}</Descriptions.Item>
-            <Descriptions.Item label={translate('role')}>{currentAdmin?.role}</Descriptions.Item>
+            <Descriptions.Item label={translate('role')}>{currentAdmin?.role_id.name}</Descriptions.Item>
           </Descriptions>
         </Col>
       </Row>

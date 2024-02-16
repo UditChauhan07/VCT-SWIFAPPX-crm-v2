@@ -22,9 +22,9 @@ import SelectAsync from '@/components/SelectAsync';
 export default function QuoteForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
-  if (!last_quote_number) {
-    return <></>;
-  }
+  // if (!last_quote_number) {
+  //   return <></>;
+  // }
 
   return <LoadQuoteForm subTotal={subTotal} current={current} />;
 }

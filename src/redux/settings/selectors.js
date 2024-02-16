@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 
 export const selectSettings = (state) => state.settings;
 
+// console.log('settings --- ', settings)
+
 export const selectCurrentSettings = createSelector(
   [selectSettings],
   (settings) => settings.result

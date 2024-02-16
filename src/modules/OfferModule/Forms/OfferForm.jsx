@@ -22,9 +22,9 @@ import useLanguage from '@/locale/useLanguage';
 export default function OfferForm({ subTotal = 0, current = null }) {
   const { last_offer_number } = useSelector(selectFinanceSettings);
 
-  if (!last_offer_number) {
-    return <></>;
-  }
+  // if (!last_offer_number) {
+  //   return <></>;
+  // }
 
   return <LoadOfferForm subTotal={subTotal} current={current} />;
 }

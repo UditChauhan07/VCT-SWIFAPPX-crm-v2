@@ -19,6 +19,8 @@ export const login =
       };
       window.localStorage.setItem('auth', JSON.stringify(auth_state));
       window.localStorage.removeItem('isLogout');
+
+      // console.log('window.localStorage --- ', window.localStorage.getItem('auth'));
       dispatch({
         type: actionTypes.REQUEST_SUCCESS,
         payload: data.result,
