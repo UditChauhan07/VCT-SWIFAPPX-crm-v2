@@ -96,6 +96,7 @@ function FixHeaderPanel({ config }) {
 }
 
 function AdminCrudModule({ config, createForm, updateForm }) {
+  console.log('ffffffffff - ', { config });
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
