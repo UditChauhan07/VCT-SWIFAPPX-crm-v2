@@ -4,6 +4,10 @@ import { message, Upload, Button, Switch } from 'antd';
 
 import useLanguage from '@/locale/useLanguage';
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from '@/config/serverApiConfig';
+
+
+console.log('url --- ', `${API_BASE_URL}roles / list ? page = 1 & items=10`);
 
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -31,7 +35,7 @@ export default function AdminForm({ isUpdateForm = false }) {
       "Accept": "*/*",
     }
 
-    let response = await fetch("http://localhost:8001/api/roles/list?page=1&items=10", {
+    let response = await fetch(`${API_BASE_URL}roles/list?page=1&items=10`, {
       method: "GET",
       headers: headersList
     });
