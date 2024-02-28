@@ -33,8 +33,6 @@ export default function UpdatePassword({ config }) {
     onFetch(callback);
   };
 
-  /////
-
   const { readBox } = crudContextAction;
 
   const showCurrentRecord = () => {

@@ -38,7 +38,7 @@ const request = {
   },
   read: async ({ entity, id }) => {
     try {
-      console.log('data entities --- ', {entity, id});
+      // console.log('data entities --- ', {entity, id});
       const response = await axios.get(entity + '/read/' + id);
       successHandler(response, {
         notifyOnSuccess: false,
@@ -63,7 +63,7 @@ const request = {
   },
   updateAndUpload: async ({ entity, id, jsonData }) => {
     try {
-      console.log({ entity, id, jsonData });
+      // console.log({ entity, id, jsonData });
       const response = await axios.patch(entity + '/update/' + id, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -73,13 +73,12 @@ const request = {
         notifyOnSuccess: true,
         notifyOnFailed: true,
       });
-      console.log({response});
+      // console.log({response});
       // return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
-
   delete: async ({ entity, id }) => {
     try {
       const response = await axios.delete(entity + '/delete/' + id);
@@ -92,7 +91,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
   filter: async ({ entity, options = {} }) => {
     try {
       let filter = options.filter ? 'filter=' + options.filter : '';
@@ -109,7 +107,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
   search: async ({ entity, options = {} }) => {
     try {
       let query = '?';
@@ -129,7 +126,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
   list: async ({ entity, options = {} }) => {
     try {
       let query = '?';
@@ -139,7 +135,7 @@ const request = {
       query = query.slice(0, -1);
 
       const response = await axios.get(entity + '/list' + query);
-
+      // console.log({response});
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -162,7 +158,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
   post: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity, jsonData);
@@ -192,7 +187,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
   upload: async ({ entity, id, jsonData }) => {
     try {
       const response = await axios.patch(entity + '/upload/' + id, jsonData, {
@@ -209,13 +203,11 @@ const request = {
       return errorHandler(error);
     }
   },
-
   source: () => {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
     return source;
   },
-
   summary: async ({ entity }) => {
     try {
       const response = await axios.get(entity + '/summary');
@@ -230,7 +222,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
   mail: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity + '/mail/', jsonData);
@@ -243,7 +234,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
   convert: async ({ entity, id }) => {
     try {
       const response = await axios.get(`${entity}/convert/${id}`);

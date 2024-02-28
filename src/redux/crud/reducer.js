@@ -33,6 +33,8 @@ const INITIAL_STATE = {
 
 const crudReducer = (state = INITIAL_STATE, action) => {
   const { payload, keyState } = action;
+
+  // console.log({payload, keyState})
   switch (action.type) {
     case actionTypes.RESET_STATE:
       return INITIAL_STATE;

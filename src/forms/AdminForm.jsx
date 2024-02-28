@@ -42,10 +42,7 @@ export default function AdminForm({ isUpdateForm = false }) {
 
     let data = JSON.parse(await response.text());
     return data
-
   }
-  // console.log('role --- ', role)
-  // console.log('roleList --- ', roleList)
 
   const translate = useLanguage();
   return (
@@ -106,7 +103,6 @@ export default function AdminForm({ isUpdateForm = false }) {
       <Form.Item label={translate('enabled')} name="enabled" valuePropName={'checked'}>
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />
       </Form.Item>
-
 
       {!isUpdateForm && (
         <Form.Item
