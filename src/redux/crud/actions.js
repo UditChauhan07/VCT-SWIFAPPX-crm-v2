@@ -166,7 +166,6 @@ export const crud = {
         });
       }
     },
-
   delete:
     ({ entity, id }) =>
     async (dispatch) => {
@@ -196,7 +195,6 @@ export const crud = {
         });
       }
     },
-
   search:
     ({ entity, options = {} }) =>
     async (dispatch) => {

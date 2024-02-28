@@ -15,21 +15,32 @@ import { generate as uniqueId } from 'shortid';
 
 import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
+let user = JSON.parse(window.localStorage.getItem('auth'))
+let role = user.current.role
+let userLevel = role.admin_level
+let permissions = role.permissions
+console.log({ userLevel });
+// console.log({ permissions });
 
 function AddNewItem({ config }) {
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
-  const navigate = useNavigate();
 
+
+  const navigate = useNavigate();
+  // console.log({ entity });
   const handelClick = () => {
-    if (entity == 'admin') {
-      panel.open();
-      collapsedBox.close();
-    }
-    else {
-      navigate(`/${entity.toLowerCase()}/create`)
-    }
+    // if (entity == 'admin') {
+    //   panel.open();
+    //   collapsedBox.close();
+    // }
+    // else {
+    //   navigate(`/${entity.toLowerCase()}/create`)
+    // }
+
+    panel.open();
+    collapsedBox.close();
   };
 
   return (
@@ -46,28 +57,60 @@ export default function DataTable({ config, extra = [] }) {
   const { moneyFormatter } = useMoney();
   const { dateFormat } = useDate();
 
-  const items = [
-    {
+  let items = []
+  console.log({ items })
+  if (permissions[entity + '_read'] || userLevel == 1) {
+    items.push({
       label: translate('Show'),
       key: 'read',
       icon: <EyeOutlined />,
-    },
-    {
+    })
+  }
+
+  if (permissions[entity + '_edit'] || userLevel == 1) {
+    items.push({
       label: translate('Edit'),
       key: 'edit',
       icon: <EditOutlined />,
-    },
-    ...extra,
+    })
+  }
+
+  items.push(...extra,
     {
       type: 'divider',
     },
+  )
 
-    {
+  if (permissions[entity + '_delete'] || userLevel == 1) {
+    items.push({
       label: translate('Delete'),
       key: 'delete',
       icon: <DeleteOutlined />,
-    },
-  ];
+    })
+  }
+
+  // const items = [
+  //   {
+  //     label: translate('Show'),
+  //     key: 'read',
+  //     icon: <EyeOutlined />,
+  //   },
+  //   {
+  //     label: translate('Edit'),
+  //     key: 'edit',
+  //     icon: <EditOutlined />,
+  //   },
+  //   ...extra,
+  //   {
+  //     type: 'divider',
+  //   },
+
+  //   {
+  //     label: translate('Delete'),
+  //     key: 'delete',
+  //     icon: <DeleteOutlined />,
+  //   },
+  // ];
 
   const handleRead = (record) => {
     dispatch(crud.currentItem({ data: record }));
@@ -167,6 +210,7 @@ export default function DataTable({ config, extra = [] }) {
       controller.abort();
     };
   }, []);
+
   // console.log("dataTableColumns", dataTableColumns, dataSource);
   return (
     <>
@@ -178,12 +222,12 @@ export default function DataTable({ config, extra = [] }) {
           <Button onClick={handelDataTableLoad} key={`${uniqueId()}`}>
             {translate('Refresh')}
           </Button>,
-          <AddNewItem key={`${uniqueId()}`} config={config} />,
+          permissions[entity + '_create'] || userLevel == 1 ? < AddNewItem key={`${uniqueId()}`} config={config} /> : ''
         ]}
         style={{
           padding: '20px 0px',
         }}
-      ></PageHeader>
+      ></PageHeader >
 
       <Table
         columns={dataTableColumns}

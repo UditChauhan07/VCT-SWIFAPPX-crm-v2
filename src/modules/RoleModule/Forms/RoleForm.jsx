@@ -43,23 +43,13 @@ function LoadRoleForm() {
   const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
   const resetErp = {
     status: '',
-    client: {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-    },
-    subTotal: 0,
-    taxTotal: 0,
-    taxRate: 0,
-    total: 0,
-    credit: 0,
-    number: 0,
-    year: 0,
   };
   const [currentErp, setCurrentErp] = useState(current ?? resetErp);
 
+  // console.log({ currentErp });
+
   const onSubmit = (fieldsValue) => {
+    console.log({ fieldsValue });
     let dataToUpdate = { ...fieldsValue };
     if (fieldsValue) {
       if (fieldsValue.date || fieldsValue.expiredDate) {
@@ -68,17 +58,13 @@ function LoadRoleForm() {
           'YYYY-MM-DDTHH:mm:ss.SSSZ'
         );
       }
-      if (fieldsValue.items) {
-        let newList = [...fieldsValue.items];
-        newList.map((item) => {
-          item.total = item.quantity * item.price;
-        });
-        dataToUpdate.items = newList;
-      }
+      // console.log({ dataToUpdate });
     }
+
     dispatch(erp.update({ entity: 'roles', id, jsonData: dataToUpdate }));
     navigate("/roles")
   };
+
   useEffect(() => {
     if (isSuccess) {
       form.resetFields();
@@ -102,9 +88,12 @@ function LoadRoleForm() {
       }
       const { subTotal } = formData;
       form.resetFields();
+      // console.log({ formData });
       form.setFieldsValue(formData);
     }
   }, [current]);
+
+
   return (
     <>
       <Row gutter={[12, 0]}>
@@ -790,8 +779,7 @@ function LoadRoleForm() {
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>
-              <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={onSubmit}>
-
+              <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block >
                 {translate('Save')}
               </Button>
             </Form.Item>
