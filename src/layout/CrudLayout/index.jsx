@@ -15,7 +15,6 @@ const ContentBox = ({ children }) => {
   const { isPanelClose } = stateCrud;
   // const { isNavMenuClose } = stateApp;
   const { panel } = crudContextAction;
-
   const [isSidePanelClose, setSidePanel] = useState(isPanelClose);
 
   useEffect(() => {
