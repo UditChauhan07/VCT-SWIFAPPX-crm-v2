@@ -19,6 +19,8 @@ let user = JSON.parse(window.localStorage.getItem('auth'))
 let role = user.current.role
 let userLevel = role.admin_level
 let permissions = role.permissions
+console.log({ user });
+console.log({ role });
 console.log({ userLevel });
 console.log({ permissions });
 
