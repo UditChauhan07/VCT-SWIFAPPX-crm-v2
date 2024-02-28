@@ -20,7 +20,7 @@ let role = user.current.role
 let userLevel = role.admin_level
 let permissions = role.permissions
 console.log({ userLevel });
-// console.log({ permissions });
+console.log({ permissions });
 
 function AddNewItem({ config }) {
   const { crudContextAction } = useCrudContext();
@@ -29,7 +29,6 @@ function AddNewItem({ config }) {
 
 
   const navigate = useNavigate();
-  // console.log({ entity });
   const handelClick = () => {
     // if (entity == 'admin') {
     //   panel.open();
@@ -51,6 +50,7 @@ function AddNewItem({ config }) {
 }
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
+  console.log({ entity });
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
   const translate = useLanguage();
@@ -59,6 +59,7 @@ export default function DataTable({ config, extra = [] }) {
 
   let items = []
   console.log({ items })
+  console.log('oer ', entity + '_edit');
   if (permissions[entity + '_read'] || userLevel == 1) {
     items.push({
       label: translate('Show'),
@@ -67,7 +68,7 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  if (permissions[entity + '_edit'] || userLevel == 1) {
+  if (permissions[entity + '_edit'] == true || userLevel == 1) {
     items.push({
       label: translate('Edit'),
       key: 'edit',
