@@ -29,6 +29,8 @@ function SidePanelTopContent({ config, formElements }) {
   // const { deleteModalLabels } = config;
   const { advancedBox, modal, editBox } = crudContextAction;
 
+  console.log({ config, formElements });
+
   // const { isReadBoxOpen, isEditBoxOpen, isAdvancedBoxOpen } = state;
   const { result: currentItem } = useSelector(selectCurrentItem);
   const dispatch = useDispatch();
@@ -96,7 +98,6 @@ function FixHeaderPanel({ config }) {
 }
 
 function AdminCrudModule({ config, createForm, updateForm }) {
-  console.log('ffffffffff - ', { config });
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {

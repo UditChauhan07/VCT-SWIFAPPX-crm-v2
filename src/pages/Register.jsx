@@ -54,16 +54,16 @@ const RegisterPage = () => {
         status="info"
         title={translate('Verify your account')}
         subTitle={translate('Check your email address to verify your account')}
-        // extra={
-        //   <Button
-        //     type="primary"
-        //     onClick={() => {
-        //       navigate(`/login`);
-        //     }}
-        //   >
-        //     {translate('Login')}
-        //   </Button>
-        // }
+        extra={
+          <Button
+            type="primary"
+            onClick={() => {
+              navigate(`/login`);
+            }}
+          >
+            {translate('Login')}
+          </Button>
+        }
       ></Result>
     );
   }

@@ -2,8 +2,6 @@ import { useState } from 'react';
 // import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
 
 import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox } from 'antd';
-
-
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
 import { useMoney, useDate } from '@/settings';
@@ -214,7 +212,6 @@ function FormElement({ field, setFeedback }) {
         addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
       />
     ),
-
     checkbox: (
       <Checkbox
         onChange={(value) => {
