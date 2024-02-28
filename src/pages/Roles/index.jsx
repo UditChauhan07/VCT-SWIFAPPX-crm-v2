@@ -34,6 +34,7 @@ export default function Role() {
   ];
 
   const entity = 'roles';
+  console.log({ entity });
   const Labels = {
     PANEL_TITLE: translate('roles'),
     DATATABLE_TITLE: translate('role_list'),
