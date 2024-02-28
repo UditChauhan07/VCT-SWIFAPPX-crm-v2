@@ -16,7 +16,7 @@ import { generate as uniqueId } from 'shortid';
 import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
 let user = JSON.parse(window.localStorage.getItem('auth'))
-let role = user.current.role
+let role = user.current.role_id
 let userLevel = role.admin_level
 let permissions = role.permissions
 console.log({ user });
