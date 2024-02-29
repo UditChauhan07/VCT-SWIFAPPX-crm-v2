@@ -70,6 +70,8 @@ function LoadRoleForm({ isUpdateForm = false }) {
 
   let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes']
 
+  console.log('current?.admin_level --- ', current?.admin_level);
+
   return (
     <>
       <Row gutter={[12, 0]}>
@@ -92,7 +94,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
           </Form.Item>
         </Col>
 
-        {!isUpdateForm && current.admin_level != 1 && (
+        {(isUpdateForm == false && current?.admin_level != 1) && (
           <Col className="gutter-row" span={12}>
             <Form.Item
               label={translate('User Level')}
@@ -102,7 +104,6 @@ function LoadRoleForm({ isUpdateForm = false }) {
                   required: true,
                 },
               ]}
-              initialValue={current.admin_level == 1 ? 'SAAS Admin' : (current.admin_level == 2 ? 'Service Provider' : 'End Customer')}
             >
               <Select>
                 <Select.Option value="2">{translate('Service Provider')}</Select.Option>
