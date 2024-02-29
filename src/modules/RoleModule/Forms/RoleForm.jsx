@@ -21,7 +21,7 @@ export default function RoleForm() {
   return <LoadRoleForm />;
 }
 
-function LoadRoleForm() {
+function LoadRoleForm({ isUpdateForm = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const translate = useLanguage();
@@ -34,7 +34,7 @@ function LoadRoleForm() {
     status: '',
   };
   const [currentErp, setCurrentErp] = useState(current ?? resetErp);
-
+  var initialAdminLevel
   useEffect(() => {
     if (isSuccess) {
       form.resetFields();
@@ -56,25 +56,31 @@ function LoadRoleForm() {
       if (!formData.taxRate) {
         formData.taxRate = 0;
       }
-      const { subTotal } = formData;
+      if (formData.admin_level) {
+        initialAdminLevel = formData.admin_level == 1 ? 'SAAS Admin' : (formData.admin_level == 2 ? 'Service Provider' : 'End Customer')
+      }
+
       form.resetFields();
       form.setFieldsValue(formData);
+      console.log({ formData });
     }
   }, [current]);
+
+  console.log({ current });
 
   let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes']
 
   return (
     <>
       <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={12}>
+        {/* <Col className="gutter-row" span={12}>
           <Form.Item
             name="company_id"
             label={translate('Company')}
           >
             <AutoCompleteAsync entity={'company'} displayLabels={['name']} searchFields={'name'} />
           </Form.Item>
-        </Col>
+        </Col> */}
 
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Name')} name="name" rules={[
@@ -85,6 +91,26 @@ function LoadRoleForm() {
             <Input />
           </Form.Item>
         </Col>
+
+        {!isUpdateForm && current.admin_level != 1 && (
+          <Col className="gutter-row" span={12}>
+            <Form.Item
+              label={translate('User Level')}
+              name="admin_level"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              initialValue={current.admin_level == 1 ? 'SAAS Admin' : (current.admin_level == 2 ? 'Service Provider' : 'End Customer')}
+            >
+              <Select>
+                <Select.Option value="2">{translate('Service Provider')}</Select.Option>
+                <Select.Option value="3">{translate('End Customer')}</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        )}
       </Row>
       <Row gutter={[12, 0]} >
         <Col className="gutter-row" span={24}>

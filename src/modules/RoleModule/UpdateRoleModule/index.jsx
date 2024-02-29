@@ -41,7 +41,7 @@ export default function UpdateRoleModule({ config }) {
     return (
       <ErpLayout>
         {isSuccess ? (
-          <UpdateItem config={config} UpdateForm={RoleForm} />
+          <UpdateItem config={config} UpdateForm={RoleForm} isUpdateForm={true} />
         ) : (
           <NotFound entity={config.entity} />
         )}
