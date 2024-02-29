@@ -18,18 +18,40 @@ export default function Role() {
       title: translate('Name'),
       dataIndex: 'name',
     },
+    // {
+    //   title: translate('Company'),
+    //   dataIndex: ['company_id', 'name'],
+    // },
     {
-      title: translate('Company'),
-      dataIndex: ['company_id', 'name'],
+      title: translate('Slug'),
+      dataIndex: 'slug',
+    },
+    {
+      title: translate('User Level'),
+      dataIndex: 'admin_level',
+      render: (adminLevel) => {
+        let userLevelString = '';
+        switch (adminLevel) {
+          case 1:
+            userLevelString = translate('Swif SAAS Level');
+            break;
+          case 2:
+            userLevelString = translate('Service Provider');
+            break;
+          // case 3:
+          //   userLevelString = translate('End Customer');
+          //   break;
+          default:
+            userLevelString = translate('End Customer');
+            break;
+        }
+        return userLevelString;
+      },
     },
     {
       title: translate('Date'),
       dataIndex: 'date',
       render: (date) => dayjs(date).format(dateFormat),
-    },
-    {
-      title: translate('Slug'),
-      dataIndex: 'slug',
     },
   ];
 
