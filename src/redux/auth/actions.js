@@ -17,10 +17,10 @@ export const login =
         isLoading: false,
         isSuccess: true,
       };
+     
       window.localStorage.setItem('auth', JSON.stringify(auth_state));
       window.localStorage.removeItem('isLogout');
 
-      // console.log('window.localStorage --- ', window.localStorage.getItem('auth'));
       dispatch({
         type: actionTypes.REQUEST_SUCCESS,
         payload: data.result,

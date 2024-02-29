@@ -269,11 +269,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <DashboardOutlined />,
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
-    // {
-    //   key: 'customer',
-    //   icon: <CustomerServiceOutlined />,
-    //   label: <Link to={'/customer'}>{translate('customers')}</Link>,
-    // },
+    {
+      key: 'customer',
+      icon: <CustomerServiceOutlined />,
+      label: <Link to={'/customer'}>{translate('customers')}</Link>,
+    },
     {
       key: 'people',
       icon: <UserOutlined />,
