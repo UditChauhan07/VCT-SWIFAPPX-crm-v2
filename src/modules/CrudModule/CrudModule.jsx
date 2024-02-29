@@ -17,8 +17,19 @@ import { crud } from '@/redux/crud/actions';
 import { useCrudContext } from '@/context/crud';
 
 import { CrudLayout } from '@/layout';
+import { API_BASE_URL } from '@/config/serverApiConfig';
+let user = JSON.parse(window.localStorage.getItem('auth'))
+console.log({ user });
+let user_id = user.current._id
+console.log({ user_id });
+
+var role
+var adminLevel
+var permissions
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
+  const entity = config.entity
+  console.log({ entity });
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
   const { deleteModalLabels } = config;
@@ -46,6 +57,32 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     editBox.open();
   };
 
+  const [admin, setAdmin] = useState([]);
+  useEffect(() => {
+    GetAdminDataHandler().then((res) => {
+      // console.log('result data --- ', res);
+      setAdmin(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetAdminDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+  role = admin?.role_id
+  adminLevel = role?.admin_level
+  permissions = role?.permissions
+
   const show = isReadBoxOpen || isEditBoxOpen ? { opacity: 1 } : { opacity: 0 };
   return (
     <>
@@ -54,7 +91,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           <p style={{ marginBottom: '10px' }}>{labels}</p>
         </Col>
         <Col span={14}>
-          <Button
+          {(permissions?.[entity + '_delete'] || adminLevel == 1) ? <Button
             onClick={removeItem}
             type="text"
             icon={<DeleteOutlined />}
@@ -63,15 +100,21 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           >
             {translate('remove')}
           </Button>
-          <Button
-            onClick={editItem}
-            type="text"
-            icon={<EditOutlined />}
-            size="small"
-            style={{ float: 'right', marginLeft: '0px', marginTop: '10px' }}
-          >
-            {translate('edit')}
-          </Button>
+            : ""
+          }
+
+          {(permissions?.[entity + '_edit'] || adminLevel == 1) ?
+            <Button
+              onClick={editItem}
+              type="text"
+              icon={<EditOutlined />}
+              size="small"
+              style={{ float: 'right', marginLeft: '0px', marginTop: '10px' }}
+            >
+              {translate('edit')}
+            </Button>
+            : ""
+          }
         </Col>
 
         <Col span={24}>
@@ -86,6 +129,39 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
 }
 
 function FixHeaderPanel({ config }) {
+  const entity = config.entity
+  console.log({ config });
+
+  const [admin, setAdmin] = useState([]);
+  useEffect(() => {
+    GetAdminDataHandler().then((res) => {
+      // console.log('result data --- ', res);
+      setAdmin(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+
+  const GetAdminDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+
+  role = admin?.role_id
+  // console.log({ role });
+  adminLevel = role?.admin_level
+  permissions = role?.permissions
+  // console.log({ adminLevel, permissions });
+
   const { crudContextAction } = useCrudContext();
 
   const { collapsedBox } = crudContextAction;
@@ -97,10 +173,14 @@ function FixHeaderPanel({ config }) {
   return (
     <Row gutter={8}>
       <Col className="gutter-row" span={21}>
-        <SearchItem config={config} />
+        {(permissions?.[entity + '_read'] || adminLevel == 1) ?
+          <SearchItem config={config} />
+          : ""}
       </Col>
       <Col className="gutter-row" span={3}>
-        <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
+        {(permissions?.[entity + '_create'] || adminLevel == 1) ?
+          <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
+          : ""}
       </Col>
     </Row>
   );
@@ -117,9 +197,7 @@ function CrudModule({ config, createForm, updateForm, withUpload = false }) {
     <CrudLayout
       config={config}
       fixHeaderPanel={<FixHeaderPanel config={config} />}
-      sidePanelBottomContent={
-        <CreateForm config={config} formElements={createForm} withUpload={withUpload} />
-      }
+      sidePanelBottomContent={<CreateForm config={config} formElements={createForm} withUpload={withUpload} />}
       sidePanelTopContent={
         <SidePanelTopContent config={config} formElements={updateForm} withUpload={withUpload} />
       }
