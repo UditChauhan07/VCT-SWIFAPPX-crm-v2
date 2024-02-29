@@ -49,7 +49,6 @@ const ContentBox = ({ children }) => {
     </Content>
   );
 };
-
 export default function CrudLayout({
   children,
   config,

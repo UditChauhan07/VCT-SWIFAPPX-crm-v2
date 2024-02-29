@@ -16,11 +16,9 @@ import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '@/config/serverApiConfig';
 let user = JSON.parse(window.localStorage.getItem('auth'))
-console.log({ user });
 let user_id = user.current._id
-console.log({ user_id });
 
-console.log('admin data api url --- ', `${API_BASE_URL}admin/read/${user_id}`);
+// console.log('admin data api url --- ', `${API_BASE_URL}admin/read/${user_id}`);
 var role
 var adminLevel
 var permissions
@@ -29,10 +27,11 @@ var permissions
 // console.log({ permissions });
 
 function AddNewItem({ config }) {
+  console.log({ config });
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
-  console.log({ entity });
+  // console.log({ entity });
   const navigate = useNavigate();
   const handelClick = () => {
     // if (entity == 'admin') {
@@ -65,7 +64,7 @@ export default function DataTable({ config, extra = [] }) {
   const [admin, setAdmin] = useState([]);
   useEffect(() => {
     GetAdminDataHandler().then((res) => {
-      console.log('result data --- ', res);
+      // console.log('result data --- ', res);
       setAdmin(res.result)
     }).catch((err) => {
       console.error({ err });
@@ -84,18 +83,14 @@ export default function DataTable({ config, extra = [] }) {
     let data = JSON.parse(await response.text());
     return data
   }
-  console.log({ admin });
+  // console.log({ admin });
   role = admin?.role_id
-  console.log({ role });
+  // console.log({ role });
   adminLevel = role?.admin_level
-  // console.log("adminLevel", adminLevel);
   permissions = role?.permissions
 
-  console.log('111111111111 --- ', { adminLevel, permissions })
 
   let items = []
-  console.log('22222222222 --- ', { adminLevel, permissions })
-  // console.log('oer ', entity + '_edit');
   if (permissions?.[entity + '_read'] || adminLevel == 1) {
     items.push({
       label: translate('Show'),
@@ -248,7 +243,7 @@ export default function DataTable({ config, extra = [] }) {
     };
   }, []);
 
-  // console.log("dataTableColumns", dataTableColumns, dataSource);
+  // console.log({ config });
   return (
     <>
       <PageHeader
@@ -267,7 +262,6 @@ export default function DataTable({ config, extra = [] }) {
           padding: '20px 0px',
         }}
       ></PageHeader >
-
       <Table
         columns={dataTableColumns}
         rowKey={(item) => item._id}

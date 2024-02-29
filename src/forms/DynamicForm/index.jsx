@@ -12,7 +12,7 @@ import { generate as uniqueId } from 'shortid';
 import { countryList } from '@/utils/countryList';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
-  console.log('DynamicForm fields --- ', fields);
+  // console.log('DynamicForm fields --- ', fields);
 
   const [feedback, setFeedback] = useState();
   return (

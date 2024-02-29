@@ -1,18 +1,61 @@
 import React from 'react';
 import { Row, Col } from 'antd';
+import { useEffect, useState } from 'react';
 
-const CollapseBoxButton = ({ onChange, title }) => {
+import { API_BASE_URL } from '@/config/serverApiConfig';
+let user = JSON.parse(window.localStorage.getItem('auth'))
+let user_id = user.current._id
+
+
+
+const CollapseBoxButton = ({ onChange, title, config }) => {
+  let { entity } = config;
+  const [admin, setAdmin] = useState([]);
+  useEffect(() => {
+    GetAdminDataHandler().then((res) => {
+      // console.log('result data colllll --- ', res);
+      setAdmin(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetAdminDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+
+  // console.log({ admin });
+  let role = admin?.role_id
+  // console.log({ role });
+  let adminLevel = role?.admin_level
+  let permissions = role?.permissions
+  let create = permissions?.[entity + '_create']
+  let condition = create || adminLevel == 1 ? true : false
   return (
-    <div className="collapseBoxHeader" onClick={onChange}>
-      {title}
+    <div>
+      {permissions?.[entity + '_create'] || adminLevel == 1 ?
+        <div className="collapseBoxHeader" onClick={onChange}>
+          {title}
+        </div>
+        : ""}
     </div>
   );
+
 };
 
-const TopCollapseBox = ({ isOpen, children }) => {
+const TopCollapseBox = ({ isOpen, children, config }) => {
   const show = isOpen ? { display: 'block', opacity: 1 } : { display: 'none', opacity: 0 };
   return (
-    <div className="TopCollapseBox">
+    <div className="TopCollapseBox bbb">
       <div style={show}>
         <Row>
           <Col span={24}> {children}</Col>
@@ -43,11 +86,12 @@ export default function CollapseBox({
   onCollapse,
 }) {
   const collapsed = isCollapsed ? 'collapsed' : '';
+  let config = topContent.props.config
   return (
     <>
       <TopCollapseBox isOpen={isCollapsed}>{topContent}</TopCollapseBox>
       <div className={'collapseBox ' + collapsed}>
-        <CollapseBoxButton title={buttonTitle} onChange={onCollapse} />
+        <CollapseBoxButton title={buttonTitle} onChange={onCollapse} config={config} />
         <div className="whiteBg"></div>
         <BottomCollapseBox isOpen={isCollapsed}>{bottomContent}</BottomCollapseBox>
       </div>
