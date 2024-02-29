@@ -1,9 +1,8 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { EyeOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import { Dropdown, Table, Button } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { crud } from '@/redux/crud/actions';
 import { selectListItems } from '@/redux/crud/selectors';
@@ -15,21 +14,25 @@ import { generate as uniqueId } from 'shortid';
 
 import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '@/config/serverApiConfig';
 let user = JSON.parse(window.localStorage.getItem('auth'))
-let role = user.current.role
-let userLevel = role.admin_level
-let permissions = role.permissions
 console.log({ user });
-console.log({ role });
-console.log({ userLevel });
-console.log({ permissions });
+let user_id = user.current._id
+console.log({ user_id });
+
+console.log('admin data api url --- ', `${API_BASE_URL}admin/read/${user_id}`);
+var role
+var adminLevel
+var permissions
+// console.log({ role });
+// console.log({ adminLevel });
+// console.log({ permissions });
 
 function AddNewItem({ config }) {
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
-
-
+  console.log({ entity });
   const navigate = useNavigate();
   const handelClick = () => {
     // if (entity == 'admin') {
@@ -50,19 +53,50 @@ function AddNewItem({ config }) {
     </Button>
   );
 }
+
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
-  console.log({ entity });
+  // console.log({ entity });
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
   const translate = useLanguage();
   const { moneyFormatter } = useMoney();
   const { dateFormat } = useDate();
+  const [admin, setAdmin] = useState([]);
+  useEffect(() => {
+    GetAdminDataHandler().then((res) => {
+      console.log('result data --- ', res);
+      setAdmin(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetAdminDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+  console.log({ admin });
+  role = admin?.role_id
+  console.log({ role });
+  adminLevel = role?.admin_level
+  // console.log("adminLevel", adminLevel);
+  permissions = role?.permissions
+
+  console.log('111111111111 --- ', { adminLevel, permissions })
 
   let items = []
-  console.log({ items })
-  console.log('oer ', entity + '_edit');
-  if (permissions[entity + '_read'] || userLevel == 1) {
+  console.log('22222222222 --- ', { adminLevel, permissions })
+  // console.log('oer ', entity + '_edit');
+  if (permissions?.[entity + '_read'] || adminLevel == 1) {
     items.push({
       label: translate('Show'),
       key: 'read',
@@ -70,7 +104,7 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  if (permissions[entity + '_edit'] == true || userLevel == 1) {
+  if (permissions?.[entity + '_edit'] == true || adminLevel == 1) {
     items.push({
       label: translate('Edit'),
       key: 'edit',
@@ -84,7 +118,7 @@ export default function DataTable({ config, extra = [] }) {
     },
   )
 
-  if (permissions[entity + '_delete'] || userLevel == 1) {
+  if (permissions?.[entity + '_delete'] || adminLevel == 1) {
     items.push({
       label: translate('Delete'),
       key: 'delete',
@@ -225,7 +259,9 @@ export default function DataTable({ config, extra = [] }) {
           <Button onClick={handelDataTableLoad} key={`${uniqueId()}`}>
             {translate('Refresh')}
           </Button>,
-          permissions[entity + '_create'] || userLevel == 1 ? < AddNewItem key={`${uniqueId()}`} config={config} /> : ''
+          permissions?.[entity + '_create'] || adminLevel == 1 ?
+            < AddNewItem key={`${uniqueId()}`} config={config} />
+            : ''
         ]}
         style={{
           padding: '20px 0px',
