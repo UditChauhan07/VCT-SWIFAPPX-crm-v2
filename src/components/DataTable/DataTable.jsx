@@ -32,7 +32,7 @@ function AddNewItem({ config }) {
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
-
+  console.log({ entity });
   const navigate = useNavigate();
   const handelClick = () => {
     // if (entity == 'admin') {
