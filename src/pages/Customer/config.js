@@ -37,7 +37,7 @@ export const fields = {
     feedback: 'people',
   },
   company: {
-    type: 'search',
+    type: 'select',
     label: 'company',
     entity: 'company',
     displayLabels: ['name'],

@@ -29,7 +29,7 @@ function SidePanelTopContent({ config, formElements }) {
   // const { deleteModalLabels } = config;
   const { advancedBox, modal, editBox } = crudContextAction;
 
-  console.log({ config, formElements });
+  // console.log({ config, formElements });
 
   // const { isReadBoxOpen, isEditBoxOpen, isAdvancedBoxOpen } = state;
   const { result: currentItem } = useSelector(selectCurrentItem);

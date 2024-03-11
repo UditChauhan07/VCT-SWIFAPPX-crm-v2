@@ -369,7 +369,6 @@ function Sidebar({ collapsible, isMobile = false }) {
           key: 'currency',
           label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
         },
-
         // {
         //   key: 'emailTemplates',
         //   label: <Link to={'/email'}>{translate('email_templates')}</Link>,
