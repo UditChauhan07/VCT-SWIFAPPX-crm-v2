@@ -32,7 +32,7 @@ export default function UpdateForm({ config, formElements, withUpload = false })
   const [form] = Form.useForm();
 
   const onSubmit = (fieldsValue) => {
-    // console.log({ fieldsValue })
+    console.log({ fieldsValue })
     const id = current._id;
 
     if (fieldsValue.file && withUpload) {

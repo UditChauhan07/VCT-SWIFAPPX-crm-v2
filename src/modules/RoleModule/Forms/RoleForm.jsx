@@ -94,7 +94,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
           </Form.Item>
         </Col>
 
-        {(isUpdateForm == false && current?.admin_level != 1) && (
+        {/* {(isUpdateForm == false && current?.admin_level != 1) && (
           <Col className="gutter-row" span={12}>
             <Form.Item
               label={translate('User Level')}
@@ -112,6 +112,25 @@ function LoadRoleForm({ isUpdateForm = false }) {
             </Form.Item>
           </Col>
         )}
+         */}
+
+        <Col className="gutter-row" span={12}>
+          <Form.Item
+            label={translate('User Level')}
+            name="admin_level"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select>
+              <Select.Option value="1">{translate('SAAS Level')}</Select.Option>
+              <Select.Option value="2">{translate('Service Provider')}</Select.Option>
+              <Select.Option value="3">{translate('End Customer')}</Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>
       </Row>
       <Row gutter={[12, 0]} >
         <Col className="gutter-row" span={24}>
