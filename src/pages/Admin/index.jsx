@@ -45,6 +45,40 @@ export default function Admin() {
         />
       ),
     },
+    // {
+    //   title: translate('Type'),
+    //   dataIndex: 'type',
+    //   type: 'selectwithfeedback',
+    //   renderAsTag: true,
+    //   options: [
+    //     { value: 'people', label: 'people', color: 'magenta' },
+    //     { value: 'company', label: 'company', color: 'blue' },
+    //   ],
+    //   required: true,
+    //   hasFeedback: true,
+    // },
+    // {
+    //   title: translate('People'),
+    //   type: 'search',
+    //   label: 'people',
+    //   entity: 'people',
+    //   displayLabels: ['firstname', 'lastname'],
+    //   searchFields: 'firstname,lastname',
+    //   dataIndex: ['people', 'firstname'],
+    //   disableForTable: true,
+    //   feedback: 'people',
+    // },
+    // {
+    //   title: translate('Company'),
+    //   type: 'select',
+    //   label: 'company',
+    //   entity: 'company',
+    //   displayLabels: ['name'],
+    //   searchFields: 'name',
+    //   dataIndex: ['company', 'name'],
+    //   disableForTable: true,
+    //   feedback: 'company',
+    // }
   ];
 
   const Labels = {

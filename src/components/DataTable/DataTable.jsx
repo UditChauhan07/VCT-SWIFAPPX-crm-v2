@@ -27,7 +27,7 @@ var permissions
 // console.log({ permissions });
 
 function AddNewItem({ config }) {
-  console.log({ config });
+  // console.log({ config });
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
@@ -243,7 +243,7 @@ export default function DataTable({ config, extra = [] }) {
     };
   }, []);
 
-  // console.log({ config });
+  // console.log('kkkkk 999 --- ', { config });
   return (
     <>
       <PageHeader

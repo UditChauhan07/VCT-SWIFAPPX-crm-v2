@@ -7,8 +7,6 @@ import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '@/config/serverApiConfig';
 
 
-console.log('url --- ', `${API_BASE_URL}roles / list ? page = 1 & items=10`);
-
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
@@ -23,19 +21,63 @@ const beforeUpload = (file) => {
 
 export default function AdminForm({ isUpdateForm = false }) {
   const [roleList, setRoleList] = useState([]);
+  const [CompanyList, setCompanyList] = useState([]);
+  const [PeopleList, setPeopleList] = useState([]);
+
   useEffect(() => {
     GetRoleDataHandler().then((res) => {
       setRoleList(res.result)
     }).catch((err) => {
       console.error({ err });
     })
+
+    GetCompanyDataHandler().then((res) => {
+      setCompanyList(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+
+    GetPeopleDataHandler().then((res) => {
+      setPeopleList(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
   }, [])
+
   const GetRoleDataHandler = async () => {
     let headersList = {
       "Accept": "*/*",
     }
 
     let response = await fetch(`${API_BASE_URL}roles/list?page=1&items=10`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+
+  const GetCompanyDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}company/list?page=1&items=10`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+
+  const GetPeopleDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}people/list?page=1&items=10`, {
       method: "GET",
       headers: headersList
     });
@@ -114,13 +156,60 @@ export default function AdminForm({ isUpdateForm = false }) {
             },
           ]}
         >
-          <Select defaultValue="">
+          <Select>
             {roleList.map((role, rKey) => (
               < Select.Option key={rKey} value={role._id} > {translate(role.name)}</Select.Option>
             ))}
           </Select>
         </Form.Item >
       )}
+
+      <Form.Item
+        label={translate('Type')}
+        name="type"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Select>
+          <Select.Option value="Company">{translate('Company')}</Select.Option>
+          <Select.Option value="People">{translate('People')}</Select.Option>
+        </Select>
+      </Form.Item >
+
+      <Form.Item
+        label={translate('Company')}
+        name="company"
+        rules={[
+          // {
+          //   required: true,
+          // },
+        ]}
+      >
+        <Select>
+          {CompanyList.map((company, cKey) => (
+            <Select.Option key={cKey} value={company._id}>{translate(company.name)}</Select.Option>
+          ))}
+        </Select>
+      </Form.Item >
+
+      <Form.Item
+        label={translate('People')}
+        name="people"
+        rules={[
+          // {
+          //   required: true,
+          // },
+        ]}
+      >
+        <Select>
+          {PeopleList.map((people, pKey) => (
+            <Select.Option key={pKey} value={people._id}>{translate(people.firstname)}</Select.Option>
+          ))}
+        </Select>
+      </Form.Item >
 
       {/* <Form.Item
         label={translate('Role')}
