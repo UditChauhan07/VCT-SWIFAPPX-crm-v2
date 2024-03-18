@@ -99,7 +99,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
 
   // console.log({ current });
 
-  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes']
+  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype']
 
   // console.log('current?.admin_level --- ', current?.admin_level);
 
