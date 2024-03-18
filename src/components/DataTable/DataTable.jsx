@@ -41,6 +41,9 @@ function AddNewItem({ config }) {
     // else {
     //   navigate(`/${entity.toLowerCase()}/create`)
     // }
+    if (entity == 'customer') {
+      setIsVisible(true);
+    }
 
     panel.open();
     collapsedBox.close();

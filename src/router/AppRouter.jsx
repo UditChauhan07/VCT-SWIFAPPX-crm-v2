@@ -52,6 +52,7 @@ const CompanyRead = lazy(() => import('@/pages/Company/CompanyRead'));
 const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
+const SamplePeople = lazy(() => import('@/pages/SamplePeople'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -259,6 +260,10 @@ export default function AppRouter() {
     {
       path: '*',
       element: <NotFound />,
+    },
+    {
+      path: '/sample',
+      element: <SamplePeople />,
     },
   ]);
 
