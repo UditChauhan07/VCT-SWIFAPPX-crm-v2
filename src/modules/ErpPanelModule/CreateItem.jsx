@@ -87,7 +87,7 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-    console.log({ fieldsValue });
+    // console.log({ fieldsValue });
     if (fieldsValue) {
       if (fieldsValue.items) {
         let newList = [...fieldsValue.items];
@@ -111,7 +111,7 @@ export default function CreateItem({ config, CreateForm }) {
         }}
         title={translate('New')}
         ghost={false}
-        tags={<Tag>{translate('Draft')}</Tag>}
+        tags={entity != 'roles' ? <Tag>{translate('Draft')}</Tag> : ''}
         // subTitle="This is create page"
         extra={[
           <Button

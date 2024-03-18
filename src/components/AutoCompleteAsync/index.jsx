@@ -104,6 +104,7 @@ export default function AutoCompleteAsync({
       value={currentValue}
       onSearch={onSearch}
       onChange={(newValue) => {
+        console.log('107', { newValue });
         if (onChange) {
           if (newValue) onChange(newValue[outputValue] || newValue);
         }

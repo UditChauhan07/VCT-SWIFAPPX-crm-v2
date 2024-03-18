@@ -22,9 +22,12 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 
         if ((isUpdateForm && !field.disableForUpdate) || !field.disableForForm) {
           field.name = key;
-          if (!field.label) field.label = key;
+          if (!field.label) field.label = key; console.log(field.hasFeedback);
           if (field.hasFeedback)
             return <FormElement setFeedback={setFeedback} key={key} field={field} />;
+          else if (field.hasCustomer) {
+            return <FormElement setFeedback={setFeedback} key={key} field={field} />;
+          }
           else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
@@ -40,6 +43,8 @@ function FormElement({ field, setFeedback }) {
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
+
+  const [isVisible, setIsVisible] = useState(false);
 
   const { TextArea } = Input;
 
@@ -107,6 +112,21 @@ function FormElement({ field, setFeedback }) {
         ))}
       </Select>
     ),
+    // selectWithCustomer: (
+    //   <Select
+    //     onChange={(value) => setFeedback(value)}
+    //     defaultValue={field.defaultValue}
+    //     style={{
+    //       width: '100%',
+    //     }}
+    //   >
+    //     {field.options?.map((option) => (
+    //       <Select.Option key={`${uniqueId()}`} value={option.value}>
+    //         {translate(option.label)}
+    //       </Select.Option>
+    //     ))}
+    //   </Select>
+    // ),
     color: (
       <Select
         defaultValue={field.defaultValue}
