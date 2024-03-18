@@ -255,7 +255,7 @@ function FormElement({ field, setFeedback }) {
         // method: 'method',
         // regexp: 'regexp',
         // integer: 'integer',
-        // float: 'float',
+        float: 'float',
         // array: 'array',
         // object: 'object',
         // enum: 'enum',

@@ -1,7 +1,25 @@
 export const fields = {
   name: {
     type: 'string',
-    disableForForm: true,
+    required: true,
+    disableForForm: false,
+  },
+
+  description: {
+    type: 'string',
+    disableForTable: false,
+  },
+  Package_Type: {
+    type: 'string',
+    disableForTable: false,
+  },
+  Package_Divider: {
+    type: 'string',
+    disableForTable: false,
+  },
+  Active_Status: {
+    type: 'string',
+    disableForTable: false,
   },
   // country: {
   //   type: 'country',
