@@ -22,6 +22,7 @@ let user_id = user.current._id
 var role
 var adminLevel
 var permissions
+let isSAAS
 // console.log({ role });
 // console.log({ adminLevel });
 // console.log({ permissions });
@@ -87,11 +88,12 @@ export default function DataTable({ config, extra = [] }) {
   role = admin?.role_id
   // console.log({ role });
   adminLevel = role?.admin_level
+  isSAAS = role?.is_saas
   permissions = role?.permissions
 
 
   let items = []
-  if (permissions?.[entity + '_read'] || adminLevel == 1) {
+  if (permissions?.[entity + '_read'] || isSAAS == true) {
     items.push({
       label: translate('Show'),
       key: 'read',
@@ -99,7 +101,7 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  if (permissions?.[entity + '_edit'] == true || adminLevel == 1) {
+  if (permissions?.[entity + '_edit'] == true || isSAAS == true) {
     items.push({
       label: translate('Edit'),
       key: 'edit',
@@ -113,7 +115,7 @@ export default function DataTable({ config, extra = [] }) {
     },
   )
 
-  if (permissions?.[entity + '_delete'] || adminLevel == 1) {
+  if (permissions?.[entity + '_delete'] || isSAAS == true) {
     items.push({
       label: translate('Delete'),
       key: 'delete',
@@ -254,7 +256,7 @@ export default function DataTable({ config, extra = [] }) {
           <Button onClick={handelDataTableLoad} key={`${uniqueId()}`}>
             {translate('Refresh')}
           </Button>,
-          permissions?.[entity + '_create'] || adminLevel == 1 ?
+          permissions?.[entity + '_create'] || isSAAS == true ?
             < AddNewItem key={`${uniqueId()}`} config={config} />
             : ''
         ]}
