@@ -15,6 +15,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { selectUpdatedItem } from '@/redux/erp/selectors';
 import { erp } from '@/redux/erp/actions';
 
+import { API_BASE_URL } from '@/config/serverApiConfig';
+let user = JSON.parse(window.localStorage.getItem('auth'))
+let user_id = user.current._id
+var role
+var adminLevel
+var permissions
+var isSAAS
 
 export default function RoleForm() {
   const { last_offer_number } = useSelector(selectFinanceSettings);
@@ -35,6 +42,35 @@ function LoadRoleForm({ isUpdateForm = false }) {
   };
   const [currentErp, setCurrentErp] = useState(current ?? resetErp);
   var initialAdminLevel
+
+  const [admin, setAdmin] = useState([]);
+  useEffect(() => {
+    GetAdminDataHandler().then((res) => {
+      // console.log('result data --- ', res);
+      setAdmin(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetAdminDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+
+  role = admin?.role_id
+  adminLevel = role?.admin_level
+
+  // console.log({ adminLevel });
+
   useEffect(() => {
     if (isSuccess) {
       form.resetFields();
@@ -50,14 +86,9 @@ function LoadRoleForm({ isUpdateForm = false }) {
       if (formData.date) {
         formData.date = dayjs(formData.date);
       }
-      if (formData.expiredDate) {
-        formData.expiredDate = dayjs(formData.expiredDate);
-      }
-      if (!formData.taxRate) {
-        formData.taxRate = 0;
-      }
+
       if (formData.admin_level) {
-        initialAdminLevel = formData.admin_level == 1 ? 'SAAS Admin' : (formData.admin_level == 2 ? 'Service Provider' : 'End Customer')
+        initialAdminLevel = formData.admin_level == 1 ? 'Swif SAAS Admin' : (formData.admin_level == 2 ? 'Service Provider' : 'End Customer')
       }
 
       form.resetFields();
@@ -66,11 +97,11 @@ function LoadRoleForm({ isUpdateForm = false }) {
     }
   }, [current]);
 
-  console.log({ current });
+  // console.log({ current });
 
-  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes']
+  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype']
 
-  console.log('current?.admin_level --- ', current?.admin_level);
+  // console.log('current?.admin_level --- ', current?.admin_level);
 
   return (
     <>
@@ -94,27 +125,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
           </Form.Item>
         </Col>
 
-        {/* {(isUpdateForm == false && current?.admin_level != 1) && (
-          <Col className="gutter-row" span={12}>
-            <Form.Item
-              label={translate('User Level')}
-              name="admin_level"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select>
-                <Select.Option value="2">{translate('Service Provider')}</Select.Option>
-                <Select.Option value="3">{translate('End Customer')}</Select.Option>
-              </Select>
-            </Form.Item>
-          </Col>
-        )}
-         */}
-
-        <Col className="gutter-row" span={12}>
+        <Col className="gutter-row" span={adminLevel == 1 ? 6 : 12}>
           <Form.Item
             label={translate('User Level')}
             name="admin_level"
@@ -125,12 +136,36 @@ function LoadRoleForm({ isUpdateForm = false }) {
             ]}
           >
             <Select>
-              <Select.Option value="1">{translate('SAAS Level')}</Select.Option>
-              <Select.Option value="2">{translate('Service Provider')}</Select.Option>
+              {(adminLevel == 1) && (
+                <Select.Option value="1">{translate('Swif SAAS Level')}</Select.Option>
+              )}
+
+              {(adminLevel <= 2) && (
+                <Select.Option value="2">{translate('Service Provider')}</Select.Option>
+              )}
+
+
               <Select.Option value="3">{translate('End Customer')}</Select.Option>
             </Select>
           </Form.Item>
         </Col>
+        {adminLevel == 1 && (<Col className="gutter-row" span={6}>
+          <Form.Item
+            label={translate('Is Default Role')}
+            name="is_default"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select>
+              <Select.Option value="true">{translate('Yes')}</Select.Option>
+              <Select.Option value="false">{translate('No')}</Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>)}
+
       </Row>
       <Row gutter={[12, 0]} >
         <Col className="gutter-row" span={24}>
@@ -139,7 +174,6 @@ function LoadRoleForm({ isUpdateForm = false }) {
           </Form.Item>
         </Col>
       </Row>
-
 
       <Row gutter={[24, 0]}>
         <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
@@ -157,7 +191,6 @@ function LoadRoleForm({ isUpdateForm = false }) {
           <p className={styles.bold_text}>{translate('Module Actions')}</p>
         </Col >
       </Row >
-
 
       {entities.map((entity, key) => (
         < Row align="middle" className={styles.middle_row} >
@@ -184,8 +217,8 @@ function LoadRoleForm({ isUpdateForm = false }) {
                   </Form.Item>
                 </div>
                 <div className={styles.w_100px}>
-                  <Form.Item name={['permissions', `${entity}_read`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_read`], e.target.checked)}>
+                  <Form.Item name={['permissions', `${entity}_read`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={entity === 'admin' ? true : false}>
+                    <Checkbox disabled={entity === 'admin' ? true : false} onChange={(e) => form.setFieldValue(['permissions', `${entity}_read`], e.target.checked)}>
                       {translate('Read')}
                     </Checkbox>
                   </Form.Item>
@@ -211,10 +244,9 @@ function LoadRoleForm({ isUpdateForm = false }) {
       ))
       }
 
-
-      < div style={{ position: 'relative', width: ' 100%', float: 'right', margin: 20 }
+      < div style={{ position: 'relative', width: ' 100%', marginTop: 30 }
       }>
-        <Row gutter={[12, -5]}>
+        <Row gutter={[10, -20]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>
               <Button className="text-center" type="primary" htmlType="submit" icon={<PlusOutlined />} block >

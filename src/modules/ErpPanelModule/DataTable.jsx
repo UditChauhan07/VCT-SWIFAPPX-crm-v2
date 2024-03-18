@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   EyeOutlined,
   EditOutlined,
@@ -21,7 +21,46 @@ import { useNavigate } from 'react-router-dom';
 
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 
+import { API_BASE_URL } from '@/config/serverApiConfig';
+let user = JSON.parse(window.localStorage.getItem('auth'))
+// console.log({ user });
+let user_id = user.current._id
+// console.log({ user_id });
+
+var role
+var adminLevel
+var permissions
+var isSAAS
+
 function AddNewItem({ config }) {
+  const [admin, setAdmin] = useState([]);
+  useEffect(() => {
+    GetAdminDataHandler().then((res) => {
+      // console.log('result data --- ', res);
+      setAdmin(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetAdminDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+  role = admin?.role_id
+  adminLevel = role?.admin_level
+  permissions = role?.permissions
+  isSAAS = role?.isSAAS
+
+  // console.log({ isSaas });
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
 
@@ -30,10 +69,13 @@ function AddNewItem({ config }) {
   };
 
   return (
-    <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
-      {ADD_NEW_ENTITY}
-    </Button>
+    permissions?.[entity + '_create'] || isSAAS == true ? (
+      <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+        {ADD_NEW_ENTITY}
+      </Button>
+    ) : null
   );
+
 }
 
 export default function DataTable({ config, extra = [] }) {
@@ -49,33 +91,64 @@ export default function DataTable({ config, extra = [] }) {
   const { erpContextAction } = useErpContext();
   const { modal } = erpContextAction;
 
-  const items = [
-    {
+  const [admin, setAdmin] = useState([]);
+  useEffect(() => {
+    GetAdminDataHandler().then((res) => {
+      // console.log('result data --- ', res);
+      setAdmin(res.result)
+    }).catch((err) => {
+      console.error({ err });
+    })
+  }, [])
+  const GetAdminDataHandler = async () => {
+    let headersList = {
+      "Accept": "*/*",
+    }
+
+    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = JSON.parse(await response.text());
+    return data
+  }
+
+  role = admin?.role_id
+  isSAAS = role?.is_saas
+  permissions = role?.permissions
+  console.log({ isSAAS });
+  let items = []
+
+  if ((permissions?.[entity + '_read'] || isSAAS == true) && entity != 'roles') {
+    items.push({
       label: translate('Show'),
       key: 'read',
       icon: <EyeOutlined />,
-    },
-    {
+    })
+  }
+
+  if (permissions?.[entity + '_edit'] == true || isSAAS == true) {
+    items.push({
       label: translate('Edit'),
       key: 'edit',
       icon: <EditOutlined />,
-    },
-    {
-      label: translate('Download'),
-      key: 'download',
-      icon: <FilePdfOutlined />,
-    },
-    ...extra,
+    })
+  }
+
+  items.push(...extra,
     {
       type: 'divider',
     },
+  )
 
-    {
+  if (permissions?.[entity + '_delete'] || isSAAS == true) {
+    items.push({
       label: translate('Delete'),
       key: 'delete',
       icon: <DeleteOutlined />,
-    },
-  ];
+    })
+  }
 
   const navigate = useNavigate();
 
@@ -109,49 +182,49 @@ export default function DataTable({ config, extra = [] }) {
       key: 'action',
       fixed: 'right',
       render: (_, record) => {
-        if (entity == "roles") {
-          return (<Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)
-          }>
-            {translate('Edit')}
-          </Button >)
-        }
-        else {
-          return <Dropdown
-            menu={{
-              items,
-              onClick: ({ key }) => {
-                switch (key) {
-                  case 'read':
-                    handleRead(record);
-                    break;
-                  case 'edit':
-                    handleEdit(record);
-                    break;
-                  case 'download':
-                    handleDownload(record);
-                    break;
-                  case 'delete':
-                    handleDelete(record);
-                    break;
-                  case 'recordPayment':
-                    handleRecordPayment(record);
-                    break;
-                  default:
-                    break;
-                }
-                // else if (key === '2')handleCloseTask
-              },
+        // if (entity == "roles") {
+        //   return (<Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)
+        //   }>
+        //     {translate('Edit')}
+        //   </Button >)
+        // }
+        // else {
+        return <Dropdown
+          menu={{
+            items,
+            onClick: ({ key }) => {
+              switch (key) {
+                case 'read':
+                  handleRead(record);
+                  break;
+                case 'edit':
+                  handleEdit(record);
+                  break;
+                case 'download':
+                  handleDownload(record);
+                  break;
+                case 'delete':
+                  handleDelete(record);
+                  break;
+                case 'recordPayment':
+                  handleRecordPayment(record);
+                  break;
+                default:
+                  break;
+              }
+              // else if (key === '2')handleCloseTask
+            },
 
-            }
-            }
-            trigger={['click']}
-          >
-            <EllipsisOutlined
-              style={{ cursor: 'pointer', fontSize: '24px' }}
-              onClick={(e) => e.preventDefault()}
-            />
-          </Dropdown>
-        }
+          }
+          }
+          trigger={['click']}
+        >
+          <EllipsisOutlined
+            style={{ cursor: 'pointer', fontSize: '24px' }}
+            onClick={(e) => e.preventDefault()}
+          />
+        </Dropdown>
+        // }
       }
     },
   ];
