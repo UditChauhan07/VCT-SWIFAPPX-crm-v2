@@ -131,7 +131,6 @@ export default function UpdateItem({ config, UpdateForm }) {
       setSubTotal(subTotal);
     }
   }, [current]);
-
   return (
     <>
       <PageHeader
@@ -140,16 +139,17 @@ export default function UpdateItem({ config, UpdateForm }) {
         }}
         title={translate('update')}
         ghost={false}
-        tags={[
-          <Tag color={tagColor(currentErp.status)?.color} key="status">
-            {currentErp.status && translate(currentErp.status)}
-          </Tag>,
-          currentErp.paymentStatus && (
-            <Tag color={tagColor(currentErp.paymentStatus)?.color} key="paymentStatus">
-              {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
-            </Tag>
-          ),
-        ]}
+        tags={
+          entity != 'roles' ? [
+            <Tag color={tagColor(currentErp.status)?.color} key="status">
+              {currentErp.status && translate(currentErp.status)}
+            </Tag>,
+            currentErp.paymentStatus && (
+              <Tag color={tagColor(currentErp.paymentStatus)?.color} key="paymentStatus">
+                {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
+              </Tag>
+            ),
+          ] : ""}
         extra={[
           <Button
             key={`${uniqueId()}`}

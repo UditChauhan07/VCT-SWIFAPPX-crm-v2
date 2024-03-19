@@ -38,11 +38,13 @@ const CollapseBoxButton = ({ onChange, title, config }) => {
   // console.log({ role });
   let adminLevel = role?.admin_level
   let permissions = role?.permissions
+  let isSAAS = role?.is_saas
+
   let create = permissions?.[entity + '_create']
-  let condition = create || adminLevel == 1 ? true : false
+  let condition = create || isSAAS == true ? true : false
   return (
     <div>
-      {permissions?.[entity + '_create'] || adminLevel == 1 ?
+      {permissions?.[entity + '_create'] || isSAAS == true ?
         <div className="collapseBoxHeader" onClick={onChange}>
           {title}
         </div>
