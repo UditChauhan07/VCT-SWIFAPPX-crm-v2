@@ -55,6 +55,7 @@ const Verify = lazy(() => import('@/pages/Verify'));
 
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
+const ServiceCategory = lazy(() => import('@/pages/ServiceCategory'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -101,6 +102,10 @@ export default function AppRouter() {
     {
       path: '/subscriptiontype',
       element: <SubscriptionType />,
+    },
+    {
+      path: '/servicecategory',
+      element: <ServiceCategory />,
     },
     {
       path: '/roles',
