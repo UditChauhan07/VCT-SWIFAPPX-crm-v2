@@ -274,12 +274,12 @@ function Sidebar({ collapsible, isMobile = false }) {
     {
       key: 'pricingmodel',
       icon: <InsertRowAboveOutlined />,
-      label: <Link to={'/'}>{translate('pricing_model')}</Link>,
+      label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
     },
     {
       key: 'subscriptiontype',
       icon: <ProfileOutlined />,
-      label: <Link to={'/'}>{translate('subscriptions')}</Link>,
+      label: <Link to={'/subscriptiontype'}>{translate('subscriptions')}</Link>,
     },
     {
       key: 'customer',
