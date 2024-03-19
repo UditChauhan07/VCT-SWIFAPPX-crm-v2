@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
 
 import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox } from 'antd';
@@ -10,27 +10,46 @@ import SelectAsync from '@/components/SelectAsync';
 import { generate as uniqueId } from 'shortid';
 
 import { countryList } from '@/utils/countryList';
+import axios from 'axios';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
   // console.log('DynamicForm fields --- ', fields);
 
   const [feedback, setFeedback] = useState();
+  const [selectedRole, setSelectedRole] = useState('');
+  const [roles, setRoles] = useState([]);
+  useEffect(() => {
+    // Fetch companies from API
+    axios.get('http://localhost:8001/api/roles')
+      .then(response => {
+        console.log(response.data.result);
+        setRoles(response.data.result);
+      })
+      .catch(error => {
+        console.error('Error fetching roles:', error);
+      });
+  }, []);
+  const handleRoleChange = (e) => {
+    setSelectedRole(e.target.value);
+  };
   return (
     <>
       {Object.keys(fields).map((key) => {
         let field = fields[key];
-
+        let i = 1;
         if ((isUpdateForm && !field.disableForUpdate) || !field.disableForForm) {
           field.name = key;
           if (!field.label) field.label = key; console.log(field.hasFeedback);
           if (field.hasFeedback)
             return <FormElement setFeedback={setFeedback} key={key} field={field} />;
-          else if (field.hasCustomer) {
-            return <FormElement setFeedback={setFeedback} key={key} field={field} />;
+          else if (field.hasRoles) {
+            console.log('hasRoles', i++);
+            return <FormElement setFeedback={setSelectedRole} key={key} field={field} roles={roles} />;
           }
           else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
+            console.log('here', i++);
             return <FormElement key={key} field={field} />;
           }
         }
@@ -39,7 +58,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   );
 }
 
-function FormElement({ field, setFeedback }) {
+function FormElement({ field, setFeedback, roles = [] }) {
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
@@ -55,6 +74,7 @@ function FormElement({ field, setFeedback }) {
     email: <Input autoComplete="off" placeholder="email@gmail.com" />,
     number: <InputNumber style={{ width: '100%' }} />,
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
+    password: <Input.Password autoComplete="new-password" />,
     boolean: <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
     date: (
       <DatePicker
@@ -112,21 +132,21 @@ function FormElement({ field, setFeedback }) {
         ))}
       </Select>
     ),
-    // selectWithCustomer: (
-    //   <Select
-    //     onChange={(value) => setFeedback(value)}
-    //     defaultValue={field.defaultValue}
-    //     style={{
-    //       width: '100%',
-    //     }}
-    //   >
-    //     {field.options?.map((option) => (
-    //       <Select.Option key={`${uniqueId()}`} value={option.value}>
-    //         {translate(option.label)}
-    //       </Select.Option>
-    //     ))}
-    //   </Select>
-    // ),
+    selectRoles: (
+      <Select
+        onChange={(value) => setFeedback(value)}
+        defaultValue={field.defaultValue}
+        style={{
+          width: '100%',
+        }}
+      >
+        {Array.isArray(roles) && roles.map((role, index) => (
+          <Select.Option key={index} value={role._id}>
+            {role.default_name}
+          </Select.Option>
+        ))}
+      </Select>
+    ),
     color: (
       <Select
         defaultValue={field.defaultValue}
