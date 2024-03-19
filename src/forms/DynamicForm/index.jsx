@@ -20,7 +20,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   const [roles, setRoles] = useState([]);
   useEffect(() => {
     // Fetch companies from API
-    axios.get('http://localhost:8001/api/roles')
+    axios.get('http://localhost:8001/api/roles/showRoles')
       .then(response => {
         console.log(response.data.result);
         setRoles(response.data.result);

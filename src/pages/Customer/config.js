@@ -70,16 +70,19 @@ export const fields = {
     renderAsTag: true,
     required: true,
     hasRoles: true,
+    disableForTable: true,
   },
   enabled: {
     type: 'boolean',
     renderAsTag: true,
     required: true,
+    disableForTable: true,
   },
   username: {
     type: 'text',
     required: true,
     renderAsTag: true,
+    disableForTable: true,
   },
   password: {
     type: 'password',
