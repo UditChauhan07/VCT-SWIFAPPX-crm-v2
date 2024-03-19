@@ -16,7 +16,7 @@ export default function Customer() {
   const Labels = {
     PANEL_TITLE: translate('subscription_type'),
     DATATABLE_TITLE: translate('subscription_type_list'),
-    ADD_NEW_ENTITY: translate('add_new_subscriptiontype'),
+    ADD_NEW_ENTITY: translate('add_subscription_type'),
     ENTITY_NAME: translate('subscription_type'),
   };
   const configPage = {
