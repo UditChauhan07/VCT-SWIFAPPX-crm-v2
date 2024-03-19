@@ -19,17 +19,18 @@ import { useCrudContext } from '@/context/crud';
 import { CrudLayout } from '@/layout';
 import { API_BASE_URL } from '@/config/serverApiConfig';
 let user = JSON.parse(window.localStorage.getItem('auth'))
-console.log({ user });
+// console.log({ user });
 let user_id = user.current._id
-console.log({ user_id });
+// console.log({ user_id });
 
 var role
 var adminLevel
 var permissions
+var isSAAS
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
   const entity = config.entity
-  console.log({ entity });
+  // console.log({ entity });
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
   const { deleteModalLabels } = config;
@@ -82,6 +83,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   role = admin?.role_id
   adminLevel = role?.admin_level
   permissions = role?.permissions
+  isSAAS = role?.is_saas
 
   const show = isReadBoxOpen || isEditBoxOpen ? { opacity: 1 } : { opacity: 0 };
   return (
@@ -91,7 +93,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           <p style={{ marginBottom: '10px' }}>{labels}</p>
         </Col>
         <Col span={14}>
-          {(permissions?.[entity + '_delete'] || adminLevel == 1) ? <Button
+          {(permissions?.[entity + '_delete'] || isSAAS == true) ? <Button
             onClick={removeItem}
             type="text"
             icon={<DeleteOutlined />}
@@ -103,7 +105,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
             : ""
           }
 
-          {(permissions?.[entity + '_edit'] || adminLevel == 1) ?
+          {(permissions?.[entity + '_edit'] || isSAAS == true) ?
             <Button
               onClick={editItem}
               type="text"
@@ -157,13 +159,11 @@ function FixHeaderPanel({ config }) {
   }
 
   role = admin?.role_id
-  // console.log({ role });
-  adminLevel = role?.admin_level
   permissions = role?.permissions
+  isSAAS = role?.is_saas
   // console.log({ adminLevel, permissions });
 
   const { crudContextAction } = useCrudContext();
-
   const { collapsedBox } = crudContextAction;
 
   const addNewItem = () => {
@@ -173,12 +173,12 @@ function FixHeaderPanel({ config }) {
   return (
     <Row gutter={8}>
       <Col className="gutter-row" span={21}>
-        {(permissions?.[entity + '_read'] || adminLevel == 1) ?
+        {(permissions?.[entity + '_read'] || isSAAS == true) ?
           <SearchItem config={config} />
           : ""}
       </Col>
       <Col className="gutter-row" span={3}>
-        {(permissions?.[entity + '_create'] || adminLevel == 1) ?
+        {(permissions?.[entity + '_create'] || isSAAS == true) ?
           <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
           : ""}
       </Col>

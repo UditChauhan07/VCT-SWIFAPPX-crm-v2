@@ -46,4 +46,52 @@ export const fields = {
     disableForTable: true,
     feedback: 'company',
   },
+
+  selected_customer: {
+    type: 'search',
+    label: 'Select Customer',
+    entity: 'people',
+    displayLabels: ['firstname', 'lastname'],
+    searchFields: 'firstname,lastname',
+    // dataIndex: ['people', 'firstname'],
+    disableForTable: true,
+    feedback: 'company',
+  },
+  // role: {
+  //   type: 'search',
+  //   label: 'roles',
+  //   entity: 'roles',
+  //   displayLabels: ['name'],
+  //   searchFields: 'name',
+  //   dataIndex: ['roles', 'name'],
+  // },
+  role: {
+    type: 'select',
+    renderAsTag: true,
+    required: true,
+    options: [
+      { value: '1', label: 'Super Admin' },
+      { value: '2', label: 'Manager' },
+      { value: '3', label: 'Accountant' },
+    ],
+  },
+  status: {
+    type: 'select',
+    renderAsTag: true,
+    required: true,
+    options: [
+      { value: '1', label: 'Active' },
+      { value: '0', label: 'In-Active' },
+    ],
+  },
+  username: {
+    type: 'text',
+    required: true,
+    renderAsTag: true,
+  },
+  password: {
+    type: 'password',
+    required: true,
+    renderAsTag: true,
+  },
 };

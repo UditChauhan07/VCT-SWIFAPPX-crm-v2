@@ -26,6 +26,8 @@ import {
   ShopOutlined,
   FilterOutlined,
   WalletOutlined,
+  InsertRowAboveOutlined,
+  ProfileOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -270,6 +272,16 @@ function Sidebar({ collapsible, isMobile = false }) {
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
     {
+      key: 'pricingmodel',
+      icon: <InsertRowAboveOutlined />,
+      label: <Link to={'/'}>{translate('pricing_model')}</Link>,
+    },
+    {
+      key: 'subscriptiontype',
+      icon: <ProfileOutlined />,
+      label: <Link to={'/'}>{translate('subscriptions')}</Link>,
+    },
+    {
       key: 'customer',
       icon: <CustomerServiceOutlined />,
       label: <Link to={'/customer'}>{translate('customers')}</Link>,
@@ -369,7 +381,6 @@ function Sidebar({ collapsible, isMobile = false }) {
           key: 'currency',
           label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
         },
-
         // {
         //   key: 'emailTemplates',
         //   label: <Link to={'/email'}>{translate('email_templates')}</Link>,

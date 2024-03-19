@@ -53,6 +53,9 @@ const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
 
+const PricingModel = lazy(() => import('@/pages/PricingModel'));
+const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
+
 export default function AppRouter() {
   let element = useRoutes([
     {
@@ -90,6 +93,14 @@ export default function AppRouter() {
     {
       path: '/worker',
       element: <Worker />,
+    },
+    {
+      path: '/pricingmodel',
+      element: <PricingModel />,
+    },
+    {
+      path: '/subscriptiontype',
+      element: <SubscriptionType />,
     },
     {
       path: '/roles',
