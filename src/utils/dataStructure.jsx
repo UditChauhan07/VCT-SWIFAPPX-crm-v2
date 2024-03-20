@@ -204,6 +204,7 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         title: field.label ? translate(field.label) : translate(key),
         dataIndex: keyIndex,
         render: (_, record) => {
+          console.log(keyIndex)
           const selectedCountry = countryList.find((obj) => obj.value === record['people'][key]);
 
           return (
