@@ -10,28 +10,30 @@ import SelectAsync from '@/components/SelectAsync';
 import { generate as uniqueId } from 'shortid';
 
 import { countryList } from '@/utils/countryList';
-import axios from 'axios';
+import { request } from '@/request';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
-  // console.log('DynamicForm fields --- ', fields);
 
   const [feedback, setFeedback] = useState();
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
+
   useEffect(() => {
-    // Fetch companies from API
-    axios.get('http://localhost:8001/api/roles/showRoles')
-      .then(response => {
-        console.log(response.data.result);
-        setRoles(response.data.result);
-      })
-      .catch(error => {
-        console.error('Error fetching roles:', error);
-      });
+    // Fetch data from API
+    const fetchData = async () => {
+      try {
+        const response = await request.getRoles();
+        if (response.success) {
+          setRoles(response.result);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
-  const handleRoleChange = (e) => {
-    setSelectedRole(e.target.value);
-  };
+
   return (
     <>
       {Object.keys(fields).map((key) => {
@@ -39,17 +41,15 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
         let i = 1;
         if ((isUpdateForm && !field.disableForUpdate) || !field.disableForForm) {
           field.name = key;
-          if (!field.label) field.label = key; console.log(field.hasFeedback);
+          if (!field.label) field.label = key;
           if (field.hasFeedback)
             return <FormElement setFeedback={setFeedback} key={key} field={field} />;
           else if (field.hasRoles) {
-            console.log('hasRoles', i++);
             return <FormElement setFeedback={setSelectedRole} key={key} field={field} roles={roles} />;
           }
           else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
-            console.log('here', i++);
             return <FormElement key={key} field={field} />;
           }
         }
@@ -63,15 +63,14 @@ function FormElement({ field, setFeedback, roles = [] }) {
   const money = useMoney();
   const { dateFormat } = useDate();
 
-  const [isVisible, setIsVisible] = useState(false);
-
   const { TextArea } = Input;
+  const [email, setEmail] = useState('test@gmail.com');
 
   const compunedComponent = {
     string: <Input autoComplete="off" />,
     url: <Input addonBefore="http://" autoComplete="off" placeholder="www.website.com" />,
     textarea: <TextArea rows={4} />,
-    email: <Input autoComplete="off" placeholder="email@gmail.com" />,
+    email: <Input autoComplete="off" placeholder="email@gmail.com" value={email} />,
     number: <InputNumber style={{ width: '100%' }} />,
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
     password: <Input.Password autoComplete="new-password" />,
@@ -142,7 +141,7 @@ function FormElement({ field, setFeedback, roles = [] }) {
       >
         {Array.isArray(roles) && roles.map((role, index) => (
           <Select.Option key={index} value={role._id}>
-            {role.default_name}
+            {role.name}
           </Select.Option>
         ))}
       </Select>
