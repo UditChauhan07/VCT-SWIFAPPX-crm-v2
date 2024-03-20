@@ -43,7 +43,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
   };
   const [currentErp, setCurrentErp] = useState(current ?? resetErp);
   var initialAdminLevel
-
+  console.log(form.getFieldValue("is_worker"));
   const [admin, setAdmin] = useState([]);
   useEffect(() => {
     GetAdminDataHandler().then((res) => {
@@ -87,16 +87,24 @@ function LoadRoleForm({ isUpdateForm = false }) {
       if (formData.date) {
         formData.date = dayjs(formData.date);
       }
-
       if (formData.admin_level) {
         initialAdminLevel = formData.admin_level == 1 ? 'Swif SAAS Admin' : (formData.admin_level == 2 ? 'Service Provider' : 'End Customer')
       }
 
+      // console.log("formData.is_worker", formData.is_worker);
+      // if (moduleAccessPermission) {
+      //   formData.is_worker = true
+      // }
+      // else {
+      //   formData.is_worker = false
+
+      // }
       form.resetFields();
       form.setFieldsValue(formData);
       console.log({ formData });
     }
   }, [current]);
+  console.log(current);
 
   // console.log({ current });
 
@@ -105,6 +113,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
   // console.log('current?.admin_level --- ', current?.admin_level);
   const [moduleAccessPermission, setModuleAccessPermission] = useState(true);
   user?.current?.has_worker ? setModuleAccessPermission(false) : null;
+  form.setFieldValue("is_worker", true)
   return (
     <>
       <Row gutter={[12, 0]}>
@@ -179,24 +188,28 @@ function LoadRoleForm({ isUpdateForm = false }) {
       {/* Radio buttons */}
       {user?.current?.has_worker ? null : <Row gutter={[12, 0]} >
         <Col className="gutter-row" span={24}>
-
-          <Form layout="vertical">
-            <Form.Item
-              label={translate('Access Permission')}
-              name="is_worker"
-              rules={[
-                {
-                  required: true,
-                  message: translate('Please select an access permission'),
-                },
-              ]}
-            >
-              <Radio.Group defaultValue={moduleAccessPermission} onChange={(e) => setModuleAccessPermission(e.target.value)}>
-                <Radio value={true} style={{ marginRight: "5rem" }} defaultChecked={true}>{('API Access')}</Radio>
-                <Radio value={false}>{translate('Admin Panel Access')}</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Form>
+          <Form.Item
+            label={translate('Access Permission')}
+            name="is_worker"
+            initialValue={true}
+            rules={[
+              {
+                required: true,
+                message: translate('Please select an access permission'),
+              },
+            ]}
+          >
+            <Radio.Group defaultValue={moduleAccessPermission} onChange={(e) => {
+              setModuleAccessPermission(e.target.value);
+              console.log(e.target.value);
+              form.setFieldValue("is_worker", e.target.value)
+              // setFeedback(e.target.value);
+            }
+            }>
+              <Radio value={true} style={{ marginRight: "5rem" }} defaultChecked={true}>{('API Access')}</Radio>
+              <Radio value={false}>{translate('Admin Panel Access')}</Radio>
+            </Radio.Group>
+          </Form.Item>
         </Col>
       </Row>}
 
