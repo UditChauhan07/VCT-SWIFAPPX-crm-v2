@@ -1,4 +1,10 @@
 export const fields = {
+  Type: {
+    type: 'string',
+    disableForForm: true,
+    displayLabels: ['type'],
+    dataIndex: ['admin', 'type'],
+  },
   type: {
     type: 'selectwithfeedback',
     renderAsTag: true,
@@ -8,6 +14,7 @@ export const fields = {
     ],
     required: true,
     hasFeedback: true,
+    disableForTable: true,
   },
   company: {
     type: 'search',
