@@ -246,5 +246,13 @@ const request = {
       return errorHandler(error);
     }
   },
+  getRoles: async () => {
+    try {
+      const response = await axios.get(`/roles/show`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
 export default request;
