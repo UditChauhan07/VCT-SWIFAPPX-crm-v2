@@ -1,6 +1,6 @@
 export const fields = {
   type: {
-    type: 'selectwithfeedback',
+    type: 'selectwithfeedbackCustom',
     renderAsTag: true,
     dataIndex: ['admin', 'type'],
     options: [
@@ -55,7 +55,7 @@ export const fields = {
     disableForTable: true,
   },
   country: {
-    type: 'string',
+    type: 'countryCustom',
     // color: 'red',
     disableForForm: true,
     displayLabels: ['country'],

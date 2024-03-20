@@ -120,6 +120,21 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         dataIndex: keyIndex,
         render: (text, record) => {
           if (field.renderAsTag) {
+            const selectedOption = field.options.find((x) => x.value === record[key]);
+
+            return (
+              <Tag bordered={false} color={selectedOption?.color}>
+                {record[key] && translate(record[key])}
+              </Tag>
+            );
+          } else return record[key] && translate(record[key]);
+        },
+      },
+      selectwithfeedbackCustom: {
+        title: field.label ? translate(field.label) : translate(key),
+        dataIndex: keyIndex,
+        render: (text, record) => {
+          if (field.renderAsTag) {
             const selectedOption = field.options.find((x) => x.value === record['admin'][key]);
 
             return (
@@ -176,6 +191,20 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         dataIndex: keyIndex,
         render: (_, record) => {
           const selectedCountry = countryList.find((obj) => obj.value === record[key]);
+
+          return (
+            <Tag bordered={false} color={field.color || undefined}>
+              {selectedCountry?.icon && selectedCountry?.icon + ' '}
+              {selectedCountry?.label && translate(selectedCountry.label)}
+            </Tag>
+          );
+        },
+      },
+      countryCustom: {
+        title: field.label ? translate(field.label) : translate(key),
+        dataIndex: keyIndex,
+        render: (_, record) => {
+          const selectedCountry = countryList.find((obj) => obj.value === record['people'][key]);
 
           return (
             <Tag bordered={false} color={field.color || undefined}>
