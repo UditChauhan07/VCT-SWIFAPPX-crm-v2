@@ -120,14 +120,14 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         dataIndex: keyIndex,
         render: (text, record) => {
           if (field.renderAsTag) {
-            const selectedOption = field.options.find((x) => x.value === record[key]);
+            const selectedOption = field.options.find((x) => x.value === record['admin'][key]);
 
             return (
               <Tag bordered={false} color={selectedOption?.color}>
-                {record[key] && translate(record[key])}
+                {record['admin'][key] && translate(record['admin'][key])}
               </Tag>
             );
-          } else return record[key] && translate(record[key]);
+          } else return record['admin'][key] && translate(record['admin'][key]);
         },
       },
       select: {

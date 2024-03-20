@@ -1,20 +1,15 @@
 export const fields = {
-  Type: {
-    type: 'string',
-    disableForForm: true,
-    displayLabels: ['type'],
-    dataIndex: ['admin', 'type'],
-  },
   type: {
     type: 'selectwithfeedback',
     renderAsTag: true,
+    dataIndex: ['admin', 'type'],
     options: [
       { value: 'People', label: 'People', color: 'magenta' },
       { value: 'Company', label: 'Company', color: 'blue' },
     ],
     required: true,
     hasFeedback: true,
-    disableForTable: true,
+    // disableForTable: true,
   },
   company: {
     type: 'search',
@@ -69,14 +64,12 @@ export const fields = {
 
   role: {
     type: 'selectRoles',
-    renderAsTag: true,
     required: true,
     hasRoles: true,
     disableForTable: true,
   },
   enabled: {
     type: 'boolean',
-    renderAsTag: true,
     required: true,
     disableForTable: true,
   },
