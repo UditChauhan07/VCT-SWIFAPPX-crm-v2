@@ -4,21 +4,20 @@ export const fields = {
     required: true,
     disableForForm: false,
   },
-
   description: {
     type: 'string',
     disableForTable: false,
   },
-  Package_Type: {
+  package_type: {
     type: 'string',
     disableForTable: false,
   },
-  Package_Divider: {
+  package_divider: {
     type: 'string',
     disableForTable: false,
   },
-  Active_Status: {
-    type: 'string',
+  active_status: {
+    type: 'boolean',
     disableForTable: false,
   },
   // country: {

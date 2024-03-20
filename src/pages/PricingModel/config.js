@@ -14,64 +14,64 @@ export const fields = {
     type: 'float',
     disableForTable: true,
   },
-  Quotations_Cost: {
+  quotation_cost: {
     type: 'float',
     disableForTable: true,
   },
-  Execution_Work_Orders_Cost: {
+  execution_work_orders_cost: {
     type: 'float',
     disableForTable: true,
   },
-  Free_Quotations: {
-    type: 'string',
-    disableForTable: true,
-  },
-  Free_Work_Orders: {
-    type: 'string',
-    disableForTable: true,
-  },
-  Numbers_of_users: {
+  free_quotations: {
     type: 'float',
     disableForTable: true,
   },
-  Discount: {
-    type: 'string',
+  free_work_orders: {
+    type: 'float',
+    disableForTable: true,
+  },
+  numbers_of_users: {
+    type: 'float',
+    disableForTable: true,
+  },
+  discount: {
+    type: 'float',
     disableForTable: false,
   },
-  Tax: {
-    type: 'string',
+  tax: {
+    type: 'float',
     disableForTable: true,
   },
-  No_of_Roles: {
-    type: 'string',
+  no_of_roles: {
+    type: 'float',
     disableForTable: false,
   },
-  Default_Storage: {
-    type: 'string',
+  default_storage: {
+    type: 'float',
     disableForTable: true,
   },
-  Additional_Storage: {
-    type: 'string',
+  additional_storage: {
+    type: 'float',
     disableForTable: true,
   },
-  Additional_Storage_Cost: {
-    type: 'string',
+  additional_storage_cost: {
+    type: 'float',
     disableForTable: true,
   },
-  Quotation_Status: {
-    type: 'Boolean',
+  quotation_status: {
+    type: 'boolean',
     disableForTable: true,
   },
-  Contracts_Status: {
-    type: 'Boolean',
+  contract_status: {
+    type: 'boolean',
     disableForTable: true,
   },
-  Work_Order_Status: {
-    type: 'Boolean',
+  work_order_status: {
+    type: 'boolean',
     disableForTable: false,
   },
-  Active_Status: {
-    type: 'Boolean',
+  active_status: {
+    type: 'boolean',
     disableForTable: true,
   },
 
