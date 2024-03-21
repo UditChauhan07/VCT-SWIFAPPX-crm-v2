@@ -18,6 +18,7 @@ import useLanguage from '@/locale/useLanguage';
 import calculate from '@/utils/calculate';
 import { useSelector } from 'react-redux';
 import SelectAsync from '@/components/SelectAsync';
+import { response } from './jsonResponse';
 
 export default function QuoteForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
@@ -45,6 +46,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const { TextArea } = Input;
   const money = useMoney();
 
+  const [options, setOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('');
+  const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
+  const [serviceCategoryOptions] = useState(['Cleaning']);
+  const [serviceOptions] = useState(['Service Custom (One Time)', 'General Packages', 'Office Packages', 'Special']);
+  console.log(response);
+
+
+
   useEffect(() => {
     if (current) {
       const { taxRate = 0, year, number } = current;
@@ -65,10 +75,56 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     addField.current.click();
   }, []);
 
+  const handleFirstDropdownChange = async (event) => {
+    // const selectedValue = event.target.value;
+    // setSelectedOption(selectedValue);
+
+    // Make API request with the selected value
+    try {
+      // const response = await fetch(`your_api_endpoint/${selectedValue}`);
+      const data = [{ value: '1', label: 'Home' }, { value: '3', label: 'Billing' }, { value: '4', label: 'Shipping' }];
+
+
+      // Extract options from the API response
+      const extractedOptions = data.map((item) => ({
+        value: item.value,
+        label: item.label,
+      }));
+
+      // Update the options for the second dropdown
+      setSecondDropdownOptions(extractedOptions);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const getServicesSubAndItems = async (event) => {
+    // const selectedValue = event.target.value;
+    // setSelectedOption(selectedValue);
+
+    // Make API request with the selected value
+    try {
+      // const response = await fetch(`your_api_endpoint/${selectedValue}`);
+      const data = [{ value: '1', label: 'Home' }, { value: '3', label: 'Billing' }, { value: '4', label: 'Shipping' }];
+
+
+      // Extract options from the API response
+      const extractedOptions = data.map((item) => ({
+        value: item.value,
+        label: item.label,
+      }));
+
+      // Update the options for the second dropdown
+      setSecondDropdownOptions(extractedOptions);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   return (
     <>
       <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={8}>
+        {/* <Col className="gutter-row" span={8}>
           <Form.Item
             name="customerType"
             label={translate('Customer Type')}
@@ -84,8 +140,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               <Radio value="Old">Existing</Radio>
             </Radio.Group>
           </Form.Item>
-        </Col>
-        <Col className="gutter-row" span={8}>
+        </Col> */}
+        <Col className="gutter-row" span={6}>
           <Form.Item
             name="selectCustomer"
             label={translate('Select Customer')}
@@ -98,12 +154,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             <AutoCompleteAsync
               entity={'client'}
               displayLabels={['name']}
-              searchFields={'name'}
+              searchFields={'name,surname'}
+              onChange={handleFirstDropdownChange}
             // onUpdateValue={autoCompleteUpdate}
             />
           </Form.Item>
         </Col>
-        <Col className="gutter-row" span={8}>
+        <Col className="gutter-row" span={6}>
           <Form.Item
             name="customerAddress"
             label={translate('Customer Address')}
@@ -113,12 +170,58 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            <AutoCompleteAsync
-              entity={'address'}
-              displayLabels={['address']}
-              searchFields={'address'}
-            // onUpdateValue={autoCompleteUpdate}
-            />
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {secondDropdownOptions.map((option, index) => (
+                <Select.Option key={index} value={option.value}>{option.label}</Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={6}>
+          <Form.Item
+            name="billingAddress"
+            label={translate('Billing Address')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {secondDropdownOptions.map((option, index) => (
+                <Select.Option key={index} value={option.value}>{option.label}</Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col className="gutter-row" span={6}>
+          <Form.Item
+            name="shippingAddress"
+            label={translate('Shipping Address')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {secondDropdownOptions.map((option, index) => (
+                <Select.Option key={index} value={option.value}>{option.label}</Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
 
@@ -134,27 +237,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Radio.Group style={{ display: "flex", gap: "20px" }}>
-              <Radio value="1">Yes</Radio>
+              <Radio value="1" selected>Yes</Radio>
               <Radio value="0">No</Radio>
             </Radio.Group>
-          </Form.Item>
-        </Col>
-        <Col className="gutter-row" span={8}>
-          <Form.Item
-            name="billingAddress"
-            label={translate('Billing Address')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <AutoCompleteAsync
-              entity={'address'}
-              displayLabels={['address']}
-              searchFields={'address'}
-            // onUpdateValue={autoCompleteUpdate}
-            />
           </Form.Item>
         </Col>
       </Row>
@@ -229,12 +314,22 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            <AutoCompleteAsync
+            {/* <AutoCompleteAsync
               entity={'servicCategories'}
               displayLabels={['servicCategories']}
               searchFields={'servicCategories'}
             // onUpdateValue={autoCompleteUpdate}
-            />
+            /> */}
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {serviceCategoryOptions.map((option, index) => (
+                <Select.Option key={index} value={index}>{option}</Select.Option>
+              ))}
+            </Select>
+
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={8}>
@@ -247,12 +342,21 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            <AutoCompleteAsync
+            {/* <AutoCompleteAsync
               entity={'services'}
               displayLabels={['services']}
               searchFields={'services'}
             // onUpdateValue={autoCompleteUpdate}
-            />
+            /> */}
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {serviceOptions.map((option, index) => (
+                <Select.Option key={index} value={index} onChange={getServicesSubAndItems}>{option}</Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
 
@@ -295,7 +399,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         {(fields, { add, remove }) => (
           <>
             {fields.map((field) => (
-              <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
+              <ItemRow key={field.key} remove={remove} field={field} current={current} response={response}></ItemRow>
             ))}
             <Form.Item>
               <Button
