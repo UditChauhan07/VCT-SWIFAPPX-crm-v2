@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, InputNumber, Button, Select, Divider, Row, Col } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Radio } from 'antd';
 
 import { PlusOutlined } from '@ant-design/icons';
 
-import { DatePicker } from 'antd';
+import { DatePicker, TimePicker } from 'antd';
 
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 
@@ -12,7 +12,7 @@ import ItemRow from '@/modules/ErpPanelModule/ItemRow';
 
 import MoneyInputFormItem from '@/components/MoneyInputFormItem';
 import { selectFinanceSettings } from '@/redux/settings/selectors';
-import { useDate } from '@/settings';
+import { useMoney, useDate } from '@/settings';
 import useLanguage from '@/locale/useLanguage';
 
 import calculate from '@/utils/calculate';
@@ -42,6 +42,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
   };
+  const { TextArea } = Input;
+  const money = useMoney();
 
   useEffect(() => {
     if (current) {
@@ -66,10 +68,27 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   return (
     <>
       <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={9}>
+        <Col className="gutter-row" span={8}>
           <Form.Item
-            name="client"
-            label={translate('Client')}
+            name="customerType"
+            label={translate('Customer Type')}
+            rules={[
+              {
+                required: true,
+                message: 'Please select a Customer Type:',
+              },
+            ]}
+          >
+            <Radio.Group style={{ display: "flex", gap: "20px" }}>
+              <Radio value="New">New</Radio>
+              <Radio value="Old">Existing</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="selectCustomer"
+            label={translate('Select Customer')}
             rules={[
               {
                 required: true,
@@ -80,68 +99,71 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               entity={'client'}
               displayLabels={['name']}
               searchFields={'name'}
-              // onUpdateValue={autoCompleteUpdate}
+            // onUpdateValue={autoCompleteUpdate}
             />
-          </Form.Item>
-        </Col>
-        <Col className="gutter-row" span={5}>
-          <Form.Item
-            label={translate('number')}
-            name="number"
-            initialValue={lastNumber}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <InputNumber min={1} style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-        <Col className="gutter-row" span={5}>
-          <Form.Item
-            label={translate('year')}
-            name="year"
-            initialValue={currentYear}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <InputNumber style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-        <Col className="gutter-row" span={5}>
-          <Form.Item
-            label={translate('status')}
-            name="status"
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-            initialValue={'draft'}
-          >
-            <Select
-              options={[
-                { value: 'draft', label: translate('Draft') },
-                { value: 'pending', label: translate('Pending') },
-                { value: 'sent', label: translate('Sent') },
-                { value: 'accepted', label: translate('Accepted') },
-              ]}
-            ></Select>
-          </Form.Item>
-        </Col>
-        <Col className="gutter-row" span={9}>
-          <Form.Item label={translate('Note')} name="note">
-            <Input />
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={8}>
           <Form.Item
+            name="customerAddress"
+            label={translate('Customer Address')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <AutoCompleteAsync
+              entity={'address'}
+              displayLabels={['address']}
+              searchFields={'address'}
+            // onUpdateValue={autoCompleteUpdate}
+            />
+          </Form.Item>
+        </Col>
+
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="sendQuotationEmail"
+            label={translate('Send Quotation Email')}
+            rules={[
+              {
+                required: true,
+                message: 'Please select a Send Quotation Email:',
+              },
+            ]}
+          >
+            <Radio.Group style={{ display: "flex", gap: "20px" }}>
+              <Radio value="1">Yes</Radio>
+              <Radio value="0">No</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="billingAddress"
+            label={translate('Billing Address')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <AutoCompleteAsync
+              entity={'address'}
+              displayLabels={['address']}
+              searchFields={'address'}
+            // onUpdateValue={autoCompleteUpdate}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Divider dashed />
+      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+        <Col className="gutter-row" span={6}>
+          <Form.Item
             name="date"
-            label={translate('Date')}
+            label={translate('Start Date')}
             rules={[
               {
                 required: true,
@@ -153,7 +175,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             <DatePicker style={{ width: '100%' }} format={dateFormat} />
           </Form.Item>
         </Col>
-        <Col className="gutter-row" span={7}>
+        <Col className="gutter-row" span={6}>
           <Form.Item
             name="expiredDate"
             label={translate('Expire Date')}
@@ -168,24 +190,106 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             <DatePicker style={{ width: '100%' }} format={dateFormat} />
           </Form.Item>
         </Col>
+        <Col className="gutter-row" span={6}>
+          <Form.Item
+            name="startTime"
+            label={translate('Start Time')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <TimePicker style={{ width: '100%' }} format="HH:mm" />
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={6}>
+          <Form.Item
+            name="expectedTimeRequired"
+            label={translate('Expected Time Required')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <TimePicker style={{ width: '100%' }} format="HH:mm" />
+          </Form.Item>
+        </Col>
       </Row>
       <Divider dashed />
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-        <Col className="gutter-row" span={5}>
-          <p>{translate('Item')}</p>
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="serviceCategory"
+            label={translate('Service Category')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <AutoCompleteAsync
+              entity={'servicCategories'}
+              displayLabels={['servicCategories']}
+              searchFields={'servicCategories'}
+            // onUpdateValue={autoCompleteUpdate}
+            />
+          </Form.Item>
         </Col>
-        <Col className="gutter-row" span={7}>
-          <p>{translate('Description')}</p>
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="serviceName"
+            label={translate('Service Name')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <AutoCompleteAsync
+              entity={'services'}
+              displayLabels={['services']}
+              searchFields={'services'}
+            // onUpdateValue={autoCompleteUpdate}
+            />
+          </Form.Item>
+        </Col>
+
+      </Row>
+      <Divider dashed />
+
+      <Divider dashed />
+
+      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+        <Col className="gutter-row" span={4}>
+          <p>{translate('Sub-Item')}</p>
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <p>{translate('Price')}</p>
         </Col>
         <Col className="gutter-row" span={3}>
           <p>{translate('Quantity')}</p>{' '}
         </Col>
         <Col className="gutter-row" span={4}>
-          <p>{translate('Price')}</p>
-        </Col>
-        <Col className="gutter-row" span={5}>
           <p>{translate('Total')}</p>
         </Col>
+        <Col className="gutter-row" span={6}>
+          <p>{translate('Remarks')}</p>
+        </Col>
+        {/* <Col className="gutter-row d-none" span={3}>
+          <Form.Item>
+            <Button
+              type="dashed"
+              onClick={() => add()}
+              block
+              icon={<PlusOutlined />}
+              ref={addField}
+            >
+              {translate('Add field')}
+            </Button>
+          </Form.Item>
+        </Col> */}
       </Row>
       <Form.List name="items">
         {(fields, { add, remove }) => (
@@ -208,6 +312,66 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         )}
       </Form.List>
       <Divider dashed />
+
+      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="adjustmentType"
+            label={translate('Adjustment Type')}
+            rules={[
+              {
+                required: true,
+                message: 'Please select a Customer Type:',
+              },
+            ]}
+          >
+            <Radio.Group style={{ display: "flex", gap: "20px" }}>
+              <Radio value="addition">Addition</Radio>
+              <Radio value="substraction">Subsctraction</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="adjustmentValue"
+            label={translate('Adjustment Value')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <InputNumber addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined} style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="Discount"
+            label={translate('Discount')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={24}>
+          <Form.Item
+            name="remarks"
+            label={translate('Remarks')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <TextArea />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Divider dashed />
       <div style={{ position: 'relative', width: ' 100%', float: 'right' }}>
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
@@ -217,61 +381,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               </Button>
             </Form.Item>
           </Col>
-          <Col className="gutter-row" span={4} offset={10}>
-            <p
-              style={{
-                paddingLeft: '12px',
-                paddingTop: '5px',
-              }}
-            >
-              {translate('Sub Total')} :
-            </p>
-          </Col>
-          <Col className="gutter-row" span={5}>
-            <MoneyInputFormItem readOnly value={subTotal} />
-          </Col>
+
         </Row>
-        <Row gutter={[12, -5]}>
-          <Col className="gutter-row" span={4} offset={15}>
-            <Form.Item
-              name="taxRate"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <SelectAsync
-                value={taxRate}
-                onChange={handelTaxChange}
-                entity={'taxes'}
-                outputValue={'taxValue'}
-                displayLabels={['taxName']}
-                withRedirect={true}
-                urlToRedirect="/taxes"
-                redirectLabel="Add New Tax"
-              />
-            </Form.Item>
-          </Col>
-          <Col className="gutter-row" span={5}>
-            <MoneyInputFormItem readOnly value={taxTotal} />
-          </Col>
-        </Row>
-        <Row gutter={[12, -5]}>
-          <Col className="gutter-row" span={4} offset={15}>
-            <p
-              style={{
-                paddingLeft: '12px',
-                paddingTop: '5px',
-              }}
-            >
-              {translate('Total')} :
-            </p>
-          </Col>
-          <Col className="gutter-row" span={5}>
-            <MoneyInputFormItem readOnly value={total} />
-          </Col>
-        </Row>
+
       </div>
     </>
   );

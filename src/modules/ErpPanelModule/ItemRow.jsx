@@ -53,7 +53,7 @@ export default function ItemRow({ field, remove, current = null }) {
 
   return (
     <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-      <Col className="gutter-row" span={5}>
+      <Col className="gutter-row" span={4}>
         <Form.Item
           name={[field.name, 'itemName']}
           rules={[
@@ -70,16 +70,6 @@ export default function ItemRow({ field, remove, current = null }) {
           <Input placeholder="Item Name" />
         </Form.Item>
       </Col>
-      <Col className="gutter-row" span={7}>
-        <Form.Item name={[field.name, 'description']}>
-          <Input placeholder="description Name" />
-        </Form.Item>
-      </Col>
-      <Col className="gutter-row" span={3}>
-        <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
-          <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
-        </Form.Item>
-      </Col>
       <Col className="gutter-row" span={4}>
         <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
           <InputNumber
@@ -92,7 +82,13 @@ export default function ItemRow({ field, remove, current = null }) {
           />
         </Form.Item>
       </Col>
-      <Col className="gutter-row" span={5}>
+      <Col className="gutter-row" span={3}>
+        <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
+          <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
+        </Form.Item>
+      </Col>
+
+      <Col className="gutter-row" span={4}>
         <Form.Item name={[field.name, 'total']}>
           <Form.Item>
             <InputNumber
@@ -109,7 +105,13 @@ export default function ItemRow({ field, remove, current = null }) {
         </Form.Item>
       </Col>
 
-      <div style={{ position: 'absolute', right: '-20px', top: ' 5px' }}>
+      <Col className="gutter-row" span={7}>
+        <Form.Item name={[field.name, 'remarks']}>
+          <Input placeholder=" Remarks for Quotation" />
+        </Form.Item>
+      </Col>
+
+      <div style={{ position: 'absolute', right: '50px', top: ' 5px' }}>
         <DeleteOutlined onClick={() => remove(field.name)} />
       </div>
     </Row>

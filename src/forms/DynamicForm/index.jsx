@@ -131,6 +131,21 @@ function FormElement({ field, setFeedback, roles = [] }) {
         ))}
       </Select>
     ),
+    selectwithfeedbackCustom: (
+      <Select
+        onChange={(value) => setFeedback(value)}
+        defaultValue={field.defaultValue}
+        style={{
+          width: '100%',
+        }}
+      >
+        {field.options?.map((option) => (
+          <Select.Option key={`${uniqueId()}`} value={option.value}>
+            {translate(option.label)}
+          </Select.Option>
+        ))}
+      </Select>
+    ),
     selectRoles: (
       <Select
         onChange={(value) => setFeedback(value)}
@@ -197,6 +212,33 @@ function FormElement({ field, setFeedback, roles = [] }) {
       </Select>
     ),
     country: (
+      <Select
+        showSearch
+        defaultValue={field.defaultValue}
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+        filterSort={(optionA, optionB) =>
+          (optionA?.label ?? '').toLowerCase().startsWith((optionB?.label ?? '').toLowerCase())
+        }
+        style={{
+          width: '100%',
+        }}
+      >
+        {countryList.map((language) => (
+          <Select.Option
+            key={language.value}
+            value={language.value}
+            label={translate(language.label)}
+          >
+            {language?.icon && language?.icon + ' '}
+            {translate(language.label)}
+          </Select.Option>
+        ))}
+      </Select>
+    ),
+    countryCustom: (
       <Select
         showSearch
         defaultValue={field.defaultValue}
