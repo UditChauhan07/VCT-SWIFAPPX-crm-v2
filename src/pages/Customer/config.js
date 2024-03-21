@@ -1,4 +1,17 @@
 export const fields = {
+
+  // Type: {
+  //   type: 'selectwithfeedback',
+  //   renderAsTag: true,
+  //   disableForForm: true, 
+  //   options: [
+  //     { value: 'People', label: 'People', color: 'magenta' },
+  //     { value: 'Company', label: 'Company', color: 'blue' },
+  //   ],
+  //   // displayLabels: ['type'],
+  //   // dataIndex: ['admin', 'type'],
+  // },
+
   type: {
     type: 'selectwithfeedbackCustom',
     renderAsTag: true,
@@ -10,6 +23,7 @@ export const fields = {
     required: true,
     hasFeedback: true,
     // disableForTable: true,
+
   },
   company: {
     type: 'search',
