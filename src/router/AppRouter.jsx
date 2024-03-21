@@ -57,6 +57,7 @@ const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
 const ServiceCategory = lazy(() => import('@/pages/ServiceCategory'));
+const ServiceList = lazy(() => import('@/pages/ServiceList'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -111,6 +112,10 @@ export default function AppRouter() {
     {
       path: '/servicecategory',
       element: <ServiceCategory />,
+    },
+    {
+      path: '/servicelist',
+      element: <ServiceList />,
     },
     {
       path: '/roles',
