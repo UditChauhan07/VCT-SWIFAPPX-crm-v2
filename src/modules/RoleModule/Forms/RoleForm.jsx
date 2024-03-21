@@ -19,7 +19,6 @@ import { erp } from '@/redux/erp/actions';
 import { API_BASE_URL } from '@/config/serverApiConfig';
 let user = JSON.parse(window.localStorage.getItem('auth'))
 let user_id = user.current._id
-console.log({ user })
 var role
 var adminLevel
 var permissions
@@ -187,7 +186,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
         </Col>
       </Row>
       {/* Radio buttons */}
-      {user?.current?.has_worker ? null : <Row gutter={[12, 0]} >
+      {/* {user?.current?.has_worker ? null : <Row gutter={[12, 0]} >
         <Col className="gutter-row" span={24}>
           <Form.Item
             label={translate('Access Permission')}
@@ -202,9 +201,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
           >
             <Radio.Group defaultValue={moduleAccessPermission} onChange={(e) => {
               setModuleAccessPermission(e.target.value);
-              console.log(e.target.value);
               form.setFieldValue("is_worker", e.target.value)
-              // setFeedback(e.target.value);
             }
             }>
               <Radio value={true} style={{ marginRight: "5rem" }} defaultChecked={true}>{('API Access')}</Radio>
@@ -212,85 +209,83 @@ function LoadRoleForm({ isUpdateForm = false }) {
             </Radio.Group>
           </Form.Item>
         </Col>
-
-      </Row>}
+      </Row>} */}
 
       {(user?.current?.has_worker)}
       {/* permissions */}
-      {moduleAccessPermission === false ?
-        <>
+      {/* {moduleAccessPermission === false ? */}
+      {/* <> */}
 
+      <Row gutter={[24, 0]}>
+        <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
+          {translate('Permissions')}
+        </Col>
 
-          <Row gutter={[24, 0]}>
-            <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
-              {translate('Permissions')}
-            </Col>
+      </Row>
+      <Row align="middle" className={styles.first_row}>
+        <Col className="gutter-row" span={6} >
+          <p className={styles.bold_text}>{translate('Module Name')}</p>
+        </Col>
+        <Col className={`${styles.custom_col} gutter-row`} span={12}>
+          <p className={styles.bold_text}>{translate('Module Actions')}</p>
+        </Col >
+      </Row >
 
-          </Row>
-          <Row align="middle" className={styles.first_row}>
-            <Col className="gutter-row" span={6} >
-              <p className={styles.bold_text}>{translate('Module Name')}</p>
-            </Col>
-            <Col className={`${styles.custom_col} gutter-row`} span={12}>
-              <p className={styles.bold_text}>{translate('Module Actions')}</p>
-            </Col >
-          </Row >
-
-          {entities.map((entity, key) => (
-            < Row align="middle" className={styles.middle_row} >
-              <Col className="gutter-row" span={6}>
-                {translate(entity[0].toUpperCase() +
-                  entity.slice(1))}
-              </Col>
-              <Col className={`${styles.custom_col} gutter-row`} span={18}>
-                <div className={styles['permissions_container']}>
-                  <p className='m-0'>Check to add Permissions</p>
-                  <div className={styles['permissions_checkboxes']}>
-                    <div className={styles.w_100px}>
-                      <Form.Item name={['permissions', `${entity}_list`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
-                        <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_list`], e.target.checked)}>
-                          {translate('List')}
-                        </Checkbox>
-                      </Form.Item>
-                    </div>
-                    <div className={styles.w_100px}>
-                      <Form.Item name={['permissions', `${entity}_create`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                        <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_create`], e.target.checked)}>
-                          {translate('Create')}
-                        </Checkbox>
-                      </Form.Item>
-                    </div>
-                    <div className={styles.w_100px}>
-                      <Form.Item name={['permissions', `${entity}_read`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={entity === 'admin' ? true : false}>
-                        <Checkbox disabled={entity === 'admin' ? true : false} onChange={(e) => form.setFieldValue(['permissions', `${entity}_read`], e.target.checked)}>
-                          {translate('Read')}
-                        </Checkbox>
-                      </Form.Item>
-                    </div>
-                    <div className={styles.w_100px}>
-                      <Form.Item name={['permissions', `${entity}_edit`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                        <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_edit`], e.target.checked)}>
-                          {translate('Edit')}
-                        </Checkbox>
-                      </Form.Item>
-                    </div>
-                    <div className={styles.w_100px}>
-                      <Form.Item name={['permissions', `${entity}_delete`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
-                        <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_delete`], e.target.checked)}>
-                          {translate('Delete')}
-                        </Checkbox>
-                      </Form.Item>
-                    </div>
-                  </div >
-                </div >
-              </Col >
-            </Row >
-          ))
-          }
-        </> :
-        null
+      {entities.map((entity, key) => (
+        < Row align="middle" className={styles.middle_row} >
+          <Col className="gutter-row" span={6}>
+            {translate(entity[0].toUpperCase() +
+              entity.slice(1))}
+          </Col>
+          <Col className={`${styles.custom_col} gutter-row`} span={18}>
+            <div className={styles['permissions_container']}>
+              <p className='m-0'>Check to add Permissions</p>
+              <div className={styles['permissions_checkboxes']}>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `${entity}_list`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_list`], e.target.checked)}>
+                      {translate('List')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `${entity}_create`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_create`], e.target.checked)}>
+                      {translate('Create')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `${entity}_read`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={entity === 'admin' ? true : false}>
+                    <Checkbox disabled={entity === 'admin' ? true : false} onChange={(e) => form.setFieldValue(['permissions', `${entity}_read`], e.target.checked)}>
+                      {translate('Read')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `${entity}_edit`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_edit`], e.target.checked)}>
+                      {translate('Edit')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `${entity}_delete`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_delete`], e.target.checked)}>
+                      {translate('Delete')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+              </div >
+            </div >
+          </Col >
+        </Row >
+      ))
       }
-      {moduleAccessPermission === true ? <>
+      {/* </> :
+        null
+      } */}
+      {/* {moduleAccessPermission === true ? <>
         <Row gutter={[24, 0]}>
           <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
             {translate('Permissions')}
@@ -352,13 +347,11 @@ function LoadRoleForm({ isUpdateForm = false }) {
             </div >
           </Col >
         </Row >
-
-      </> : null}
+      </> : null} */}
       {/* Module Name and Module Actions */}
 
-
-
-      < div style={{ position: 'relative', width: ' 100%', marginTop: 30 }}>
+      < div style={{ position: 'relative', width: ' 100%', marginTop: 30 }
+      }>
         <Row gutter={[10, -20]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>
