@@ -1,13 +1,13 @@
 export const fields = {
-
   type: {
     type: 'selectwithfeedback',
     renderAsTag: true,
-    disableForForm: true, 
     options: [
       { value: 'People', label: 'People', color: 'magenta' },
       { value: 'Company', label: 'Company', color: 'blue' },
     ],
+    required: true,
+    hasFeedback: true,
   },
   company: {
     type: 'search',
@@ -27,7 +27,7 @@ export const fields = {
     searchFields: 'firstname,lastname',
     dataIndex: ['people', 'firstname'],
     disableForTable: true,
-    // feedback: 'People',
+    feedback: 'People',
   },
   name: {
     type: 'string',
