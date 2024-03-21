@@ -1,29 +1,13 @@
 export const fields = {
 
-  // Type: {
-  //   type: 'selectwithfeedback',
-  //   renderAsTag: true,
-  //   disableForForm: true, 
-  //   options: [
-  //     { value: 'People', label: 'People', color: 'magenta' },
-  //     { value: 'Company', label: 'Company', color: 'blue' },
-  //   ],
-  //   // displayLabels: ['type'],
-  //   // dataIndex: ['admin', 'type'],
-  // },
-
   type: {
-    type: 'selectwithfeedbackCustom',
+    type: 'selectwithfeedback',
     renderAsTag: true,
-    dataIndex: ['admin', 'type'],
+    disableForForm: true, 
     options: [
       { value: 'People', label: 'People', color: 'magenta' },
       { value: 'Company', label: 'Company', color: 'blue' },
     ],
-    required: true,
-    hasFeedback: true,
-    // disableForTable: true,
-
   },
   company: {
     type: 'search',
@@ -49,12 +33,6 @@ export const fields = {
     type: 'string',
     disableForForm: true,
     dataIndex: ['admin', 'name'],
-  },
-  phone: {
-    type: 'phone',
-    disableForForm: true,
-    displayLabels: ['phone'],
-    dataIndex: ['people', 'phone'],
   },
   email: {
     type: 'email',
@@ -85,6 +63,6 @@ export const fields = {
   enabled: {
     type: 'boolean',
     required: true,
-    disableForTable: true,
+    disableForTable: false,
   },
 };
