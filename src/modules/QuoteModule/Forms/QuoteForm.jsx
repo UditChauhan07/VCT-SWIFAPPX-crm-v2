@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Radio } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Radio, Checkbox } from 'antd';
 
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -8,7 +8,7 @@ import { DatePicker, TimePicker } from 'antd';
 
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 
-import ItemRow from '@/modules/ErpPanelModule/ItemRow';
+import QuoteItemRow from '@/modules/ErpPanelModule/QuoteItemRow';
 
 import MoneyInputFormItem from '@/components/MoneyInputFormItem';
 import { selectFinanceSettings } from '@/redux/settings/selectors';
@@ -19,6 +19,7 @@ import calculate from '@/utils/calculate';
 import { useSelector } from 'react-redux';
 import SelectAsync from '@/components/SelectAsync';
 import { response } from './jsonResponse';
+import styles from './styles.module.css'; // Import the CSS module
 
 export default function QuoteForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
@@ -52,8 +53,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [serviceCategoryOptions] = useState(['Cleaning']);
   const [serviceOptions] = useState(['Service Custom (One Time)', 'General Packages', 'Office Packages', 'Special']);
   console.log(response);
+  const [subscriptionData, setSubscriptionData] = useState({});
 
+  useEffect(() => {
+    // Your code to fetch response.servicePriceModal and process data
+    const processedData = {};
+    response.servicePriceModal.forEach(item => {
+      const { subscription, option_name, option_price } = item;
+      const { name } = subscription;
+      if (!processedData[name]) {
+        processedData[name] = {};
+      }
+      processedData[name][option_name] = option_price;
+    });
 
+    // Set subscriptionData state with processed data
+    setSubscriptionData(processedData);
+  }, []);
 
   useEffect(() => {
     if (current) {
@@ -362,44 +378,75 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       </Row>
       <Divider dashed />
+      {/* {response.servicePriceModal.map((entity, key) => ( */}
+      <Row align="middle" className={styles.first_row}>
+        <Col className="gutter-row" span={3} >
+          <p className={styles.bold_text}>Subscription</p>
+        </Col>
+        <Col className={`${styles.custom_col} gutter-row`} span={7}>
+          <p className={styles.bold_text}>3 hour</p>
+        </Col >
+        <Col className={`${styles.custom_col} gutter-row`} span={7}>
+          <p className={styles.bold_text}>3.5 hour</p>
+        </Col >
+        <Col className={`${styles.custom_col} gutter-row`} span={7}>
+          <p className={styles.bold_text}>4 hour</p>
+        </Col >
+      </Row >
 
+      < Row align="middle" className={styles.middle_row} >
+        <Col className="gutter-row" span={3}>
+          One Time
+        </Col>
+        <Col className={`${styles.custom_col} gutter-row`} span={7}>
+          <div className={styles['permissions_container']}>
+            <div className={styles['permissions_checkboxes']}>
+              <div className={styles.w_100px}>
+                <Form.Item name={['permissions']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
+                  <Checkbox>
+                    98.00
+                  </Checkbox>
+                </Form.Item>
+              </div>
+            </div >
+          </div >
+        </Col >
+        <Col className={`${styles.custom_col} gutter-row`} span={7}>
+          <div className={styles['permissions_container']}>
+            <div className={styles['permissions_checkboxes']}>
+              <div className={styles.w_100px}>
+                <Form.Item name={['permissions']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
+                  <Checkbox>
+                    112.00
+                  </Checkbox>
+                </Form.Item>
+              </div>
+            </div >
+          </div >
+        </Col >
+        <Col className={`${styles.custom_col} gutter-row`} span={7}>
+          <div className={styles['permissions_container']}>
+            <div className={styles['permissions_checkboxes']}>
+              <div className={styles.w_100px}>
+                <Form.Item name={['permissions']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
+                  <Checkbox>
+                    126.00
+                  </Checkbox>
+                </Form.Item>
+              </div>
+            </div >
+          </div >
+        </Col >
+      </Row >
+      {/* ))} */}
       <Divider dashed />
 
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-        <Col className="gutter-row" span={4}>
-          <p>{translate('Sub-Item')}</p>
-        </Col>
-        <Col className="gutter-row" span={4}>
-          <p>{translate('Price')}</p>
-        </Col>
-        <Col className="gutter-row" span={3}>
-          <p>{translate('Quantity')}</p>{' '}
-        </Col>
-        <Col className="gutter-row" span={4}>
-          <p>{translate('Total')}</p>
-        </Col>
-        <Col className="gutter-row" span={6}>
-          <p>{translate('Remarks')}</p>
-        </Col>
-        {/* <Col className="gutter-row d-none" span={3}>
-          <Form.Item>
-            <Button
-              type="dashed"
-              onClick={() => add()}
-              block
-              icon={<PlusOutlined />}
-              ref={addField}
-            >
-              {translate('Add field')}
-            </Button>
-          </Form.Item>
-        </Col> */}
-      </Row>
+
       <Form.List name="items">
         {(fields, { add, remove }) => (
           <>
             {fields.map((field) => (
-              <ItemRow key={field.key} remove={remove} field={field} current={current} response={response}></ItemRow>
+              <QuoteItemRow key={field.key} remove={remove} field={field} current={current} response={response}></QuoteItemRow>
             ))}
             <Form.Item>
               <Button
