@@ -32,14 +32,19 @@ export const fields = {
   name: {
     type: 'string',
     disableForForm: true,
-    dataIndex: ['admin', 'name'],
+    dataIndex: ['people', 'firstname'],
+    // pending
+    // dataIndex: ['type'] === 'Company' ? ['company', 'name'] : ['people', 'firstname'],
   },
+
   email: {
     type: 'email',
     required: true,
     displayLabels: ['email'],
     dataIndex: ['admin', 'email'],
   },
+  // dataIndex: hasPeople ? ['people', 'email'] : ['company', 'email'] // Replace 'company, email' with your logic
+
   password: {
     type: 'password',
     required: true,

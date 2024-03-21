@@ -33,7 +33,6 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 
     fetchData();
   }, []);
-
   return (
     <>
       {Object.keys(fields).map((key) => {
@@ -311,7 +310,7 @@ function FormElement({ field, setFeedback, roles = [] }) {
     string: 'string',
     textarea: 'string',
     number: 'number',
-    phone: 'string',
+    phone: 'phone',
     //boolean: 'boolean',
     // method: 'method',
     // regexp: 'regexp',
@@ -327,6 +326,7 @@ function FormElement({ field, setFeedback, roles = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
+  console.log(field);
   return (
     <Form.Item
       label={translate(field.label)}
@@ -335,6 +335,18 @@ function FormElement({ field, setFeedback, roles = [] }) {
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
+          validator: field.type === 'phone' ? (rule, value, callback) => {
+            if (!value) {
+              callback(); // Allow empty values if not required
+              return;
+            }
+            const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
+            if (!pattern.test(value)) {
+              callback('Please enter a valid 10-digit mobile number ');
+            } else {
+              callback(); // Success
+            }
+          } : undefined,
         },
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
