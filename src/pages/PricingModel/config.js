@@ -8,8 +8,10 @@ export const fields = {
 
   description: {
     type: 'string',
-    disableForTable: true,
+    type: 'textarea',
+    disableForForm: false,
   },
+  
   primary_work_order_cost: {
     type: 'float',
     disableForTable: true,

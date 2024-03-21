@@ -4,6 +4,29 @@ export const fields = {
     required: true,
     disableForForm: false,
   },
+  // description: {
+  //   type: 'string',
+  //   // required: true,
+  //   // TextArea_rows:5,
+  //   // disableForForm: true,
+  //   disableForForm: false,
+
+  // },
+  description: {
+    type: 'string',
+    type: 'textarea',
+    disableForForm: false,
+  },
+
+  Choose_subscription_types: {
+    type: 'checkbox',
+    label: 'Choose subscription types',
+  },
+  status: {
+    type: 'select',
+    disableForForm: false,
+  
+  },
 
   // description: {
   //   type: 'string',
