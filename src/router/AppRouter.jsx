@@ -52,6 +52,7 @@ const CompanyRead = lazy(() => import('@/pages/Company/CompanyRead'));
 const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
+const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
 
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
@@ -66,6 +67,10 @@ export default function AppRouter() {
     {
       path: '/verify/*',
       element: <Verify />,
+    },
+    {
+      path: '/role-select',
+      element: <CompanyRoleSelector />,
     },
     {
       path: '/resetpassword/*',

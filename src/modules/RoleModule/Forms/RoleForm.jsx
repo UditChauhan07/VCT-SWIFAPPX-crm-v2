@@ -19,6 +19,7 @@ import { erp } from '@/redux/erp/actions';
 import { API_BASE_URL } from '@/config/serverApiConfig';
 let user = JSON.parse(window.localStorage.getItem('auth'))
 let user_id = user.current._id
+console.log({ user })
 var role
 var adminLevel
 var permissions
@@ -211,12 +212,14 @@ function LoadRoleForm({ isUpdateForm = false }) {
             </Radio.Group>
           </Form.Item>
         </Col>
+
       </Row>}
 
       {(user?.current?.has_worker)}
       {/* permissions */}
       {moduleAccessPermission === false ?
         <>
+
 
           <Row gutter={[24, 0]}>
             <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
@@ -349,11 +352,13 @@ function LoadRoleForm({ isUpdateForm = false }) {
             </div >
           </Col >
         </Row >
+
       </> : null}
       {/* Module Name and Module Actions */}
 
-      < div style={{ position: 'relative', width: ' 100%', marginTop: 30 }
-      }>
+
+
+      < div style={{ position: 'relative', width: ' 100%', marginTop: 30 }}>
         <Row gutter={[10, -20]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>
