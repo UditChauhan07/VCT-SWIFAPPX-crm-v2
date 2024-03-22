@@ -52,10 +52,13 @@ const CompanyRead = lazy(() => import('@/pages/Company/CompanyRead'));
 const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
+const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
 
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
 const ServiceCategory = lazy(() => import('@/pages/ServiceCategory'));
+const ServiceList = lazy(() => import('@/pages/ServiceList'));
+const PublicHoliday = lazy(() => import('@/pages/PublicHoliday'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -66,6 +69,10 @@ export default function AppRouter() {
     {
       path: '/verify/*',
       element: <Verify />,
+    },
+    {
+      path: '/role-select',
+      element: <CompanyRoleSelector />,
     },
     {
       path: '/resetpassword/*',
@@ -100,12 +107,20 @@ export default function AppRouter() {
       element: <PricingModel />,
     },
     {
+      path: '/publicholiday',
+      element: <PublicHoliday />,
+    },
+    {
       path: '/subscriptiontype',
       element: <SubscriptionType />,
     },
     {
       path: '/servicecategory',
       element: <ServiceCategory />,
+    },
+    {
+      path: '/servicelist',
+      element: <ServiceList />,
     },
     {
       path: '/roles',
