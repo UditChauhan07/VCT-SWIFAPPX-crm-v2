@@ -37,6 +37,13 @@ export const fields = {
     // dataIndex: ['type'] === 'Company' ? ['company', 'name'] : ['people', 'firstname'],
   },
 
+//   phone: {
+//     type: 'phone',
+//     disableForForm: true,
+//     displayLabels: ['phone'],
+//     dataIndex: ['people', 'phone'],
+//   },
+
   email: {
     type: 'email',
     required: true,
@@ -68,6 +75,6 @@ export const fields = {
   enabled: {
     type: 'boolean',
     required: true,
-    disableForTable: false,
+    disableForTable: true,
   },
 };

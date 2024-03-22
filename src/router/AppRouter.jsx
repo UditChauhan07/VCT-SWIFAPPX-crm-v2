@@ -58,6 +58,7 @@ const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
 const ServiceCategory = lazy(() => import('@/pages/ServiceCategory'));
 const ServiceList = lazy(() => import('@/pages/ServiceList'));
+const PublicHoliday = lazy(() => import('@/pages/PublicHoliday'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -104,6 +105,10 @@ export default function AppRouter() {
     {
       path: '/pricingmodel',
       element: <PricingModel />,
+    },
+    {
+      path: '/publicholiday',
+      element: <PublicHoliday />,
     },
     {
       path: '/subscriptiontype',
