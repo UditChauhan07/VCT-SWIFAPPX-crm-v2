@@ -11,7 +11,7 @@ export const fields = {
     type: 'textarea',
     disableForForm: false,
   },
-  
+
   primary_work_order_cost: {
     type: 'float',
     disableForTable: true,
@@ -72,9 +72,10 @@ export const fields = {
     type: 'boolean',
     disableForTable: false,
   },
-  active_status: {
+  enabled: {
     type: 'boolean',
     disableForTable: true,
+    label: 'active_status',
   },
 
   // country: {
