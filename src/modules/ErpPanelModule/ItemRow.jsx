@@ -4,10 +4,12 @@ import { Form, Input, InputNumber, Row, Col } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useMoney, useDate } from '@/settings';
 import calculate from '@/utils/calculate';
+import { useForm } from 'antd/lib/form/Form';
 
-export default function ItemRow({ field, remove, current = null }) {
+export default function ItemRow({ field, remove, current = null, response }) {
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
+  const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
 
   const money = useMoney();
@@ -17,6 +19,10 @@ export default function ItemRow({ field, remove, current = null }) {
   const updatePrice = (value) => {
     setPrice(value);
   };
+  const updateName = (value) => {
+    setName(value);
+  };
+  const [form] = useForm();
 
   useEffect(() => {
     if (current) {
