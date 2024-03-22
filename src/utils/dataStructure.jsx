@@ -120,7 +120,29 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         dataIndex: keyIndex,
         render: (text, record) => {
           if (field.renderAsTag) {
-            const selectedOption = field.options.find((x) => x.value === record[key]);
+            const selectedOption = field.options.find((x) =>
+              // let y;
+              // if (x.value.toLowerCase() === 'people') {
+              //   if (record && record[x.value.toLowerCase()] && record[x.value.toLowerCase()]['firstname']) {
+              //     y = record[x.value.toLowerCase()]['firstname'];
+              //   } else {
+              //     // Handle the case where 'firstname' is not available
+              //     y = 'Unknown';
+              //   }
+              // } else {
+              //   if (record && record[x.value.toLowerCase()] && record[x.value.toLowerCase()]['name']) {
+              //     y = record[x.value.toLowerCase()]['name'];
+              //   } else {
+              //     // Handle the case where 'name' is not available
+              //     y = 'Unknown';
+              //   }
+              // }
+
+              // // let r = record
+              // console.log({ x, record })
+              // console.log('ecord[x.value] -- ', x.value.toLowerCase() == 'company' ? record[x.value.toLowerCase()]['name'] : record[x.value.toLowerCase()]['firstname'])
+              x.value === record[key]
+            );
 
             return (
               <Tag bordered={false} color={selectedOption?.color}>
@@ -204,7 +226,7 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         title: field.label ? translate(field.label) : translate(key),
         dataIndex: keyIndex,
         render: (_, record) => {
-          console.log(keyIndex)
+          // console.log(keyIndex)
           const selectedCountry = countryList.find((obj) => obj.value === record?.['people']?.[key]);
 
           return (

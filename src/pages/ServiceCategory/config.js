@@ -1,4 +1,3 @@
-// Given fields object
 export const fields = {
   name: {
     type: 'string',
@@ -17,6 +16,7 @@ export const fields = {
       { label: 'Option 2', value: 'option2' },
     ],
     hasFeedback: true,
+    disableForTable: true,
   },
   enabled: {
     type: 'boolean',
@@ -24,26 +24,3 @@ export const fields = {
     label:'status'
   },
 };
-
-// // Transformation function
-// function transformFields(fields) {
-//   const newFields = { ...fields };
-
-//   if (newFields.subscription_type && newFields.subscription_type.type === 'checkoxes') {
-
-//     console.log('newFields.subscription_type -- ', newFields.subscription_type);
-//     newFields.subscription_type.type = 'array';
-//     newFields.subscription_type.items = {
-//       subscription: { type: 'checkoxes' },
-//       removed: { type: 'boolean', default: false },
-//       enabled: { type: 'boolean', default: true }
-//     };
-//     delete newFields.subscription_type.options;
-//   }
-
-//   return newFields;
-// }
-
-// // Usage
-// const transformedFields = transformFields(fields);
-// console.log({transformedFields});
