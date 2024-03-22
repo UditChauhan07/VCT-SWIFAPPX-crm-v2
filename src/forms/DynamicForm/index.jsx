@@ -63,8 +63,14 @@ function FormElement({ field, setFeedback, roles = [] }) {
   const money = useMoney();
   const { dateFormat } = useDate();
 
+  const { label, options } = field;
+
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const handleCheckboxChange = (checkedValues) => {
+    setSelectedOptions(checkedValues);
+  };
 
   const compunedComponent = {
     string: <Input autoComplete="off" />,
@@ -303,6 +309,7 @@ function FormElement({ field, setFeedback, roles = [] }) {
         {field.label}
       </Checkbox>
     ),
+    checkoxes: (<Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />)
   };
 
 
