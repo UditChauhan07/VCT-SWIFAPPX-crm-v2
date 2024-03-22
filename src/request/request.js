@@ -254,5 +254,13 @@ const request = {
       return errorHandler(error);
     }
   },
+  getCategorySubscription: async () => {
+    try {
+      const response = await axios.get(`/servicecategory/subscriptions/65fd622d5ab3ba2cbde4522b`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
 export default request;

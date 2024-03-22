@@ -9,13 +9,14 @@ export const fields = {
     disableForForm: false,
   },
   subscription_type: {
-    type: 'checkoxes',
+    type: 'checkoxesCustom',
     label: 'Subscription Type',
-    options: [
-      { label: 'Option 1', value: 'option1' },
-      { label: 'Option 2', value: 'option2' },
-    ],
-    hasFeedback: true,
+    hasOptions: true,
+    // options: [
+    //   { label: 'Option 1', value: 'option1' },
+    //   { label: 'Option 2', value: 'option2' },
+    // ],
+    // hasFeedback: true,
     disableForTable: true,
   },
   enabled: {

@@ -17,6 +17,8 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
+  const [checkboxes, setCheckBoxes] = useState([]);
+  const [checkedOption, setcheckedOption] = useState('');
 
   useEffect(() => {
     // Fetch data from API
@@ -25,6 +27,21 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
         const response = await request.getRoles();
         if (response.success) {
           setRoles(response.result);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  useEffect(() => {
+    // Fetch data from API
+    const fetchData = async () => {
+      try {
+        const response = await request.getCategorySubscription();
+        if (response.success) {
+          setCheckBoxes(response.result);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -46,6 +63,9 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
           else if (field.hasRoles) {
             return <FormElement setFeedback={setSelectedRole} key={key} field={field} roles={roles} />;
           }
+          else if (field.hasOptions) {
+            return <FormElement setFeedback={setcheckedOption} key={key} field={field} checkboxes={checkboxes} />;
+          }
           else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
@@ -57,7 +77,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   );
 }
 
-function FormElement({ field, setFeedback, roles = [] }) {
+function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
@@ -308,7 +328,15 @@ function FormElement({ field, setFeedback, roles = [] }) {
         {field.label}
       </Checkbox>
     ),
-    checkoxes: (<Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />)
+    checkoxes: (<Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />),
+    checkoxesCustom: (
+      <Checkbox.Group onChange={handleCheckboxChange} value={selectedOptions}>
+        {checkboxes.map((item) => (
+          <Checkbox key={item.subscription._id} value={item.subscription._id}>
+            {item.subscription.name}
+          </Checkbox>
+        ))}
+      </Checkbox.Group>)
   };
 
 
@@ -333,7 +361,6 @@ function FormElement({ field, setFeedback, roles = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-  console.log(field);
   return (
     <Form.Item
       label={translate(field.label)}
