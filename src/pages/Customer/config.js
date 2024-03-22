@@ -1,13 +1,13 @@
 export const fields = {
-
   type: {
     type: 'selectwithfeedback',
     renderAsTag: true,
-    disableForForm: true, 
     options: [
       { value: 'People', label: 'People', color: 'magenta' },
       { value: 'Company', label: 'Company', color: 'blue' },
     ],
+    required: true,
+    hasFeedback: true,
   },
   company: {
     type: 'search',
@@ -27,25 +27,31 @@ export const fields = {
     searchFields: 'firstname,lastname',
     dataIndex: ['people', 'firstname'],
     disableForTable: true,
-    // feedback: 'People',
+    feedback: 'People',
   },
   name: {
     type: 'string',
     disableForForm: true,
-    dataIndex: ['admin', 'name'],
+    dataIndex: ['people', 'firstname'],
+    // pending
+    // dataIndex: ['type'] === 'Company' ? ['company', 'name'] : ['people', 'firstname'],
   },
-  phone: {
-    type: 'phone',
-    disableForForm: true,
-    displayLabels: ['phone'],
-    dataIndex: ['people', 'phone'],
-  },
+
+//   phone: {
+//     type: 'phone',
+//     disableForForm: true,
+//     displayLabels: ['phone'],
+//     dataIndex: ['people', 'phone'],
+//   },
+
   email: {
     type: 'email',
     required: true,
     displayLabels: ['email'],
     dataIndex: ['admin', 'email'],
   },
+  // dataIndex: hasPeople ? ['people', 'email'] : ['company', 'email'] // Replace 'company, email' with your logic
+
   password: {
     type: 'password',
     required: true,

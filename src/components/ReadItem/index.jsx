@@ -41,13 +41,13 @@ export default function ReadItem({ config }) {
   const itemsList = listState.map((item) => {
     return (
       <Row key={item.propsKey} gutter={12}>
-        <Col className="gutter-row" span={14}>
+        <Col className="gutter-row" span={12}>
           <p>{translate(item.label)}</p>
         </Col>
         <Col className="gutter-row" span={2}>
           <p> : </p>
         </Col>
-        <Col className="gutter-row" span={8}>
+        <Col className="gutter-row" span={10}>
           <p>{item.value}</p>
         </Col>
       </Row>
