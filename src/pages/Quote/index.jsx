@@ -15,7 +15,7 @@ export default function Quote() {
     displayLabels: ['name'],
     searchFields: 'name',
   };
-  const deleteModalLabels = ['number', 'client.name'];
+  const deleteModalLabels = [];//['number', 'client.name'];
   const dataTableColumns = [
     {
       title: translate('Number'),

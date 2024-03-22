@@ -1,40 +1,14 @@
-export const fields = {
+
+const fields = {
   type: {
     type: 'selectwithfeedback',
     renderAsTag: true,
     options: [
-      { value: 'people', label: 'people', color: 'magenta' },
-      { value: 'company', label: 'company', color: 'blue' },
+      { value: 'People', label: 'People', color: 'magenta' },
+      { value: 'Company', label: 'Company', color: 'blue' },
     ],
     required: true,
     hasFeedback: true,
-  },
-  name: {
-    type: 'string',
-    disableForForm: true,
-  },
-  country: {
-    type: 'country',
-    // color: 'red',
-    disableForForm: true,
-  },
-  phone: {
-    type: 'phone',
-    disableForForm: true,
-  },
-  email: {
-    type: 'email',
-    disableForForm: true,
-  },
-  people: {
-    type: 'search',
-    label: 'people',
-    entity: 'people',
-    displayLabels: ['firstname', 'lastname'],
-    searchFields: 'firstname,lastname',
-    dataIndex: ['people', 'firstname'],
-    disableForTable: true,
-    feedback: 'people',
   },
   company: {
     type: 'search',
@@ -44,54 +18,110 @@ export const fields = {
     searchFields: 'name',
     dataIndex: ['company', 'name'],
     disableForTable: true,
-    feedback: 'company',
+    feedback: 'Company',
   },
-
-  selected_customer: {
+  people: {
     type: 'search',
-    label: 'Select Customer',
+    label: 'people',
     entity: 'people',
     displayLabels: ['firstname', 'lastname'],
     searchFields: 'firstname,lastname',
-    // dataIndex: ['people', 'firstname'],
+    dataIndex: ['people', 'firstname'],
     disableForTable: true,
-    feedback: 'company',
+    feedback: 'People',
   },
-  // role: {
-  //   type: 'search',
-  //   label: 'roles',
-  //   entity: 'roles',
-  //   displayLabels: ['name'],
-  //   searchFields: 'name',
-  //   dataIndex: ['roles', 'name'],
-  // },
-  role: {
-    type: 'select',
-    renderAsTag: true,
-    required: true,
-    options: [
-      { value: '1', label: 'Super Admin' },
-      { value: '2', label: 'Manager' },
-      { value: '3', label: 'Accountant' },
-    ],
+  name: {
+    type: 'string',
+    disableForForm: true,
   },
-  status: {
-    type: 'select',
-    renderAsTag: true,
+  email: {
+    type: 'email',
     required: true,
-    options: [
-      { value: '1', label: 'Active' },
-      { value: '0', label: 'In-Active' },
-    ],
-  },
-  username: {
-    type: 'text',
-    required: true,
-    renderAsTag: true,
+    displayLabels: ['email'],
+    dataIndex: ['admin', 'email'],
   },
   password: {
     type: 'password',
     required: true,
     renderAsTag: true,
+    disableForTable: true,
+  },
+  country: {
+    type: 'countryCustom',
+    disableForForm: true,
+    displayLabels: ['country'],
+    dataIndex: ['people', 'country'],
+  },
+  role: {
+    type: 'selectRoles',
+    required: true,
+    hasRoles: true,
+    disableForTable: true,
+  },
+  enabled: {
+    type: 'boolean',
+    required: true,
+    disableForTable: true,
   },
 };
+
+// const apiUrl = 'http://localhost:8001/api/client/list?page=1&items=10';
+
+// async function fetchData() {
+//   try {
+//     const response = await fetch(apiUrl);
+//     if (!response.ok) {
+//       throw new Error('Failed to fetch data');
+//     }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//     return null;
+//   }
+// }
+
+// async function setSelectedTypeForEntries() {
+//   try {
+//     const data = await fetchData();
+//     const entriesConfig = [];
+
+//     for (const entry of data.result) {
+//       const selectedType = entry.type;
+//       const entryConfig = {};
+//       entryConfig.selectedType = selectedType;
+//       entryConfig.dataIndex = (selectedType === 'Company') ? ['company', 'name'] : ['people', 'firstname'];
+//       entriesConfig.push(entryConfig);
+//       console.log(`Selected type for entry: ${selectedType}`);
+//     }
+//     return entriesConfig;
+//   } catch (error) {
+//     console.error('Error setting selectedType for entries:', error);
+//     return null;
+//   }
+// }
+
+// async function configureFields() {
+//   try {
+//     const entriesConfig = await setSelectedTypeForEntries();
+//     for (const entryConfig of entriesConfig) {
+//       fields[entryConfig.selectedType.toLowerCase()] = {
+//         type: 'string',
+//         disableForForm: true,
+//         dataIndex: entryConfig.dataIndex,
+//       };
+//     }
+//     console.log(fields);
+//   } catch (error) {
+//     console.error('Error configuring fields:', error);
+//   }
+// }
+
+// // Call the function to configure fields
+// configureFields();
+
+// Export the fields object
+export { fields };
+
+
+

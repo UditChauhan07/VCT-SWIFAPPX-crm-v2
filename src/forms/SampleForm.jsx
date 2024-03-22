@@ -15,6 +15,7 @@ export default function SampleForm({ fields, isUpdateForm = false }) {
     // console.log('DynamicForm fields --- ', fields);
 
     const [feedback, setFeedback] = useState();
+    console.log(feedback);
     return (
         <>
             {Object.keys(fields).map((key) => {

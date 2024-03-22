@@ -4,7 +4,7 @@ import { request } from '@/request';
 import useOnFetch from '@/hooks/useOnFetch';
 import useDebounce from '@/hooks/useDebounce';
 
-import { Select, Empty } from 'antd';
+import { Select, Empty, Input } from 'antd';
 
 export default function AutoCompleteAsync({
   entity,
@@ -25,6 +25,9 @@ export default function AutoCompleteAsync({
   const [valToSearch, setValToSearch] = useState('');
   const [debouncedValue, setDebouncedValue] = useState('');
 
+  const [searchResult, setSearchResult] = useState(null);
+
+
   const [, cancel] = useDebounce(
     () => {
       //  setState("Typing stopped");
@@ -35,7 +38,13 @@ export default function AutoCompleteAsync({
   );
 
   const asyncSearch = async (options) => {
-    return await request.search({ entity, options });
+    const response = await request.search({ entity, options });
+    if (response.success) {
+      const data = await response.result;
+      const firstResult = data[0];
+      setSearchResult(firstResult);
+    }
+    return response;
   };
 
   let { onFetch, result, isSuccess, isLoading } = useOnFetch();
