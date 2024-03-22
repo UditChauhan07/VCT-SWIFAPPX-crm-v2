@@ -7,7 +7,6 @@ export const fields = {
   description: {
     type: 'string',
     type: 'textarea',
-
     disableForTable: false,
   },
   package_type: {
