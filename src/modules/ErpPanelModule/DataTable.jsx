@@ -22,9 +22,10 @@ import { useNavigate } from 'react-router-dom';
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 
 import { API_BASE_URL } from '@/config/serverApiConfig';
-let user = JSON.parse(window.localStorage.getItem('auth'))
-// console.log({ user });
-let user_id = user.current._id
+let data = JSON.parse(window.localStorage.getItem('auth'))
+let user = data.current
+console.log({ user });
+let user_id = user._id
 // console.log({ user_id });
 
 var role
@@ -55,7 +56,13 @@ function AddNewItem({ config }) {
     let data = JSON.parse(await response.text());
     return data
   }
-  role = admin?.role_id
+  console.log({ admin });
+
+  // role = admin?.role_id
+  role = user?.role
+
+  console.log({ role });
+
   adminLevel = role?.admin_level
   permissions = role?.permissions
   isSAAS = role?.isSAAS
