@@ -120,7 +120,10 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         dataIndex: keyIndex,
         render: (text, record) => {
           if (field.renderAsTag) {
-            const selectedOption = field.options.find((x) => x.value === record[key]);
+            const selectedOption = field.options.find((x) =>
+              // console.log('ecord[x.value] -- ', x.value.toLowerCase() == 'company' ? record[x.value.toLowerCase()]['name'] : record[x.value.toLowerCase()]['firstname'])
+              x.value === record[key]
+            );
 
             return (
               <Tag bordered={false} color={selectedOption?.color}>
@@ -205,7 +208,10 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         dataIndex: keyIndex,
         render: (_, record) => {
           console.log(keyIndex)
-          const selectedCountry = countryList.find((obj) => obj.value === record?.['people']?.[key]);
+          const selectedCountry = countryList.find((obj) =>
+            // console.log('obj.value === record --- ', obj.value === record?.['people']?.[key])
+            obj.value === record?.['people']?.[key]
+          );
 
           return (
             <Tag bordered={false} color={field.color || undefined}>
