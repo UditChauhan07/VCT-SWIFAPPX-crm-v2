@@ -2,43 +2,29 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { API_BASE_URL } from '@/config/serverApiConfig';
-let user = JSON.parse(window.localStorage.getItem('auth'))
-let user_id = user.current._id
+let data = JSON.parse(localStorage.getItem('auth'))
+let user = data.current
 
-
+var role
+var permissions
+var isSAAS
 
 const CollapseBoxButton = ({ onChange, title, config }) => {
   let { entity } = config;
   const [admin, setAdmin] = useState([]);
+  const [authUser, setAuthUser] = useState({});
   useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data colllll --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
+    data = JSON.parse(localStorage.getItem('auth'))
+    user = data.current
+    setAuthUser(user)
+    setAdmin(user?.role_id)
   }, [])
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
-
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
-
-    let data = JSON.parse(await response.text());
-    return data
-  }
 
   // console.log({ admin });
-  let role = admin?.role_id
+  role = user?.role_id
   // console.log({ role });
-  let adminLevel = role?.admin_level
-  let permissions = role?.permissions
-  let isSAAS = role?.is_saas
+  permissions = role?.permissions
+  isSAAS = role?.is_saas
 
   let create = permissions?.[entity + '_create']
   let condition = create || isSAAS == true ? true : false

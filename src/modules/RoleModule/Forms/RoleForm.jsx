@@ -17,8 +17,10 @@ import { selectUpdatedItem } from '@/redux/erp/selectors';
 import { erp } from '@/redux/erp/actions';
 
 import { API_BASE_URL } from '@/config/serverApiConfig';
-let user = JSON.parse(window.localStorage.getItem('auth'))
-let user_id = user.current._id
+
+let data = JSON.parse(localStorage.getItem('auth'))
+let user = data.current
+
 var role
 var adminLevel
 var permissions
@@ -44,30 +46,20 @@ function LoadRoleForm({ isUpdateForm = false }) {
   const [currentErp, setCurrentErp] = useState(current ?? resetErp);
   var initialAdminLevel
   console.log(form.getFieldValue("is_worker"));
+
   const [admin, setAdmin] = useState([]);
+  const [authUser, setAuthUser] = useState({});
   useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
+    data = JSON.parse(localStorage.getItem('auth'))
+    user = data.current
+    setAuthUser(user)
+    setAdmin(user?.role_id)
   }, [])
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
 
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
+  // role = admin?.role_id
+  role = user?.role_id
 
-    let data = JSON.parse(await response.text());
-    return data
-  }
-
-  role = admin?.role_id
+  // role = admin?.role_id
   adminLevel = role?.admin_level
 
   // console.log({ adminLevel });

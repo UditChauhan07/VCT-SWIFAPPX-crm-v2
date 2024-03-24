@@ -14,18 +14,13 @@ import { generate as uniqueId } from 'shortid';
 
 import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '@/config/serverApiConfig';
-let user = JSON.parse(window.localStorage.getItem('auth'))
-let user_id = user.current._id
 
-// console.log('admin data api url --- ', `${API_BASE_URL}admin/read/${user_id}`);
+let data = JSON.parse(localStorage.getItem('auth'))
+let user = data.current
+
 var role
-var adminLevel
 var permissions
-let isSAAS
-// console.log({ role });
-// console.log({ adminLevel });
-// console.log({ permissions });
+var isSAAS
 
 function AddNewItem({ config }) {
   // console.log({ config });
@@ -66,34 +61,20 @@ export default function DataTable({ config, extra = [] }) {
   const { moneyFormatter } = useMoney();
   const { dateFormat } = useDate();
   const [admin, setAdmin] = useState([]);
+  const [authUser, setAuthUser] = useState({});
   useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
+    data = JSON.parse(localStorage.getItem('auth'))
+    user = data.current
+    setAuthUser(user)
+    setAdmin(user?.role_id)
   }, [])
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
 
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
-
-    let data = JSON.parse(await response.text());
-    return data
-  }
   // console.log({ admin });
-  role = admin?.role_id
+  role = user?.role_id
   // console.log({ role });
-  adminLevel = role?.admin_level
+
   isSAAS = role?.is_saas
   permissions = role?.permissions
-
 
   let items = []
   if (permissions?.[entity + '_read'] || isSAAS == true) {
@@ -248,7 +229,7 @@ export default function DataTable({ config, extra = [] }) {
     };
   }, []);
 
-  // console.log('kkkkk 999 --- ', { config });
+
   return (
     <>
       <PageHeader
