@@ -17,11 +17,9 @@ import { crud } from '@/redux/crud/actions';
 import { useCrudContext } from '@/context/crud';
 
 import { CrudLayout } from '@/layout';
-import { API_BASE_URL } from '@/config/serverApiConfig';
-let user = JSON.parse(window.localStorage.getItem('auth'))
-// console.log({ user });
-let user_id = user.current._id
-// console.log({ user_id });
+
+let data = JSON.parse(localStorage.getItem('auth'))
+let user = data.current
 
 var role
 var adminLevel
@@ -59,28 +57,15 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   };
 
   const [admin, setAdmin] = useState([]);
+  const [authUser, setAuthUser] = useState({});
   useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
+    data = JSON.parse(localStorage.getItem('auth'))
+    user = data.current
+    setAuthUser(user)
+    setAdmin(user?.role_id)
   }, [])
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
 
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
-
-    let data = JSON.parse(await response.text());
-    return data
-  }
-  role = admin?.role_id
+  role = user?.role_id
   adminLevel = role?.admin_level
   permissions = role?.permissions
   isSAAS = role?.is_saas
@@ -132,33 +117,8 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
 
 function FixHeaderPanel({ config }) {
   const entity = config.entity
-  console.log({ config });
 
-  const [admin, setAdmin] = useState([]);
-  useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
-  }, [])
-
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
-
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
-
-    let data = JSON.parse(await response.text());
-    return data
-  }
-
-  role = admin?.role_id
+  role = user?.role_id
   permissions = role?.permissions
   isSAAS = role?.is_saas
   // console.log({ adminLevel, permissions });

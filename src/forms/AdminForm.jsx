@@ -24,6 +24,8 @@ export default function AdminForm({ isUpdateForm = false }) {
   const [CompanyList, setCompanyList] = useState([]);
   const [PeopleList, setPeopleList] = useState([]);
 
+  console.log({ CompanyList });
+
   useEffect(() => {
     GetRoleDataHandler().then((res) => {
       setRoleList(res.result)

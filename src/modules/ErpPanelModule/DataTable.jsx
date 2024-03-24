@@ -21,59 +21,36 @@ import { useNavigate } from 'react-router-dom';
 
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 
-import { API_BASE_URL } from '@/config/serverApiConfig';
-let data = JSON.parse(window.localStorage.getItem('auth'))
+let data = JSON.parse(localStorage.getItem('auth'))
 let user = data.current
-console.log({ user });
-let user_id = user._id
-// console.log({ user_id });
 
 var role
-var adminLevel
 var permissions
 var isSAAS
 
 function AddNewItem({ config }) {
   const [admin, setAdmin] = useState([]);
+  const [authUser, setAuthUser] = useState({});
   useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
+    data = JSON.parse(localStorage.getItem('auth'))
+    user = data.current
+    setAuthUser(user)
+    setAdmin(user?.role_id)
   }, [])
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
-
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
-
-    let data = JSON.parse(await response.text());
-    return data
-  }
-  console.log({ admin });
 
   // role = admin?.role_id
-  role = user?.role
-
-  console.log({ role });
-
-  adminLevel = role?.admin_level
-  permissions = role?.permissions
+  role = user?.role_id
   isSAAS = role?.isSAAS
 
-  // console.log({ isSaas });
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
 
   const handleClick = () => {
     navigate(`/${entity.toLowerCase()}/create`);
   };
+
+  let { role_id } = authUser || {};
+  let { permissions } = role_id || {};
 
   return (
     permissions?.[entity + '_create'] || isSAAS == true ? (
@@ -97,34 +74,10 @@ export default function DataTable({ config, extra = [] }) {
 
   const { erpContextAction } = useErpContext();
   const { modal } = erpContextAction;
-
-  const [admin, setAdmin] = useState([]);
-  useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
-  }, [])
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
-
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
-
-    let data = JSON.parse(await response.text());
-    return data
-  }
-
-  role = admin?.role_id
+  role = user?.role_id
   isSAAS = role?.is_saas
   permissions = role?.permissions
-  console.log({ isSAAS });
+  // console.log({ isSAAS });
   let items = []
 
   if ((permissions?.[entity + '_read'] || isSAAS == true) && entity != 'roles') {
