@@ -333,7 +333,7 @@ function FormElement({ field, setFeedback, roles = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-  console.log(field);
+  // console.log(field);
   return (
     <Form.Item
       label={translate(field.label)}

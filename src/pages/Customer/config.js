@@ -47,10 +47,14 @@ const fields = {
     disableForTable: true,
   },
   country: {
-    type: 'countryCustom',
+    type: 'country',
     disableForForm: true,
     displayLabels: ['country'],
-    dataIndex: ['people', 'country'],
+    dataIndex: ['country'],
+  },
+  phone: {
+    type: 'phone',
+    disableForForm: true,
   },
   role: {
     type: 'selectRoles',
@@ -65,63 +69,5 @@ const fields = {
   },
 };
 
-// const apiUrl = 'http://localhost:8001/api/client/list?page=1&items=10';
 
-// async function fetchData() {
-//   try {
-//     const response = await fetch(apiUrl);
-//     if (!response.ok) {
-//       throw new Error('Failed to fetch data');
-//     }
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//     return null;
-//   }
-// }
-
-// async function setSelectedTypeForEntries() {
-//   try {
-//     const data = await fetchData();
-//     const entriesConfig = [];
-
-//     for (const entry of data.result) {
-//       const selectedType = entry.type;
-//       const entryConfig = {};
-//       entryConfig.selectedType = selectedType;
-//       entryConfig.dataIndex = (selectedType === 'Company') ? ['company', 'name'] : ['people', 'firstname'];
-//       entriesConfig.push(entryConfig);
-//       console.log(`Selected type for entry: ${selectedType}`);
-//     }
-//     return entriesConfig;
-//   } catch (error) {
-//     console.error('Error setting selectedType for entries:', error);
-//     return null;
-//   }
-// }
-
-// async function configureFields() {
-//   try {
-//     const entriesConfig = await setSelectedTypeForEntries();
-//     for (const entryConfig of entriesConfig) {
-//       fields[entryConfig.selectedType.toLowerCase()] = {
-//         type: 'string',
-//         disableForForm: true,
-//         dataIndex: entryConfig.dataIndex,
-//       };
-//     }
-//     console.log(fields);
-//   } catch (error) {
-//     console.error('Error configuring fields:', error);
-//   }
-// }
-
-// // Call the function to configure fields
-// configureFields();
-
-// Export the fields object
 export { fields };
-
-
-
