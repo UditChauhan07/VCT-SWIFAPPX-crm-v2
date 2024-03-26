@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 // import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
 
-import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox } from 'antd';
+import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox, notification } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
 import { useMoney, useDate } from '@/settings';
@@ -11,6 +11,9 @@ import { generate as uniqueId } from 'shortid';
 
 import { countryList } from '@/utils/countryList';
 import { request } from '@/request';
+import { useSelector } from 'react-redux';
+import { selectUpdatedItem } from '@/redux/crud/selectors';
+import { useCrudContext } from '@/context/crud';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
 
@@ -19,6 +22,9 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
   const [checkedOption, setcheckedOption] = useState('');
+
+  const { crudContextAction } = useCrudContext();
+  const { panel, collapsedBox, readBox } = crudContextAction;
 
   useEffect(() => {
     // Fetch data from API
@@ -35,21 +41,35 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 
     fetchData();
   }, []);
-  useEffect(() => {
-    // Fetch data from API
-    const fetchData = async () => {
-      try {
-        const response = await request.getCategorySubscription();
-        if (response.success) {
-          setCheckBoxes(response.result);
+  if (fields.subscription_type) {
+    useEffect(() => {
+      // Fetch data from API
+      const fetchData = async () => {
+        try {
+          const response = await request.getCategorySubscription();
+          if (response.success) {
+            setCheckBoxes(response.result);
+          } else {
+            readBox.close();
+            collapsedBox.close();
+            panel.close();
+            notification.config({
+              duration: 4,
+              maxCount: 2,
+            });
+            notification.error({
+              message: `Request error`,
+              description: response.message,
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+      };
 
-    fetchData();
-  }, []);
+      fetchData();
+    }, []);
+  }
   return (
     <>
       {Object.keys(fields).map((key) => {
@@ -332,8 +352,8 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
     checkoxesCustom: (
       <Checkbox.Group onChange={handleCheckboxChange} value={selectedOptions}>
         {checkboxes.map((item) => (
-          <Checkbox key={item.subscription._id} value={item.subscription._id}>
-            {item.subscription.name}
+          <Checkbox key={item._id} value={item._id}>
+            {item.name}
           </Checkbox>
         ))}
       </Checkbox.Group>)

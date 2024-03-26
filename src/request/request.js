@@ -256,7 +256,7 @@ const request = {
   },
   getCategorySubscription: async () => {
     try {
-      const response = await axios.get(`/servicecategory/subscriptions/65fd622d5ab3ba2cbde4522b`);
+      const response = await axios.get(`/subscriptiontype/list`) //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
       return response.data;
     } catch (error) {
       return errorHandler(error);

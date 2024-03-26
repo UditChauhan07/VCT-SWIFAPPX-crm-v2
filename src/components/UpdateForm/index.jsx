@@ -32,11 +32,15 @@ export default function UpdateForm({ config, formElements, withUpload = false })
   const [form] = Form.useForm();
 
   const onSubmit = (fieldsValue) => {
-    console.log({ fieldsValue })
     const id = current._id;
 
     if (fieldsValue.file && withUpload) {
       fieldsValue.file = fieldsValue.file[0].originFileObj;
+    }
+    if (fieldsValue.subscription_type) {
+      fieldsValue.subscription_type = fieldsValue.subscription_type.map(subscriptionId => ({
+        subscription: subscriptionId
+      }));
     }
     const trimmedValues = Object.keys(fieldsValue).reduce((acc, key) => {
       acc[key] = typeof fieldsValue[key] === 'string' ? fieldsValue[key].trim() : fieldsValue[key];
