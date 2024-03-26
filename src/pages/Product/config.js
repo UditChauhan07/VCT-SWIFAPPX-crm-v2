@@ -21,4 +21,8 @@ export const fields = {
   ref: {
     type: 'string',
   },
+  enabled : {
+    type : 'boolean',
+    label : 'Status'
+  }
 };

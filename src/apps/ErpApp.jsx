@@ -18,6 +18,7 @@ import AppRouter from '@/router/AppRouter';
 import useResponsive from '@/hooks/useResponsive';
 
 import storePersist from '@/redux/storePersist';
+import AuthHandler from '@/authHandler';
 
 export default function ErpCrmApp() {
   const { Content } = Layout;
@@ -75,6 +76,7 @@ export default function ErpCrmApp() {
               maxWidth: isNavMenuClose ? 1200 : 1100,
             }}
           >
+            <AuthHandler></AuthHandler>
             <AppRouter />
           </Content>
         </Layout>

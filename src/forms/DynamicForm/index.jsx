@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
 
 import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox } from 'antd';
@@ -10,23 +10,41 @@ import SelectAsync from '@/components/SelectAsync';
 import { generate as uniqueId } from 'shortid';
 
 import { countryList } from '@/utils/countryList';
+import { request } from '@/request';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
-  // console.log('DynamicForm fields --- ', fields);
 
   const [feedback, setFeedback] = useState();
+  const [selectedRole, setSelectedRole] = useState('');
+  const [roles, setRoles] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from API
+    const fetchData = async () => {
+      try {
+        const response = await request.getRoles();
+        if (response.success) {
+          setRoles(response.result);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       {Object.keys(fields).map((key) => {
         let field = fields[key];
-
+        let i = 1;
         if ((isUpdateForm && !field.disableForUpdate) || !field.disableForForm) {
           field.name = key;
-          if (!field.label) field.label = key; console.log(field.hasFeedback);
+          if (!field.label) field.label = key;
           if (field.hasFeedback)
             return <FormElement setFeedback={setFeedback} key={key} field={field} />;
-          else if (field.hasCustomer) {
-            return <FormElement setFeedback={setFeedback} key={key} field={field} />;
+          else if (field.hasRoles) {
+            return <FormElement setFeedback={setSelectedRole} key={key} field={field} roles={roles} />;
           }
           else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
@@ -39,22 +57,28 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   );
 }
 
-function FormElement({ field, setFeedback }) {
+function FormElement({ field, setFeedback, roles = [] }) {
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
 
-  const [isVisible, setIsVisible] = useState(false);
+  const { label, options } = field;
 
   const { TextArea } = Input;
+  const [email, setEmail] = useState('test@gmail.com');
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const handleCheckboxChange = (checkedValues) => {
+    setSelectedOptions(checkedValues);
+  };
 
   const compunedComponent = {
     string: <Input autoComplete="off" />,
     url: <Input addonBefore="http://" autoComplete="off" placeholder="www.website.com" />,
     textarea: <TextArea rows={4} />,
-    email: <Input autoComplete="off" placeholder="email@gmail.com" />,
+    email: <Input autoComplete="off" placeholder="email@gmail.com" value={email} />,
     number: <InputNumber style={{ width: '100%' }} />,
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
+    password: <Input.Password autoComplete="new-password" />,
     boolean: <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
     date: (
       <DatePicker
@@ -112,21 +136,36 @@ function FormElement({ field, setFeedback }) {
         ))}
       </Select>
     ),
-    // selectWithCustomer: (
-    //   <Select
-    //     onChange={(value) => setFeedback(value)}
-    //     defaultValue={field.defaultValue}
-    //     style={{
-    //       width: '100%',
-    //     }}
-    //   >
-    //     {field.options?.map((option) => (
-    //       <Select.Option key={`${uniqueId()}`} value={option.value}>
-    //         {translate(option.label)}
-    //       </Select.Option>
-    //     ))}
-    //   </Select>
-    // ),
+    selectwithfeedbackCustom: (
+      <Select
+        onChange={(value) => setFeedback(value)}
+        defaultValue={field.defaultValue}
+        style={{
+          width: '100%',
+        }}
+      >
+        {field.options?.map((option) => (
+          <Select.Option key={`${uniqueId()}`} value={option.value}>
+            {translate(option.label)}
+          </Select.Option>
+        ))}
+      </Select>
+    ),
+    selectRoles: (
+      <Select
+        onChange={(value) => setFeedback(value)}
+        defaultValue={field.defaultValue}
+        style={{
+          width: '100%',
+        }}
+      >
+        {Array.isArray(roles) && roles.map((role, index) => (
+          <Select.Option key={index} value={role._id}>
+            {role.name}
+          </Select.Option>
+        ))}
+      </Select>
+    ),
     color: (
       <Select
         defaultValue={field.defaultValue}
@@ -204,6 +243,33 @@ function FormElement({ field, setFeedback }) {
         ))}
       </Select>
     ),
+    countryCustom: (
+      <Select
+        showSearch
+        defaultValue={field.defaultValue}
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+        filterSort={(optionA, optionB) =>
+          (optionA?.label ?? '').toLowerCase().startsWith((optionB?.label ?? '').toLowerCase())
+        }
+        style={{
+          width: '100%',
+        }}
+      >
+        {countryList.map((language) => (
+          <Select.Option
+            key={language.value}
+            value={language.value}
+            label={translate(language.label)}
+          >
+            {language?.icon && language?.icon + ' '}
+            {translate(language.label)}
+          </Select.Option>
+        ))}
+      </Select>
+    ),
     async: (
       <SelectAsync
         entity={field.entity}
@@ -242,6 +308,7 @@ function FormElement({ field, setFeedback }) {
         {field.label}
       </Checkbox>
     ),
+    checkoxes: (<Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />)
   };
 
 
@@ -250,7 +317,7 @@ function FormElement({ field, setFeedback }) {
     string: 'string',
     textarea: 'string',
     number: 'number',
-    phone: 'string',
+    phone: 'phone',
     //boolean: 'boolean',
     // method: 'method',
     // regexp: 'regexp',
@@ -266,6 +333,7 @@ function FormElement({ field, setFeedback }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
+  // console.log(field);
   return (
     <Form.Item
       label={translate(field.label)}
@@ -274,6 +342,18 @@ function FormElement({ field, setFeedback }) {
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
+          validator: field.type === 'phone' ? (rule, value, callback) => {
+            if (!value) {
+              callback(); // Allow empty values if not required
+              return;
+            }
+            const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
+            if (!pattern.test(value)) {
+              callback('Please enter a valid 10-digit mobile number ');
+            } else {
+              callback(); // Success
+            }
+          } : undefined,
         },
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}

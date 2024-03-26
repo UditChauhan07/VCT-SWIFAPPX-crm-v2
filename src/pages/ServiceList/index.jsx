@@ -5,7 +5,7 @@ import useLanguage from '@/locale/useLanguage';
 
 export default function Customer() {
   const translate = useLanguage();
-  const entity = 'servicecategory';
+  const entity = 'servicelist';
   const searchConfig = {
     displayLabels: ['name'],
     searchFields: 'name',
@@ -13,10 +13,10 @@ export default function Customer() {
   const deleteModalLabels = ['name'];
 
   const Labels = {
-    PANEL_TITLE: translate('service_category'),
-    DATATABLE_TITLE: translate('service_category_list'),
-    ADD_NEW_ENTITY: translate('add_service_category'),
-    ENTITY_NAME: translate('service_category'),
+    PANEL_TITLE: translate('service_list'),
+    DATATABLE_TITLE: translate('service_list'),
+    ADD_NEW_ENTITY: translate('add_service_list'),
+    ENTITY_NAME: translate('service_list'),
   };
   const configPage = {
     entity,

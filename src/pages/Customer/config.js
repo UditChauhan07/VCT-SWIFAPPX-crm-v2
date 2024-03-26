@@ -1,40 +1,14 @@
-export const fields = {
+
+const fields = {
   type: {
     type: 'selectwithfeedback',
     renderAsTag: true,
     options: [
-      { value: 'people', label: 'people', color: 'magenta' },
-      { value: 'company', label: 'company', color: 'blue' },
+      { value: 'People', label: 'People', color: 'magenta' },
+      { value: 'Company', label: 'Company', color: 'blue' },
     ],
     required: true,
     hasFeedback: true,
-  },
-  name: {
-    type: 'string',
-    disableForForm: true,
-  },
-  country: {
-    type: 'country',
-    // color: 'red',
-    disableForForm: true,
-  },
-  phone: {
-    type: 'phone',
-    disableForForm: true,
-  },
-  email: {
-    type: 'email',
-    disableForForm: true,
-  },
-  people: {
-    type: 'search',
-    label: 'people',
-    entity: 'people',
-    displayLabels: ['firstname', 'lastname'],
-    searchFields: 'firstname,lastname',
-    dataIndex: ['people', 'firstname'],
-    disableForTable: true,
-    feedback: 'people',
   },
   company: {
     type: 'search',
@@ -44,54 +18,56 @@ export const fields = {
     searchFields: 'name',
     dataIndex: ['company', 'name'],
     disableForTable: true,
-    feedback: 'company',
+    feedback: 'Company',
   },
-
-  selected_customer: {
+  people: {
     type: 'search',
-    label: 'Select Customer',
+    label: 'people',
     entity: 'people',
     displayLabels: ['firstname', 'lastname'],
     searchFields: 'firstname,lastname',
-    // dataIndex: ['people', 'firstname'],
+    dataIndex: ['people', 'firstname'],
     disableForTable: true,
-    feedback: 'company',
+    feedback: 'People',
   },
-  // role: {
-  //   type: 'search',
-  //   label: 'roles',
-  //   entity: 'roles',
-  //   displayLabels: ['name'],
-  //   searchFields: 'name',
-  //   dataIndex: ['roles', 'name'],
-  // },
-  role: {
-    type: 'select',
-    renderAsTag: true,
-    required: true,
-    options: [
-      { value: '1', label: 'Super Admin' },
-      { value: '2', label: 'Manager' },
-      { value: '3', label: 'Accountant' },
-    ],
+  name: {
+    type: 'string',
+    disableForForm: true,
   },
-  status: {
-    type: 'select',
-    renderAsTag: true,
+  email: {
+    type: 'email',
     required: true,
-    options: [
-      { value: '1', label: 'Active' },
-      { value: '0', label: 'In-Active' },
-    ],
-  },
-  username: {
-    type: 'text',
-    required: true,
-    renderAsTag: true,
+    displayLabels: ['email'],
+    dataIndex: ['admin', 'email'],
   },
   password: {
     type: 'password',
     required: true,
     renderAsTag: true,
+    disableForTable: true,
+  },
+  country: {
+    type: 'country',
+    disableForForm: true,
+    displayLabels: ['country'],
+    dataIndex: ['country'],
+  },
+  phone: {
+    type: 'phone',
+    disableForForm: true,
+  },
+  role: {
+    type: 'selectRoles',
+    required: true,
+    hasRoles: true,
+    disableForTable: true,
+  },
+  enabled: {
+    type: 'boolean',
+    required: true,
+    disableForTable: true,
   },
 };
+
+
+export { fields };

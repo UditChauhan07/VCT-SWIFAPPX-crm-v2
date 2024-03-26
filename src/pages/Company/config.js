@@ -20,6 +20,7 @@ export const fields = {
   },
   email: {
     type: 'email',
+    required: true,
   },
   website: {
     type: 'url',

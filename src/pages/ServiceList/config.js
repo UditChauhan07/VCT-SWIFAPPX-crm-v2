@@ -4,23 +4,46 @@ export const fields = {
     required: true,
     disableForForm: false,
   },
-  description: {
-    type: 'string',
-    type: 'textarea',
-    disableForTable: false,
-  },
-  package_type: {
-    type: 'string',
-    disableForTable: false,
-  },
-  package_divider: {
-    type: 'string',
-    disableForTable: false,
-  },
-  active_status: {
-    type: 'boolean',
-    disableForTable: false,
-  },
+  // description: {
+  //   type: 'string',
+  //   // required: true,
+  //   // TextArea_rows:5,
+  //   // disableForForm: true,
+  //   disableForForm: false,
+
+  // },
+  // description: {
+  //   type: 'string',
+  //   type: 'textarea',
+  //   disableForForm: false,
+  // },
+
+  // Choose_subscription_types: {
+  //   type: 'checkbox',
+  //   label: 'Choose subscription types',
+  // },
+  // status: {
+  //   type: 'select',
+  //   disableForForm: false,
+
+  // },
+
+  // description: {
+  //   type: 'string',
+  //   disableForTable: false,
+  // },
+  // Package_Type: {
+  //   type: 'string',
+  //   disableForTable: false,
+  // },
+  // Package_Divider: {
+  //   type: 'string',
+  //   disableForTable: false,
+  // },
+  // Active_Status: {
+  //   type: 'string',
+  //   disableForTable: false,
+  // },
   // country: {
   //   type: 'country',
   //   // color: 'red',

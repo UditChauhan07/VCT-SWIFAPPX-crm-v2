@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Checkbox } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Checkbox, Radio } from 'antd';
+// import { Radio, RadioGroup } from '@ant-design/react';
 
 import { PlusOutlined } from '@ant-design/icons';
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
@@ -16,8 +17,10 @@ import { selectUpdatedItem } from '@/redux/erp/selectors';
 import { erp } from '@/redux/erp/actions';
 
 import { API_BASE_URL } from '@/config/serverApiConfig';
-let user = JSON.parse(window.localStorage.getItem('auth'))
-let user_id = user.current._id
+
+let data = JSON.parse(localStorage.getItem('auth'))
+let user = data.current
+
 var role
 var adminLevel
 var permissions
@@ -42,31 +45,21 @@ function LoadRoleForm({ isUpdateForm = false }) {
   };
   const [currentErp, setCurrentErp] = useState(current ?? resetErp);
   var initialAdminLevel
+  console.log(form.getFieldValue("is_worker"));
 
   const [admin, setAdmin] = useState([]);
+  const [authUser, setAuthUser] = useState({});
   useEffect(() => {
-    GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
-      setAdmin(res.result)
-    }).catch((err) => {
-      console.error({ err });
-    })
+    data = JSON.parse(localStorage.getItem('auth'))
+    user = data.current
+    setAuthUser(user)
+    setAdmin(user?.role_id)
   }, [])
-  const GetAdminDataHandler = async () => {
-    let headersList = {
-      "Accept": "*/*",
-    }
 
-    let response = await fetch(`${API_BASE_URL}admin/read/${user_id}`, {
-      method: "GET",
-      headers: headersList
-    });
+  // role = admin?.role_id
+  role = user?.role_id
 
-    let data = JSON.parse(await response.text());
-    return data
-  }
-
-  role = admin?.role_id
+  // role = admin?.role_id
   adminLevel = role?.admin_level
 
   // console.log({ adminLevel });
@@ -86,23 +79,33 @@ function LoadRoleForm({ isUpdateForm = false }) {
       if (formData.date) {
         formData.date = dayjs(formData.date);
       }
-
       if (formData.admin_level) {
         initialAdminLevel = formData.admin_level == 1 ? 'Swif SAAS Admin' : (formData.admin_level == 2 ? 'Service Provider' : 'End Customer')
       }
 
+      // console.log("formData.is_worker", formData.is_worker);
+      // if (moduleAccessPermission) {
+      //   formData.is_worker = true
+      // }
+      // else {
+      //   formData.is_worker = false
+
+      // }
       form.resetFields();
       form.setFieldsValue(formData);
       console.log({ formData });
     }
   }, [current]);
+  console.log(current);
 
   // console.log({ current });
 
-  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype', 'servicecategory']
+  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype', 'servicecategory', 'servicelist', 'publicholiday']
 
   // console.log('current?.admin_level --- ', current?.admin_level);
-
+  const [moduleAccessPermission, setModuleAccessPermission] = useState(true);
+  user?.current?.has_worker ? setModuleAccessPermission(false) : null;
+  form.setFieldValue("is_worker", true)
   return (
     <>
       <Row gutter={[12, 0]}>
@@ -174,6 +177,36 @@ function LoadRoleForm({ isUpdateForm = false }) {
           </Form.Item>
         </Col>
       </Row>
+      {/* Radio buttons */}
+      {/* {user?.current?.has_worker ? null : <Row gutter={[12, 0]} >
+        <Col className="gutter-row" span={24}>
+          <Form.Item
+            label={translate('Access Permission')}
+            name="is_worker"
+            initialValue={true}
+            rules={[
+              {
+                required: true,
+                message: translate('Please select an access permission'),
+              },
+            ]}
+          >
+            <Radio.Group defaultValue={moduleAccessPermission} onChange={(e) => {
+              setModuleAccessPermission(e.target.value);
+              form.setFieldValue("is_worker", e.target.value)
+            }
+            }>
+              <Radio value={true} style={{ marginRight: "5rem" }} defaultChecked={true}>{('API Access')}</Radio>
+              <Radio value={false}>{translate('Admin Panel Access')}</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+      </Row>} */}
+
+      {(user?.current?.has_worker)}
+      {/* permissions */}
+      {/* {moduleAccessPermission === false ? */}
+      {/* <> */}
 
       <Row gutter={[24, 0]}>
         <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
@@ -181,8 +214,6 @@ function LoadRoleForm({ isUpdateForm = false }) {
         </Col>
 
       </Row>
-
-      {/* Module Name and Module Actions */}
       <Row align="middle" className={styles.first_row}>
         <Col className="gutter-row" span={6} >
           <p className={styles.bold_text}>{translate('Module Name')}</p>
@@ -243,6 +274,73 @@ function LoadRoleForm({ isUpdateForm = false }) {
         </Row >
       ))
       }
+      {/* </> :
+        null
+      } */}
+      {/* {moduleAccessPermission === true ? <>
+        <Row gutter={[24, 0]}>
+          <Col className="gutter-row" span={12} style={{ fontSize: '1.3rem', marginBottom: '15px' }}>
+            {translate('Permissions')}
+          </Col>
+
+        </Row>
+        <Row align="middle" className={styles.first_row}>
+          <Col className="gutter-row" span={6} >
+            <p className={styles.bold_text}>{translate('Module Name')}</p>
+          </Col>
+          <Col className={`${styles.custom_col} gutter-row`} span={12}>
+            <p className={styles.bold_text}>{translate('Module Actions')}</p>
+          </Col >
+        </Row >
+        < Row align="middle" className={styles.middle_row} >
+          <Col className="gutter-row" span={6}>
+            {translate("API Access")}
+          </Col>
+          <Col className={`${styles.custom_col} gutter-row`} span={18}>
+            <div className={styles['permissions_container']}>
+              <p className='m-0'>Check to add Permissions</p>
+              <div className={styles['permissions_checkboxes']}>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `API_list`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `API_list`], e.target.checked)}>
+                      {translate('List')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `API_create`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `API_create`], e.target.checked)}>
+                      {translate('Create')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `API_read`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `API_read`], e.target.checked)}>
+                      {translate('Read')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `API_edit`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `API_edit`], e.target.checked)}>
+                      {translate('Edit')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+                <div className={styles.w_100px}>
+                  <Form.Item name={['permissions', `API_delete`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
+                    <Checkbox onChange={(e) => form.setFieldValue(['permissions', `API_delete`], e.target.checked)}>
+                      {translate('Delete')}
+                    </Checkbox>
+                  </Form.Item>
+                </div>
+              </div >
+            </div >
+          </Col >
+        </Row >
+      </> : null} */}
+      {/* Module Name and Module Actions */}
 
       < div style={{ position: 'relative', width: ' 100%', marginTop: 30 }
       }>
