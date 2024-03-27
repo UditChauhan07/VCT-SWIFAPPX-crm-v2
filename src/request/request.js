@@ -262,5 +262,21 @@ const request = {
       return errorHandler(error);
     }
   },
+  getServiceCategory: async () => {
+    try {
+      const response = await axios.get(`/servicecategory/list`) //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getCateGorySubscription: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicecategory/subscriptions/${id}`) 
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
 export default request;

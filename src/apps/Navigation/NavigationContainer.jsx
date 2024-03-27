@@ -77,6 +77,10 @@ function Sidebar({ collapsible, isMobile = false }) {
           label: <Link to={'/servicecategory'}>{translate('service_category')}</Link>,
         },
         {
+          key: 'servicelist',
+          label: <Link to={'/servicelist'}>{translate('service_list')}</Link>,
+        },
+        {
           key: 'categoryproduct',
           // icon: <TagsOutlined />,
           label: <Link to={'/category/product'}>{translate('product_category')}</Link>,

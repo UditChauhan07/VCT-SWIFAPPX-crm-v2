@@ -58,6 +58,9 @@ const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
 const ServiceCategory = lazy(() => import('@/pages/ServiceCategory'));
 const ServiceList = lazy(() => import('@/pages/ServiceList'));
+const ServiceListCreate = lazy(() => import('@/pages/ServiceList/Create'));
+// const ServiceListRead = lazy(() => import('@/pages/ServiceList/Read'));
+const ServiceListUpdate = lazy(() => import('@/pages/ServiceList/Update'));
 const PublicHoliday = lazy(() => import('@/pages/PublicHoliday'));
 
 export default function AppRouter() {
@@ -121,6 +124,14 @@ export default function AppRouter() {
     {
       path: '/servicelist',
       element: <ServiceList />,
+    },
+    {
+      path: '/servicelist/create',
+      element: <ServiceListCreate />,
+    },
+    {
+      path: '/servicelist/update/:id',
+      element: <ServiceListUpdate />,
     },
     {
       path: '/roles',

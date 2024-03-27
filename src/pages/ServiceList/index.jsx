@@ -1,7 +1,8 @@
-import CrudModule from '@/modules/CrudModule/CrudModule';
-import DynamicForm from '@/forms/DynamicForm';
-import { fields } from './config';
+import { Tag } from 'antd';
+import { tagColor } from '@/utils/statusTagColor';
+import ServiceListDataTableModule from '@/modules/ServiceListModule/ServiceListDataTableModule';
 import useLanguage from '@/locale/useLanguage';
+
 
 export default function Customer() {
   const translate = useLanguage();
@@ -11,6 +12,34 @@ export default function Customer() {
     searchFields: 'name',
   };
   const deleteModalLabels = ['name'];
+  const dataTableColumns = [
+    {
+      title: translate('Name'),
+      dataIndex: 'name',
+    },
+    {
+      title: translate('Subscription Type'),
+      dataIndex: ['subscriptionType'],
+    },
+    {
+      title: translate('Description'),
+      dataIndex: ['description'],
+    },
+    {
+      title: translate('Enabled'),
+      dataIndex: 'enable',
+      render: (status) => {
+        let tagStatus = tagColor(status);
+
+        return (
+          <Tag color={tagStatus.color}>
+            {/* {tagStatus.icon + ' '} */}
+            {status && translate(tagStatus.label)}
+          </Tag>
+        );
+      },
+    },
+  ];
 
   const Labels = {
     PANEL_TITLE: translate('service_list'),
@@ -24,17 +53,10 @@ export default function Customer() {
   };
   const config = {
     ...configPage,
-    fields,
+    dataTableColumns,
     searchConfig,
     deleteModalLabels,
   };
-  return (
-    <CrudModule
-      createForm={<DynamicForm fields={fields} />}
-      updateForm={<DynamicForm fields={fields} />}
-      config={config}
-    />
 
-
-  );
+  return <ServiceListDataTableModule config={config} />;
 }
