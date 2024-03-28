@@ -278,5 +278,13 @@ const request = {
       return errorHandler(error);
     }
   },
+  getCateGoryDetails: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicecategory/read/${id}`) 
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
 export default request;

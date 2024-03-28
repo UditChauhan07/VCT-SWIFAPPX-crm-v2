@@ -2,7 +2,7 @@ import NotFound from '@/components/NotFound';
 
 import { ErpLayout } from '@/layout';
 import UpdateItem from '@/modules/ErpPanelModule/UpdateItem';
-import ServiceListForm from '@/modules/ServiceListModule/Forms/ServiceListForm';
+import ServiceListEditForm from '@/modules/ServiceListModule/Forms/ServiceListEditForm';
 
 import PageLoader from '@/components/PageLoader';
 
@@ -41,7 +41,7 @@ export default function UpdateServiceListModule({ config }) {
         return (
             <ErpLayout>
                 {isSuccess ? (
-                    <UpdateItem config={config} UpdateForm={ServiceListForm} />
+                    <UpdateItem config={config} UpdateForm={ServiceListEditForm} />
                 ) : (
                     <NotFound entity={config.entity} />
                 )}

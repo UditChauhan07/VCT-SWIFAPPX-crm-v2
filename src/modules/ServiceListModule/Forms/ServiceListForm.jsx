@@ -74,7 +74,20 @@ export default function ServiceListForm() {
   return (
     <>
       <Row gutter={[12, 0]}>
-        <Col className="gutter-row" span={24}>
+        <Col className="gutter-row" span={12}>
+          <Form.Item
+            name='name'
+            label={translate('Name')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="" />
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="servicecategory"
             label={translate('Select Category')}
@@ -133,12 +146,21 @@ export default function ServiceListForm() {
           {
             responseData.map((data, index) => (
               <div key={[`${index}`]}>
-                <Col className="gutter-row" span={24}><h3>{data.subscription.name}</h3></Col>
+                <Col className="gutter-row" span={24}>
+                  <h3>{data.subscription.name}</h3>
+                  <Form.Item
+                    name={[`${index}`, 'type']}
+                    initialValue={data.subscription._id} // Use initialValue to set initial value
+                    hidden // You can use hidden prop to hide the input
+                  >
+                    <InputNumber style={{ display: 'none' }} />
+                  </Form.Item>
+                </Col>
                 {rows.map((row, i) => (
                   <div key={[`${i}`, `${index}`]}>
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                       <Col className="gutter-row" span={10}>
-                        <Form.Item name={[`${i}`, 'name']} key={[`${i}`]}>
+                        <Form.Item name={[`${index}`, `${i}`, 'name']} >
                           <Input placeholder="Enter Option Name" />
                         </Form.Item>
                       </Col>
