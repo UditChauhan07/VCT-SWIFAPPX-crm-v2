@@ -381,6 +381,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
+
   return (
     <Form.Item
       label={translate(field.label)}
