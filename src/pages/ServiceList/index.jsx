@@ -1,4 +1,4 @@
-import { Tag } from 'antd';
+import { Tag, Switch } from 'antd';
 import { tagColor } from '@/utils/statusTagColor';
 import ServiceListDataTableModule from '@/modules/ServiceListModule/ServiceListDataTableModule';
 import useLanguage from '@/locale/useLanguage';
@@ -19,7 +19,7 @@ export default function Customer() {
     },
     {
       title: translate('Subscription Type'),
-      dataIndex: ['subscriptionType'],
+      dataIndex: ['service_category', 'name'],
     },
     {
       title: translate('Description'),
@@ -27,16 +27,17 @@ export default function Customer() {
     },
     {
       title: translate('Enabled'),
-      dataIndex: 'enable',
+      dataIndex: 'enabled',
       render: (status) => {
-        let tagStatus = tagColor(status);
-
-        return (
-          <Tag color={tagStatus.color}>
-            {/* {tagStatus.icon + ' '} */}
-            {status && translate(tagStatus.label)}
-          </Tag>
-        );
+        if (status) {
+          return (
+            <Switch checked={true} />
+          );
+        } else {
+          return (
+            <Switch checked={false} />
+          );
+        }
       },
     },
   ];

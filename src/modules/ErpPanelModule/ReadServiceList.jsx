@@ -51,58 +51,49 @@ export default function ReadServiceList({ config, selectedItem }) {
     };
 
     const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
-    const [serviceName, setServiceName] = useState('');
-    useEffect(() => {
-        // Function to fetch the name from the backend using the service category ID
-        const fetchServiceName = async () => {
-            try {
-                const response = await request.getCateGoryDetails({ id: currentErp.service_category }); // Assuming your request function is named getData()
-                // Assuming your API response contains an array of options as response.options
-                if (response.success) {
-                    const { name } = response.result;
-                    setServiceName(name);
-                }
-
-                console.log(response)
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        // Fetch the service name when the component mounts
-        fetchServiceName();
-    }, [currentErp.service_category]);
-
-    console.log(currentErp);
     // Function to extract subscription names
     const getSubscriptionNames = () => {
-        return currentErp.subscriptions.map(item => item.subscription);
+        console.log('name', currentErp.subscriptions.map(item => item.subscription.name));
+        return currentErp.subscriptions.map(item => item.subscription.name);
     };
 
     // Function to extract price values
     const getPriceValues = () => {
+        console.log('item', currentErp.subscriptions.map(item => Object.values(item.data).map(subitem => subitem.price)));
         return currentErp.subscriptions.map(item => Object.values(item.data).map(subitem => subitem.price));
     };
 
     // Function to generate table columns
     const generateColumns = () => {
+        console.log('key pair ', ...currentErp.subscriptions.map((item => Object.values(item.data).map((subitem, key) => ({
+            title: subitem.name,
+            dataIndex: subitem.name,
+        })))), 'old key pair ', ...currentErp.subscriptions.map((item, key) => ({
+            title: item.data[key].name,
+            dataIndex: item.data[key].name,
+        })));
         const columns = [
             {
                 title: 'Subscription',
                 dataIndex: 'subscription',
             },
-            ...currentErp.subscriptions.map(item => ({
-                title: item.data[0].name,
-                dataIndex: item.data[0].name,
+            ...currentErp.subscriptions.map((item, key) => ({
+                title: item.data[key].name,
+                dataIndex: item.data[key].name,
             })),
+            // ...currentErp.subscriptions.map((item => Object.values(item.data).map((subitem, key) => ({
+            //     title: subitem.name,
+            //     dataIndex: subitem.name,
+            // }))))
         ];
+        console.log({ columns });
         return columns;
     };
 
     // Function to generate table data
     const generateTableData = () => {
         const subscriptionNames = getSubscriptionNames();
-        const priceValues = getPriceValues();
+        const priceValues = getPriceValues(); console.log(subscriptionNames, priceValues);
         const tableData = subscriptionNames.map((subscription, index) => {
             // console.log(subscription);
             const rowData = {
@@ -110,7 +101,7 @@ export default function ReadServiceList({ config, selectedItem }) {
             };
             priceValues[index].forEach((price, idx) => {
                 // console.log(currentErp.subscriptions, idx, price);
-                rowData[currentErp.subscriptions[index].data[0].name] = price;
+                rowData[currentErp.subscriptions[index].data[idx].name] = price;
             });
             return rowData;
         });
@@ -174,7 +165,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                     <p><strong>{translate('Service Category')}: </strong></p>
                 </Col>
                 <Col className="gutter-row" span={12}>
-                    <p>{serviceName}</p>
+                    <p>{currentErp.service_category.name}</p>
                 </Col>
             </Row>
             <Row gutter={[12, 12]}>
@@ -190,10 +181,15 @@ export default function ReadServiceList({ config, selectedItem }) {
                     <p><strong>{translate('Pricing Modal')}: </strong></p>
                 </Col>
                 <Col className="gutter-row" span={12}>
-                    <Table
-                        columns={generateColumns()}
-                        dataSource={generateTableData()}
-                        pagination={false} />
+
+                    <Row gutter={[12, 12]}>
+                        <Col span={24}>
+                            <Table
+                                columns={generateColumns()}
+                                dataSource={generateTableData()}
+                                pagination={false} />
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
 
