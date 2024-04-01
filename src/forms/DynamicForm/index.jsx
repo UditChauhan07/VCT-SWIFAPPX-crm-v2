@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 // import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
 
-import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox } from 'antd';
+import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox, notification } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
 import { useMoney, useDate } from '@/settings';
@@ -11,12 +11,20 @@ import { generate as uniqueId } from 'shortid';
 
 import { countryList } from '@/utils/countryList';
 import { request } from '@/request';
+import { useSelector } from 'react-redux';
+import { selectUpdatedItem } from '@/redux/crud/selectors';
+import { useCrudContext } from '@/context/crud';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
 
   const [feedback, setFeedback] = useState();
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
+  const [checkboxes, setCheckBoxes] = useState([]);
+  const [checkedOption, setcheckedOption] = useState('');
+
+  const { crudContextAction } = useCrudContext();
+  const { panel, collapsedBox, readBox } = crudContextAction;
 
   useEffect(() => {
     // Fetch data from API
@@ -33,6 +41,35 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 
     fetchData();
   }, []);
+  if (fields.subscription_type) {
+    useEffect(() => {
+      // Fetch data from API
+      const fetchData = async () => {
+        try {
+          const response = await request.getCategorySubscription();
+          if (response.success) {
+            setCheckBoxes(response.result);
+          } else {
+            readBox.close();
+            collapsedBox.close();
+            panel.close();
+            notification.config({
+              duration: 4,
+              maxCount: 2,
+            });
+            notification.error({
+              message: `Request error`,
+              description: response.message,
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchData();
+    }, []);
+  }
   return (
     <>
       {Object.keys(fields).map((key) => {
@@ -46,6 +83,9 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
           else if (field.hasRoles) {
             return <FormElement setFeedback={setSelectedRole} key={key} field={field} roles={roles} />;
           }
+          else if (field.hasOptions) {
+            return <FormElement setFeedback={setcheckedOption} key={key} field={field} checkboxes={checkboxes} />;
+          }
           else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
@@ -57,7 +97,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   );
 }
 
-function FormElement({ field, setFeedback, roles = [] }) {
+function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
@@ -308,7 +348,15 @@ function FormElement({ field, setFeedback, roles = [] }) {
         {field.label}
       </Checkbox>
     ),
-    checkoxes: (<Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />)
+    checkoxes: (<Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />),
+    checkoxesCustom: (
+      <Checkbox.Group onChange={handleCheckboxChange} value={selectedOptions}>
+        {checkboxes.map((item) => (
+          <Checkbox key={item._id} value={item._id}>
+            {item.name}
+          </Checkbox>
+        ))}
+      </Checkbox.Group>)
   };
 
 
@@ -333,7 +381,7 @@ function FormElement({ field, setFeedback, roles = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-  // console.log(field);
+
   return (
     <Form.Item
       label={translate(field.label)}

@@ -20,7 +20,6 @@ export default function CreateForm({ config, formElements, withUpload = false })
   const [form] = Form.useForm();
   const translate = useLanguage();
   const onSubmit = (fieldsValue) => {
-    console.log({ fieldsValue })
 
     // Manually trim values before submission
     if (fieldsValue.file && withUpload) {
