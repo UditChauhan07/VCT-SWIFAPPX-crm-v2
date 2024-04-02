@@ -10,8 +10,15 @@ export const fields = {
     disableForTable: false,
   },
   package_type: {
-    type: 'string',
+    type: 'selectWithTranslation',
     disableForTable: false,
+    renderAsTag: true,
+    options: [
+      { value: 'default', label: 'draft' },
+      { value: 'One Time', label: 'One Time', color: 'blue' },
+      { value: 'Monthly', label: 'Monthly', color: 'green' },
+      { value: 'Yearly', label: 'Yearly', color: 'orange' }
+    ],
   },
   package_divider: {
     type: 'string',
@@ -22,37 +29,4 @@ export const fields = {
     disableForTable: false,
     label: 'Active'
   },
-  // country: {
-  //   type: 'country',
-  //   // color: 'red',
-  //   disableForForm: true,
-  // },
-  // phone: {
-  //   type: 'phone',
-  //   disableForForm: true,
-  // },
-  // email: {
-  //   type: 'email',
-  //   disableForForm: true,
-  // },
-  // people: {
-  //   type: 'search',
-  //   label: 'people',
-  //   entity: 'people',
-  //   displayLabels: ['firstname', 'lastname'],
-  //   searchFields: 'firstname,lastname',
-  //   dataIndex: ['people', 'firstname'],
-  //   disableForTable: true,
-  //   feedback: 'people',
-  // },
-  // company: {
-  //   type: 'select',
-  //   label: 'company',
-  //   entity: 'company',
-  //   displayLabels: ['name'],
-  //   searchFields: 'name',
-  //   dataIndex: ['company', 'name'],
-  //   disableForTable: true,
-  //   feedback: 'company',
-  // },
 };

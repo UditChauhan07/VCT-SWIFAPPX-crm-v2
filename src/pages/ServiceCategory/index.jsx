@@ -35,7 +35,5 @@ export default function Customer() {
       updateForm={<DynamicForm fields={updatefields} />}
       config={config}
     />
-
-
   );
 }

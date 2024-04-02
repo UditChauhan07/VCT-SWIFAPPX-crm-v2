@@ -48,6 +48,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
         try {
           const response = await request.getCategorySubscription();
           if (response.success) {
+            console.log({ response });
             setCheckBoxes(response.result);
           } else {
             readBox.close();

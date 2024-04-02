@@ -13,6 +13,7 @@ export const fields = {
     label: 'Subscription Type',
     hasOptions: true,
     disableForTable: true,
+    defaultValue:[],
   },
   enabled: {
     type: 'boolean',
@@ -20,6 +21,8 @@ export const fields = {
     label:'status'
   },
 };
+
+
 export const updatefields = {
   name: {
     type: 'string',
