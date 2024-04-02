@@ -9,6 +9,7 @@ axios.defaults.withCredentials = true;
 
 const request = {
   create: async ({ entity, jsonData }) => {
+    console.log('dsds', jsonData)
     try {
       const response = await axios.post(entity + '/create', jsonData);
       successHandler(response, {

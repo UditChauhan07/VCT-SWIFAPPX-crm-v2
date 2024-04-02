@@ -36,15 +36,14 @@ export default function ServiceListForm() {
   const [selectedValue, setSelectedValue] = useState('');
   const [responseData, setResponseData] = useState(null);
 
+
   const handleChange = (value) => {
     setSelectedValue(value);
-    // Fetch data from API
     const fetchData = async () => {
       try {
-        const response = await request.getCateGorySubscription({ id: value }); // Assuming your request function is named getData()
-        // Assuming your API response contains an array of options as response.options
+        const response = await request.getCateGorySubscription({ id: value });
         if (response.success) {
-          setResponseData(response.result); // Set options state based on API response
+          setResponseData(response.result);
         } else {
           setResponseData(null)
         }
@@ -53,12 +52,10 @@ export default function ServiceListForm() {
         console.error('Error fetching data:', error);
       }
     };
-
-    fetchData(); // Call fetchData function when component mounts
+    fetchData();
   };
 
   const [rows, setRows] = useState([{ name: '', price: '' }]);
-
   // Function to add a new row
   const addRow = () => {
     setRows([...rows, { name: '', price: '' }]);
@@ -69,6 +66,17 @@ export default function ServiceListForm() {
     const updatedRows = [...rows];
     updatedRows.splice(index, 1);
     setRows(updatedRows);
+  };
+
+  const handleInputChange = (value, event, rowIndex, fieldName) => {
+    console.log(event)
+    // const { value } = event.target;
+    console.log('Input value:', value);
+
+    // console.log('Field Name:', fieldName);
+    // const updatedRows = [...rows];
+    // updatedRows[rowIndex][fieldName] = value;
+    // setRows(updatedRows);
   };
 
   return (
@@ -89,8 +97,8 @@ export default function ServiceListForm() {
         </Col>
         <Col className="gutter-row" span={12}>
           <Form.Item
-            name="servicecategory"
-            label={translate('Select Category')}
+            name = "servicecategory"
+            label = {translate('Select Category')}
             rules={[
               {
                 required: true,
@@ -143,7 +151,9 @@ export default function ServiceListForm() {
       {
         responseData && <>
           <Divider dashed />
+          {/* <p>hello</p> */}
           {
+
             responseData.map((data, index) => (
               <div key={[`${index}`]}>
                 <Col className="gutter-row" span={24}>
@@ -151,22 +161,25 @@ export default function ServiceListForm() {
                   <Form.Item
                     name={[`${index}`, 'type']}
                     initialValue={data.subscription._id} // Use initialValue to set initial value
-                    hidden // You can use hidden prop to hide the input
+                    hidden
                   >
-                    <InputNumber style={{ display: 'none' }} />
+                    {/* <InputNumber style={{ display: 'none' }} /> */}
                   </Form.Item>
                 </Col>
+
                 {rows.map((row, i) => (
-                  <div key={[`${i}`, `${index}`]}>
+
+                  <div key={[`${index}`]}>
+                    {console.log(index)}
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                       <Col className="gutter-row" span={10}>
-                        <Form.Item name={[`${index}`, `${i}`, 'name']} >
-                          <Input placeholder="Enter Option Name" />
+                        <Form.Item name={[`${i}`, 'name']} >
+                          <Input placeholder="Enter Option Name" onChange={(event) => handleInputChange(event, i, 'name')} />
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={10}>
                         <Form.Item name={[`${index}`, `${i}`, 'price']} rules={[{ required: true }]}>
-                          <InputNumber className="moneyInput" />
+                          <InputNumber className="moneyInput" placeholder='Enter Price' onChange={(value) => handleInputChange(value, i, 'price')} />
                         </Form.Item>
                       </Col>
                       {/* Render Remove button for each row */}
@@ -182,7 +195,7 @@ export default function ServiceListForm() {
               </div>
             ))
           }
-          <Button icon={<PlusOutlined />} onClick={addRow} > Add Option</Button>
+          <Button icon={<PlusOutlined />} onClick={addRow} > Add Option </Button>
           <Divider dashed />
         </>
       }
