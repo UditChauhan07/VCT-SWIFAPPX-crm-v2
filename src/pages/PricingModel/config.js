@@ -72,9 +72,10 @@ export const fields = {
     type: 'boolean',
     disableForTable: false,
   },
-  active_status: {
+  enabled: {
     type: 'boolean',
     disableForTable: true,
+    label: 'Active Status'
   },
 
   // country: {

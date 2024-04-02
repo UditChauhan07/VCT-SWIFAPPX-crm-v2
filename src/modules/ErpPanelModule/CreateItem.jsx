@@ -99,6 +99,35 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
+      if (fieldsValue.servicecategory) {
+        console.log('102103104', { fieldsValue });
+        let requestBody = {
+          name: fieldsValue.name,
+          servicecategory: fieldsValue.servicecategory,
+          description: fieldsValue.description,
+          subscriptionType: [],
+        }; //console.log(Object.keys(fieldsValue));
+        for (let i = 0; i < Object.keys(fieldsValue).length - 4; i++) {
+          let option = fieldsValue[i];
+          let subscriptionType = {
+            Type: option.type, // Set the type for each option
+            data: []
+          };
+          console.log(Object.keys(option));
+          // Iterate over each price within the option
+          for (let j = 0; j < Object.keys(option).length - 1; j++) {
+            let price = option[j].price;
+            let name = option[j].name;
+            subscriptionType.data.push({
+              name: name,
+              price: price.toString()
+            });
+          }
+
+          requestBody.subscriptionType.push(subscriptionType);
+        }
+        fieldsValue = requestBody;
+      }
     }
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
   };
