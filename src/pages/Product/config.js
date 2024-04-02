@@ -18,9 +18,6 @@ export const fields = {
   description: {
     type: 'textarea',
   },
-  ref: {
-    type: 'string',
-  },
   enabled : {
     type : 'boolean',
     label : 'Status'

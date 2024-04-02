@@ -17,9 +17,10 @@ export const fields = {
     type: 'string',
     disableForTable: false,
   },
-  active_status: {
+  enabled: {
     type: 'boolean',
     disableForTable: false,
+    label: 'Active'
   },
   // country: {
   //   type: 'country',
