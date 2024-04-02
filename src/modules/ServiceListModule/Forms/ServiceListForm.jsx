@@ -56,6 +56,7 @@ export default function ServiceListForm() {
   };
 
   const [rows, setRows] = useState([{ name: '', price: '' }]);
+  console.log(rows)
   // Function to add a new row
   const addRow = () => {
     setRows([...rows, { name: '', price: '' }]);
@@ -69,14 +70,24 @@ export default function ServiceListForm() {
   };
 
   const handleInputChange = (value, event, rowIndex, fieldName) => {
-    console.log(event)
     // const { value } = event.target;
-    console.log('Input value:', value);
+ 
+    const updatedRows = [...rows];
+    updatedRows[rowIndex][fieldName] = value;
+    setRows(updatedRows);
+  };
 
-    // console.log('Field Name:', fieldName);
-    // const updatedRows = [...rows];
-    // updatedRows[rowIndex][fieldName] = value;
-    // setRows(updatedRows);
+  const handleNameChange = (index, value) => {
+    const newRows = [...rows];
+    newRows[index].name = value;
+    setRows(newRows);
+  };
+
+  // Function to handle changes in price input
+  const handlePriceChange = (index, value) => {
+    const newRows = [...rows];
+    newRows[index].price = value;
+    setRows(newRows);
   };
 
   return (
@@ -163,23 +174,22 @@ export default function ServiceListForm() {
                     initialValue={data.subscription._id} // Use initialValue to set initial value
                     hidden
                   >
-                    {/* <InputNumber style={{ display: 'none' }} /> */}
+                    <InputNumber style={{ display: 'none' }} />
                   </Form.Item>
                 </Col>
-
                 {rows.map((row, i) => (
-
+              
                   <div key={[`${index}`]}>
-                    {console.log(index)}
+     
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                       <Col className="gutter-row" span={10}>
-                        <Form.Item name={[`${i}`, 'name']} >
-                          <Input placeholder="Enter Option Name" onChange={(event) => handleInputChange(event, i, 'name')} />
+                        <Form.Item name={[`${i}`,'name']} >
+                          <Input placeholder="Enter Option Name" onChange={(e) => handleNameChange(index, e.target.value)} />
                         </Form.Item>
                       </Col>
-                      <Col className="gutter-row" span={10}>
+                      <Col className="gutter-row" span={10}> 
                         <Form.Item name={[`${index}`, `${i}`, 'price']} rules={[{ required: true }]}>
-                          <InputNumber className="moneyInput" placeholder='Enter Price' onChange={(value) => handleInputChange(value, i, 'price')} />
+                          <InputNumber className="moneyInput" placeholder='Enter Price' onChange={(value) => handlePriceChange(i, value)} />
                         </Form.Item>
                       </Col>
                       {/* Render Remove button for each row */}

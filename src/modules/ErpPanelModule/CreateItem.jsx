@@ -103,7 +103,7 @@ export default function CreateItem({ config, CreateForm }) {
         console.log('10tty', { fieldsValue });
         let requestBody = {
           name: fieldsValue.name,
-          servicecategory: fieldsValue.servicecategory,
+          serviceCategory: fieldsValue.servicecategory,
           description: fieldsValue.description,
           subscriptionType: [],
         }; 
