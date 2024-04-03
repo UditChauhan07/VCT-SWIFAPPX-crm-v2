@@ -1,4 +1,3 @@
-
 const fields = {
   type: {
     type: 'selectwithfeedback',
@@ -68,6 +67,5 @@ const fields = {
     disableForTable: true,
   },
 };
-
 
 export { fields };

@@ -4,21 +4,18 @@ export const fields = {
     required: true,
     disableForForm: false,
   },
-  subscription_type: {
-    type: 'select',
-    options: [
-      { value: 'Cleaning', label: 'Cleaning' },
-      { value: 'Home Cleaning', label: 'Home Cleaning' },
-    ],
-    required: true,
-    hasTypeList: true,
+  serviceCategory : {
+    type: 'async',
+    label: 'service Category',
+    dataIndex: ['serviceCategory', 'name'],
+    entity: 'serviceCategory',
+    disableForForm: true,
   },
   description: {
     type: 'textarea',
   },
   enabled: {
     type: 'boolean',
-    disableForForm: false,
     label:'status'
   },
 };

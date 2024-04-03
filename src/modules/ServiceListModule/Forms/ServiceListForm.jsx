@@ -4,12 +4,7 @@ import { PlusOutlined, DeleteOutlined, CloseOutlined, CheckOutlined } from '@ant
 import useLanguage from '@/locale/useLanguage';
 import { request } from '@/request';
 
-
 export default function ServiceListForm() {
-  //   return <LoadServiceListForm />;
-  // }
-
-  // function LoadServiceListForm() {
   const translate = useLanguage();
 
   const { TextArea } = Input;
@@ -36,7 +31,6 @@ export default function ServiceListForm() {
   const [selectedValue, setSelectedValue] = useState('');
   const [responseData, setResponseData] = useState(null);
 
-
   const handleChange = (value) => {
     setSelectedValue(value);
     const fetchData = async () => {
@@ -56,12 +50,11 @@ export default function ServiceListForm() {
   };
 
   const [rows, setRows] = useState([{ name: '', price: '' }]);
-  // Function to add a new row
+
   const addRow = () => {
     setRows([...rows, { name: '', price: '' }]);
   };
 
-  // Function to remove a particular row
   const removeRow = (index) => {
     const updatedRows = [...rows];
     updatedRows.splice(index, 1);
@@ -97,8 +90,8 @@ export default function ServiceListForm() {
         </Col>
         <Col className="gutter-row" span={12}>
           <Form.Item
-            name = "servicecategory"
-            label = {translate('Select Category')}
+            name="servicecategory"
+            label={translate('Select Category')}
             rules={[
               {
                 required: true,

@@ -18,8 +18,15 @@ export default function Customer() {
       dataIndex: 'name',
     },
     {
-      title: translate('Subscription Type'),
-      dataIndex: ['service_category', 'name'],
+      title: translate('Service Category'),
+      dataIndex: 'serviceCategory',
+      render: (serviceCategory) => (
+        <span>
+          <Tag color='#6f42c1'>
+            {serviceCategory.name}
+          </Tag>
+        </span >
+      ),
     },
     {
       title: translate('Description'),

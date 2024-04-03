@@ -106,7 +106,7 @@ export default function CreateItem({ config, CreateForm }) {
           servicecategory: fieldsValue.servicecategory,
           description: fieldsValue.description,
           subscriptionType: [],
-        }; 
+        };
         // for (let i = 0; i < Object.keys(fieldsValue).length - 4; i++) {
         //   let option = fieldsValue[i];
         //   let subscriptionType = {
@@ -128,7 +128,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
     }
-       console.log(fieldsValue)
+    console.log(fieldsValue)
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
   };
 
@@ -140,7 +140,7 @@ export default function CreateItem({ config, CreateForm }) {
         }}
         title={translate('New')}
         ghost={false}
-        tags={entity != 'roles' ? <Tag>{translate('Draft')}</Tag> : ''}
+        // tags={entity != 'roles' ? <Tag>{translate('Draft')}</Tag> : ''}
         // subTitle="This is create page"
         extra={[
           <Button
