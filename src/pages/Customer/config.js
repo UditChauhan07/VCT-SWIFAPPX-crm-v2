@@ -37,7 +37,7 @@ const fields = {
     type: 'email',
     required: true,
     displayLabels: ['email'],
-    dataIndex: ['admin', 'email'],
+    dataIndex: ['userAdmin', 'email'],
   },
   password: {
     type: 'password',

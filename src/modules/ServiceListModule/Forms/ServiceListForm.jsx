@@ -144,9 +144,7 @@ export default function ServiceListForm() {
       {
         responseData && <>
           <Divider dashed />
-          {/* <p>hello</p> */}
           {
-
             responseData.map((data, index) => (
               <div key={[`${index}`]}>
                 <Col className="gutter-row" span={24}>
