@@ -14,10 +14,10 @@ export const fields = {
     disableForTable: false,
     renderAsTag: true,
     options: [
-      { value: 'default', label: 'draft' },
+      // { value: 'default', label: 'draft' },
       { value: 'One Time', label: 'One Time', color: 'blue' },
       { value: 'Monthly', label: 'Monthly', color: 'green' },
-      { value: 'Yearly', label: 'Yearly', color: 'orange' }
+      { value: 'Yearly', label: 'Yearly', color: 'orange' },
     ],
   },
   package_divider: {
@@ -27,6 +27,6 @@ export const fields = {
   enabled: {
     type: 'boolean',
     disableForTable: false,
-    label: 'Active'
+    label: 'Active',
   },
 };

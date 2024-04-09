@@ -102,11 +102,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <UserOutlined />,
       label: <Link to={'/people'}>{translate('peoples')}</Link>,
     },
-    {
-      key: 'worker',
-      icon: <UserOutlined />,
-      label: <Link to={'/worker'}>{translate('worker')}</Link>,
-    },
+    // {
+    //   key: 'worker',
+    //   icon: <UserOutlined />,
+    //   label: <Link to={'/worker'}>{translate('worker')}</Link>,
+    // },
     {
       key: 'company',
       icon: <ShopOutlined />,

@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 
 const request = {
   create: async ({ entity, jsonData }) => {
-    console.log('dsds', jsonData)
+    console.log('dsds', jsonData);
     try {
       const response = await axios.post(entity + '/create', jsonData);
       successHandler(response, {
@@ -257,7 +257,7 @@ const request = {
   },
   getCategorySubscription: async () => {
     try {
-      const response = await axios.get(`/subscriptiontype/listAll`) //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      const response = await axios.get(`/subscriptiontype/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -265,7 +265,7 @@ const request = {
   },
   getServiceCategory: async () => {
     try {
-      const response = await axios.get(`/servicecategory/list`) //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      const response = await axios.get(`/servicecategory/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -273,7 +273,7 @@ const request = {
   },
   getCateGorySubscription: async ({ id }) => {
     try {
-      const response = await axios.get(`/servicecategory/subscriptions/${id}`) 
+      const response = await axios.get(`/servicecategory/subscriptions/${id}`);
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -281,7 +281,7 @@ const request = {
   },
   getCateGoryDetails: async ({ id }) => {
     try {
-      const response = await axios.get(`/servicecategory/read/${id}`) 
+      const response = await axios.get(`/servicecategory/read/${id}`);
       return response.data;
     } catch (error) {
       return errorHandler(error);

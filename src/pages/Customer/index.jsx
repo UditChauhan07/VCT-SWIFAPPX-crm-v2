@@ -1,6 +1,6 @@
 import CrudModule from '@/modules/CrudModule/CrudModule';
 import DynamicForm from '@/forms/DynamicForm';
-import { fields } from './config';
+import { fields, readColumns } from './config';
 
 import useLanguage from '@/locale/useLanguage';
 
@@ -26,6 +26,7 @@ export default function Customer() {
   const config = {
     ...configPage,
     fields,
+    readColumns,
     searchConfig,
     deleteModalLabels,
   };

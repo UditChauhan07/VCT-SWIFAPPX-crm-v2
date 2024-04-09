@@ -13,15 +13,14 @@ export const fields = {
     label: 'Subscription Type',
     hasOptions: true,
     disableForTable: true,
-    defaultValue:[],
+    defaultValue: [],
   },
   enabled: {
     type: 'boolean',
     disableForForm: false,
-    label:'status'
+    label: 'status',
   },
 };
-
 
 export const updatefields = {
   name: {
@@ -36,6 +35,23 @@ export const updatefields = {
   enabled: {
     type: 'boolean',
     disableForForm: false,
-    label:'status'
+    label: 'status',
+  },
+};
+
+export const readColumns = {
+  name: {
+    type: 'string',
+    required: true,
+    disableForForm: false,
+  },
+  description: {
+    type: 'textarea',
+    disableForForm: false,
+  },
+  enabled: {
+    type: 'boolean',
+    disableForForm: false,
+    label: 'status',
   },
 };

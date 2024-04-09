@@ -1,4 +1,4 @@
-const fields = {
+export const fields = {
   type: {
     type: 'selectwithfeedback',
     renderAsTag: true,
@@ -68,4 +68,46 @@ const fields = {
   },
 };
 
-export { fields };
+export const readColumns = {
+  type: {
+    type: 'selectwithfeedback',
+    renderAsTag: true,
+    options: [
+      { value: 'People', label: 'People', color: 'magenta' },
+      { value: 'Company', label: 'Company', color: 'blue' },
+    ],
+    required: true,
+    hasFeedback: true,
+  },
+  name: {
+    type: 'string',
+    disableForForm: true,
+  },
+  email: {
+    type: 'email',
+    required: true,
+    displayLabels: ['email'],
+    dataIndex: ['userAdmin', 'email'],
+  },
+  country: {
+    type: 'country',
+    disableForForm: true,
+    displayLabels: ['country'],
+    dataIndex: ['country'],
+  },
+  phone: {
+    type: 'phone',
+    disableForForm: true,
+  },
+  role: {
+    type: 'selectRoles',
+    required: true,
+    hasRoles: true,
+    disableForTable: true,
+  },
+  enabled: {
+    type: 'boolean',
+    required: true,
+    disableForTable: true,
+  },
+};
