@@ -2,10 +2,12 @@ export const fields = {
   firstname: {
     type: 'string',
     required: true,
+    label : 'First Name',
   },
   lastname: {
     type: 'string',
     required: true,
+    label : 'Last Name',
   },
   company: {
     type: 'search',

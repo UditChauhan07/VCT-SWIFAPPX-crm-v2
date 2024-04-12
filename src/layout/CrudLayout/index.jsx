@@ -56,6 +56,7 @@ export default function CrudLayout({
   sidePanelBottomContent,
   fixHeaderPanel,
 }) {
+
   return (
     <>
       <DefaultLayout>

@@ -9,6 +9,7 @@ axios.defaults.withCredentials = true;
 
 const request = {
   create: async ({ entity, jsonData }) => {
+    console.log('dsds', jsonData);
     try {
       const response = await axios.post(entity + '/create', jsonData);
       successHandler(response, {
@@ -249,6 +250,38 @@ const request = {
   getRoles: async () => {
     try {
       const response = await axios.get(`/roles/show`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getCategorySubscription: async () => {
+    try {
+      const response = await axios.get(`/subscriptiontype/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceCategory: async () => {
+    try {
+      const response = await axios.get(`/servicecategory/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getCateGorySubscription: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicecategory/subscriptions/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getCateGoryDetails: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicecategory/read/${id}`);
       return response.data;
     } catch (error) {
       return errorHandler(error);

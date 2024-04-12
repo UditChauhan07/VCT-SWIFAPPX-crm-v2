@@ -99,7 +99,36 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
+      if (fieldsValue.servicecategory) {
+        console.log('10tty', { fieldsValue });
+        let requestBody = {
+          name: fieldsValue.name,
+          servicecategory: fieldsValue.servicecategory,
+          description: fieldsValue.description,
+          subscriptionType: [],
+        };
+        // for (let i = 0; i < Object.keys(fieldsValue).length - 4; i++) {
+        //   let option = fieldsValue[i];
+        //   let subscriptionType = {
+        //     Type: option.type, 
+        //     data: []
+        //   };
+        //   for (let j = 0; j < Object.keys(option).length - 1; j++) {
+        //     let price = option[j].price;
+        //     let name = option[j].name;
+        //     subscriptionType.data.push({
+        //       name: name,
+        //       price: price.toString()
+        //     });
+        //   }
+        //   requestBody.subscriptionType.push(subscriptionType)
+        // }
+
+        fieldsValue = requestBody;
+
+      }
     }
+    console.log(fieldsValue)
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
   };
 
@@ -111,7 +140,7 @@ export default function CreateItem({ config, CreateForm }) {
         }}
         title={translate('New')}
         ghost={false}
-        tags={entity != 'roles' ? <Tag>{translate('Draft')}</Tag> : ''}
+        // tags={entity != 'roles' ? <Tag>{translate('Draft')}</Tag> : ''}
         // subTitle="This is create page"
         extra={[
           <Button
