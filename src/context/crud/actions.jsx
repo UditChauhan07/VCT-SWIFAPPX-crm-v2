@@ -51,7 +51,7 @@ const contextActions = (dispatch) => {
     readBox: {
       open: () => {
         dispatch({ type: actionTypes.OPEN_READ_BOX });
-        console.log('readBox open');
+        // console.log('readBox open');
       },
       close: () => {
         dispatch({ type: actionTypes.CLOSE_READ_BOX });

@@ -61,8 +61,9 @@ function LoadRoleForm({ isUpdateForm = false }) {
 
   // role = admin?.role_id
   adminLevel = role?.admin_level
+  isSAAS = role?.is_saas
 
-  // console.log({ adminLevel });
+  console.log({ isSAAS });
 
   useEffect(() => {
     if (isSuccess) {
@@ -128,7 +129,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={adminLevel == 1 ? 6 : 12}>
+        <Col className="gutter-row" span={adminLevel == 1 ? 12 : 12}>
           <Form.Item
             label={translate('User Level')}
             name="admin_level"
@@ -142,17 +143,14 @@ function LoadRoleForm({ isUpdateForm = false }) {
               {(adminLevel == 1) && (
                 <Select.Option value="1">{translate('Swif SAAS Level')}</Select.Option>
               )}
-
               {(adminLevel <= 2) && (
                 <Select.Option value="2">{translate('Service Provider')}</Select.Option>
               )}
-
-
               <Select.Option value="3">{translate('End Customer')}</Select.Option>
             </Select>
           </Form.Item>
         </Col>
-        {adminLevel == 1 && (<Col className="gutter-row" span={6}>
+        {/* {isSAAS == true && (<Col className="gutter-row" span={6}>
           <Form.Item
             label={translate('Is Default Role')}
             name="is_default"
@@ -167,7 +165,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
               <Select.Option value="false">{translate('No')}</Select.Option>
             </Select>
           </Form.Item>
-        </Col>)}
+        </Col>)} */}
 
       </Row>
       <Row gutter={[12, 0]} >

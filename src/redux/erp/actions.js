@@ -74,9 +74,8 @@ export const erp = {
         keyState: 'create',
         payload: null,
       });
-
+       
       let data = await request.create({ entity, jsonData });
-
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,

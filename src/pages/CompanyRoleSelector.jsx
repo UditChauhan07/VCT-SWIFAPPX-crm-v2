@@ -157,7 +157,42 @@ const CompanyRoleSelector = () => {
     //             </select>
     //         </div>
     //     );
-    const [options, setOptions] = useState([]); // Initialize state to store dropdown options
+    // const [options, setOptions] = useState([]); // Initialize state to store dropdown options
+
+    // useEffect(() => {
+    //     // Fetch data from API
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await request.getRoles(); // Assuming your request function is named getData()
+    //             // Assuming your API response contains an array of options as response.options
+    //             if (response.success) {
+    //                 setOptions(response.result); // Set options state based on API response
+    //             }
+
+    //             console.log(response)
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+
+    //     fetchData(); // Call fetchData function when component mounts
+    // }, []); // Empty dependency array ensures useEffect runs only once after initial render
+
+    // return (
+    //     <div>
+    //         <Select defaultValue={null}>
+    //             {/* Render dropdown options dynamically */}
+    //             {options.map(option => (
+    //                 <Select.Option key={option._id} value={option.name}>
+    //                     {option.label}
+    //                 </Select.Option>
+    //             ))}
+    //         </Select>
+    //         {/* Render other components or UI elements */}
+    //     </div>
+    // );
+
+    // const [options, setOptions] = useState([]); // Initialize state to store dropdown options
 
     useEffect(() => {
         // Fetch data from API
@@ -176,21 +211,59 @@ const CompanyRoleSelector = () => {
         };
 
         fetchData(); // Call fetchData function when component mounts
-    }, []); // Empty dependency array ensures useEffect runs only once after initial render
+    }, []);
+
+
+    const [selectedValue, setSelectedValue] = useState('');
+    const [responseData, setResponseData] = useState(null);
+
+    const handleChange = async (event) => {
+        const value = event.target.value;
+        setSelectedValue(value);
+
+        // Fetch data from API based on the selected value
+
+        // Fetch data from API
+        const fetchData = async () => {
+            try {
+                const response = await request.getCateGorySubscription({ id: value }); // Assuming your request function is named getData()
+                // Assuming your API response contains an array of options as response.options
+                if (response.success) {
+                    setResponseData(response.result); // Set options state based on API response
+                }
+
+                console.log(response.result)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData(); // Call fetchData function when component mounts
+    };
 
     return (
         <div>
-            <Select defaultValue={null}>
-                {/* Render dropdown options dynamically */}
-                {options.map(option => (
-                    <Select.Option key={option._id} value={option.name}>
-                        {option.label}
-                    </Select.Option>
-                ))}
-            </Select>
-            {/* Render other components or UI elements */}
+            <select value={selectedValue} onChange={handleChange}>
+                <option value="">Select an option</option>
+                <option value="6602c4500b127c22abc7c1a7">Test Cleaner</option>
+                <option value="66026b730b127c22abc798a2">Shop Cleaner</option>
+                {/* Add more options as needed */}
+            </select>
+
+            {/* Render input fields based on API response */}
+            {responseData && (
+                <div>
+                    {responseData.map((item) => (
+                        <div key={item.subscription._id}>
+                            <label>{item.subscription.name}</label>
+                            <input type="text" />
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
+
 };
 
 export default CompanyRoleSelector;

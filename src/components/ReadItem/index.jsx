@@ -13,7 +13,7 @@ import useLanguage from '@/locale/useLanguage';
 import { useDate } from '@/settings';
 
 export default function ReadItem({ config }) {
-  // console.log({ config })
+  console.log({ config })
   const { dateFormat } = useDate();
   let { readColumns, fields } = config;
   const translate = useLanguage();
@@ -21,8 +21,9 @@ export default function ReadItem({ config }) {
   const { state } = useCrudContext();
   const { isReadBoxOpen } = state;
   const [listState, setListState] = useState([]);
+  const readFields = !readColumns ? fields : readColumns
 
-  if (fields) readColumns = [...dataForRead({ fields: fields, translate: translate })];
+  if (fields) readColumns = [...dataForRead({ fields: readFields, translate: translate })];
   useEffect(() => {
     const list = [];
     readColumns.map((props) => {
@@ -53,6 +54,8 @@ export default function ReadItem({ config }) {
       </Row>
     );
   });
+
+  console.log({ itemsList });
 
   return <div style={show}>{itemsList}</div>;
 }
