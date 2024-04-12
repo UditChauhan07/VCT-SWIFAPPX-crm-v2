@@ -15,14 +15,8 @@ export const fields = {
     type: 'currency',
     required: true,
   },
-  description: {
-    type: 'textarea',
+  enabled: {
+    type: 'boolean',
+    label: 'Status',
   },
-  ref: {
-    type: 'string',
-  },
-  enabled : {
-    type : 'boolean',
-    label : 'Status'
-  }
 };
