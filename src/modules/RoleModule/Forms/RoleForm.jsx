@@ -101,7 +101,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
 
   // console.log({ current });
 
-  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype', 'servicecategory', 'servicelist', 'publicholiday']
+  let entities = ['people', 'client', 'api_access', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype', 'servicecategory', 'servicelist', 'publicholiday', 'worker']
 
   // console.log('current?.admin_level --- ', current?.admin_level);
   const [moduleAccessPermission, setModuleAccessPermission] = useState(true);
