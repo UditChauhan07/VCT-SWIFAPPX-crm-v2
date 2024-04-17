@@ -12,7 +12,7 @@ export const fields = {
   date: {
     type: 'date',
     required: true,
-    disableForUpdate: true,
+    disableForUpdate: false,
   },
   enabled: {
     type: 'boolean',
