@@ -28,11 +28,9 @@ export default function ServiceListForm() {
     fetchData(); // Call fetchData function when component mounts
   }, []);
 
-  const [selectedValue, setSelectedValue] = useState('');
   const [responseData, setResponseData] = useState(null);
 
   const handleChange = (value) => {
-    setSelectedValue(value);
     const fetchData = async () => {
       try {
         const response = await request.getCateGorySubscription({ id: value });
@@ -49,28 +47,66 @@ export default function ServiceListForm() {
     fetchData();
   };
 
-  const [rows, setRows] = useState([{ name: '', price: '' }]);
+  const [subscriptions, setSubscriptions] = useState([])
+  console.log(subscriptions)
+  useEffect(() => {
+    if (responseData) {
+      setSubscriptions(responseData.map(data => ({
+        id: data.subscription._id,
+        options: [{
+          position: 0,
+          name: "",
+          price: ""
+        }]
+      })))
+    }
+  }, [responseData])
 
-  const addRow = () => {
-    setRows([...rows, { name: '', price: '' }]);
-  };
+  const handleAddOption = () => {
+    setSubscriptions((subscriptions) => {
+      const updatedSubscriptions = [...subscriptions]
+      updatedSubscriptions?.forEach((subscription) => {
+        subscription.options.push({
+          position: subscription.options?.length,
+          name: "",
+          price: ""
+        })
+      })
+      return updatedSubscriptions
+    })
+  }
+  const handleRemoveOption = (position) => {
+    setSubscriptions((subscriptions) => {
+      const updatedSubscriptions = [...subscriptions]
+      updatedSubscriptions?.forEach(subscription => {
+        subscription.options = subscription.options?.filter(option => option.position !== position)
+      })
+      return updatedSubscriptions
+    })
+  }
+  const handleOptionNameChange = (name, position) => {
+    setSubscriptions((subscriptions) => {
+      const updatedSubscriptions = [...subscriptions]
+      updatedSubscriptions?.forEach(subscription => {
+        const option = subscription.options.find(option => option.position === position)
+        subscription.options.splice(position, 1, { ...option, name: name })
+      })
+      return updatedSubscriptions
+    })
+  }
 
-  const removeRow = (index) => {
-    const updatedRows = [...rows];
-    updatedRows.splice(index, 1);
-    setRows(updatedRows);
-  };
-
-  const handleInputChange = (value, event, rowIndex, fieldName) => {
-    console.log(event)
-    // const { value } = event.target;
-    console.log('Input value:', value);
-
-    // console.log('Field Name:', fieldName);
-    // const updatedRows = [...rows];
-    // updatedRows[rowIndex][fieldName] = value;
-    // setRows(updatedRows);
-  };
+  const handleOptionPriceChange = (price, position, subscriptionId) => {
+    setSubscriptions((subscriptions) => {
+      const updatedSubscriptions = [...subscriptions]
+      updatedSubscriptions.forEach(subscription => {
+        if (subscription.id === subscriptionId) {
+          const option = subscription.options.find(option => option.position === position)
+          subscription.options.splice(position, 1, { ...option, price: price })
+        }
+      })
+      return updatedSubscriptions
+    })
+  }
 
   return (
     <>
@@ -145,48 +181,47 @@ export default function ServiceListForm() {
         responseData && <>
           <Divider dashed />
           {
-            responseData.map((data, index) => (
-              <div key={[`${index}`]}>
-                <Col className="gutter-row" span={24}>
-                  <h3>{data.subscription.name}</h3>
-                  <Form.Item
-                    name={[`${index}`, 'type']}
-                    initialValue={data.subscription._id} // Use initialValue to set initial value
-                    hidden
-                  >
-                    {/* <InputNumber style={{ display: 'none' }} /> */}
-                  </Form.Item>
-                </Col>
+            subscriptions.map((subscription, index) => {
+              const data = responseData.find(data => data.subscription._id === subscription.id)
+              console.log(data, subscription)
+              return (
+                <div key={[`${subscription.id}`]}>
+                  <Col className="gutter-row" span={24}>
+                    <h3>{data.subscription.name}</h3>
+                    <Form.Item
+                      name={[`${index}`, 'type']}
+                      initialValue={data.subscription._id} // Use initialValue to set initial value
+                      hidden
+                    >
+                      {/* <InputNumber style={{ display: 'none' }} /> */}
+                    </Form.Item>
+                  </Col>
 
-                {rows.map((row, i) => (
-
-                  <div key={[`${index}`]}>
-                    {console.log(index)}
-                    <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                      <Col className="gutter-row" span={10}>
-                        <Form.Item name={[`${i}`, 'name']} >
-                          <Input placeholder="Enter Option Name" onChange={(event) => handleInputChange(event, i, 'name')} />
-                        </Form.Item>
-                      </Col>
-                      <Col className="gutter-row" span={10}>
-                        <Form.Item name={[`${index}`, `${i}`, 'price']} rules={[{ required: true }]}>
-                          <InputNumber className="moneyInput" placeholder='Enter Price' onChange={(value) => handleInputChange(value, i, 'price')} />
-                        </Form.Item>
-                      </Col>
-                      {/* Render Remove button for each row */}
-
-                      {i > 0 && (
-                        <Col span={4}>
-                          <Button onClick={() => removeRow(index)}>Remove</Button>
+                  {subscription.options.map((option, i) => (
+                    <div key={[`${subscription.id}-${option.position}-${i}`]}>
+                      {console.log(index)}
+                      <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
+                        <Col className="gutter-row" span={10}>
+                          <Input placeholder="Enter Option Name" value={option.name} onChange={(event) => handleOptionNameChange(event.target.value, option.position)} />
                         </Col>
-                      )}
-                    </Row>
-                  </div>
-                ))}
-              </div>
-            ))
+                        <Col className="gutter-row" span={10}>
+                          <InputNumber className="moneyInput" placeholder='Enter Price' value={option.price} onChange={(value) => handleOptionPriceChange(value, option.position, subscription.id)} />
+                        </Col>
+                        {/* Render Remove button for each row */}
+
+                        {i > 0 && (
+                          <Col span={4}>
+                            <Button onClick={() => handleRemoveOption(option.position)}>Remove</Button>
+                          </Col>
+                        )}
+                      </Row>
+                    </div>
+                  ))}
+                </div>
+              )
+            })
           }
-          <Button icon={<PlusOutlined />} onClick={addRow} > Add Option </Button>
+          <Button icon={<PlusOutlined />} onClick={handleAddOption} > Add Option </Button>
           <Divider dashed />
         </>
       }

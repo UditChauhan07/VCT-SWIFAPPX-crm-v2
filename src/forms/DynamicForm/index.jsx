@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-// import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
-
 import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox, notification } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
@@ -374,14 +372,13 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
     // array: 'array',
     // object: 'object',
     // enum: 'enum',
-    // date: 'date',
+    date: 'date',
     url: 'url',
     website: 'url',
     email: 'email',
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-
   return (
     <Form.Item
       label={translate(field.label)}
