@@ -2,6 +2,7 @@ import CrudModule from '@/modules/CrudModule/CrudModule';
 import DynamicForm from '@/forms/DynamicForm';
 import { fields, readColumns } from './config';
 import useLanguage from '@/locale/useLanguage';
+import { useParams } from 'react-router-dom';
 
 export default function Address() {
   const translate = useLanguage();
@@ -11,7 +12,8 @@ export default function Address() {
     searchFields: 'name',
   };
   const deleteModalLabels = ['name'];
-
+  let { id } = useParams();
+  
   const Labels = {
     PANEL_TITLE: translate('clientaddress'),
     DATATABLE_TITLE: translate('client_address_list'),
@@ -30,6 +32,7 @@ export default function Address() {
     readColumns,
     searchConfig,
     deleteModalLabels,
+    id
   };
 
   return (  
