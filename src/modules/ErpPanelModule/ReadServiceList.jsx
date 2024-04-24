@@ -51,6 +51,26 @@ export default function ReadServiceList({ config, selectedItem }) {
     };
 
     const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
+    console.log("currentErp", currentErp);
+    const [options, setOptions] = useState([]);
+    useEffect(() => {
+        // Fetch data from API
+        const fetchData = async () => {
+            try {
+                const response = await request.getServiceCategory(); // Assuming your request function is named getData()
+                // Assuming your API response contains an array of options as response.options
+                if (response.success) {
+                    setOptions(response.result); // Set options state based on API response
+                }
+
+                console.log(response)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData(); // Call fetchData function when component mounts
+    }, []);
     // Function to extract subscription names
     const getSubscriptionNames = () => {
         console.log('name', currentErp.subscriptions.map(item => item.subscription.name));
@@ -93,7 +113,8 @@ export default function ReadServiceList({ config, selectedItem }) {
     // Function to generate table data
     const generateTableData = () => {
         const subscriptionNames = getSubscriptionNames();
-        const priceValues = getPriceValues(); console.log(subscriptionNames, priceValues);
+        const priceValues = getPriceValues();
+        console.log(subscriptionNames, priceValues);
         const tableData = subscriptionNames.map((subscription, index) => {
             // console.log(subscription);
             const rowData = {
@@ -107,7 +128,7 @@ export default function ReadServiceList({ config, selectedItem }) {
         });
         return tableData;
     };
-
+    console.log(options.filter((ele) => ele._id === currentErp.serviceCategory)?.[0]?.name);
     return (
         <>
             <PageHeader
@@ -165,7 +186,9 @@ export default function ReadServiceList({ config, selectedItem }) {
                     <p><strong>{translate('Service Category')}: </strong></p>
                 </Col>
                 <Col className="gutter-row" span={12}>
-                    <p>{currentErp.serviceCategory?.name}</p>
+
+                    {/* <p>{currentErp.serviceCategory?.name}</p> */}
+                    <p>{options.filter((ele) => ele._id === currentErp.serviceCategory)?.[0]?.name}</p>
                 </Col>
             </Row>
             <Row gutter={[12, 12]}>
