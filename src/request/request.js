@@ -162,7 +162,6 @@ const request = {
   post: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity, jsonData);
-
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -287,5 +286,20 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  create2: async ({ entity, jsonData }) => {
+    console.log('dsds', jsonData);
+    try {
+      const response = await axios.post(entity + '/create', jsonData);
+      successHandler(response, {
+        notifyOnSuccess: true,
+        notifyOnFailed: true,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
+
 export default request;

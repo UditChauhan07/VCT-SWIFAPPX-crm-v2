@@ -9,6 +9,7 @@ import { DatePicker, TimePicker } from 'antd';
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 
 import QuoteItemRow from '@/modules/ErpPanelModule/QuoteItemRow';
+// import ItemRow from '@/modules/ErpPanelModule/ItemRow';
 
 import MoneyInputFormItem from '@/components/MoneyInputFormItem';
 import { selectFinanceSettings } from '@/redux/settings/selectors';
@@ -56,6 +57,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
   const [serviceCategoryOptions] = useState(['Cleaning']);
+  const[Customeraddress]=useState([""])
   const [serviceOptions] = useState(['Service Custom (One Time)', 'General Packages', 'Office Packages', 'Special']);
   console.log(response);
   const [subscriptionData, setSubscriptionData] = useState({});
@@ -211,7 +213,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [price, quantity]);
   return (
     <>
+    
+      <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
+        {translate('Customer Detail Section')}
+      </Col>
       <Row gutter={[12, 0]}>
+       
         {/* <Col className="gutter-row" span={8}>
           <Form.Item
             name="customerType"
@@ -248,9 +255,39 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             />
           </Form.Item>
         </Col>
-        {/* <Col className="gutter-row" span={6}>
+       
+        <Col className="gutter-row" span={6}>
           <Form.Item
-            name="billingAddress"
+            name="Customer Address"
+            label={translate('Customer Address')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            {/* <AutoCompleteAsync
+              entity={'servicCategories'}
+              displayLabels={['servicCategories']}
+              searchFields={'servicCategories'}
+            // onUpdateValue={autoCompleteUpdate}
+            /> */}
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {Customeraddress.map((option, index) => (
+                <Select.Option key={index} value={index}>{option}</Select.Option>
+              ))}
+            </Select>
+
+          </Form.Item>
+        </Col>
+
+        <Col className="gutter-row" span={6}>
+          <Form.Item
+            name="BillingAddress"
             label={translate('Billing Address')}
             rules={[
               {
@@ -258,41 +295,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
+            {/* <AutoCompleteAsync
+              entity={'servicCategories'}
+              displayLabels={['servicCategories']}
+              searchFields={'servicCategories'}
+            // onUpdateValue={autoCompleteUpdate}
+            /> */}
             <Select
               style={{
                 width: '100%',
               }}
             >
-              {secondDropdownOptions.map((option, index) => (
-                <Select.Option key={index} value={option.value}>{option.label}</Select.Option>
+              {Customeraddress.map((option, index) => (
+                <Select.Option key={index} value={index}>{option}</Select.Option>
               ))}
             </Select>
+
           </Form.Item>
         </Col>
 
         <Col className="gutter-row" span={6}>
-          <Form.Item
-            name="shippingAddress"
-            label={translate('Shipping Address')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              style={{
-                width: '100%',
-              }}
-            >
-              {secondDropdownOptions.map((option, index) => (
-                <Select.Option key={index} value={option.value}>{option.label}</Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col> */}
-
-        <Col className="gutter-row" span={8}>
           <Form.Item
             name="sendQuotationEmail"
             label={translate('Send Quotation Email')}
@@ -311,8 +333,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
       </Row>
       <Divider dashed />
+      <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
+        {translate('Basic Quatation Details')}
+      </Col>
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-        <Col className="gutter-row" span={6}>
+       <Col className="gutter-row" span={6}>
           <Form.Item
             name="date"
             label={translate('Start Date')}
@@ -369,9 +394,67 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
       </Row>
-      <Divider dashed />
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={8}>
+          <Form.Item
+            name="SalesPerson"
+            label={translate('Sales Person')}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            {/* <AutoCompleteAsync
+              entity={'servicCategories'}
+              displayLabels={['servicCategories']}
+              searchFields={'servicCategories'}
+            // onUpdateValue={autoCompleteUpdate}
+            /> */}
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {serviceCategoryOptions.map((option, index) => (
+                <Select.Option key={index} value={index}>{option}</Select.Option>
+              ))}
+            </Select>
+
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={8}>
+          <Form.Item label={translate('Sales Person Contact')} name="Sales Person Contact" rules={[
+            {
+              required: true,
+            },
+          ]}>
+            <Input />
+          </Form.Item>
+        </Col>
+
+      </Row>
+      <Divider dashed />
+      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+        <Col className="gutter-row" span={5}>
+          <p>{translate('Item')}</p>
+        </Col>
+        <Col className="gutter-row" span={7}>
+          <p>{translate('Description')}</p>
+        </Col>
+        <Col className="gutter-row" span={3}>
+          <p>{translate('Quantity')}</p>{' '}
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <p>{translate('Price')}</p>
+        </Col>
+        <Col className="gutter-row" span={5}>
+          <p>{translate('Total')}</p>
+        </Col>
+      </Row>
+      <Divider dashed />
+      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="serviceCategory"
             label={translate('Service Category')}
@@ -399,7 +482,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
           </Form.Item>
         </Col>
-        <Col className="gutter-row" span={8}>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="serviceName"
             label={translate('Service Name')}
@@ -427,7 +510,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Select>
           </Form.Item>
         </Col>
-
       </Row>
 
       {/* {response.servicePriceModal.map((entity, key) => ( */}
@@ -609,6 +691,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </>
         )}
       </Form.List> */}
+     
       <Divider dashed />
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -669,6 +752,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
       </Row>
+      {/* <Form.List name="items">
+        {(fields, { add, remove }) => (
+          <>
+            {fields.map((field) => (
+              <QuoteItemRow key={field.key} remove={remove} field={field} current={current} response={response}></QuoteItemRow>
+            ))}
+            <Form.Item>
+              <Button
+                type="dashed"
+                onClick={() => add()}
+                block
+                icon={<PlusOutlined />}
+                ref={addField}
+              >
+                {translate('Add field')}
+              </Button>
+            </Form.Item>
+          </>
+        )}
+      </Form.List> */}
       <Divider dashed />
       <div style={{ position: 'relative', width: ' 100%', float: 'right' }}>
         <Row gutter={[12, -5]}>
