@@ -14,6 +14,7 @@ import { selectUpdatedItem } from '@/redux/crud/selectors';
 import { useCrudContext } from '@/context/crud';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
+
   const [feedback, setFeedback] = useState();
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
@@ -38,6 +39,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 
     fetchData();
   }, []);
+
   if (fields.subscription_type) {
     useEffect(() => {
       // Fetch data from API

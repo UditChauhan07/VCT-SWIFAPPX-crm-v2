@@ -47,6 +47,43 @@ export default function ServiceListForm() {
     fetchData();
   };
 
+
+  const [rows, setRows] = useState([{ name: '', price: '' }]);
+
+  console.log(rows)
+  // Function to add a new row
+
+  const addRow = () => {
+    setRows([...rows, { name: '', price: '' }]);
+  };
+
+  const removeRow = (index) => {
+    const updatedRows = [...rows];
+    updatedRows.splice(index, 1);
+    setRows(updatedRows);
+  };
+
+  const handleInputChange = (value, event, rowIndex, fieldName) => {
+    // const { value } = event.target;
+ 
+    const updatedRows = [...rows];
+    updatedRows[rowIndex][fieldName] = value;
+    setRows(updatedRows);
+  };
+
+  const handleNameChange = (index, value) => {
+    const newRows = [...rows];
+    newRows[index].name = value;
+    setRows(newRows);
+  };
+
+  // Function to handle changes in price input
+  const handlePriceChange = (index, value) => {
+    const newRows = [...rows];
+    newRows[index].price = value;
+    setRows(newRows);
+  };
+
   const [subscriptions, setSubscriptions] = useState([])
   console.log(subscriptions)
   useEffect(() => {
@@ -107,6 +144,7 @@ export default function ServiceListForm() {
       return updatedSubscriptions
     })
   }
+
 
   return (
     <>
@@ -181,6 +219,8 @@ export default function ServiceListForm() {
         responseData && <>
           <Divider dashed />
           {
+
+
             subscriptions.map((subscription, index) => {
               const data = responseData.find(data => data.subscription._id === subscription.id)
               console.log(data, subscription)
@@ -206,6 +246,7 @@ export default function ServiceListForm() {
                         </Col>
                         <Col className="gutter-row" span={10}>
                           <InputNumber className="moneyInput" placeholder='Enter Price' value={option.price} onChange={(value) => handleOptionPriceChange(value, option.position, subscription.id)} />
+
                         </Col>
                         {/* Render Remove button for each row */}
 
