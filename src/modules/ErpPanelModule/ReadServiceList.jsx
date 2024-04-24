@@ -165,7 +165,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                     <p><strong>{translate('Service Category')}: </strong></p>
                 </Col>
                 <Col className="gutter-row" span={12}>
-                    <p>{currentErp.service_category.name}</p>
+                    <p>{currentErp.serviceCategory?.name}</p>
                 </Col>
             </Row>
             <Row gutter={[12, 12]}>
