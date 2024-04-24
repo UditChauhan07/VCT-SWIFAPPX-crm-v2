@@ -65,8 +65,7 @@ function AddNewItem({ config }) {
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
-  console.log(entity)
-
+  // console.log(entity)
 
   const { DATATABLE_TITLE } = config;
 
@@ -143,7 +142,7 @@ export default function DataTable({ config, extra = [] }) {
   //   navigate(`/customer/address/${record}`);
   // };
 
-  
+
 
   dataTableColumns = [
     ...dataTableColumns,
@@ -178,9 +177,9 @@ export default function DataTable({ config, extra = [] }) {
                   break;
                 case 'recordPayment':
                   handleRecordPayment(record);
-                  // case 'clientaddress':
-                  //   handleClientAddress(record);
-                  // break;
+                // case 'clientaddress':
+                //   handleClientAddress(record);
+                // break;
                 default:
                   break;
               }
