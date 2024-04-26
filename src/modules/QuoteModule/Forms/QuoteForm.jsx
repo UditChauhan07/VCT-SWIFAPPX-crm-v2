@@ -317,7 +317,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col> */}
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="selectCustomer"
+            name="client"
             label={translate('Select Customer')}
             rules={[
               {

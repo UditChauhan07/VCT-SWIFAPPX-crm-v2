@@ -65,6 +65,7 @@ function AddNewItem({ config }) {
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
+  // console.log(entity)
 
   const { DATATABLE_TITLE } = config;
 
@@ -135,6 +136,14 @@ export default function DataTable({ config, extra = [] }) {
     navigate(`/invoice/pay/${record._id}`);
   };
 
+  // const handleClientAddress = (record) => {
+  //   console.log(record)
+  //   dispatch(erp.currentItem({ data: record }));
+  //   navigate(`/customer/address/${record}`);
+  // };
+
+
+
   dataTableColumns = [
     ...dataTableColumns,
     {
@@ -168,7 +177,9 @@ export default function DataTable({ config, extra = [] }) {
                   break;
                 case 'recordPayment':
                   handleRecordPayment(record);
-                  break;
+                // case 'clientaddress':
+                //   handleClientAddress(record);
+                // break;
                 default:
                   break;
               }
