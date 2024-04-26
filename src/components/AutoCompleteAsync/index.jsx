@@ -27,8 +27,7 @@ export default function AutoCompleteAsync({
 
   const [searchResult, setSearchResult] = useState(null);
 
-
-  const [, cancel] = useDebounce(
+const [, cancel] = useDebounce(
     () => {
       //  setState("Typing stopped");
       setDebouncedValue(valToSearch);
@@ -39,6 +38,7 @@ export default function AutoCompleteAsync({
 
   const asyncSearch = async (options) => {
     const response = await request.search({ entity, options });
+    console.log({ entity, options })
     if (response.success) {
       const data = await response.result;
       const firstResult = data[0];

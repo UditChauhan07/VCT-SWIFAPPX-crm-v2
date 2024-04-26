@@ -23,6 +23,7 @@ import { response } from './jsonResponse';
 import styles from './styles.module.css'; // Import the CSS module
 
 import { useForm } from 'antd/lib/form/Form';
+import { request } from '@/request';
 const { Option } = Select;
 const { Panel } = Collapse;
 
@@ -35,13 +36,11 @@ export default function QuoteForm({ subTotal = 0, current = null }) {
 
   return <LoadQuoteForm subTotal={subTotal} current={current} />;
 }
-
 function LoadQuoteForm({ subTotal = 0, current = null }) {
   const translate = useLanguage();
   const { dateFormat } = useDate();
   const { last_quote_number } = useSelector(selectFinanceSettings);
   const [lastNumber, setLastNumber] = useState(() => last_quote_number + 1);
-
   const [total, setTotal] = useState(0);
   const [taxRate, setTaxRate] = useState(0);
   const [taxTotal, setTaxTotal] = useState(0);
@@ -50,23 +49,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setTaxRate(value / 100);
   };
   const { TextArea } = Input;
-
   const money = useMoney();
-
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
   const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
-  const [serviceCategoryOptions] = useState(['Cleaning']);
-  const[Customeraddress]=useState([""])
-  const [serviceOptions] = useState(['Service Custom (One Time)', 'General Packages', 'Office Packages', 'Special']);
-  console.log(response);
+  const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
+  const [Customeraddress, setCustomeraddress] = useState([])
+  const [SalesPerson, setSalesPerson] = useState()
   const [subscriptionData, setSubscriptionData] = useState({});
   const [accordionData, setAccordionData] = useState([]);
 
-  const handleDropdownChange = (value) => {
+  // console.log(SalesPerson)
+  const handleDropdownChange = async (value) => {
+
     setSelectedOption(value);
     try {
-      // const response = await axios.get(`YOUR_API_ENDPOINT/${value}`); // Replace YOUR_API_ENDPOINT with your actual API endpoint
+      //   const response = await axios.get(`client/search?q=${value}&fields=name,surname`); // Replace YOUR_API_ENDPOINT with your actual API endpoint
+      //   console.log(response)
       setAccordionData(response); // Assuming the response contains an array of accordion data
     } catch (error) {
       console.error('Error fetching accordion data:', error);
@@ -86,6 +85,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     // Set subscriptionData state with processed data
     setSubscriptionData(processedData);
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -109,8 +109,90 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     if (addField.current) {
       addField.current.click();
     }
+
   }, []); // This effect runs only once when the component mounts
 
+  // console.log({ serviceOptions });
+
+  const [selectedValue, setSelectedValue] = useState('');
+  const [serviceOptions, setServiceOptions] = useState(null);
+  console.log(serviceOptions)
+  const handleChange2 = (value) => {
+    setSelectedValue(value);
+    const fetchData2 = async () => {
+      // console.log(fetchData2)
+      try {
+        const response = await request.getCateGorySubscription({ id: value });// Assuming your request function is named getData()
+        console.log({ id: value })
+        // Assuming your API response contains an array of options as response.options
+        if (response.success) {
+          setServiceOptions(response.result);
+          console.log({ responseresult: response.result })
+          // Set options state based on API response
+        } else {
+          setServiceOptions(null)
+        }
+        console.log(response.result)
+      } catch (error) {
+        setServiceOptions(null)
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData2();
+  };
+
+
+  // .............
+  //   const fetchData2 = async () => {
+  //     try {
+  //       const response = await request.getServiceListShow();// Assuming your request function is named getData()
+  //     // Assuming your API response contains an array of options as response.options
+  //       if (response.success) {
+  //         setServiceOptions(response);
+  //         // Set options state based on API response
+  // }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  // ................
+  useEffect(() => {
+    // Fetch data from API
+    const fetchData1 = async () => {
+      try {
+        const response = await request.getSalesPerson();
+        // Assuming your request function is named getData()
+        // console.log({ response1111: response })
+        // Assuming your API response contains an array of options as response.options
+        if (response.success) {
+          // console.log({ responseresult: response.result });
+          setSalesPerson(response.result); // Set options state based on API response
+          // console.log({ setSalesPerson, SalesPerson });
+        }
+        // console.log({ SalesPerson22222222222: SalesPerson })
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData1()// Call fetchData function when component mounts
+  }, []);
+  // .................
+  const fetchData = async () => {
+    try {
+      const response = await request.getServiceCategoryOptions();
+      // Assuming your request function is named getData()
+      console.log(response)
+      // Assuming your API response contains an array of options as response.options
+      if (response.success) {
+
+        setserviceCategoryOptions(response.result);
+        // Set options state based on API response
+
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   const handleFirstDropdownChange = async (event) => {
     // const selectedValue = event.target.value;
     // setSelectedOption(selectedValue);
@@ -133,7 +215,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching data:', error);
     }
   };
-
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
     // setSelectedOption(selectedValue);
@@ -157,7 +238,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
   };
   const [accordionActiveKey, setAccordionActiveKey] = useState([]);
-
   const handleChange = (key) => {
     setAccordionActiveKey(key);
   };
@@ -213,12 +293,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [price, quantity]);
   return (
     <>
-    
       <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Customer Detail Section')}
       </Col>
       <Row gutter={[12, 0]}>
-       
+
         {/* <Col className="gutter-row" span={8}>
           <Form.Item
             name="customerType"
@@ -255,7 +334,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             />
           </Form.Item>
         </Col>
-       
+
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="Customer Address"
@@ -267,9 +346,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             {/* <AutoCompleteAsync
-              entity={'servicCategories'}
-              displayLabels={['servicCategories']}
-              searchFields={'servicCategories'}
+              entity={'client'}
+              displayLabels={['name']}
+              searchFields={'name,surname'}
+              onChange={handleFirstDropdownChange}
             // onUpdateValue={autoCompleteUpdate}
             /> */}
             <Select
@@ -278,7 +358,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
             >
               {Customeraddress.map((option, index) => (
-                <Select.Option key={index} value={index}>{option}</Select.Option>
+                <Select.Option key={index} value={index}>{option.label}</Select.Option>
               ))}
             </Select>
 
@@ -307,7 +387,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
             >
               {Customeraddress.map((option, index) => (
-                <Select.Option key={index} value={index}>{option}</Select.Option>
+                <Select.Option key={index} value={index}>{option.name}</Select.Option>
               ))}
             </Select>
 
@@ -337,7 +417,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         {translate('Basic Quatation Details')}
       </Col>
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-       <Col className="gutter-row" span={6}>
+        <Col className="gutter-row" span={6}>
           <Form.Item
             name="date"
             label={translate('Start Date')}
@@ -397,7 +477,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={8}>
           <Form.Item
-            name="SalesPerson"
+            name="SalesPerson" f
             label={translate('Sales Person')}
             rules={[
               {
@@ -416,10 +496,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {serviceCategoryOptions.map((option, index) => (
-                <Select.Option key={index} value={index}>{option}</Select.Option>
+              {SalesPerson?.map((option, index) => (
+                <Select.Option key={index._id} value={index._id}>{option.name}</Select.Option>
               ))}
             </Select>
+
 
           </Form.Item>
         </Col>
@@ -435,24 +516,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       </Row>
       <Divider dashed />
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-        <Col className="gutter-row" span={5}>
-          <p>{translate('Item')}</p>
-        </Col>
-        <Col className="gutter-row" span={7}>
-          <p>{translate('Description')}</p>
-        </Col>
-        <Col className="gutter-row" span={3}>
-          <p>{translate('Quantity')}</p>{' '}
-        </Col>
-        <Col className="gutter-row" span={4}>
-          <p>{translate('Price')}</p>
-        </Col>
-        <Col className="gutter-row" span={5}>
-          <p>{translate('Total')}</p>
-        </Col>
-      </Row>
-      <Divider dashed />
+
+
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={12}>
           <Form.Item
@@ -475,8 +540,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {serviceCategoryOptions.map((option, index) => (
-                <Select.Option key={index} value={index}>{option}</Select.Option>
+              {serviceCategoryOptions?.map((option, index) => (
+                <Select.Option key={index._id} value={index._id}>{option.name}</Select.Option>
               ))}
             </Select>
 
@@ -499,35 +564,46 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             // onUpdateValue={autoCompleteUpdate}
             /> */}
             <Select
+              // onChange={(value) => setFeedback(value)}
+              // defaultValue={selectedValue}
+              onChange={handleChange2}
+              // defaultValue={field.defaultValue}
               style={{
                 width: '100%',
               }}
-              onChange={handleDropdownChange}
+            // key={}
             >
-              {serviceOptions.map((option, index) => (
-                <Select.Option key={index} value={index} onChange={getServicesSubAndItems}>{option}</Select.Option>
+              {serviceOptions?.map((option, ind) => (
+                <Select.Option key={ind} value={option._id}>
+                  {translate(option.name)}
+                </Select.Option>
               ))}
             </Select>
+
           </Form.Item>
         </Col>
       </Row>
-
+      <Divider dashed />
       {/* {response.servicePriceModal.map((entity, key) => ( */}
       {accordionData.subItem && <div>
-        <Divider dashed /><Row align="middle" className={styles.first_row}>
-          <Col className="gutter-row" span={3} >
-            <p className={styles.bold_text}>Subscription</p>
+        <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+          <Col className="gutter-row" span={5}>
+            <p>{translate('Item')}</p>
           </Col>
-          <Col className={`${styles.custom_col} gutter-row`} span={7}>
-            <p className={styles.bold_text}>3 hour</p>
-          </Col >
-          <Col className={`${styles.custom_col} gutter-row`} span={7}>
-            <p className={styles.bold_text}>3.5 hour</p>
-          </Col >
-          <Col className={`${styles.custom_col} gutter-row`} span={7}>
-            <p className={styles.bold_text}>4 hour</p>
-          </Col >
-        </Row >
+          <Col className="gutter-row" span={7}>
+            <p>{translate('Description')}</p>
+          </Col>
+          <Col className="gutter-row" span={3}>
+            <p>{translate('Quantity')}</p>{' '}
+          </Col>
+          <Col className="gutter-row" span={4}>
+            <p>{translate('Price')}</p>
+          </Col>
+          <Col className="gutter-row" span={5}>
+            <p>{translate('Total')}</p>
+          </Col>
+        </Row>
+        <Divider dashed />
 
         < Row align="middle" className={styles.middle_row} >
           <Col className="gutter-row" span={3}>
@@ -691,7 +767,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </>
         )}
       </Form.List> */}
-     
+
       <Divider dashed />
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
