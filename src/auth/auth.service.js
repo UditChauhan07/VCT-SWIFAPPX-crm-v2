@@ -104,3 +104,25 @@ export const logout = async () => {
 //  console.log(
 //    '🚀 Welcome to IDURAR ERP CRM! Did you know that we also offer commercial customization services? Contact us at hello@idurarapp.com for more information.'
 //  );
+
+export const SaveQuotation = async ({ loginData }) => {
+  try {
+    const response = await axios.post(
+      API_BASE_URL + `login?timestamp=${new Date().getTime()}`,
+      loginData
+    );
+
+    const { status, data } = response;
+
+    successHandler(
+      { data, status },
+      {
+        notifyOnSuccess: false,
+        notifyOnFailed: true,
+      }
+    );
+    return data;
+  } catch (error) {
+    return errorHandler(error);
+  }
+};
