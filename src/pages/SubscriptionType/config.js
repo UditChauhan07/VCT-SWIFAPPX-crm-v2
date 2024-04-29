@@ -5,7 +5,6 @@ export const fields = {
     disableForForm: false,
   },
   description: {
-    type: 'string',
     type: 'textarea',
     disableForTable: false,
   },
@@ -14,10 +13,9 @@ export const fields = {
     disableForTable: false,
     renderAsTag: true,
     options: [
-      // { value: 'default', label: 'draft' },
       { value: 'One Time', label: 'One Time', color: 'blue' },
       { value: 'Monthly', label: 'Monthly', color: 'green' },
-      { value: 'Yearly', label: 'Yearly', color: 'orange' },
+      { value: 'Yearly', label: 'Yearly', color: 'pink' },
     ],
   },
   package_divider: {

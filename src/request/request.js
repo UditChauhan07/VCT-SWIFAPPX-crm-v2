@@ -118,6 +118,8 @@ const request = {
     }
   },
   search: async ({ entity, options = {} }) => {
+    console.log(entity);
+
     try {
       let query = '?';
       for (var key in options) {
@@ -139,6 +141,7 @@ const request = {
    
   list: async ({ entity, options = {} }) => {
     try { 
+    try {
       let query = '?';
 
       for (var key in options) {
@@ -176,6 +179,10 @@ const request = {
     try {
       let query = '?';
 
+      if (entity === 'address') {
+        query = '?';
+      }
+
       for (var key in options) {
         query += key + '=' + options[key] + '&';
       }
@@ -210,7 +217,6 @@ const request = {
   post: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity, jsonData);
-
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -335,5 +341,63 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  create2: async ({ entity, jsonData }) => {
+    console.log('dsds', jsonData);
+    try {
+      const response = await axios.post(entity + '/create', jsonData);
+      successHandler(response, {
+        notifyOnSuccess: true,
+        notifyOnFailed: true,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  // getSearchclintAddress: async ({ id }) => {
+  //   try {
+  //     const response = await axios.get(`/clientaddress/search?Q=h$client${id}=label`);
+  //     console.log({ response });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.log({ lll: error });
+  //     return errorHandler(error);
+  //   }
+  // },
+  getSalesPerson: async () => {
+    try {
+      const response = await axios.get('/admin/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceCategoryOptions: async () => {
+    try {
+      const response = await axios.get('/servicecategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getProductList: async () => {
+    try {
+      const response = await axios.get('/productcategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceListShow: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicelist/show${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
+
 export default request;
