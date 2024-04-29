@@ -130,13 +130,12 @@ const request = {
     }
   },
   list: async ({ entity, options = {} }) => {
-  
     try {
       let query = '?';
       if (entity === 'address') {
         query = '?';
       }
-      
+
       for (var key in options) {
         query += key + '=' + options[key] + '&';
       }
@@ -285,7 +284,7 @@ const request = {
       return errorHandler(error);
     }
   },
-  getCateGoryDetails: async ({id}) => {
+  getCateGoryDetails: async ({ id }) => {
     try {
       const response = await axios.get(`/servicecategory/read/${id}`);
       return response.data;
@@ -334,7 +333,15 @@ const request = {
       return errorHandler(error);
     }
   },
-  getServiceListShow: async ({id}) => {
+  getProductList: async () => {
+    try {
+      const response = await axios.get('/productcategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceListShow: async ({ id }) => {
     try {
       const response = await axios.get(`/servicelist/show${id}`);
       return response.data;

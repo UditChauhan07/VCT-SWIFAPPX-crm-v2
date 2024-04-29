@@ -24,6 +24,7 @@ import styles from './styles.module.css'; // Import the CSS module
 
 import { useForm } from 'antd/lib/form/Form';
 import { request } from '@/request';
+import ItemRow from '@/modules/ErpPanelModule/ItemRow';
 const { Option } = Select;
 const { Panel } = Collapse;
 
@@ -114,25 +115,41 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   // console.log({ serviceOptions });
 
+  const [productList, setProductList] = useState([])
+  useEffect(() => {
+    getProductHandler()
+  }, [])
+  const getProductHandler = async () => {
+    try {
+      const productListRes = await request.getProductList();
+      if (productListRes.success) {
+        console.log({ aaa: productListRes.result });
+        setProductList(productListRes.result);
+      } else {
+        setProductList([]);
+      }
+      console.log({ productList });
+    } catch (er) {
+      console.error({ er });
+    }
+  }
+
   const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
-  console.log(serviceOptions)
-  const handleChange2 = (value) => {
+
+  const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
     const fetchData2 = async () => {
-      // console.log(fetchData2)
       try {
-        const response = await request.getCateGorySubscription({ id: value });// Assuming your request function is named getData()
-        console.log({ id: value })
-        // Assuming your API response contains an array of options as response.options
+        const response = await request.getCateGorySubscription({ id: value });
         if (response.success) {
           setServiceOptions(response.result);
-          console.log({ responseresult: response.result })
+          getProductHandler();
+          console.log({ cateResult: response.result })
           // Set options state based on API response
         } else {
           setServiceOptions(null)
         }
-        console.log(response.result)
       } catch (error) {
         setServiceOptions(null)
         console.error('Error fetching data:', error);
@@ -291,6 +308,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     setTotal2(currentTotal);
   }, [price, quantity]);
+
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
@@ -345,20 +363,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            {/* <AutoCompleteAsync
-              entity={'client'}
-              displayLabels={['name']}
-              searchFields={'name,surname'}
-              onChange={handleFirstDropdownChange}
-            // onUpdateValue={autoCompleteUpdate}
-            /> */}
             <Select
               style={{
                 width: '100%',
               }}
             >
               {Customeraddress.map((option, index) => (
-                <Select.Option key={index} value={index}>{option.label}</Select.Option>
+                <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
 
@@ -375,19 +386,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            {/* <AutoCompleteAsync
-              entity={'servicCategories'}
-              displayLabels={['servicCategories']}
-              searchFields={'servicCategories'}
-            // onUpdateValue={autoCompleteUpdate}
-            /> */}
             <Select
               style={{
                 width: '100%',
               }}
             >
               {Customeraddress.map((option, index) => (
-                <Select.Option key={index} value={index}>{option.name}</Select.Option>
+                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
               ))}
             </Select>
 
@@ -485,19 +490,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            {/* <AutoCompleteAsync
-              entity={'servicCategories'}
-              displayLabels={['servicCategories']}
-              searchFields={'servicCategories'}
-            // onUpdateValue={autoCompleteUpdate}
-            /> */}
             <Select
               style={{
                 width: '100%',
               }}
             >
               {SalesPerson?.map((option, index) => (
-                <Select.Option key={index._id} value={index._id}>{option.name}</Select.Option>
+                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
               ))}
             </Select>
 
@@ -529,19 +528,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            {/* <AutoCompleteAsync
-              entity={'servicCategories'}
-              displayLabels={['servicCategories']}
-              searchFields={'servicCategories'}
-            // onUpdateValue={autoCompleteUpdate}
-            /> */}
             <Select
               style={{
                 width: '100%',
               }}
+              onChange={getCategorySubscriptionHandler}
             >
               {serviceCategoryOptions?.map((option, index) => (
-                <Select.Option key={index._id} value={index._id}>{option.name}</Select.Option>
+                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
               ))}
             </Select>
 
@@ -566,7 +560,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             <Select
               // onChange={(value) => setFeedback(value)}
               // defaultValue={selectedValue}
-              onChange={handleChange2}
               // defaultValue={field.defaultValue}
               style={{
                 width: '100%',
@@ -650,101 +643,142 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Col >
         </Row >
         {/* ))} */}
-
-        <Divider dashed />
+      </div>}
+      {selectedValue && <> <Divider dashed />
         <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange}>
-          {accordionData.subItem.map((mainData, i) => (
-            <Collapse.Panel header={mainData.Servicename} key={mainData.Serviceid}>
-              <div key={`${i}`}>
-                <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                  <Col className="gutter-row" span={4}>
-                    <p>{translate('Sub-Item')}</p>
-                  </Col>
-                  <Col className="gutter-row" span={4}>
-                    <p>{translate('Price')}</p>
-                  </Col>
-                  <Col className="gutter-row" span={3}>
-                    <p>{translate('Quantity')}</p>{' '}
-                  </Col>
-                  <Col className="gutter-row" span={4}>
-                    <p>{translate('Total')}</p>
-                  </Col>
-                  <Col className="gutter-row" span={6}>
-                    <p>{translate('Remarks')}</p>
-                  </Col>
-                </Row>
-                {mainData.subItemlist.map((data, index) => (
-
-                  <Row gutter={[12, 12]} style={{ position: 'relative' }} key={[`${i}`, `${index}`]}>
+          {productList.map((mainData, i) => (
+            <>
+              <Collapse.Panel header={mainData.name} key={mainData._id}>
+                <div key={`${i}`}>
+                  <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                     <Col className="gutter-row" span={4}>
-                      <Form.Item
-                        name={[`${i}`, `${index}`, 'itemName']}
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Missing itemName name',
-                          },
-                          {
-                            pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                            message: 'Item Name must contain alphanumeric or special characters',
-                          },
-                        ]}
-                        key={[`${i}`, `${index}`]}
-                      >
-                        {data?.name && <Input placeholder="Item Name" defaultValue={data.name} />}
-                      </Form.Item>
+                      <p>{translate('Sub-Item')}</p>
                     </Col>
                     <Col className="gutter-row" span={4}>
-                      <Form.Item name={[`${i}`, `${index}`, 'price']} rules={[{ required: true }]} >
-                        <InputNumber
-                          className="moneyInput"
-                          onChange={updatePrice}
-                          min={0}
-                          controls={false}
-                          addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                          addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                          defaultValue={data.price}
-                        />
-                      </Form.Item>
+                      <p>{translate('Price')}</p>
                     </Col>
                     <Col className="gutter-row" span={3}>
-                      <Form.Item name={[`${i}`, `${index}`, 'quantity']} rules={[{ required: true }]} >
-                        <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
-                      </Form.Item>
+                      <p>{translate('Quantity')}</p>{' '}
                     </Col>
-
                     <Col className="gutter-row" span={4}>
-                      <Form.Item name={[`${i}`, `${index}`, 'total']} >
-                        <InputNumber
-                          readOnly
-                          className="moneyInput"
-                          value={totalState}
-                          min={0}
-                          controls={false}
-                          addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                          addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                          formatter={(value) => money.amountFormatter({ amount: value })}
-                        />
-                      </Form.Item>
+                      <p>{translate('Total')}</p>
                     </Col>
-
-                    <Col className="gutter-row" span={7}>
-                      <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
-                        <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
-                      </Form.Item>
+                    <Col className="gutter-row" span={6}>
+                      <p>{translate('Remarks')}</p>
                     </Col>
-
-                    <div style={{ position: 'absolute', right: '50px', top: ' 5px' }}>
-                      <DeleteOutlined onClick={() => remove(`${i}`, `${index}`)} />
-                    </div>
                   </Row>
-                ))}
-              </div>
-            </Collapse.Panel>
+                  {mainData.products.map((data, index) => (
+                    <Row gutter={[12, 12]} style={{ position: 'relative' }} key={[`${i}`, `${data._id}`]}>
+                      <Col className="gutter-row" span={4}>
+                        <Form.Item
+                          name={data.name}
+                          rules={[
+                            {
+                              required: true,
+                              message: 'Missing itemName name',
+                            },
+                            {
+                              pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                              message: 'Item Name must contain alphanumeric or special characters',
+                            },
+                          ]}
+                          key={[`${i}`, `${data._id}`]}
+                        >
+                          {data?.name && <Input placeholder="Item Name" defaultValue={data.name} />}
+                        </Form.Item>
+                      </Col>
+                      <Col className="gutter-row" span={4}>
+                        <Form.Item name={[`${i}`, `${index}`, 'price']} rules={[{ required: true }]} >
+                          <InputNumber
+                            className="moneyInput"
+                            onChange={updatePrice}
+                            min={0}
+                            controls={false}
+                            addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                            addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+                            defaultValue={data.price}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col className="gutter-row" span={3}>
+                        <Form.Item name={[`${i}`, `${index}`, 'quantity']} rules={[{ required: true }]} >
+                          <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
+                        </Form.Item>
+                      </Col>
+
+                      <Col className="gutter-row" span={4}>
+                        <Form.Item name={[`${i}`, `${index}`, 'total']} >
+                          <InputNumber
+                            readOnly
+                            className="moneyInput"
+                            value={totalState}
+                            min={0}
+                            controls={false}
+                            addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                            addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+                            formatter={(value) => money.amountFormatter({ amount: value })}
+                          />
+                        </Form.Item>
+                      </Col>
+
+                      <Col className="gutter-row" span={7}>
+                        <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
+                          <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
+                        </Form.Item>
+                      </Col>
+
+                      {/* <div style={{ position: 'absolute', right: '50px', top: ' 5px' }}>
+                      <DeleteOutlined onClick={() => remove(`${i}`, `${index}`)} />
+                    </div> */}
+                    </Row>
+                  ))}
+                </div >
+              </Collapse.Panel>
+              {i == productList.length - 1 &&
+                <Collapse.Panel header={"Custom Item"} key={'custom item'}>
+                  <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
+                    <Col className="gutter-row" span={4}>
+                      <p>{translate('Sub-Item')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={4}>
+                      <p>{translate('Price')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={3}>
+                      <p>{translate('Quantity')}</p>{' '}
+                    </Col>
+                    <Col className="gutter-row" span={4}>
+                      <p>{translate('Total')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={6}>
+                      <p>{translate('Remarks')}</p>
+                    </Col>
+                  </Row>
+                  <Form.List name="items">
+                    {(fields, { add, remove }) => (
+                      <>
+                        {fields.map((field) => (
+                          <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
+                        ))}
+                        <Form.Item>
+                          <Button
+                            type="dashed"
+                            onClick={() => add()}
+                            block
+                            icon={<PlusOutlined />}
+                            ref={addField}
+                          >
+                            {translate('Add field')}
+                          </Button>
+                        </Form.Item>
+                      </>
+                    )}
+                  </Form.List>
+                </Collapse.Panel>
+              }
+            </>
           ))}
         </Collapse>
-        <Divider dashed />
-      </div>}
+      </>}
 
 
       {/* <Form.List name="items">
