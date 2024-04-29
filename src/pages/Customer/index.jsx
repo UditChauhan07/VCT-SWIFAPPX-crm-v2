@@ -30,7 +30,9 @@ export default function Customer() {
     readColumns,
     searchConfig,
     deleteModalLabels,
+ 
   };
+
   return (  
 
     <CrudModule

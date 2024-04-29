@@ -163,6 +163,7 @@ function CrudModule({ config, createForm, updateForm, withUpload = false }) {
       }
     >
       <DataTable config={config} />
+
       <DeleteModal config={config} />
      
     </CrudLayout>

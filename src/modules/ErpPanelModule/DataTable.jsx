@@ -44,6 +44,7 @@ function AddNewItem({ config }) {
 
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
+  console.log(config)
 
   const handleClick = () => {
     navigate(`/${entity.toLowerCase()}/create`);
@@ -65,7 +66,6 @@ function AddNewItem({ config }) {
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
-  console.log(entity)
 
 
   const { DATATABLE_TITLE } = config;

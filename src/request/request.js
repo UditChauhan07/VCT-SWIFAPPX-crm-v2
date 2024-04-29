@@ -3,15 +3,24 @@ import { API_BASE_URL } from '@/config/serverApiConfig';
 
 import errorHandler from './errorHandler';
 import successHandler from './successHandler';
+import { useEffect, useState } from 'react';
+// import { useParams } from 'react-router-dom';
 
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
+// let { id } = useParams();
 
 const request = {
-  create: async ({ entity, jsonData }) => {
-    console.log('dsds', jsonData);
+  create: async ({ entity, id, jsonData }) => {
+    // console.log('dsds', jsonData);
     try {
-      const response = await axios.post(entity + '/create', jsonData);
+
+      let url = entity + '/create';
+      if (entity === 'clientaddress' && id) {
+        url = `${entity}/create/${id}`;
+      }
+
+      const response = await axios.post(url, jsonData);
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -127,20 +136,53 @@ const request = {
       return errorHandler(error);
     }
   },
+   
   list: async ({ entity, options = {} }) => {
-  
-    try {
+    try { 
       let query = '?';
-      if (entity === 'address') {
-        query = '?';
-      }
-      
+
       for (var key in options) {
         query += key + '=' + options[key] + '&';
       }
+
       query = query.slice(0, -1);
 
-      const response = await axios.get(entity + '/list' + query);
+      let url = entity + '/list' + query;
+
+     
+      
+      if (entity === 'clientaddress') {
+        // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
+        const ClientId = localStorage.getItem('key');
+        url = entity + '/list/' + ClientId + query;
+      }
+       
+      const response = await axios.get(url);
+  
+      // const response = await axios.get(entity + '/list'  + query);
+      // console.log({response});
+      successHandler(response, {
+        notifyOnSuccess: false,
+        notifyOnFailed: false,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error); 
+   
+    }
+  },
+
+  Addresslist: async ({ entity, id, options = {} }) => {
+    try {
+      let query = '?';
+
+      for (var key in options) {
+        query += key + '=' + options[key] + '&';
+      }
+
+      query = query.slice(0, -1);
+
+      const response = await axios.get(entity + 'address/list' + `/${id}` + query);
       // console.log({response});
       successHandler(response, {
         notifyOnSuccess: false,
@@ -151,6 +193,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   listAll: async ({ entity }) => {
     try {
       const response = await axios.get(entity + '/listAll');

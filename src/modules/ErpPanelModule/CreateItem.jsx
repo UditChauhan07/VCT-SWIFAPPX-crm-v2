@@ -100,7 +100,7 @@ export default function CreateItem({ config, CreateForm }) {
         };
       }
       if (fieldsValue.servicecategory) {
-        console.log('10tty', { fieldsValue });
+   
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.servicecategory,

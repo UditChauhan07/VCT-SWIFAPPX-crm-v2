@@ -35,8 +35,9 @@ export const crud = {
         payload: { ...data },
       });
     },
+
   list:
-    ({ entity, options = { page: 1, items: 10 } }) =>
+    ({ entity, options = { page: 1, items: 10 } })   =>
     async (dispatch) => {
       dispatch({
         type: actionTypes.REQUEST_LOADING,
@@ -44,8 +45,47 @@ export const crud = {
         payload: null,
       });
 
+      if (entity === 'clientaddress') {
+        const ClientId = localStorage.getItem('key');
+        console.log({ClientId});
+        let data = await request.list({ entity, ClientId, options });
+      }
+
       let data = await request.list({ entity, options });
 
+      if (data.success === true) {
+        const result = {
+          items: data.result,
+          pagination: { 
+            current: parseInt(data.pagination.page, 10),
+            pageSize: options?.items,
+            total: parseInt(data.pagination.count, 10),
+          },
+        }; 
+        dispatch({
+          type: actionTypes.REQUEST_SUCCESS,
+          keyState: 'list',
+          payload: result,
+        });
+      } else {
+        dispatch({
+          type: actionTypes.REQUEST_FAILED,
+          keyState: 'list',
+          payload: null,
+        });
+      }
+    },
+
+  Addresslist:
+    ({ entity, id, options = { page: 1, items: 10 } }) =>
+    async (dispatch) => {
+      dispatch({
+        type: actionTypes.REQUEST_LOADING,
+        keyState: 'list',
+        payload: null,
+      });
+
+      let data = await request.Addresslist({ entity, id, options });
       if (data.success === true) {
         const result = {
           items: data.result,
@@ -70,8 +110,9 @@ export const crud = {
     },
 
   create:
-    ({ entity, jsonData, withUpload = false }) =>
+    ({ entity, id, jsonData, withUpload = false }) =>
     async (dispatch) => {
+      // console.log(id)
       dispatch({
         type: actionTypes.REQUEST_LOADING,
         keyState: 'create',
@@ -80,6 +121,8 @@ export const crud = {
       let data = null;
       if (withUpload) {
         data = await request.createAndUpload({ entity, jsonData });
+      } else if (entity === 'clientaddress') {
+        data = await request.create({ entity, id, jsonData });
       } else {
         data = await request.create({ entity, jsonData });
       }
