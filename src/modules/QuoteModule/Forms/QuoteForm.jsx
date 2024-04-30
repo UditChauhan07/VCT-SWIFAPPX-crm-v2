@@ -65,13 +65,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     setSelectedOption(value);
     try {
-      //   const response = await axios.get(`client/search?q=${value}&fields=name,surname`); // Replace YOUR_API_ENDPOINT with your actual API endpoint
-      //   console.log(response)
+        // const response = await axios.get(`client/search?q=${value}&fields=label`); // Replace YOUR_API_ENDPOINT with your actual API endpoint
+        // console.log(response)
       setAccordionData(response); // Assuming the response contains an array of accordion data
     } catch (error) {
       console.error('Error fetching accordion data:', error);
     }
   };
+  // .......................
+  // ...................
   useEffect(() => {
     // Your code to fetch response.servicePriceModal and process data
     const processedData = {};
@@ -114,11 +116,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, []); // This effect runs only once when the component mounts
 
   // console.log({ serviceOptions });
+// ...........
 
+// ...............
   const [productList, setProductList] = useState([])
   useEffect(() => {
     getProductHandler()
-    fetchData3();
+    getClientHandler()
   }, [])
   const getProductHandler = async () => {
     try {
@@ -134,8 +138,22 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error({ er });
     }
   }
-
-  const [selectedValue, setSelectedValue] = useState('');
+  const getClientHandler = async () => {
+    console.log("first")
+    try {
+      const productListRes = await request.getSearchclintAddress({ id: "" });
+      if (productListRes.success) {
+        setCustomeraddress(productListRes.result);
+        console.log({productListResresult:productListRes.result})
+      } else {
+        setProductList([]);
+      }
+      console.log({ productListRes });
+    } catch (er) {
+      console.error({ er });
+    }
+  }
+ const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState();
 
@@ -157,29 +175,31 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         console.error('Error fetching data:', error);
       }
     };
+    const fetchData3 = async () => {
+      try {
+        const response = await request.getServiceListShow({id: value });
+        console.log(response)
+        if (response.success) {
+          console.log({ cateResult: response.result })
+          setShowServiceList(response.result);
+          setProductList(ShowServiceList)
+          // getProductHandler();
+          console.log({ cateResult: response.result })
+          // Set options state based on API response
+        } else {
+          setShowServiceList(null)
+        }
+      } catch (error) {
+        setShowServiceList(null)
+        console.error('Error fetching data:', error);
+      }
+    };
     fetchData2();
+    fetchData3();
   
   };
   // .............
-  const fetchData3 = async () => {
-    try {
-      const response = await request.getServiceListShow({id:value});
-      console.log(response)
-      if (response.success) {
-        console.log({cateResultss:response.result })
-        setShowServiceList(response.result);
-        // getProductHandler();
-        console.log({cateResult:response.result })
-        // Set options state based on API response
-      } 
-      // else {
-      //   setShowServiceList(null)
-      // }
-    } catch (error) {
-      setShowServiceList(null)
-      console.error('Error fetching data:', error);
-    }
-  };
+  
   // const getServiceListHandler = (value) => {
   //   setSelectedValue(value);
   //   const fetchData3 = async () => {
@@ -200,7 +220,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //       console.error('Error fetching data:', error);
   //     }
   //   };
-  //   fetchData3();
+  //    fetchData3();
   // };
   // .............
   //   const fetchData2 = async () => {
@@ -434,7 +454,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
             >
               {Customeraddress.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
+                <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
 
@@ -549,7 +569,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               required: true,
             },
           ]}>
-            <Input />
+            <Select
+              style={{
+                width: '100%',
+              }}
+            >
+              {SalesPerson?.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}>{option.phone}</Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
 
@@ -593,7 +621,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-              // onUpdateValue={getServiceListHandler}
+              // onClick={getServiceListHandler}
             >
               {ShowServiceList?.map((option, ind) => (
                 <Select.Option key={ind} value={option}>
