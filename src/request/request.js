@@ -14,7 +14,6 @@ const request = {
   create: async ({ entity, id, jsonData }) => {
     // console.log('dsds', jsonData);
     try {
-
       let url = entity + '/create';
       if (entity === 'clientaddress' && id) {
         url = `${entity}/create/${id}`;
@@ -138,9 +137,8 @@ const request = {
       return errorHandler(error);
     }
   },
-   
+
   list: async ({ entity, options = {} }) => {
-    try { 
     try {
       let query = '?';
 
@@ -152,16 +150,14 @@ const request = {
 
       let url = entity + '/list' + query;
 
-     
-      
       if (entity === 'clientaddress') {
         // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
         const ClientId = localStorage.getItem('key');
         url = entity + '/list/' + ClientId + query;
       }
-       
+
       const response = await axios.get(url);
-  
+
       // const response = await axios.get(entity + '/list'  + query);
       // console.log({response});
       successHandler(response, {
@@ -170,8 +166,7 @@ const request = {
       });
       return response.data;
     } catch (error) {
-      return errorHandler(error); 
-   
+      return errorHandler(error);
     }
   },
 
