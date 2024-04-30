@@ -113,7 +113,7 @@ function SearchItemComponent({ config, onRerender }) {
   );
 }
 
-export default function SearchItem({ }) {
+export default function SearchItem({ config }) {
   const [state, setState] = useState([0]);
 
   const onRerender = () => {
