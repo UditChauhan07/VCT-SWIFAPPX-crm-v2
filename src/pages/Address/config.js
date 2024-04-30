@@ -1,17 +1,19 @@
+import { useParams } from 'react-router-dom';
 export const fields = {
-    address_label: {
+
+    label: {
       type: 'string',
       label:  'address_label',
       displayLabels: ['name'],
       // disableForTable: true,
     },
-    contact_person: {
+    contactPerson: {
       type: 'string',
       label:  'contact_person',
       displayLabels: ['name'],
       // disableForTable: true,
     },
-    contact_number: {
+    contactNumber: {
       type: 'string',
       label:  'contact_number',
       displayLabels: ['name'],
@@ -47,7 +49,7 @@ export const fields = {
       displayLabels: ['name'],
       // disableForTable: true,
     },
-    postal_code: {
+    zipCode: {
       type: 'string',
       label:  'postal_code',
       displayLabels: ['name'],
@@ -58,25 +60,50 @@ export const fields = {
   };
   
   export const readColumns = {
+
    
-    address_label: {
+    label: {
+      type: 'string',
+      disableForForm: true,
+    
+    },
+
+    contactPerson: {
+      type: 'string',
+      disableForForm: true,
+      label:  'contact_person',
+    },
+
+    contactNumber: {
+      type: 'string',
+      disableForForm: true,
+      label:  'contact_number',
+    },
+
+    street: {
       type: 'string',
       disableForForm: true,
     },
-
-    contact_person: {
+    unit: {
       type: 'string',
       disableForForm: true,
     },
-
-    contact_number: {
+    block: {
       type: 'string',
       disableForForm: true,
     },
-
-    address_label: {
+    state: {
       type: 'string',
       disableForForm: true,
+    },
+    country: {
+      type: 'string',
+      disableForForm: true,
+    },
+    zipCode: {
+      type: 'string',
+      disableForForm: true,
+      label:  'postal_code',
     },
   };
   

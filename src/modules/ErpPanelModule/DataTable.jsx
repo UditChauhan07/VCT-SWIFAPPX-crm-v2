@@ -44,6 +44,7 @@ function AddNewItem({ config }) {
 
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
+  console.log(config)
 
   const handleClick = () => {
     navigate(`/${entity.toLowerCase()}/create`);

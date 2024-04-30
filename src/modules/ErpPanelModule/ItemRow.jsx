@@ -5,6 +5,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { useMoney, useDate } from '@/settings';
 import calculate from '@/utils/calculate';
 import { useForm } from 'antd/lib/form/Form';
+import { Checkbox } from 'antd/lib';
 
 export default function ItemRow({ field, remove, current = null, response }) {
   const [totalState, setTotal] = useState(undefined);
@@ -58,68 +59,75 @@ export default function ItemRow({ field, remove, current = null, response }) {
   }, [price, quantity]);
 
   return (
-    <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-      <Col className="gutter-row" span={4}>
-        <Form.Item
-          name={[field.name, 'itemName']}
-          rules={[
-            {
-              required: true,
-              message: 'Missing itemName name',
-            },
-            {
-              pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-              message: 'Item Name must contain alphanumeric or special characters',
-            },
-          ]}
-        >
-          <Input placeholder="Item Name" />
-        </Form.Item>
-      </Col>
-      <Col className="gutter-row" span={4}>
-        <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
-          <InputNumber
-            className="moneyInput"
-            onChange={updatePrice}
-            min={0}
-            controls={false}
-            addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-            addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-          />
-        </Form.Item>
-      </Col>
-      <Col className="gutter-row" span={3}>
-        <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
-          <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
-        </Form.Item>
-      </Col>
+    <>
 
-      <Col className="gutter-row" span={4}>
-        <Form.Item name={[field.name, 'total']}>
-          <Form.Item>
+      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+        <Col className="gutter-row" >
+          <Checkbox></Checkbox>
+        </Col>
+
+        <Col className="gutter-row" span={4}>
+          <Form.Item
+            name={[field.name, 'itemName']}
+            rules={[
+              {
+                required: true,
+                message: 'Missing itemName name',
+              },
+              {
+                pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                message: 'Item Name must contain alphanumeric or special characters',
+              },
+            ]}
+          >
+            <Input placeholder="Item Name" />
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
             <InputNumber
-              readOnly
               className="moneyInput"
-              value={totalState}
+              onChange={updatePrice}
               min={0}
               controls={false}
               addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
               addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-              formatter={(value) => money.amountFormatter({ amount: value })}
             />
           </Form.Item>
-        </Form.Item>
-      </Col>
+        </Col>
+        <Col className="gutter-row" span={3}>
+          <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
+            <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
+          </Form.Item>
+        </Col>
 
-      <Col className="gutter-row" span={7}>
-        <Form.Item name={[field.name, 'remarks']}>
-          <Input placeholder=" Remarks for Quotation" />
-        </Form.Item>
-      </Col>
+        <Col className="gutter-row" span={4}>
+          <Form.Item name={[field.name, 'total']}>
+            <Form.Item>
+              <InputNumber
+                readOnly
+                className="moneyInput"
+                value={totalState}
+                min={0}
+                controls={false}
+                addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+                formatter={(value) => money.amountFormatter({ amount: value })}
+              />
+            </Form.Item>
+          </Form.Item>
+        </Col>
 
-      <div style={{ position: 'absolute', right: '50px', top: ' 5px' }}>
-        <DeleteOutlined onClick={() => remove(field.name)} />
-      </div>
-    </Row>
+        <Col className="gutter-row" span={7}>
+          <Form.Item name={[field.name, 'remarks']}>
+            <Input placeholder=" Remarks for Quotation" />
+          </Form.Item>
+        </Col>
+
+        <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
+          <DeleteOutlined onClick={() => remove(field.name)} />
+        </div>
+      </Row>
+    </>
   );
 }

@@ -118,6 +118,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [productList, setProductList] = useState([])
   useEffect(() => {
     getProductHandler()
+    fetchData3();
   }, [])
   const getProductHandler = async () => {
     try {
@@ -136,6 +137,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
+  const [ShowServiceList, setShowServiceList] = useState();
 
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -156,9 +158,50 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     fetchData2();
+  
   };
-
-
+  // .............
+  const fetchData3 = async () => {
+    try {
+      const response = await request.getServiceListShow({id:value});
+      console.log(response)
+      if (response.success) {
+        console.log({cateResultss:response.result })
+        setShowServiceList(response.result);
+        // getProductHandler();
+        console.log({cateResult:response.result })
+        // Set options state based on API response
+      } 
+      // else {
+      //   setShowServiceList(null)
+      // }
+    } catch (error) {
+      setShowServiceList(null)
+      console.error('Error fetching data:', error);
+    }
+  };
+  // const getServiceListHandler = (value) => {
+  //   setSelectedValue(value);
+  //   const fetchData3 = async () => {
+  //     try {
+  //       const response = await request.getServiceListShow({ id: value });
+  //       console.log(response)
+  //       if (response.success) {
+  //         console.log({ cateResult: response.result })
+  //         setShowServiceList(response.result);
+  //         // getProductHandler();
+  //         console.log({ cateResult: response.result })
+  //         // Set options state based on API response
+  //       } else {
+  //         setShowServiceList(null)
+  //       }
+  //     } catch (error) {
+  //       setShowServiceList(null)
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   fetchData3();
+  // };
   // .............
   //   const fetchData2 = async () => {
   //     try {
@@ -305,7 +348,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
-
     setTotal2(currentTotal);
   }, [price, quantity]);
 
@@ -499,8 +541,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
               ))}
             </Select>
-
-
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={8}>
@@ -515,8 +555,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       </Row>
       <Divider dashed />
-
-
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={12}>
           <Form.Item
@@ -551,23 +589,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            {/* <AutoCompleteAsync
-              entity={'services'}
-              displayLabels={['services']}
-              searchFields={'services'}
-            // onUpdateValue={autoCompleteUpdate}
-            /> */}
             <Select
-              // onChange={(value) => setFeedback(value)}
-              // defaultValue={selectedValue}
-              // defaultValue={field.defaultValue}
               style={{
                 width: '100%',
               }}
-            // key={}
+              // onUpdateValue={getServiceListHandler}
             >
-              {serviceOptions?.map((option, ind) => (
-                <Select.Option key={ind} value={option._id}>
+              {ShowServiceList?.map((option, ind) => (
+                <Select.Option key={ind} value={option}>
                   {translate(option.name)}
                 </Select.Option>
               ))}
@@ -669,6 +698,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   </Row>
                   {mainData.products.map((data, index) => (
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={[`${i}`, `${data._id}`]}>
+                      <Col className="gutter-row mt-2" >
+                        <Checkbox></Checkbox>
+                      </Col>
                       <Col className="gutter-row" span={4}>
                         <Form.Item
                           name={data.name}
@@ -684,6 +716,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           ]}
                           key={[`${i}`, `${data._id}`]}
                         >
+
                           {data?.name && <Input placeholder="Item Name" defaultValue={data.name} />}
                         </Form.Item>
                       </Col>
@@ -737,6 +770,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               {i == productList.length - 1 &&
                 <Collapse.Panel header={"Custom Item"} key={'custom item'}>
                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
+
                     <Col className="gutter-row" span={4}>
                       <p>{translate('Sub-Item')}</p>
                     </Col>

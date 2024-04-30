@@ -17,10 +17,9 @@ import { dataForTable } from '@/utils/dataStructure';
 import { useMoney, useDate } from '@/settings';
 
 import { generate as uniqueId } from 'shortid';
-
 import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 let data = JSON.parse(localStorage.getItem('auth'));
 let user = data.current;
 
@@ -60,13 +59,14 @@ function AddNewItem({ config }) {
 
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
-  
+
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
   const translate = useLanguage();
   const { moneyFormatter } = useMoney();
   const { dateFormat } = useDate();
   const [admin, setAdmin] = useState([]);
+
   const [authUser, setAuthUser] = useState({});
   useEffect(() => {
     data = JSON.parse(localStorage.getItem('auth'));
@@ -79,7 +79,6 @@ export default function DataTable({ config, extra = [] }) {
 
   isSAAS = role?.is_saas;
   permissions = role?.permissions;
-  // console.log(permissions)
 
   let items = [];
   if (permissions?.[entity + '_read'] || isSAAS == true) {
@@ -97,11 +96,23 @@ export default function DataTable({ config, extra = [] }) {
       icon: <EditOutlined />,
     });
   }
+
   // address module
-  if (permissions?.[entity + '_address'] || isSAAS == true) {
+
+  // if(entity === "client"){
+  //   if (permissions?.[entity + 'address_list'] || isSAAS == true) {
+  //     items.push({
+  //       label: translate('address_list'),
+  //       key: 'address_list',
+  //       icon: <HomeOutlined />,
+  //     });
+  //   }
+  // }
+
+  if (permissions?.[entity + 'address_list'] || isSAAS == true) {
     items.push({
-      label: translate('Address'),
-      key: 'address',
+      label: translate('address_list'),
+      key: 'address_list',
       icon: <HomeOutlined />,
     });
   }
@@ -117,7 +128,6 @@ export default function DataTable({ config, extra = [] }) {
       icon: <DeleteOutlined />,
     });
   }
-
 
   const navigate = useNavigate();
 
@@ -135,14 +145,16 @@ export default function DataTable({ config, extra = [] }) {
     collapsedBox.open();
   }
   function handleDelete(record) {
+    console.log(record);
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));
     modal.open();
   }
 
-   function handleAddresses(record) {
-    // console.log(record)
-    // dispatch(crud.currentAction({ actionType: 'clientaddress', data: record }));
-    navigate(`/customer/address/${record._id}`);
+  function handleAddresses(record) {
+    let id = record._id;
+    localStorage.setItem('key', id);
+    dispatch(crud.Addresslist({ entity, id }));
+    navigate(`/customer/address/${id}`);
   }
 
   function handleUpdatePassword(record) {
@@ -170,7 +182,7 @@ export default function DataTable({ config, extra = [] }) {
         <Dropdown
           menu={{
             // items,
-            items: items.filter((item) => item.key !== 'address' || entity === 'client'),
+            items: items.filter((item) => item.key !== 'address_list' || entity === 'client'),
             onClick: ({ key }) => {
               switch (key) {
                 case 'read':
@@ -185,8 +197,9 @@ export default function DataTable({ config, extra = [] }) {
                 case 'updatePassword':
                   handleUpdatePassword(record);
                   break;
-                case 'address':
+                case 'address_list':
                   handleAddresses(record);
+
                   break;
 
                 default:
@@ -217,13 +230,20 @@ export default function DataTable({ config, extra = [] }) {
     dispatch(crud.list({ entity, options }));
   }, []);
 
-  const dispatcher = () => {
+  const dispatcher = (id) => {
     dispatch(crud.list({ entity }));
+    if(id){
+      dispatch(crud.list({ entity, id }));
+    }
   };
 
   useEffect(() => {
     const controller = new AbortController();
     dispatcher();
+    const id = localStorage.getItem('key');
+    if (id) {
+      dispatcher(id);
+    }
     return () => {
       controller.abort();
     };
