@@ -41,7 +41,7 @@ export default function CreateItem({ config, CreateForm }) {
     dispatch(settingsAction.list({ entity: 'setting' }));
   }, []);
   let { entity } = config;
-  console.log(config)
+
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
   const [form] = Form.useForm();
@@ -88,7 +88,7 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-    console.log({ fieldsValue });
+    // console.log({ fieldsValue });
     if (fieldsValue) {
       if (fieldsValue.items) {
         let newList = [...fieldsValue.items];
@@ -175,5 +175,5 @@ export default function CreateItem({ config, CreateForm }) {
         </Form>
       </Loading>
     </>
-  );6
+  );
 }
