@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-// import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
-
 import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox, notification } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
@@ -16,6 +14,7 @@ import { selectUpdatedItem } from '@/redux/crud/selectors';
 import { useCrudContext } from '@/context/crud';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
+
   const [feedback, setFeedback] = useState();
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
@@ -40,6 +39,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 
     fetchData();
   }, []);
+
   if (fields.subscription_type) {
     useEffect(() => {
       // Fetch data from API
@@ -374,14 +374,13 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
     // array: 'array',
     // object: 'object',
     // enum: 'enum',
-    // date: 'date',
+    date: 'date',
     url: 'url',
     website: 'url',
     email: 'email',
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-
   return (
     <Form.Item
       label={translate(field.label)}

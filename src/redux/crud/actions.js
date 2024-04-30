@@ -68,6 +68,7 @@ export const crud = {
         });
       }
     },
+
   create:
     ({ entity, jsonData, withUpload = false }) =>
     async (dispatch) => {

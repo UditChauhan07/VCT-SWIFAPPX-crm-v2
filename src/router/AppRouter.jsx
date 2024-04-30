@@ -53,6 +53,7 @@ const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
 const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
+const CustomerAddresses =  lazy(() => import('@/pages/Address'));
 
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
@@ -62,6 +63,7 @@ const ServiceListCreate = lazy(() => import('@/pages/ServiceList/Create'));
 const ServiceListRead = lazy(() => import('@/pages/ServiceList/Read'));
 const ServiceListUpdate = lazy(() => import('@/pages/ServiceList/Update'));
 const PublicHoliday = lazy(() => import('@/pages/PublicHoliday'));
+
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -301,6 +303,10 @@ export default function AppRouter() {
     {
       path: '/offer/update/:id',
       element: <OfferUpdate />,
+    },
+    {
+      path: '/customer/address/:id',
+      element: <CustomerAddresses/>,
     },
     {
       path: '*',

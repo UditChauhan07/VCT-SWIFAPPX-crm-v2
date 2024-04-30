@@ -128,8 +128,13 @@ const request = {
     }
   },
   list: async ({ entity, options = {} }) => {
+  
     try {
       let query = '?';
+      if (entity === 'address') {
+        query = '?';
+      }
+      
       for (var key in options) {
         query += key + '=' + options[key] + '&';
       }

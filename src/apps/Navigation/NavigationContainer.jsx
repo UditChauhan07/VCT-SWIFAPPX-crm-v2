@@ -29,6 +29,8 @@ import {
   InsertRowAboveOutlined,
   ProfileOutlined,
   BarsOutlined,
+  ReconciliationOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -150,7 +152,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     },
     {
       key: 'expensesCategory',
-      // icon: <ReconciliationOutlined />,
+      icon: <ReconciliationOutlined />,
       label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
     },
     // {
@@ -158,7 +160,6 @@ function Sidebar({ collapsible, isMobile = false }) {
     //   icon: <UserOutlined />,
     //   label: <Link to={'/employee'}>{translate('employee')}</Link>,
     // },
-
     {
       label: translate('Settings'),
       key: 'settings',
@@ -166,7 +167,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       children: [
         {
           key: 'admin',
-          // icon: <TeamOutlined />,
+          icon: <TeamOutlined />,
           label: <Link to={'/admin'}>{translate('admin')}</Link>,
         },
         {
@@ -178,6 +179,10 @@ function Sidebar({ collapsible, isMobile = false }) {
           label: <Link to={'/roles'}>{translate('roles')}</Link>,
         },
         {
+          key: 'publicholiday',
+          label: <Link to={'/publicholiday'}>{translate('public_holiday')}</Link>,
+        },
+        {
           key: 'currency',
           label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
         },
@@ -187,7 +192,7 @@ function Sidebar({ collapsible, isMobile = false }) {
         // },
         {
           key: 'paymentMode',
-          label: <Link to={'/payment/mode'}>{translate('payments_mode')}</Link>,
+          label: <Link to={'/payment/mode'}>{translate('payment_mode')}</Link>,
         },
         {
           key: 'taxes',
