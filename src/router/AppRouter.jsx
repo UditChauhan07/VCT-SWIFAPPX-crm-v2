@@ -63,7 +63,8 @@ const ServiceListCreate = lazy(() => import('@/pages/ServiceList/Create'));
 const ServiceListRead = lazy(() => import('@/pages/ServiceList/Read'));
 const ServiceListUpdate = lazy(() => import('@/pages/ServiceList/Update'));
 const PublicHoliday = lazy(() => import('@/pages/PublicHoliday'));
-
+const WorkOrder = lazy(() => import('@/pages/WorkOrder'));
+const WorkCreate = lazy(() => import('@/pages/WorkOrder/WorkCreate'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -307,6 +308,14 @@ export default function AppRouter() {
     {
       path: '/customer/address/:id',
       element: <CustomerAddresses/>,
+    },
+    {
+      path: '/workorder',
+      element: <WorkOrder />,
+    },
+    {
+      path: '/workorder/create',
+      element: <WorkCreate />,
     },
     {
       path: '*',

@@ -71,6 +71,7 @@ export default function ReadServiceList({ config, selectedItem }) {
 
         fetchData(); // Call fetchData function when component mounts
     }, []);
+
     // Function to extract subscription names
     const getSubscriptionNames = () => {
         console.log('name', currentErp.subscriptions.map(item => item.subscription.name));
@@ -89,8 +90,8 @@ export default function ReadServiceList({ config, selectedItem }) {
             title: subitem.name,
             dataIndex: subitem.name,
         })))), 'old key pair ', ...currentErp.subscriptions.map((item, key) => ({
-            title: item.data[key].name,
-            dataIndex: item.data[key].name,
+            title: item.data[key]?.name,
+            dataIndex: item.data[key]?.name,
         })));
         const columns = [
             {
@@ -98,8 +99,8 @@ export default function ReadServiceList({ config, selectedItem }) {
                 dataIndex: 'subscription',
             },
             ...currentErp.subscriptions.map((item, key) => ({
-                title: item.data[key].name,
-                dataIndex: item.data[key].name,
+                title: item.data[key]?.name,
+                dataIndex: item.data[key]?.name,
             })),
             // ...currentErp.subscriptions.map((item => Object.values(item.data).map((subitem, key) => ({
             //     title: subitem.name,
@@ -128,7 +129,6 @@ export default function ReadServiceList({ config, selectedItem }) {
         });
         return tableData;
     };
-    console.log(options.filter((ele) => ele._id === currentErp.serviceCategory)?.[0]?.name);
     return (
         <>
             <PageHeader
@@ -188,7 +188,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                 <Col className="gutter-row" span={12}>
 
                     {/* <p>{currentErp.serviceCategory?.name}</p> */}
-                    <p>{options.filter((ele) => ele._id === currentErp.serviceCategory)?.[0]?.name}</p>
+                    <p>{currentErp.serviceCategory.name}</p>
                 </Col>
             </Row>
             <Row gutter={[12, 12]}>

@@ -17,6 +17,7 @@ import {
   ContainerOutlined,
   FileSyncOutlined,
   DashboardOutlined,
+  LineChartOutlined,
   TagOutlined,
   TagsOutlined,
   UserOutlined,
@@ -139,6 +140,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'quote',
       icon: <FileSyncOutlined />,
       label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
+    },
+    {
+      key: 'workorder',
+      icon: <LineChartOutlined />,
+      label: <Link to={'/workorder'}>{translate('Work Order')}</Link>,
     },
     {
       key: 'payment',
