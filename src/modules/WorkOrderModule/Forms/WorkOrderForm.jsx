@@ -31,6 +31,10 @@ const { Panel } = Collapse;
 export default function WorkOrderForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
+
+  
+
+
   // if (!last_quote_number) {
   //   return <></>;
   // }
@@ -46,6 +50,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [taxRate, setTaxRate] = useState(0);
   const [taxTotal, setTaxTotal] = useState(0);
   const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
+  const [adjustmentType, setAdjustmentType] = useState('1');
+  const [showInput, setShowInput] = useState(false);
+
+  const handleAdjustmentTypeChange = (e) => {
+    setAdjustmentType(e.target.value);
+    setShowInput(e.target.value === '1'); // Show input if 'Addition' is selected
+  };
+
+
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
   };
@@ -293,10 +306,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   return (
     <>
-      <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
+      <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
         {translate('Customer Detail Section')}
       </Col>
-      <Row gutter={[12, 0]}>
+      <Row gutter={[12, 0]} style={{marginTop: "30px"}}>
 
         {/* <Col className="gutter-row" span={8}>
           <Form.Item
@@ -402,10 +415,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Divider dashed />
 
 
-      <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
+      <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Basic Work Order Details')}
       </Col>
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="date"
@@ -463,7 +476,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "20px" }}>
         <Col className="gutter-row" span={8}>
           <Form.Item
             name="SalesPerson" f
@@ -505,7 +518,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
       </Row>
 
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "20px" }}>
         <Col className="gutter-row" span={8}>
           <Form.Item
             name="SalesPerson" f
@@ -575,11 +588,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-  <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
+  <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Work Order Services')}
       </Col>
 
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
       <Col className="gutter-row" span={12}>
           <Form.Item
             name="ServiceCategory" f
@@ -627,7 +640,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Row>
 
        
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "15px" }}>
 
       <Col className="gutter-row" span={6}>
           <Form.Item label={translate('Product Categories')} name="ProductCategories" rules={[
@@ -696,12 +709,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Divider dashed />
 
 
-      <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
+      <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Work Order Status')}
       </Col>
 
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-      <Col className="gutter-row" span={10}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
+      <Col className="gutter-row" span={12}>
           <Form.Item
             name="AttendenceTime"
             label={translate('Attendence Time')}
@@ -715,7 +728,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={10}>
+        <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Work Order Status in the Attendence')} name="Products" rules={[
             {
               required: true,
@@ -728,13 +741,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         <Divider dashed />
 
-        <Col className="gutter-row" span={12} style={{ fontSize: '1.1rem', marginTop: "-9px;", marginBottom: "20px" }}>
+        <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
         {translate('Work Order Billing Details')}
        </Col>
 
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }} >
 
-        <Col className="gutter-row" span={10} >
+        <Col className="gutter-row" span={12} >
           <Form.Item
             name="AdjustmentType"
             label={translate('Adjustment Type')}
@@ -745,18 +758,33 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            <Radio.Group style={{ display: "flex", gap: "20px" }}>
+            <Radio.Group style={{ display: "flex", gap: "20px" }} onChange={handleAdjustmentTypeChange} value={adjustmentType}>
               <Radio value="1" selected>Addition</Radio>
               <Radio value="0">Subtraction</Radio>
             </Radio.Group>
           </Form.Item>
+
+          {showInput && (
+            <Form.Item
+              name=""
+              label=""
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter a Value:',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          )}
         </Col>
 
 
 
 
 
-        <Col className="gutter-row" span={10}>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="AdjustmentValue"
             label={translate('Adjustment Value')}
@@ -774,7 +802,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Row>
 
 
-      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
     
   
      <Col className="gutter-row" span={8}>
@@ -822,23 +850,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Select>
           </Form.Item>
         </Col>
-
-
-
         </Row>
 
 
 
-
-
-
-
-
-
-
-
-
-      <div style={{ position: 'relative', width: ' 100%', float: 'right' }}>
+      <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
             <Form.Item>

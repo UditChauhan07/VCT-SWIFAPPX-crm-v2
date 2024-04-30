@@ -138,6 +138,7 @@ export default function DataTable({ config, extra = [] }) {
     readBox.open();
   };
   function handleEdit(record) {
+    
     dispatch(crud.currentItem({ data: record }));
     dispatch(crud.currentAction({ actionType: 'update', data: record }));
     editBox.open();
