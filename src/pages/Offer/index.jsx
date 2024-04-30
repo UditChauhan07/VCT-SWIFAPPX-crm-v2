@@ -89,6 +89,7 @@ export default function Offer() {
     entity,
     ...Labels,
   };
+  console.log(configPage)
   const config = {
     ...configPage,
     dataTableColumns,

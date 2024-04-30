@@ -15,6 +15,7 @@ export default function ServiceListForm() {
     const fetchData = async () => {
       try {
         const response = await request.getServiceCategory(); // Assuming your request function is named getData()
+        console.log(response)
         // Assuming your API response contains an array of options as response.options
         if (response.success) {
           setOptions(response.result); // Set options state based on API response
@@ -28,6 +29,25 @@ export default function ServiceListForm() {
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
+useEffect(() => {
+    // Fetch data from API
+    const fetchData = async () => {
+      try {
+        const response = await request.getServiceCategory(); // Assuming your request function is named getData()
+        console.log(response)
+        // Assuming your API response contains an array of options as response.options
+        if (response.success) {
+          setOptions(response.result); // Set options state based on API response
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); // Call fetchData function when component mounts
+  }, []);
+  const [selectedValue, setSelectedValue] = useState('');
 
   const [responseData, setResponseData] = useState(null);
 
