@@ -5,6 +5,7 @@ export default function OfferCreate() {
   const translate = useLanguage();
 
   const entity = 'offer';
+  console.log(entity)
   const Labels = {
     PANEL_TITLE: translate('offer'),
     DATATABLE_TITLE: translate('offer_list'),

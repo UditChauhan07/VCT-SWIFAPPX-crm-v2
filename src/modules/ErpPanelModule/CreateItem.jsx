@@ -42,6 +42,7 @@ export default function CreateItem({ config, CreateForm }) {
   }, []);
   let { entity } = config;
 
+
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
@@ -99,30 +100,41 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
-      if (fieldsValue.servicecategory) {
-   
+      if (fieldsValue.serviceCategory) {
+        console.log('10tty', { fieldsValue });
         let requestBody = {
           name: fieldsValue.name,
-          serviceCategory: fieldsValue.servicecategory,
+          serviceCategory: fieldsValue.serviceCategory,
           description: fieldsValue.description,
-          subscriptionType: [],
+          subscriptions: [],
         };
+        let lengthOfNameProperty = 0;
+        for (let i = 0; i < 50; i++) {
+          lengthOfNameProperty = lengthOfNameProperty + Object.keys(fieldsValue).filter((ele) => ele === `name${i}`).length
+        }
         // for (let i = 0; i < Object.keys(fieldsValue).length - 4; i++) {
-        //   let option = fieldsValue[i];
-        //   let subscriptionType = {
-        //     Type: option.type, 
-        //     data: []
-        //   };
-        //   for (let j = 0; j < Object.keys(option).length - 1; j++) {
-        //     let price = option[j].price;
-        //     let name = option[j].name;
-        //     subscriptionType.data.push({
-        //       name: name,
-        //       price: price.toString()
-        //     });
-        //   }
-        //   requestBody.subscriptionType.push(subscriptionType)
-        // }
+
+        for (let i = 0; i < Object.keys(fieldsValue).length - 4 - lengthOfNameProperty; i++) {
+          let option = fieldsValue[i];
+          console.log("option", option);
+          let subscriptions = {
+            // Type: option.type,
+            subscription: option?.type,
+            data: []
+          };
+          for (let j = 0; j < Object.keys(option).length - 1; j++) {
+            // for (let j = 0; j < (Object.keys(option).length / 2); j++) {
+            console.log("jiji", j);
+            let price = option[`price${j}`];
+            let name = fieldsValue[Object.keys(fieldsValue).filter((ele) => ele === `name${j}`)?.[0]];
+            // let name = option[`name${j}`];
+            subscriptions.data.push({
+              name: name,
+              price: price?.toString()
+            });
+          }
+          requestBody.subscriptions.push(subscriptions)
+        }
 
         fieldsValue = requestBody;
 

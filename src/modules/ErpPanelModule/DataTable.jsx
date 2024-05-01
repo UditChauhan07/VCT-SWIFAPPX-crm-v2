@@ -6,6 +6,7 @@ import {
   FilePdfOutlined,
   RedoOutlined,
   PlusOutlined,
+  PayCircleOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons';
 import { Dropdown, Table, Button } from 'antd';
@@ -66,7 +67,7 @@ function AddNewItem({ config }) {
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
-
+  // console.log(entity)
 
   const { DATATABLE_TITLE } = config;
 
@@ -97,6 +98,14 @@ export default function DataTable({ config, extra = [] }) {
       icon: <EditOutlined />,
     })
   }
+  // if (entity === "servicelist" && (permissions?.[entity + '_edit'] == true || isSAAS == true)) {
+  //   items.push({
+  //     label: translate('Pricing Model'),
+  //     key: 'price_model',
+  //     icon: <PayCircleOutlined />,
+  //   })
+  // }
+
 
   items.push(...extra,
     {
@@ -131,6 +140,12 @@ export default function DataTable({ config, extra = [] }) {
     dispatch(erp.currentAction({ actionType: 'delete', data: record }));
     modal.open();
   };
+  const handlePriceModel = (record) => {
+    const data = { ...record };
+    console.log("data", data);
+    dispatch(erp.currentAction({ actionType: 'update', data }));
+    navigate(`/${entity}/update/pricing/${record._id}`);
+  };
 
   const handleRecordPayment = (record) => {
     dispatch(erp.currentItem({ data: record }));
@@ -143,7 +158,7 @@ export default function DataTable({ config, extra = [] }) {
   //   navigate(`/customer/address/${record}`);
   // };
 
-  
+
 
   dataTableColumns = [
     ...dataTableColumns,
@@ -176,11 +191,14 @@ export default function DataTable({ config, extra = [] }) {
                 case 'delete':
                   handleDelete(record);
                   break;
+                case 'price_model':
+                  handlePriceModel(record);
+                  break;
                 case 'recordPayment':
                   handleRecordPayment(record);
-                  // case 'clientaddress':
-                  //   handleClientAddress(record);
-                  // break;
+                // case 'clientaddress':
+                //   handleClientAddress(record);
+                // break;
                 default:
                   break;
               }

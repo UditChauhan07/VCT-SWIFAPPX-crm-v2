@@ -116,6 +116,13 @@ export default function DataTable({ config, extra = [] }) {
       icon: <HomeOutlined />,
     });
   }
+  if (entity === "servicelist" && (permissions?.[entity + '_edit'] == true || isSAAS == true)) {
+    items.push({
+      label: translate('Pricing Model'),
+      key: 'sec_edit',
+      icon: <EditOutlined />,
+    })
+  }
 
   items.push(...extra, {
     type: 'divider',
@@ -233,7 +240,7 @@ export default function DataTable({ config, extra = [] }) {
 
   const dispatcher = (id) => {
     dispatch(crud.list({ entity }));
-    if(id){
+    if (id) {
       dispatch(crud.list({ entity, id }));
     }
   };

@@ -14,7 +14,6 @@ const request = {
   create: async ({ entity, id, jsonData }) => {
     // console.log('dsds', jsonData);
     try {
-
       let url = entity + '/create';
       if (entity === 'clientaddress' && id) {
         url = `${entity}/create/${id}`;
@@ -118,6 +117,8 @@ const request = {
     }
   },
   search: async ({ entity, options = {} }) => {
+    console.log(entity);
+
     try {
       let query = '?';
       for (var key in options) {
@@ -136,9 +137,9 @@ const request = {
       return errorHandler(error);
     }
   },
-   
+
   list: async ({ entity, options = {} }) => {
-    try { 
+    try {
       let query = '?';
 
       for (var key in options) {
@@ -149,16 +150,14 @@ const request = {
 
       let url = entity + '/list' + query;
 
-     
-      
       if (entity === 'clientaddress') {
         // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
         const ClientId = localStorage.getItem('key');
         url = entity + '/list/' + ClientId + query;
       }
-       
+
       const response = await axios.get(url);
-  
+
       // const response = await axios.get(entity + '/list'  + query);
       // console.log({response});
       successHandler(response, {
@@ -167,14 +166,17 @@ const request = {
       });
       return response.data;
     } catch (error) {
-      return errorHandler(error); 
-   
+      return errorHandler(error);
     }
   },
 
   Addresslist: async ({ entity, id, options = {} }) => {
     try {
       let query = '?';
+
+      if (entity === 'address') {
+        query = '?';
+      }
 
       for (var key in options) {
         query += key + '=' + options[key] + '&';
@@ -210,7 +212,6 @@ const request = {
   post: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity, jsonData);
-
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -335,5 +336,76 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  create2: async ({ entity, jsonData }) => {
+    console.log('dsds', jsonData);
+    try {
+      const response = await axios.post(entity + '/create', jsonData);
+      successHandler(response, {
+        notifyOnSuccess: true,
+        notifyOnFailed: true,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  getSearchclintAddress: async () => {
+    try {
+      // const response = await axios.get(`/clientaddress/search?q=ho&client=${getLocalUserData.current._id}&fields=label`);
+      const response = await axios.get(
+        `/clientaddress/search?q=ho&client=${'660f885915289c0cee5e2b8f'}&fields=label`
+      ); // 660f885915289c0cee5e2b8f
+      return response.data;
+    } catch (error) {
+      console.log({ lll: error });
+      return errorHandler(error);
+    }
+  },
+  getSalesPerson: async () => {
+    try {
+      const response = await axios.get('/admin/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceCategoryOptions: async () => {
+    try {
+      const response = await axios.get('/servicecategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getProductList: async () => {
+    try {
+      const response = await axios.get('/productcategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceListShow: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicelist/show/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  // getnewShow: async ({ id }) => {
+  //   try {
+  //     // const response = await axios.get(`/clientaddress/search?q=ho&client=${getLocalUserData.current._id}&fields=label`);
+  //     const response = await axios.get(
+  //       `/clientaddress/search?q=ho&client=${'660f885915289c0cee5e2b8f'}&fields=label`
+  //     ); // 660f885915289c0cee5e2b8f
+  //     return response.data;
+  //   } catch (error) {
+  //     return errorHandler(error);
+  //   }
+  // },
 };
+
 export default request;

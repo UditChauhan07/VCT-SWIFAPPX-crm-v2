@@ -8,12 +8,14 @@ export default function ServiceListForm() {
   const translate = useLanguage();
 
   const { TextArea } = Input;
-  const [options, setOptions] = useState([{ name: '', price: '' }]);
+  // const [options, setOptions] = useState([{ name: '', price: '' }]);
+  const [options, setOptions] = useState([]);
   useEffect(() => {
     // Fetch data from API
     const fetchData = async () => {
       try {
         const response = await request.getServiceCategory(); // Assuming your request function is named getData()
+        console.log(response)
         // Assuming your API response contains an array of options as response.options
         if (response.success) {
           setOptions(response.result); // Set options state based on API response
@@ -27,6 +29,25 @@ export default function ServiceListForm() {
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
+useEffect(() => {
+    // Fetch data from API
+    const fetchData = async () => {
+      try {
+        const response = await request.getServiceCategory(); // Assuming your request function is named getData()
+        console.log(response)
+        // Assuming your API response contains an array of options as response.options
+        if (response.success) {
+          setOptions(response.result); // Set options state based on API response
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); // Call fetchData function when component mounts
+  }, []);
+  const [selectedValue, setSelectedValue] = useState('');
 
   const [responseData, setResponseData] = useState(null);
 
@@ -47,10 +68,9 @@ export default function ServiceListForm() {
     fetchData();
   };
 
-
+  console.log("responseData", responseData);
   const [rows, setRows] = useState([{ name: '', price: '' }]);
 
-  console.log(rows)
   // Function to add a new row
 
   const addRow = () => {
@@ -65,7 +85,7 @@ export default function ServiceListForm() {
 
   const handleInputChange = (value, event, rowIndex, fieldName) => {
     // const { value } = event.target;
- 
+
     const updatedRows = [...rows];
     updatedRows[rowIndex][fieldName] = value;
     setRows(updatedRows);
@@ -85,7 +105,7 @@ export default function ServiceListForm() {
   };
 
   const [subscriptions, setSubscriptions] = useState([])
-  console.log(subscriptions)
+  // console.log(subscriptions)
   useEffect(() => {
     if (responseData) {
       setSubscriptions(responseData.map(data => ({
@@ -109,6 +129,7 @@ export default function ServiceListForm() {
           price: ""
         })
       })
+      // console.log("updatedSubscriptions", updatedSubscriptions);
       return updatedSubscriptions
     })
   }
@@ -128,6 +149,8 @@ export default function ServiceListForm() {
         const option = subscription.options.find(option => option.position === position)
         subscription.options.splice(position, 1, { ...option, name: name })
       })
+      // console.log("-handleOptionNameChange", updatedSubscriptions);
+
       return updatedSubscriptions
     })
   }
@@ -144,7 +167,7 @@ export default function ServiceListForm() {
       return updatedSubscriptions
     })
   }
-
+  // console.log("subscriptions", subscriptions);
 
   return (
     <>
@@ -164,7 +187,7 @@ export default function ServiceListForm() {
         </Col>
         <Col className="gutter-row" span={12}>
           <Form.Item
-            name="servicecategory"
+            name="serviceCategory"
             label={translate('Select Category')}
             rules={[
               {
@@ -223,7 +246,7 @@ export default function ServiceListForm() {
 
             subscriptions.map((subscription, index) => {
               const data = responseData.find(data => data.subscription._id === subscription.id)
-              console.log(data, subscription)
+              // console.log(data, subscription)
               return (
                 <div key={[`${subscription.id}`]}>
                   <Col className="gutter-row" span={24}>
@@ -239,14 +262,40 @@ export default function ServiceListForm() {
 
                   {subscription.options.map((option, i) => (
                     <div key={[`${subscription.id}-${option.position}-${i}`]}>
-                      {console.log(index)}
+                      {/* {console.log(index)} */}
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                         <Col className="gutter-row" span={10}>
-                          <Input placeholder="Enter Option Name" value={option.name} onChange={(event) => handleOptionNameChange(event.target.value, option.position)} />
+                          <Form.Item
+                            name={[`name${option.position}`]}
+                            rules={[
+                              {
+                                required: true,
+                              },
+                            ]}
+                            value={option.name}
+                            onChange={(event) => handleOptionNameChange(event.target.value, option.position)}
+
+                          >
+                            <Input placeholder={`Enter ${data.subscription.name} Service Name`}
+                            />
+                          </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={10}>
-                          <InputNumber className="moneyInput" placeholder='Enter Price' value={option.price} onChange={(value) => handleOptionPriceChange(value, option.position, subscription.id)} />
+                          <Form.Item
+                            name={[`${index}`, `price${option.position}`]}
+                            // name={[`${ option.position }`, 'price']}
 
+                            rules={[
+                              {
+                                required: true,
+                              },
+                            ]}
+                            value={option.price} onChange={(value) => handleOptionPriceChange(value, option.position, subscription.id)}
+                          >
+                            <InputNumber className="moneyInput" placeholder='Enter Price'
+                            // value={option.price} onChange={(value) => handleOptionPriceChange(value, option.position, subscription.id)}
+                            />
+                          </Form.Item>
                         </Col>
                         {/* Render Remove button for each row */}
 
