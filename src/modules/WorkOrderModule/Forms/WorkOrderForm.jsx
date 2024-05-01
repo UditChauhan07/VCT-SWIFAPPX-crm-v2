@@ -311,23 +311,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Col>
       <Row gutter={[12, 0]} style={{marginTop: "30px"}}>
 
-        {/* <Col className="gutter-row" span={8}>
-          <Form.Item
-            name="customerType"
-            label={translate('Customer Type')}
-            rules={[
-              {
-                required: true,
-                message: 'Please select a Customer Type:',
-              },
-            ]}
-          >
-            <Radio.Group style={{ display: "flex", gap: "20px" }}>
-              <Radio value="New">New</Radio>
-              <Radio value="Old">Existing</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Col> */}
+      
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="client"
@@ -413,6 +397,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
       </Row>
       <Divider dashed />
+
 
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
@@ -766,16 +751,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
           {showInput && (
             <Form.Item
-              name=""
-              label=""
+              name="AdjustmentValue"
+              label={translate('Adjustment Value')}
               rules={[
                 {
                   required: true,
                   message: 'Please enter a Value:',
                 },
               ]}
+              
+        
             >
-              <Input />
+              <InputNumber addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined} style={{ width: '100%' }} />
             </Form.Item>
           )}
         </Col>
@@ -783,7 +770,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-
+{/* 
         <Col className="gutter-row" span={12}>
           <Form.Item
             name="AdjustmentValue"
@@ -796,16 +783,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           >
             <InputNumber addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined} style={{ width: '100%' }} />
           </Form.Item>
-        </Col>
-
-       
-        </Row>
-
-
-      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
-    
-  
-     <Col className="gutter-row" span={8}>
+        </Col> */}
+        <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
               required: true,
@@ -815,7 +794,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={8}>
+       
+        </Row>
+
+
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
+    
+  
+     {/* <Col className="gutter-row" span={8}>
+          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
+            {
+              required: true,
+            },
+          ]}>
+            <Input />
+          </Form.Item>
+        </Col> */}
+
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="Discount"
             label={translate('Discount')}
@@ -829,7 +825,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={8}>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="PaymentMode" f
             label={translate('Payment Mode')}
