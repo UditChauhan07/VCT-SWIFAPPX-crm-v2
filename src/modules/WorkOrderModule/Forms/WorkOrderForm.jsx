@@ -32,7 +32,7 @@ export default function WorkOrderForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
 
-  
+
 
 
   // if (!last_quote_number) {
@@ -68,12 +68,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
-  const [Customeraddress, setCustomeraddress] = useState([])
   const [SalesPerson, setSalesPerson] = useState()
+  const [customerAddress, setCustomerAddress] = useState([])
+  const [customerSelect, setcustomSelect] = useState()
   const [subscriptionData, setSubscriptionData] = useState({});
   const [accordionData, setAccordionData] = useState([]);
 
-  
+  const [selectedSalesPerson, setSelectedSalesPerson] = useState()
+
+  console.log(SalesPerson?.find((item) => item._id === customerSelect)?.phone)
 
 
   useEffect(() => {
@@ -126,6 +129,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState();
 
+  
+  // console.log(customerSelect)
+
+
+
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
     const fetchData2 = async () => {
@@ -145,20 +153,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     fetchData2();
-  
+
   };
   // .............
   const fetchData3 = async () => {
     try {
-      const response = await request.getServiceListShow({id:value});
+      const response = await request.getServiceListShow({ id: value });
       console.log(response)
       if (response.success) {
-        console.log({cateResultss:response.result })
+        console.log({ cateResultss: response.result })
         setShowServiceList(response.result);
         // getProductHandler();
-        console.log({cateResult:response.result })
+        console.log({ cateResult: response.result })
         // Set options state based on API response
-      } 
+      }
       // else {
       //   setShowServiceList(null)
       // }
@@ -205,29 +213,27 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // ................
 
   // .................
- 
+
   const handleFirstDropdownChange = async (event) => {
-    // const selectedValue = event.target.value;
-    // setSelectedOption(selectedValue);
+    console.log("event", event);
 
-    // Make API request with the selected value
     try {
-      // const response = await fetch(`your_api_endpoint/${selectedValue}`);
-      const data = [{ value: '1', label: 'Home' }, { value: '3', label: 'Billing' }, { value: '4', label: 'Shipping' }];
+      const response = await request.getSearchClientAddress(event);
+      console.log("response", response);
+      if (response.success) {
+        setCustomerAddress(response.result)
+        // Set options state based on API response
+      } else {
 
-
-      // Extract options from the API response
-      const extractedOptions = data.map((item) => ({
-        value: item.value,
-        label: item.label,
-      }));
-
-      // Update the options for the second dropdown
-      setSecondDropdownOptions(extractedOptions);
+      }
     } catch (error) {
+
       console.error('Error fetching data:', error);
     }
+
   };
+
+
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
     // setSelectedOption(selectedValue);
@@ -304,14 +310,75 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setTotal2(currentTotal);
   }, [price, quantity]);
 
+
+  // --------- WORK ORDER MODULE -----------
+
+
+  useEffect(() => {
+
+    const fetchData1 = async () => {
+      try {
+        const response = await request.getSalesPerson();
+        if (response.success) {
+          setSalesPerson(response.result);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData1()
+  }, []);
+
+
+
+
+  const [salesContactNumber, setSalesContactNumber] = useState();
+  useEffect(() => {
+    if (selectedSalesPerson) {
+      let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone
+      setSalesContactNumber(number)
+      ContactHandler({ salesContactNumber: number })
+      let saleRepConElement = document.getElementById("salesContactNumber")
+      saleRepConElement.value = number || null
+      console.log({ number, salesContactNumber });
+    }
+  }, [selectedSalesPerson, salesContactNumber])
+
+  useEffect(() => { }, [selectedSalesPerson])
+
+  const ContactHandler = ({ salesContactNumber }) => {
+    return (<Form.Item label={translate('Sales Person Contact')} name="Sales Person Contact" rules={[
+      {
+        required: true,
+
+      },
+    ]}
+      initialValue={salesContactNumber}
+
+
+    >
+      <Input style={{
+        width: '100%',
+      }} placeholder="+1 123 456 789"
+        id='salesContactNumber'
+        value={salesContactNumber}
+
+      />
+    </Form.Item>
+    )
+  }
+
+
+
+
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
         {translate('Customer Detail Section')}
       </Col>
-      <Row gutter={[12, 0]} style={{marginTop: "30px"}}>
+      <Row gutter={[12, 0]} style={{ marginTop: "30px" }}>
 
-      
+
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="client"
@@ -327,7 +394,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               displayLabels={['name']}
               searchFields={'name,surname'}
               onChange={handleFirstDropdownChange}
-            // onUpdateValue={autoCompleteUpdate}
+
             />
           </Form.Item>
         </Col>
@@ -342,12 +409,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
+
+
             <Select
               style={{
                 width: '100%',
               }}
             >
-              {Customeraddress.map((option, index) => (
+              {customerAddress.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
@@ -365,13 +434,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
+
             <Select
               style={{
                 width: '100%',
               }}
             >
-              {Customeraddress.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
+              {customerAddress.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
 
@@ -471,34 +541,55 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 required: true,
               },
             ]}
+
           >
             <Select
               style={{
                 width: '100%',
+                
               }}
+              // onChange={(event) => setcustomSelect(event) }
+              onChange={(event) => setSelectedSalesPerson(event)}
+
             >
               {SalesPerson?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
+                <Select.Option
+                  key={option._id}
+                  value={option._id}>
+                  {option.name}
+                </Select.Option>
               ))}
             </Select>
           </Form.Item>
         </Col>
-        <Col className="gutter-row" span={8}>
-          <Form.Item label={translate('Sales Person Contact')} name="Sales Person Contact" rules={[
+
+
+        {/* <Col className="gutter-row" span={8}>
+          <Form.Item label={translate('Sales Person Contact')}
+           name="SalesPersonContact"
+            rules={[
             {
               required: true,
             },
-          ]}>
-            <Input  />
+          ]}> 
+      
+            <Input defaultValue={(SalesPerson?.find((item) => item._id === customerSelect)?.phone)}/>
           </Form.Item>
-        </Col>
+        </Col> */}
         <Col className="gutter-row" span={8}>
-          <Form.Item label={translate('Files')} name="Files" rules={[
-            {
-              required: true,
-            },
-          ]}>
-            <Input  type='file' />
+          <ContactHandler salesContactNumber={salesContactNumber} />
+        </Col>
+
+
+        <Col className="gutter-row" span={8}>
+          <Form.Item label={translate('Files')} name="Files" 
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]} 
+          >
+            <Input type='file' />
           </Form.Item>
         </Col>
       </Row>
@@ -573,12 +664,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-  <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
+      <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Work Order Services')}
       </Col>
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
-      <Col className="gutter-row" span={12}>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="ServiceCategory" f
             label={translate('Service Category')}
@@ -622,18 +713,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-        </Row>
+      </Row>
 
-       
+
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "15px" }}>
 
-      <Col className="gutter-row" span={6}>
+        <Col className="gutter-row" span={6}>
           <Form.Item label={translate('Product Categories')} name="ProductCategories" rules={[
             {
               required: true,
             },
           ]}>
-            <Input   />
+            <Input />
           </Form.Item>
         </Col>
 
@@ -643,11 +734,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               required: true,
             },
           ]}>
-            <Input   />
+            <Input />
           </Form.Item>
         </Col>
-     
-      
+
+
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="Price"
@@ -675,7 +766,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-     
+
         <Col className="gutter-row" span={24}>
           <Form.Item
             name="remarks"
@@ -690,7 +781,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
       </Row>
-    
+
       <Divider dashed />
 
 
@@ -699,7 +790,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Col>
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
-      <Col className="gutter-row" span={12}>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="AttendenceTime"
             label={translate('Attendence Time')}
@@ -719,16 +810,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               required: true,
             },
           ]}>
-            <Input   />
+            <Input />
           </Form.Item>
         </Col>
-        </Row>
+      </Row>
 
-        <Divider dashed />
+      <Divider dashed />
 
-        <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
+      <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
         {translate('Work Order Billing Details')}
-       </Col>
+      </Col>
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }} >
 
@@ -759,8 +850,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   message: 'Please enter a Value:',
                 },
               ]}
-              
-        
+
+
             >
               <InputNumber addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined} style={{ width: '100%' }} />
             </Form.Item>
@@ -770,7 +861,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-{/* 
+        {/* 
         <Col className="gutter-row" span={12}>
           <Form.Item
             name="AdjustmentValue"
@@ -794,14 +885,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-       
-        </Row>
+
+      </Row>
 
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
-    
-  
-     {/* <Col className="gutter-row" span={8}>
+
+
+        {/* <Col className="gutter-row" span={8}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
               required: true,
@@ -846,7 +937,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Select>
           </Form.Item>
         </Col>
-        </Row>
+      </Row>
 
 
 
@@ -859,7 +950,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               </Button>
             </Form.Item>
           </Col>
-
         </Row>
 
       </div>

@@ -1,63 +1,61 @@
 import { useParams } from 'react-router-dom';
 export const fields = {
-
-    label: {
-      type: 'string',
-      label:  'address_label',
-      displayLabels: ['name'],
-      // disableForTable: true,
-    },
-    contactPerson: {
-      type: 'string',
-      label:  'contact_person',
-      displayLabels: ['name'],
-      // disableForTable: true,
-    },
-    contactNumber: {
-      type: 'string',
-      label:  'contact_number',
-      displayLabels: ['name'],
-      // disableForTable: true,
-    },
-    street: {
-      type: 'string',
-      label:  'street',
-      displayLabels: ['name'],
-      // disableForTable: true,
-    },
-    unit: {
-      type: 'string',
-      label:  'unit',
-      displayLabels: ['name'],
-      // disableForTable: true,
-    },
-    block: {
-      type: 'string',
-      label:  'block',
-      displayLabels: ['name'],
-      disableForTable: true,
-    },
-    state: {
-      type: 'string',
-      label:  'state',
-      displayLabels: ['name'],
-      disableForTable: true,
-    },
-    country: {
-      type: 'string',
-      label:  'country',
-      displayLabels: ['name'],
-      // disableForTable: true,
-    },
-    zipCode: {
-      type: 'string',
-      label:  'postal_code',
-      displayLabels: ['name'],
-      // disableForTable: true,
-    },
-
-   
-  };
+  label: {
+    type: 'string',
+    label: 'address_label',
+    displayLabels: ['name'],
+    searchFields: 'name',
+    // disableForTable: true,
+  },
+  contactPerson: {
+    type: 'string',
+    label: 'contact_person',
+    displayLabels: ['name'],
+    // disableForTable: true,
+  },
+  contactNumber: {
+    type: 'string',
+    label: 'contact_number',
+    displayLabels: ['name'],
+    // disableForTable: true,
+  },
+  street: {
+    type: 'string',
+    label: 'street',
+    displayLabels: ['name'],
+    // disableForTable: true,
+  },
+  unit: {
+    type: 'string',
+    label: 'unit',
+    displayLabels: ['name'],
+    // disableForTable: true,
+  },
+  block: {
+    type: 'string',
+    label: 'block',
+    displayLabels: ['name'],
+    disableForTable: true,
+  },
+  state: {
+    type: 'string',
+    label: 'state',
+    displayLabels: ['name'],
+    disableForTable: true,
+  },
+  country: {
+    type: 'string',
+    label: 'country',
+    displayLabels: ['name'],
+    // disableForTable: true,
+  },
+  zipCode: {
+    type: 'string',
+    label: 'postal_code',
+    displayLabels: ['name'],
+    // disableForTable: true,
+  },
+};
   
   export const readColumns = {
 

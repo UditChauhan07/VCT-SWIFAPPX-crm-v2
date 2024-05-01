@@ -116,9 +116,8 @@ const request = {
       return errorHandler(error);
     }
   },
-  search: async ({ entity, options = {} }) => {
-    console.log(entity);
-
+  search: async ({ entity, value, options = {} }) => {
+    console.log(value);
     try {
       let query = '?';
       for (var key in options) {
@@ -127,7 +126,6 @@ const request = {
       query = query.slice(0, -1);
       // headersInstance.cancelToken = source.token;
       const response = await axios.get(entity + '/search' + query);
-
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -357,6 +355,16 @@ const request = {
       const response = await axios.get(
         `/clientaddress/search?q=ho&client=${'660f885915289c0cee5e2b8f'}&fields=label`
       ); // 660f885915289c0cee5e2b8f
+      return response.data;
+    } catch (error) {
+      console.log({ lll: error });
+      return errorHandler(error);
+    }
+  },
+
+  getSearchClientAddress: async (id) => {
+    try {
+      const response = await axios.get(`/clientaddress/search?q=ho&client=${id}&fields=label`);
       return response.data;
     } catch (error) {
       console.log({ lll: error });
