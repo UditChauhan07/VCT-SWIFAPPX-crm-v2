@@ -580,6 +580,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       </Row>
       <Divider dashed />
+      
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={12}>
           <Form.Item

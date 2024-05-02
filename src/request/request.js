@@ -371,6 +371,16 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  getServiceCategoryName: async (id) =>{
+       try {
+        const response = await axios.get(`/servicelist/show/${id}`);
+          return response.data;
+       } catch (error) {
+         console.log({ lll: error });
+         return errorHandler(error);
+       }
+  },
   getSalesPerson: async () => {
     try {
       const response = await axios.get('/admin/listAll');
@@ -379,6 +389,17 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  getLeadWorker: async () => {
+    try {
+      const response = await axios.get('/worker/listAll');
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
   getServiceCategoryOptions: async () => {
     try {
       const response = await axios.get('/servicecategory/listAll');
