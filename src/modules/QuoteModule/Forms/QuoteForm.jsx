@@ -274,10 +274,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
   };
   const handleFirstDropdownChange = async (event) => {
-    // const selectedValue = event.target.value;
-    // setSelectedOption(selectedValue);
 
-    // Make API request with the selected value
     try {
       // const response = await fetch(`your_api_endpoint/${selectedValue}`);
       const data = [{ value: '1', label: 'Home' }, { value: '3', label: 'Billing' }, { value: '4', label: 'Shipping' }];
@@ -583,6 +580,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       </Row>
       <Divider dashed />
+      
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={12}>
           <Form.Item
