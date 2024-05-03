@@ -146,17 +146,17 @@ const request = {
         query += key + '=' + options[key] + '&';
       }
 
-      query = query.slice(0, -1);
+      query = query.slice(0, -1)
 
-      let url = entity + '/list' + query;
+      let url = entity + '/list' + query
 
       if (entity === 'clientaddress') {
         // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
-        const ClientId = localStorage.getItem('key');
-        url = entity + '/list/' + ClientId + query;
+        const ClientId = localStorage.getItem('key')
+        url = entity + '/list/' + ClientId + query
       }
 
-      const response = await axios.get(url);
+      const response = await axios.get(url)
 
       // const response = await axios.get(entity + '/list'  + query);
       // console.log({response});
@@ -172,25 +172,25 @@ const request = {
 
   Addresslist: async ({ entity, id, options = {} }) => {
     try {
-      let query = '?';
+      let query = '?'
 
       if (entity === 'address') {
-        query = '?';
+        query = '?'
       }
 
       for (var key in options) {
-        query += key + '=' + options[key] + '&';
+        query += key + '=' + options[key] + '&'
       }
 
-      query = query.slice(0, -1);
+      query = query.slice(0, -1)
 
-      const response = await axios.get(entity + 'address/list' + `/${id}` + query);
+      const response = await axios.get(entity + 'address/list' + `/${id}` + query)
       // console.log({response});
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
       });
-      return response.data;
+      return response.data
     } catch (error) {
       return errorHandler(error);
     }
