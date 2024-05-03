@@ -206,7 +206,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
 
-  
+
   const handleFirstDropdownChange = async (event) => {
     console.log("event", event);
     try {
@@ -669,11 +669,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="SelectRole/Type" f
             label={translate('Select Role/Type')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+         
+          
           >
             <Select
               style={{
@@ -1314,11 +1311,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="PaymentMode" f
             label={translate('Payment Mode')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            // rules={[
+            //   {
+            //     required: true,
+            //   },
+            // ]}
           >
             <Select
               style={{
