@@ -393,7 +393,7 @@ const request = {
   getLeadWorker: async () => {
     try {
       const response = await axios.get('/worker/listAll');
-      console.log(response)
+    
       return response.data;
     } catch (error) {
       return errorHandler(error);
