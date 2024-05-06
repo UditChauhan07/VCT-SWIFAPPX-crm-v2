@@ -77,7 +77,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [subscriptionData, setSubscriptionData] = useState({});
   const [accordionData, setAccordionData] = useState([]);
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
-  console.log(serviceCategoryOptions)
   const [selectedSalesPerson, setSelectedSalesPerson] = useState()
 
 
@@ -161,16 +160,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
-  const [ShowServiceList, setShowServiceList] = useState();
-  console.log(ShowServiceList)
+  const [ShowServiceList, setShowServiceList] = useState(null);
+
+
+
+  const [ShowServiceId, setShowServiceId] = useState();
+  const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
+
+
+
 
 
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
+    setIsFirstServiceCategorySelect(false);
     const fetchData2 = async () => {
       try {
         const response = await request.getCateGorySubscription({ id: value });
-        console.log(response)
+   
         if (response.success) {
           setServiceOptions(response.result);
           getProductHandler();
@@ -184,15 +191,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     const fetchData3 = async () => {
       try {
-        const response = await request.getServiceListShow({ id: value });
-        console.log(response)
+        const response = await request.getServiceListShow({ id: value }); 
+    
         if (response.success) {
-          // console.log({ cateResult: response.result })
           setShowServiceList(response.result);
           setProductList(ShowServiceList)
-          // getProductHandler();
-          // console.log({ cateResult: response.result })
-          // Set options state based on API response
         } else {
           setShowServiceList(null)
         }
@@ -434,6 +437,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       key: 'Subscription',
     },
     {
+      title: 'Name',
+      dataIndex: 'Name',
+      key: 'Name',
+    }, {
       title: 'Price',
       dataIndex: 'Price',
       key: 'Price',
@@ -441,8 +448,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   ];
 
-
-
+  const generateTableData = () => {
+    const TableData = ShowServiceId.map((ele) => {
+      const rowData = {
+        Subscription: ele.subscription.name,
+      }
+      ele.data.forEach((item) => {
+        console.log(item.name)
+        rowData['Name'] = item.name;
+        // rowData['Price'] = item.price;
+        rowData['Price'] = (
+          <Checkbox>{item.price}</Checkbox>
+        );
+      });
+      return rowData
+    })
+    return TableData
+  }
 
 
   return (
@@ -638,18 +660,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
 
 
-        {/* <Col className="gutter-row" span={8}>
-          <Form.Item label={translate('Sales Person Contact')}
-           name="SalesPersonContact"
-            rules={[
-            {
-              required: true,
-            },
-          ]}> 
-      
-            <Input defaultValue={(SalesPerson?.find((item) => item._id === customerSelect)?.phone)}/>
-          </Form.Item>
-        </Col> */}
+
         <Col className="gutter-row" span={8}>
           <ContactHandler salesContactNumber={salesContactNumber} />
         </Col>
@@ -669,8 +680,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="SelectRole/Type" f
             label={translate('Select Role/Type')}
-         
-          
+
+
           >
             <Select
               style={{
@@ -802,7 +813,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
+            
               onChange={getCategorySubscriptionHandler}
+      
             >
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
@@ -825,25 +838,38 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
+              defaultValue="Select"
               onSelect={(value) => {
-                console.log(value)
                 if (value === 'custom') {
                   IsActiveness(2);
                   IsActiveSelect(1)
-                } else if (value === 'Dynamic') {
-                  IsActiveSelect(2)
-                  IsActiveness(1);
                 }
                 else {
-                  IsActiveness(0);
-                  IsActiveSelect(0)
+                  const selectedOption = ShowServiceList.find(option => option._id === value);
+                  if (selectedOption) {
+                    setShowServiceId(selectedOption.subscriptions);
+                    IsActiveSelect(2);
+                    IsActiveness(1);
+                  } else {
+                    IsActiveness(0);
+                    IsActiveSelect(0)
+                  }
                 }
+
+                // else if (value === 'Dynamic') {
+                //   IsActiveSelect(2)
+                //   IsActiveness(1);
+                // }
+                // else {
+                //   IsActiveness(0);
+                //   IsActiveSelect(0)
+                // }
               }}
 
-            >
+            > <Select.Option value="Select">Select</Select.Option>
               <Select.Option key="custom" value="custom">Custom Service (One Time)</Select.Option>
-              {ShowServiceList?.map((option, index) => (
-                <Select.Option key={option._id} value="Dynamic"  >{option.name}</Select.Option>
+              { isFirstServiceCategorySelect && ShowServiceList?.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}  >{option.name}</Select.Option>
               ))}
             </Select>
 
@@ -881,89 +907,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 <Input.TextArea />
               </Form.Item>
             </Col>
-
-
-
-
           </Row>
-          // console.log("hello")
-
-
-
-
 
         )
       }
 
-
-
-
-      {/* {accordionData.subItem && <div>
-        <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-          <Col className="gutter-row" span={5}>
-            <p>{translate('Item')}</p>
-          </Col>
-          <Col className="gutter-row" span={7}>
-            <p>{translate('Description')}</p>
-          </Col>
-          <Col className="gutter-row" span={3}>
-            <p>{translate('Quantity')}</p>{' '}
-          </Col>
-          <Col className="gutter-row" span={4}>
-            <p>{translate('Price')}</p>
-          </Col>
-          <Col className="gutter-row" span={5}>
-            <p>{translate('Total')}</p>
-          </Col>
-        </Row>
-        <Divider dashed />
-
-        < Row align="middle" className={styles.middle_row} >
-          <Col className="gutter-row" span={3}>
-            One Time
-          </Col>
-          <Col className={`${styles.custom_col} gutter-row`} span={7}>
-            <div className={styles['permissions_container']}>
-              <div className={styles['permissions_checkboxes']}>
-                <div className={styles.w_100px}>
-                  <Form.Item name={['permissions']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
-                    <Checkbox>
-                      98.00
-                    </Checkbox>
-                  </Form.Item>
-                </div>
-              </div >
-            </div >
-          </Col >
-          <Col className={`${styles.custom_col} gutter-row`} span={7}>
-            <div className={styles['permissions_container']}>
-              <div className={styles['permissions_checkboxes']}>
-                <div className={styles.w_100px}>
-                  <Form.Item name={['permissions']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
-                    <Checkbox>
-                      112.00
-                    </Checkbox>
-                  </Form.Item>
-                </div>
-              </div >
-            </div >
-          </Col >
-          <Col className={`${styles.custom_col} gutter-row`} span={7}>
-            <div className={styles['permissions_container']}>
-              <div className={styles['permissions_checkboxes']}>
-                <div className={styles.w_100px}>
-                  <Form.Item name={['permissions']} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}  >
-                    <Checkbox>
-                      126.00
-                    </Checkbox>
-                  </Form.Item>
-                </div>
-              </div >
-            </div >
-          </Col >
-        </Row >
-
-      </div>} */}
 
 
       {activeSelect === 2 && <>
@@ -976,20 +924,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={24}>
+        <Col className="gutter-row " span={24} >
 
           <Row gutter={[12, 12]}>
             <Col span={24}>
               <Table
                 columns={columns}
-              // dataSource={generateTableData()}
-              // pagination={false}
+                dataSource={generateTableData()}
+                pagination={false}
               />
             </Col>
           </Row>
         </Col>
 
-        <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange}>
+        <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "5%" }}>
           {productList?.map((mainData, i) => (
             <>
 
@@ -1311,11 +1259,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="PaymentMode" f
             label={translate('Payment Mode')}
-            // rules={[
-            //   {
-            //     required: true,
-            //   },
-            // ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]}
           >
             <Select
               style={{
