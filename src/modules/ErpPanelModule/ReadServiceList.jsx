@@ -115,7 +115,7 @@ export default function ReadServiceList({ config, selectedItem }) {
     const generateTableData = () => {
         const subscriptionNames = getSubscriptionNames();
         const priceValues = getPriceValues();
-        console.log(subscriptionNames, priceValues);
+       
         const tableData = subscriptionNames.map((subscription, index) => {
             // console.log(subscription);
             const rowData = {
