@@ -418,7 +418,7 @@ const request = {
   },
   getServiceListShow: async ({ id }) => {
     try {
-      const response = await axios.get(`/servicelist/show/${id}`);
+      const response = await axios.get(`/servicelist/service/${id}`);
       return response.data;
     } catch (error) {
       return errorHandler(error);
