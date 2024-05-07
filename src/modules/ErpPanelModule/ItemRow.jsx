@@ -62,9 +62,10 @@ export default function ItemRow({ field, remove, current = null, response }) {
     <>
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-        <Col className="gutter-row" >
+        {/* <Col className="gutter-row" >
           <Checkbox></Checkbox>
-        </Col>
+        </Col> */}
+        
 
         <Col className="gutter-row" span={4}>
           <Form.Item
