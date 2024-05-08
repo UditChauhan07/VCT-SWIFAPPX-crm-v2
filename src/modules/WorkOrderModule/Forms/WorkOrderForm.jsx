@@ -51,7 +51,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [active, IsActive] = useState(1);
   const [activeness, IsActiveness] = useState(1);
   const [activeSelect, IsActiveSelect] = useState(1);
-  console.log(activeSelect)
+
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
@@ -68,8 +68,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [WorkLead, setWorkLead] = useState()
   const [Workers, setWorkers] = useState()
   const [CheckedId, setCheckedId] = useState()
-  // console.log(CheckedId)
-
 
 
   const [customerAddress, setCustomerAddress] = useState([])
@@ -161,23 +159,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState(null);
-
-
-
   const [ShowServiceId, setShowServiceId] = useState();
-  const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
-
-
-
-
+ 
 
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
-    setIsFirstServiceCategorySelect(false);
+
     const fetchData2 = async () => {
       try {
         const response = await request.getCateGorySubscription({ id: value });
-   
+
         if (response.success) {
           setServiceOptions(response.result);
           getProductHandler();
@@ -189,10 +180,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         console.error('Error fetching data:', error);
       }
     };
+
+
+
     const fetchData3 = async () => {
       try {
-        const response = await request.getServiceListShow({ id: value }); 
-    
+        const response = await request.getServiceListShow({ id: value });
         if (response.success) {
           setShowServiceList(response.result);
           setProductList(ShowServiceList)
@@ -204,6 +197,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         console.error('Error fetching data:', error);
       }
     };
+
     fetchData2();
     fetchData3();
   };
@@ -314,6 +308,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const fetchData = async () => {
       try {
         const response = await request.getServiceCategoryOptions();
+        console.log(response)
         if (response.success) {
           setserviceCategoryOptions(response.result);
         }
@@ -430,41 +425,140 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
 
 
-  const columns = [
-    {
-      title: 'Subscription',
-      dataIndex: 'Subscription',
-      key: 'Subscription',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'Name',
-      key: 'Name',
-    }, {
-      title: 'Price',
-      dataIndex: 'Price',
-      key: 'Price',
-    },
+  // const columns = [
+  //   {
+  //     title: 'Subscription',
+  //     dataIndex: 'Subscription',
+  //     key: 'Subscription',
+  //   },
+  //   {
 
-  ];
+  //     dataIndex: 'Name',
+  //     key: 'Name',
+  //   }, {
+
+  //     dataIndex: 'Price',
+  //     key: 'Price',
+  //   },
+
+  // ];
+
+  // const generateTableData = () => {
+  //   const TableData = ShowServiceId.map((ele) => {
+  //     const rowData = {
+  //       Subscription: ele.subscription.name,
+  //     }
+  //     ele.data.forEach((item) => {
+  //       console.log(item.name)
+  //       rowData['Name'] = item.name;
+  //       // rowData['Price'] = item.price;
+  //       rowData['Price'] = (
+  //         <Checkbox>{item.price}</Checkbox>
+  //       );
+  //     });
+  //     return rowData
+  //   })
+  //   return TableData
+  // }
+
+  // const getSubscriptionNames = () => {
+  //   console.log('name', ShowServiceId?.map(item => item));
+  //   // return ShowServiceId.subscriptions.map(item => item.subscription.name);
+  // };
+  const getSubscriptionNames = () => ShowServiceId.map((ele) => {
+    return ele.data.map((item) => {
+      return item.name
+    })
+  })
+
+
+  const getPriceValues = () => ShowServiceId.map((ele) => {
+    return ele.data.map((item) => {
+      return item.price
+    })
+  })
+
+
+
+    const columns = [
+      {
+        title: 'Subscription',
+        dataIndex: 'Subscription',
+      }, {
+        // title: 'Name',
+        dataIndex: 'Name',
+      }, 
+      {
+        // title: 'Price',
+        dataIndex: 'Price',
+      }, 
+    
+    ]
+  
+
+
+
+
+  // const columns = [
+  //   {
+  //     title: 'Subscription',
+  //     dataIndex: 'Subscription',
+  //     key: 'Subscription',
+  //   },
+  //   {
+  //     title: dynamicTitle,
+  //     dataIndex: 'NameAndPrice',
+  //     key: 'NameAndPrice',
+  //     render: (text, record) => (
+  //       <>
+  //         <div data-attr="">{record.Name}</div>
+  //         <div style={{ display: "flex" }}>
+  //           <Checkbox />
+  //           <div style={{ paddingLeft: "8px" }}>{`${record.Price}.00 / One Time `}</div>
+  //         </div>
+
+  //       </>
+  //     ),
+  //   },
+  // ];
+
 
   const generateTableData = () => {
-    const TableData = ShowServiceId.map((ele) => {
+    const subscriptionNames = getSubscriptionNames();
+    const priceValues = getPriceValues();
+
+    const tableData = subscriptionNames.map((subscription, index) => {
       const rowData = {
-        Subscription: ele.subscription.name,
-      }
-      ele.data.forEach((item) => {
-        console.log(item.name)
-        rowData['Name'] = item.name;
-        // rowData['Price'] = item.price;
-        rowData['Price'] = (
-          <Checkbox>{item.price}</Checkbox>
-        );
+        Name: subscription,
+      };
+      ShowServiceId.map((item) => {
+        rowData['Subscription'] = item.subscription.name
+      })
+      priceValues.map((price, idx) => {
+        rowData['Price'] = price
+        
+
       });
-      return rowData
-    })
-    return TableData
-  }
+      return rowData;
+    });
+    return tableData;
+  };
+
+
+  // const generateTableData = () => {
+  //   const TableData = ShowServiceId.map((ele) => {
+  //     return ele.data.map((item) => {
+  //       return {
+  //         Subscription: ele.subscription.name,
+  //         Name: item.name,
+  //         Price: item.price,
+  //         key: item.id,
+  //       };
+  //     });
+  //   }).flat();
+  //   return TableData;
+  // };
+
 
 
   return (
@@ -688,9 +782,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {SalesPerson?.map((option, index) => (
+              {/* {SalesPerson?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-              ))}
+              ))} */}
             </Select>
           </Form.Item>
         </Col>
@@ -731,6 +825,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
+              mode="multiple"
             >
               {filteredWorkLead?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
@@ -813,9 +908,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-            
+
               onChange={getCategorySubscriptionHandler}
-      
+
             >
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
@@ -838,7 +933,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-              defaultValue="Select"
+              // defaultValue="Select"
               onSelect={(value) => {
                 if (value === 'custom') {
                   IsActiveness(2);
@@ -866,9 +961,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 // }
               }}
 
-            > <Select.Option value="Select">Select</Select.Option>
+            >
+              {/* <Select.Option value="Select">Select</Select.Option> */}
               <Select.Option key="custom" value="custom">Custom Service (One Time)</Select.Option>
-              { isFirstServiceCategorySelect && ShowServiceList?.map((option, index) => (
+              {ShowServiceList?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}  >{option.name}</Select.Option>
               ))}
             </Select>
@@ -930,6 +1026,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             <Col span={24}>
               <Table
                 columns={columns}
+
                 dataSource={generateTableData()}
                 pagination={false}
               />
@@ -1200,20 +1297,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-        {/* 
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            name="AdjustmentValue"
-            label={translate('Adjustment Value')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <InputNumber addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined} style={{ width: '100%' }} />
-          </Form.Item>
-        </Col> */}
+
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
@@ -1229,18 +1313,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
-
-
-        {/* <Col className="gutter-row" span={8}>
-          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
-            {
-              required: true,
-            },
-          ]}>
-            <Input />
-          </Form.Item>
-        </Col> */}
-
         <Col className="gutter-row" span={12}>
           <Form.Item
             name="Discount"
@@ -1270,9 +1342,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {SalesPerson?.map((option, index) => (
+              {/* {SalesPerson?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-              ))}
+              ))} */}
             </Select>
           </Form.Item>
         </Col>
