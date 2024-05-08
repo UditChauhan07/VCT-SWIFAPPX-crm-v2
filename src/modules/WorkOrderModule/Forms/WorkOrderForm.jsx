@@ -224,9 +224,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
 
   };
-
-
-  const getServicesSubAndItems = async (event) => {
+ const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
     // setSelectedOption(selectedValue);
 
@@ -234,9 +232,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     try {
       // const response = await fetch(`your_api_endpoint/${selectedValue}`);
       const data = [{ value: '1', label: 'Home' }, { value: '3', label: 'Billing' }, { value: '4', label: 'Shipping' }];
-
-
-      // Extract options from the API response
+// Extract options from the API response
       const extractedOptions = data.map((item) => ({
         value: item.value,
         label: item.label,
@@ -305,8 +301,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setTotal2(currentTotal);
   }, [CheckedId, quantity]);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -339,8 +333,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     fetchData1()
   }, []);
-
-
 
   useEffect(() => {
     const fetchData2 = async () => {
@@ -386,13 +378,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
 
   };
-
-
-
-
-
-
-
   const [salesContactNumber, setSalesContactNumber] = useState();
   useEffect(() => {
     if (selectedSalesPerson) {
@@ -425,8 +410,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
-
-
   const columns = [
     {
       title: 'Subscription',
@@ -441,18 +424,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   ];
 
-
-
-
-
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
         {translate('Customer Detail Section')}
       </Col>
       <Row gutter={[12, 0]} style={{ marginTop: "30px" }}>
-
-
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="client"
@@ -483,8 +460,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-
-
             <Select
               style={{
                 width: '100%',
@@ -508,7 +483,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-
             <Select
               style={{
                 width: '100%',
@@ -541,9 +515,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
       </Row>
       <Divider dashed />
-
-
-
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Basic Work Order Details')}
       </Col>
@@ -668,10 +639,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={8}>
           <Form.Item
             name="SelectRole/Type" f
-            label={translate('Select Role/Type')}
-         
-          
-          >
+            label={translate('Select Role/Type')} >
             <Select
               style={{
                 width: '100%',
@@ -730,9 +698,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Row>
       <Divider dashed />
 
-
-
-      <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
+<Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Work Order Services')}
       </Col>
 
@@ -1311,11 +1277,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="PaymentMode" f
             label={translate('Payment Mode')}
-            // rules={[
-            //   {
-            //     required: true,
-            //   },
-            // ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]}
           >
             <Select
               style={{

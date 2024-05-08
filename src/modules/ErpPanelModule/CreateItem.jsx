@@ -90,7 +90,7 @@ export default function CreateItem({ config, CreateForm }) {
   const onSubmit = (fieldsValue) => {
     // console.log({ fieldsValue });
     if (fieldsValue) {
-      if (fieldsValue.items) {
+      if (entity === "items") {
         let newList = [...fieldsValue.items];
         newList.map((item) => {
           item.total = calculate.multiply(item.quantity, item.price);
@@ -100,7 +100,7 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
-      if (fieldsValue.serviceCategory) {
+      if (entity === "serviceCategory") {
         console.log('10tty', { fieldsValue });
         let requestBody = {
           name: fieldsValue.name,

@@ -29,7 +29,7 @@ export default function ServiceListForm() {
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
-useEffect(() => {
+  useEffect(() => {
     // Fetch data from API
     const fetchData = async () => {
       try {
