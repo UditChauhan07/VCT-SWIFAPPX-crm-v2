@@ -31,12 +31,6 @@ const { Panel } = Collapse;
 export default function WorkOrderForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
-
-
-
-
-
-
   return <LoadQuoteForm subTotal={subTotal} current={current} />;
 }
 function LoadQuoteForm({ subTotal = 0, current = null }) {
@@ -69,15 +63,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [Workers, setWorkers] = useState()
   const [CheckedId, setCheckedId] = useState()
   // console.log(CheckedId)
-
-
-
   const [customerAddress, setCustomerAddress] = useState([])
   const [customerSelect, setcustomSelect] = useState()
   const [subscriptionData, setSubscriptionData] = useState({});
   const [accordionData, setAccordionData] = useState([]);
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
-  console.log(serviceCategoryOptions)
   const [selectedSalesPerson, setSelectedSalesPerson] = useState()
 
 
@@ -92,7 +82,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching accordion data:', error);
     }
   };
-
 
   useEffect(() => {
     if (current) {
@@ -139,37 +128,22 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error({ er });
     }
   }
-  // const getClientHandler = async () => {
-  //   console.log("first")
-  //   try {
-  //     const productListRes = await request.getSearchclintAddress({ id: "" });
-  //     if (productListRes.success) {
-  //       setCustomeraddress(productListRes.result);
-  //       console.log({ productListResresult: productListRes.result })
-  //     } else {
-  //       setProductList([]);
-  //     }
-  //     console.log({ productListRes });
-  //   } catch (er) {
-  //     console.error({ er });
-  //   }
-  // }
-
-
-
-
 
   const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
-  const [ShowServiceList, setShowServiceList] = useState();
+  console.log(serviceOptions)
+  const [ShowServiceList, setShowServiceList] = useState(null);
   console.log(ShowServiceList)
 
-
+  const [ShowServiceId, setShowServiceId] = useState();
+  console.log({ data: ShowServiceId })
+  const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
+    // setIsFirstServiceCategorySelect(false);
     const fetchData2 = async () => {
       try {
-        const response = await request.getCateGorySubscription({ id: value });
+        const response = await request.getServiceCategoryOptions({ id: value });
         console.log(response)
         if (response.success) {
           setServiceOptions(response.result);
@@ -187,12 +161,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         const response = await request.getServiceListShow({ id: value });
         console.log(response)
         if (response.success) {
-          // console.log({ cateResult: response.result })
           setShowServiceList(response.result);
           setProductList(ShowServiceList)
-          // getProductHandler();
-          // console.log({ cateResult: response.result })
-          // Set options state based on API response
         } else {
           setShowServiceList(null)
         }
@@ -204,8 +174,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     fetchData2();
     fetchData3();
   };
-
-
 
   const handleFirstDropdownChange = async (event) => {
     console.log("event", event);
@@ -225,7 +193,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   };
 
-
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
     // setSelectedOption(selectedValue);
@@ -234,10 +201,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     try {
       // const response = await fetch(`your_api_endpoint/${selectedValue}`);
       const data = [{ value: '1', label: 'Home' }, { value: '3', label: 'Billing' }, { value: '4', label: 'Shipping' }];
-
-
       // Extract options from the API response
-      const extractedOptions = data.map((item) => ({
+      const extractedOptions = data?.map((item) => ({
         value: item.value,
         label: item.label,
       }));
@@ -305,12 +270,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setTotal2(currentTotal);
   }, [CheckedId, quantity]);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await request.getServiceCategoryOptions();
+        console.log(response)
         if (response.success) {
           setserviceCategoryOptions(response.result);
         }
@@ -323,8 +287,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
   // --------- WORK ORDER MODULE -----------
-
-
   useEffect(() => {
 
     const fetchData1 = async () => {
@@ -338,22 +300,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     fetchData1()
-  }, []);
-
-
-
-  useEffect(() => {
-    const fetchData2 = async () => {
-      try {
-        const response = await request.getLeadWorker();
-        if (response.success) {
-          setWorkLead(response.result)
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData2()
   }, []);
 
   useEffect(() => {
@@ -371,7 +317,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     fetchData3()
   }, []);
 
-
   const handleserviceId = async (event) => {
     try {
       const response = await request.getServiceCategoryName(event);
@@ -386,12 +331,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
 
   };
-
-
-
-
-
-
 
   const [salesContactNumber, setSalesContactNumber] = useState();
   useEffect(() => {
@@ -425,25 +364,95 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
-
+ 
+  const getUniqueSubscriptionNames = () => {
+    const subscriptionNames = [];
+    ShowServiceId.forEach((ele) => {
+      ele.data.forEach((item) => {
+        if (!subscriptionNames.includes(item.name)) {
+          subscriptionNames.push(item.name);
+        }
+      });
+    });
+    return subscriptionNames;
+  };
 
   const columns = [
     {
       title: 'Subscription',
       dataIndex: 'Subscription',
-      key: 'Subscription',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'Name',
     },
     {
       title: 'Price',
       dataIndex: 'Price',
-      key: 'Price',
     },
-
   ];
 
+  const generateColumns = () => {
+    const subscriptionNames = getUniqueSubscriptionNames();
+    const columns = [
+      {
+        title: 'Subscription',
+        dataIndex: 'Subscription',
+      },
+    ];
 
+    subscriptionNames.forEach((name) => {
+      columns.push({
+        title: <span>{name}</span>,
+        dataIndex: name,
+      });
+    });
 
+    return columns;
+  };
 
+  
+  const generateTableData = () => {
+    const subscriptionNames = getUniqueSubscriptionNames();
+    const tableData = [];
+    ShowServiceId.forEach((ele, index) => {
+      const rowData = {
+        Subscription: ele.subscription.name,
+      };
+
+      subscriptionNames.forEach((name) => {
+        const matchingItem = ele.data.find(item => item.name === name);
+        rowData[name] = matchingItem ? (
+          <Checkbox>{`${matchingItem.price}.00 /One Time`}</Checkbox>
+        ) : null;
+      });
+
+      tableData.push(rowData);
+    });
+
+    return tableData;
+  };
+
+  
+  const handleSelectChange = (value) => {
+    if (value === 'custom') {
+      // Handle custom option selection
+      IsActiveness(2);
+      IsActiveSelect(1);
+    } else {
+      const option = ShowServiceList.find((option) => option._id === value);
+      if (option) {
+        setSelectedOption(option);
+        // Show all subscriptions corresponding to the selected option
+        setShowServiceId(option.subscriptions);
+        IsActiveSelect(2);
+        IsActiveness(1);
+      } else {
+        IsActiveness(0);
+        IsActiveSelect(0);
+      }
+    }
+  };
 
   return (
     <>
@@ -451,8 +460,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         {translate('Customer Detail Section')}
       </Col>
       <Row gutter={[12, 0]} style={{ marginTop: "30px" }}>
-
-
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="client"
@@ -475,7 +482,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="Customer Address"
+            name="clientAddress"
             label={translate('Customer Address')}
             rules={[
               {
@@ -483,14 +490,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-
-
             <Select
               style={{
                 width: '100%',
               }}
             >
-              {customerAddress.map((option, index) => (
+              {customerAddress?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
@@ -500,7 +505,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="BillingAddress"
+            name="billingAddress"
             label={translate('Billing Address')}
             rules={[
               {
@@ -508,7 +513,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-
             <Select
               style={{
                 width: '100%',
@@ -525,7 +529,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="sendQuotationEmail"
-            label={translate('Send Quotation Email')}
+            label={translate('Send work order Email')}
             rules={[
               {
                 required: true,
@@ -542,15 +546,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Row>
       <Divider dashed />
 
-
-
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
-        {translate('Basic Quotation Details')}
+        {translate('Basic Work Order Details')}
       </Col>
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="date"
+            name="startDate"
             label={translate('Start Date')}
             rules={[
               {
@@ -593,7 +595,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="expectedTimeRequired"
+            name="expectedRequiredTime"
             label={translate('Expected Time Required')}
             rules={[
               {
@@ -608,7 +610,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "20px" }}>
         <Col className="gutter-row" span={8}>
           <Form.Item
-            name="SalesPerson" f
+            name="SalesPerson"
             label={translate('Sales Person')}
             rules={[
               {
@@ -636,24 +638,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Select>
           </Form.Item>
         </Col>
-
-
-        {/* <Col className="gutter-row" span={8}>
-          <Form.Item label={translate('Sales Person Contact')}
-           name="SalesPersonContact"
-            rules={[
-            {
-              required: true,
-            },
-          ]}> 
-      
-            <Input defaultValue={(SalesPerson?.find((item) => item._id === customerSelect)?.phone)}/>
-          </Form.Item>
-        </Col> */}
         <Col className="gutter-row" span={8}>
           <ContactHandler salesContactNumber={salesContactNumber} />
         </Col>
-
 
         <Col className="gutter-row" span={8}>
           <Form.Item label={translate('Files')} name="Files"
@@ -663,28 +650,19 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
       </Row>
-
-
       <Divider dashed />
-
-
-
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Quotation Services')}
       </Col>
 
- 
-
+     
       {/* ---------------NEW SERVICE CATEGORY------------ */}
-
-
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={12}>
           <Form.Item
             name="serviceCategory"
             label={translate('Service Category')}
-
           >
             <Select
               style={{
@@ -713,26 +691,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-              onSelect={(value) => {
-                console.log(value)
-                if (value === 'custom') {
-                  IsActiveness(2);
-                  IsActiveSelect(1)
-                } else if (value === 'Dynamic') {
-                  IsActiveSelect(2)
-                  IsActiveness(1);
-                }
-                else {
-                  IsActiveness(0);
-                  IsActiveSelect(0)
-                }
-              }}
-
+              defaultValue="Select"
+              onChange={handleSelectChange}
+            
             >
-              <Select.Option key="custom" value="custom">Custom Service (One Time)</Select.Option>
-              {ShowServiceList?.map((option, index) => (
-                <Select.Option key={option._id} value="Dynamic"  >{option.name}</Select.Option>
-              ))}
+              <Select.Option value="Select">Select</Select.Option>
+              <Select.Option value="custom">Custom Service (One Time)</Select.Option>
+              {isFirstServiceCategorySelect &&
+                ShowServiceList?.map((option) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.name}
+                  </Select.Option>
+                ))}
+
+              
             </Select>
 
           </Form.Item>
@@ -769,20 +741,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 <Input.TextArea />
               </Form.Item>
             </Col>
-
-
-
-
           </Row>
-          // console.log("hello")
-
-
-
-
 
         )
       }
-
 
       {activeSelect === 2 && <>
 
@@ -794,20 +756,21 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={24}>
+        <Col className="gutter-row " span={24} >
 
           <Row gutter={[12, 12]}>
             <Col span={24}>
               <Table
-                columns={columns}
-              // dataSource={generateTableData()}
-              // pagination={false}
+                // columns={columns}
+                columns={generateColumns()}
+                dataSource={generateTableData()}
+                pagination={false}
               />
             </Col>
           </Row>
         </Col>
 
-        <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange}>
+        <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "5%" }}>
           {productList?.map((mainData, i) => (
             <>
 
@@ -894,7 +857,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Row>
 
 
-                        {fields.map((field) => (
+                        {fields?.map((field) => (
                           <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
                         ))}
                         <Form.Item>
@@ -952,7 +915,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           ]}
                           key={[`${i}`, `${data._id}`]}
                         >
-
                           {data?.name && <Input placeholder="Item Name" defaultValue={data.name} readOnly />}
                         </Form.Item>
                       </Col>
@@ -1011,11 +973,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           ))}
         </Collapse>
       </>}
-
-
-
-
-
       <Divider dashed />
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
@@ -1043,7 +1000,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
           {
             active == 3 && (
-              <Form.Item name="AdjustmentValue" rules={[
+              <Form.Item name="type" rules={[
                 {
                   required: true,
                 },
@@ -1055,7 +1012,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
           {
             active == 2 && (
-              <Form.Item name="AdjustmentValue" rules={[
+              <Form.Item name="value" rules={[
                 {
                   required: true,
                 },
@@ -1070,20 +1027,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-        {/* 
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            name="AdjustmentValue"
-            label={translate('Adjustment Value')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <InputNumber addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined} style={{ width: '100%' }} />
-          </Form.Item>
-        </Col> */}
+       
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
@@ -1101,19 +1045,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
 
 
-        {/* <Col className="gutter-row" span={8}>
-          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
-            {
-              required: true,
-            },
-          ]}>
-            <Input />
-          </Form.Item>
-        </Col> */}
 
         <Col className="gutter-row" span={12}>
           <Form.Item
-            name="Discount"
+            name="discount"
             label={translate('Discount')}
             rules={[
               {
@@ -1129,11 +1064,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="PaymentMode" f
             label={translate('Payment Mode')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]}
           >
             <Select
               style={{
