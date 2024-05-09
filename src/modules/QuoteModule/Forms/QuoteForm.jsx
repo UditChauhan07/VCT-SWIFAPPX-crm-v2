@@ -128,15 +128,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error({ er });
     }
   }
-  
-const [selectedValue, setSelectedValue] = useState('');
+
+  const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
   console.log(serviceOptions)
   const [ShowServiceList, setShowServiceList] = useState(null);
-console.log(ShowServiceList)
+  console.log(ShowServiceList)
 
   const [ShowServiceId, setShowServiceId] = useState();
-  console.log({ data:ShowServiceId})
+  console.log({ data: ShowServiceId })
   const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -270,7 +270,7 @@ console.log(ShowServiceList)
     setTotal2(currentTotal);
   }, [CheckedId, quantity]);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await request.getServiceCategoryOptions();
@@ -302,7 +302,7 @@ useEffect(() => {
     fetchData1()
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     const fetchData3 = async () => {
       try {
         const response = await request.getServiceCategory();
@@ -397,7 +397,7 @@ useEffect(() => {
   //   });
   //   return tableData;
   // };
-// ...................
+  // ...................
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
@@ -468,34 +468,57 @@ useEffect(() => {
 
   //   return tableData;
   // };
+  // const generateTableData = () => {
+  //   const subscriptionNames = getUniqueSubscriptionNames();
+  //   const tableData = [];
+  //   ShowServiceId.forEach((ele, index) => {
+  //     let isFirstRow = true; // Flag to check if it's the first row for each subscription
+  //     // let isFirstRow2 = true;
+  //     ele.data.forEach((item) => {
+  //       const rowData = {
+  //         Subscription: isFirstRow ? ele.subscription.name : '', // Only render subscription name for the first row
+  //         Name:  item.name ,
+  //       };
+
+  //       subscriptionNames.forEach((name) => {
+  //         if (name === item.name) {
+  //           rowData[name] = <Checkbox>{`${item.price}.00 /One Time`}</Checkbox>;
+  //         } else {
+  //           rowData[name] = null;
+  //           // rowData[name] = <Checkbox>{`${item.price}.00 /One Time`}</Checkbox>;
+
+  //         }
+  //       });
+
+  //       tableData.push(rowData);
+  //       isFirstRow = false; // Set isFirstRow flag to false after first row
+  //       // isFirstRow2 = false; // Set isFirstRow flag to false after first row
+  //     });
+  //   });
+
+  //   return tableData;
+  // };
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
     ShowServiceId.forEach((ele, index) => {
-      let isFirstRow = true; // Flag to check if it's the first row for each subscription
-      let isFirstRow2 = true;
-      ele.data.forEach((item) => {
-        const rowData = {
-          Subscription: isFirstRow ? ele.subscription.name : '', // Only render subscription name for the first row
-          Name: isFirstRow2 ? item.name : "",
-        };
+      const rowData = {
+        Subscription: ele.subscription.name,
+      };
 
-        subscriptionNames.forEach((name) => {
-          if (name === item.name) {
-            rowData[name] = <Checkbox>{`${item.price}.00 /One Time`}</Checkbox>;
-          } else {
-            rowData[name] = null;
-          }
-        });
-
-        tableData.push(rowData);
-        isFirstRow = false; // Set isFirstRow flag to false after first row
-        isFirstRow2 = false; // Set isFirstRow flag to false after first row
+      subscriptionNames.forEach((name) => {
+        const matchingItem = ele.data.find(item => item.name === name);
+        rowData[name] = matchingItem ? (
+          <Checkbox>{`${matchingItem.price}.00 /One Time`}</Checkbox>
+        ) : null;
       });
+
+      tableData.push(rowData);
     });
 
     return tableData;
   };
+
   // const generateTableData = () => {
   //   const subscriptionNames = getUniqueSubscriptionNames();
   //   const tableData = [];
@@ -531,7 +554,7 @@ useEffect(() => {
       // Handle custom option selection
       IsActiveness(2);
       IsActiveSelect(1);
-    }  else {
+    } else {
       const option = ShowServiceList.find((option) => option._id === value);
       if (option) {
         setSelectedOption(option);
@@ -546,7 +569,7 @@ useEffect(() => {
     }
   };
 
-return (
+  return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
         {translate('Customer Detail Section')}
@@ -796,9 +819,9 @@ return (
       </Row> */}
 
 
-{/* ---------------NEW SERVICE CATEGORY------------ */}
+      {/* ---------------NEW SERVICE CATEGORY------------ */}
 
-<Row gutter={[12, 12]} style={{ position: 'relative' }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={12}>
           <Form.Item
             name="serviceCategory"
@@ -808,8 +831,8 @@ return (
               style={{
                 width: '100%',
               }}
-          onChange={getCategorySubscriptionHandler}
->
+              onChange={getCategorySubscriptionHandler}
+            >
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
               ))}
@@ -832,42 +855,42 @@ return (
                 width: '100%',
               }}
               defaultValue="Select"
-            onChange={handleSelectChange}
-              // onSelect={(value) => {
-              //   if (value === 'custom') {
-              //     IsActiveness(2);
-              //     IsActiveSelect(1)
-              //   }
-              //   else {
-              //     const selectedOption = ShowServiceList?.find(option => option._id === value);
-              //     if (selectedOption) {
-              //       setShowServiceId(option.subscriptions);
-              //       IsActiveSelect(2);
-              //       IsActiveness(1);
-              //     } else {
-              //       IsActiveness(0);
-              //       IsActiveSelect(0)
-              //     }
-              //   }
+              onChange={handleSelectChange}
+            // onSelect={(value) => {
+            //   if (value === 'custom') {
+            //     IsActiveness(2);
+            //     IsActiveSelect(1)
+            //   }
+            //   else {
+            //     const selectedOption = ShowServiceList?.find(option => option._id === value);
+            //     if (selectedOption) {
+            //       setShowServiceId(option.subscriptions);
+            //       IsActiveSelect(2);
+            //       IsActiveness(1);
+            //     } else {
+            //       IsActiveness(0);
+            //       IsActiveSelect(0)
+            //     }
+            //   }
 
-              //   // else if (value === 'Dynamic') {
-              //   //   IsActiveSelect(2)
-              //   //   IsActiveness(1);
-              //   // }
-              //   // else {
-              //   //   //   IsActiveness(0);
-              //   //   //   IsActiveSelect(0)
-              //   //   // }
-              // }}
->
+            //   // else if (value === 'Dynamic') {
+            //   //   IsActiveSelect(2)
+            //   //   IsActiveness(1);
+            //   // }
+            //   // else {
+            //   //   //   IsActiveness(0);
+            //   //   //   IsActiveSelect(0)
+            //   //   // }
+            // }}
+            >
               <Select.Option value="Select">Select</Select.Option>
-            <Select.Option value="custom">Custom Service (One Time)</Select.Option>
-           {isFirstServiceCategorySelect &&
-              ShowServiceList?.map((option) => (
-                <Select.Option key={option._id} value={option._id}>
-                  {option.name}
-                </Select.Option>
-              ))}
+              <Select.Option value="custom">Custom Service (One Time)</Select.Option>
+              {isFirstServiceCategorySelect &&
+                ShowServiceList?.map((option) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.name}
+                  </Select.Option>
+                ))}
 
               {/* <Select.Option key="custom" value="custom">Custom Service (One Time)</Select.Option>
               {ShowServiceList?.map((option, index) => (
@@ -929,8 +952,8 @@ return (
           <Row gutter={[12, 12]}>
             <Col span={24}>
               <Table
-              // columns={columns}
-                    columns={generateColumns()}
+                // columns={columns}
+                columns={generateColumns()}
                 dataSource={generateTableData()}
                 pagination={false}
               />
@@ -1141,7 +1164,7 @@ return (
           ))}
         </Collapse>
       </>}
- <Divider dashed />
+      <Divider dashed />
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
         {translate('Quotation Billing Details')}
