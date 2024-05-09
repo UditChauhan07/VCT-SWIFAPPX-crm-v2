@@ -158,7 +158,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     const fetchData3 = async () => {
       try {
-        const response = await request.getServiceListShow({ id: value });
+        const response = await request.getServiceListShows({ id: value });
         console.log(response)
         if (response.success) {
           setShowServiceList(response.result);
@@ -364,7 +364,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
- 
+
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
@@ -411,7 +411,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return columns;
   };
 
-  
+
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
@@ -433,7 +433,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return tableData;
   };
 
-  
+
   const handleSelectChange = (value) => {
     if (value === 'custom') {
       // Handle custom option selection
@@ -529,11 +529,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="sendQuotationEmail"
-            label={translate('Send work order Email')}
+            label={translate('Send Quotation Email')}
             rules={[
               {
                 required: true,
-                message: 'Please select a Send work order Email:',
+                message: 'Please select a Send Quotation Email:',
               },
             ]}
           >
@@ -547,7 +547,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Divider dashed />
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
-        {translate('Basic Work Order Details')}
+        {translate('Basic Quotation Details')}
       </Col>
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
         <Col className="gutter-row" span={6}>
@@ -655,7 +655,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         {translate('Quotation Services')}
       </Col>
 
-     
+
       {/* ---------------NEW SERVICE CATEGORY------------ */}
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -693,7 +693,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
               defaultValue="Select"
               onChange={handleSelectChange}
-            
+
             >
               <Select.Option value="Select">Select</Select.Option>
               <Select.Option value="custom">Custom Service (One Time)</Select.Option>
@@ -704,7 +704,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   </Select.Option>
                 ))}
 
-              
+
             </Select>
 
           </Form.Item>
@@ -1027,7 +1027,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-       
+
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
