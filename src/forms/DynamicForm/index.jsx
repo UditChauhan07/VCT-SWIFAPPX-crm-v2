@@ -58,7 +58,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
       // Fetch data from API
       const fetchData = async () => {
         try {
-          const response = await request.getCategorySubscription();
+          const response = await request.getCategory();
           if (response.success) {
             console.log({ response });
             setCheckBoxes(response.result);
@@ -116,7 +116,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
           } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
-            return <FormElement key={key} field={field}  />;
+            return <FormElement key={key} field={field} />;
           }
         }
       })}
@@ -131,7 +131,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
 
   const { label, options } = field;
   // let { id } = useParams();
-     
+
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -423,17 +423,17 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
           validator:
             field.type === 'phone'
               ? (rule, value, callback) => {
-                  if (!value) {
-                    callback(); // Allow empty values if not required
-                    return;
-                  }
-                  const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
-                  if (!pattern.test(value)) {
-                    callback('Please enter a valid 10-digit mobile number ');
-                  } else {
-                    callback(); // Success
-                  }
+                if (!value) {
+                  callback(); // Allow empty values if not required
+                  return;
                 }
+                const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
+                if (!pattern.test(value)) {
+                  callback('Please enter a valid 10-digit mobile number ');
+                } else {
+                  callback(); // Success
+                }
+              }
               : undefined,
         },
       ]}

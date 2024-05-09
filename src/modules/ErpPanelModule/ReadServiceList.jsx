@@ -99,6 +99,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                 dataIndex: 'subscription',
             },
             ...currentErp.subscriptions.map((item, key) => ({
+        
                 title: item.data[key]?.name,
                 dataIndex: item.data[key]?.name,
             })),
@@ -122,7 +123,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                 subscription: subscription,
             };
             priceValues[index].forEach((price, idx) => {
-                console.log([currentErp.subscriptions[index].data[idx].name]);
+                console.log([currentErp.subscriptions[index].data[idx].name] = price);
                 rowData[currentErp.subscriptions[index].data[idx].name] = price;
             });
             return rowData;
