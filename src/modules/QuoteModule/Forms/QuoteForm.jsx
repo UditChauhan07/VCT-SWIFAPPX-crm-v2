@@ -529,11 +529,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="sendQuotationEmail"
-            label={translate('Send work order Email')}
+            label={translate('Send Quotation Email')}
             rules={[
               {
                 required: true,
-                message: 'Please select a Send work order Email:',
+                message: 'Please select a Send Quotation Email:',
               },
             ]}
           >
@@ -547,7 +547,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Divider dashed />
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
-        {translate('Basic Work Order Details')}
+        {translate('Basic Quotation Details')}
       </Col>
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
         <Col className="gutter-row" span={6}>
