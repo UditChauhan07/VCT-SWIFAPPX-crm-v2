@@ -413,17 +413,7 @@ const request = {
       return errorHandler(error);
     }
   },
-  // getnewShow: async ({ id }) => {
-  //   try {
-  //     // const response = await axios.get(`/clientaddress/search?q=ho&client=${getLocalUserData.current._id}&fields=label`);
-  //     const response = await axios.get(
-  //       `/clientaddress/search?q=ho&client=${'660f885915289c0cee5e2b8f'}&fields=label`
-  //     ); // 660f885915289c0cee5e2b8f
-  //     return response.data;
-  //   } catch (error) {
-  //     return errorHandler(error);
-  //   }
-  // },
+  
 };
 
 export default request;

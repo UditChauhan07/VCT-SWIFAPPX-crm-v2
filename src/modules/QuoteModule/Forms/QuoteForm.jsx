@@ -364,40 +364,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
-  // const columns = [
-  //   {
-  //     title: 'Subscription',
-  //     dataIndex: 'Subscription',
-  //     key: 'Subscription',
-  //   },
-  //   {
-  //     title: 'Name',
-  //     dataIndex: 'Name', // Yahaan "Name" dataIndex mein istemal kiya gaya hai
-  //     key: 'Name',
-  //   },
-  // ];
-  // const generateTableData = () => {
-  //   const tableData = [];
-  //   ShowServiceId?.forEach((ele) => {
-  //     ele.data.forEach((item) => {
-  //       const subscriptionName = ele.subscription ? ele.subscription.name : '';
-  //       const rowData = {
-  //         key: item.id,
-  //         Subscription: subscriptionName,
-  //         Name: item.name, // Sirf item name ko print karna
-  //         Name: (
-  //           <div>
-  //             <div> {item.name}</div>
-  //             <div><Checkbox>{item.price}</Checkbox></div>
-  //           </div>
-  //         ),
-  //       };
-  //       tableData.push(rowData);
-  //     });
-  //   });
-  //   return tableData;
-  // };
-  // ...................
+ 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
@@ -444,60 +411,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return columns;
   };
 
-  // const generateTableData = () => {
-  //   const subscriptionNames = getUniqueSubscriptionNames();
-  //   const tableData = [];
-  //   ShowServiceId.forEach((ele) => {
-  //     ele.data.forEach((item) => {
-  //       const rowData = {
-  //         Subscription: ele.subscription.name,
-  //         Name: item.name,
-  //       };
-
-  //       subscriptionNames.forEach((name) => {
-  //         if (name === item.name) {
-  //           rowData[name] = <Checkbox>{`${item.price}.00 /One Time`}</Checkbox>;
-  //         } else {
-  //           rowData[name] = null;
-  //         }
-  //       });
-
-  //       tableData.push(rowData);
-  //     });
-  //   });
-
-  //   return tableData;
-  // };
-  // const generateTableData = () => {
-  //   const subscriptionNames = getUniqueSubscriptionNames();
-  //   const tableData = [];
-  //   ShowServiceId.forEach((ele, index) => {
-  //     let isFirstRow = true; // Flag to check if it's the first row for each subscription
-  //     // let isFirstRow2 = true;
-  //     ele.data.forEach((item) => {
-  //       const rowData = {
-  //         Subscription: isFirstRow ? ele.subscription.name : '', // Only render subscription name for the first row
-  //         Name:  item.name ,
-  //       };
-
-  //       subscriptionNames.forEach((name) => {
-  //         if (name === item.name) {
-  //           rowData[name] = <Checkbox>{`${item.price}.00 /One Time`}</Checkbox>;
-  //         } else {
-  //           rowData[name] = null;
-  //           // rowData[name] = <Checkbox>{`${item.price}.00 /One Time`}</Checkbox>;
-
-  //         }
-  //       });
-
-  //       tableData.push(rowData);
-  //       isFirstRow = false; // Set isFirstRow flag to false after first row
-  //       // isFirstRow2 = false; // Set isFirstRow flag to false after first row
-  //     });
-  //   });
-
-  //   return tableData;
-  // };
+  
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
@@ -519,36 +433,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return tableData;
   };
 
-  // const generateTableData = () => {
-  //   const subscriptionNames = getUniqueSubscriptionNames();
-  //   const tableData = [];
-  //   ShowServiceId.forEach((ele) => {
-  //     const nameDataMap = {}; // Object to store data associated with each name
-  //     ele.data.forEach((item) => {
-  //       // Check if name is already present in the nameDataMap
-  //       if (nameDataMap.hasOwnProperty(item.name)) {
-  //         // If present, add the price to the existing name key
-  //         nameDataMap[item.name].Price.push(item.price);
-  //       } else {
-  //         // If not present, create a new key-value pair with the name and price
-  //         nameDataMap[item.name] = { Name: item.name, Price: [item.price] };
-  //       }
-  //     });
-
-  //     // Iterate over nameDataMap and create tableData
-  //     for (const name in nameDataMap) {
-  //       const rowData = {
-  //         Subscription: ele.subscription.name,
-  //         ...nameDataMap[name], // Spread the data associated with the name
-  //         [name]: <Checkbox>{`${nameDataMap[name].Price.join(', ')}.00 /One Time`}</Checkbox>,
-  //       };
-  //       tableData.push(rowData);
-  //     }
-  //   });
-
-  //   return tableData;
-  // };
-
+  
   const handleSelectChange = (value) => {
     if (value === 'custom') {
       // Handle custom option selection
@@ -770,55 +655,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         {translate('Quotation Services')}
       </Col>
 
-      {/* <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            name="ServiceCategory" f
-            label={translate('Service Category')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              style={{
-                width: '100%',
-              }}
-              // onChange={(event) => setserviceCategoryId(event)}
-              onChange={handleserviceId}
-            >
-              {serviceCategory?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            name="ServiceName" f
-            label={translate('Service Name')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              style={{
-                width: '100%',
-              }}
-            >
-              {serviceCategoryNam?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row> */}
-
-
+     
       {/* ---------------NEW SERVICE CATEGORY------------ */}
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -856,32 +693,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
               defaultValue="Select"
               onChange={handleSelectChange}
-            // onSelect={(value) => {
-            //   if (value === 'custom') {
-            //     IsActiveness(2);
-            //     IsActiveSelect(1)
-            //   }
-            //   else {
-            //     const selectedOption = ShowServiceList?.find(option => option._id === value);
-            //     if (selectedOption) {
-            //       setShowServiceId(option.subscriptions);
-            //       IsActiveSelect(2);
-            //       IsActiveness(1);
-            //     } else {
-            //       IsActiveness(0);
-            //       IsActiveSelect(0)
-            //     }
-            //   }
-
-            //   // else if (value === 'Dynamic') {
-            //   //   IsActiveSelect(2)
-            //   //   IsActiveness(1);
-            //   // }
-            //   // else {
-            //   //   //   IsActiveness(0);
-            //   //   //   IsActiveSelect(0)
-            //   //   // }
-            // }}
+            
             >
               <Select.Option value="Select">Select</Select.Option>
               <Select.Option value="custom">Custom Service (One Time)</Select.Option>
@@ -892,10 +704,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   </Select.Option>
                 ))}
 
-              {/* <Select.Option key="custom" value="custom">Custom Service (One Time)</Select.Option>
-              {ShowServiceList?.map((option, index) => (
-                <Select.Option key={option._id} value="Dynamic"  >{option.name}</Select.Option>
-              ))} */}
+              
             </Select>
 
           </Form.Item>
@@ -1218,20 +1027,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-        {/* 
-        <Col className="gutter-row" span={12}>
-          <Form.Item
-            name="AdjustmentValue"
-            label={translate('Adjustment Value')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <InputNumber addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined} style={{ width: '100%' }} />
-          </Form.Item>
-        </Col> */}
+       
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
@@ -1249,15 +1045,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
 
 
-        {/* <Col className="gutter-row" span={8}>
-          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
-            {
-              required: true,
-            },
-          ]}>
-            <Input />
-          </Form.Item>
-        </Col> */}
 
         <Col className="gutter-row" span={12}>
           <Form.Item
