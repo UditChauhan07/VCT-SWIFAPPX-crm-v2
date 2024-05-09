@@ -425,162 +425,62 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
 
 
-  // const columns = [
-  //   {
-  //     title: 'Subscription',
-  //     dataIndex: 'Subscription',
-  //     key: 'Subscription',
-  //   },
-  //   {
-
-  //     dataIndex: 'Name',
-  //     key: 'Name',
-  //   }, {
-
-  //     dataIndex: 'Price',
-  //     key: 'Price',
-  //   },
-
-  // ];
-
-  // const generateTableData = () => {
-  //   const TableData = ShowServiceId.map((ele) => {
-  //     const rowData = {
-  //       Subscription: ele.subscription.name,
-  //     }
-  //     ele.data.forEach((item) => {
-  //       console.log(item.name)
-  //       rowData['Name'] = item.name;
-  //       // rowData['Price'] = item.price;
-  //       rowData['Price'] = (
-  //         <Checkbox>{item.price}</Checkbox>
-  //       );
-  //     });
-  //     return rowData
-  //   })
-  //   return TableData
-  // }
-
-  // const getSubscriptionNames = () => {
-  //   console.log('name', ShowServiceId?.map(item => item));
-  //   // return ShowServiceId.subscriptions.map(item => item.subscription.name);
-  // };
-  const getSubscriptionNames = () => ShowServiceId.map((ele) => {
-    return ele.data.map((item) => {
-      return item.name + '  '
-    })
-  })
 
 
-  const getPriceValues = () => ShowServiceId.map((ele) => {
-    return ele.data.map((item) => {
-      return item.price
-    })
-  })
+  
+  const getUniqueSubscriptionNames = () => {
+    const subscriptionNames = [];
+    ShowServiceId.forEach((ele) => {
+      ele.data.forEach((item) => {
+        if (!subscriptionNames.includes(item.name)) {
+          subscriptionNames.push(item.name);
+        }
+      });
+    });
+    return subscriptionNames;
+  };
 
 
-
-  const columns = [
-    {
-      title: 'Subscription',
-      dataIndex: 'Subscription',
-    },
-     {
-      // title: 'Name',
-      dataIndex: 'Name',
-    }, 
-    {
-      // title: 'Price',
-      dataIndex: 'Price',
-    }, 
-  ]
-
-
-
-  // const columns = [
-  //   {
-  //     title: 'Subscription',
-  //     dataIndex: 'Subscription',
-  //     key: 'Subscription',
-  //   },
-  //   {
-  //     title: dynamicTitle,
-  //     dataIndex: 'NameAndPrice',
-  //     key: 'NameAndPrice',
-  //     render: (text, record) => (
-  //       <>
-  //         <div data-attr="">{record.Name}</div>
-  //         <div style={{ display: "flex" }}>
-  //           <Checkbox />
-  //           <div style={{ paddingLeft: "8px" }}>{`${record.Price}.00 / One Time `}</div>
-  //         </div>
-
-  //       </>
-  //     ),
-  //   },
-  // ];
 
   const generateColumns = () => {
-    const subscriptionNames = getSubscriptionNames();
+    const subscriptionNames = getUniqueSubscriptionNames();
     const columns = [
       {
         title: 'Subscription',
         dataIndex: 'Subscription',
-      },  
+      },
     ];
 
     subscriptionNames.forEach((name) => {
       columns.push({
-        title: <span>{`${name} `}</span>,
+        title: <span>{name}</span>,
         dataIndex: name,
       });
     });
-    // columns.push({
-    //   // title: 'Price',
-    //   dataIndex: 'Price',
-    // });
 
     return columns;
   };
 
-
-
   const generateTableData = () => {
-    const subscriptionNames = getSubscriptionNames();
-    const priceValues = getPriceValues();
-    const tableData = subscriptionNames.map((subscription, index) => {
+    const subscriptionNames = getUniqueSubscriptionNames();
+    const tableData = [];
+    ShowServiceId.forEach((ele, index) => {
       const rowData = {
-        Name: subscription,
+        Subscription: ele.subscription.name,
       };
-      ShowServiceId.map((item) => {
-        rowData['Subscription'] = item.subscription.name
-      })
 
-      // priceValues.map((price, idx) => {
-      //   rowData['Price'] = price
-      // });
+      subscriptionNames.forEach((name) => {
+        const matchingItem = ele.data.find(item => item.name === name);
+        rowData[name] = matchingItem ? (
+          <Checkbox>{`${matchingItem.price}.00 /One Time`}</Checkbox>
+        ) : null;
+      });
 
-      const price = priceValues[index] || '';
-      rowData[subscription] = <Checkbox>{`${price}.00 /One Time`}</Checkbox>
-      return rowData;
+      tableData.push(rowData);
     });
     return tableData;
   };
 
-
-  // const generateTableData = () => {
-  //   const TableData = ShowServiceId.map((ele) => {
-  //     return ele.data.map((item) => {
-  //       return {
-  //         Subscription: ele.subscription.name,
-  //         Name: item.name,
-  //         Price: item.price,
-  //         key: item.id,
-  //       };
-  //     });
-  //   }).flat();
-  //   return TableData;
-  // };
 
 
   return (
