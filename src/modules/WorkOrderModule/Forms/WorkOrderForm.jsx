@@ -1098,14 +1098,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
                     </Col>
                   </Row>
-                  <Form.List name="customItems">
-                  </Form.List>
-
                   <Form.List name="items">
                     {(fields, { add, remove }) => (
 
                       <>
-                        {/* <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
+                        <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
                           <Col className="gutter-row" span={4} >
                             <Form.Item
                               name='CustomitemName'
@@ -1163,7 +1160,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               <Input placeholder=" Remarks for Workorder" />
                             </Form.Item>
                           </Col>
-                        </Row> */}
+                        </Row>
 
 
                         {fields?.map((field) => (
@@ -1211,7 +1208,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
                       <Col className="gutter-row" span={4}>
                         <Form.Item
-                          name='subitemname'
+                          name={['items', `${index}`, '_id']}
                           // rules={[
                           //   {
                           //     required: true,
@@ -1222,32 +1219,31 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           //     message: 'Item Name must contain alphanumeric or special characters',
                           //   },
                           // ]}
+                          key={['items', `${data._id}`]}
                           value={data._id}
-                          key={['items', `${index}`, '_id']}
                         >
-                          {data?.name && <Input placeholder="Item Name" defaultValue={data.name} name={`items[${index}][item]`} value={data._id} readOnly />}
+                          {data?.name && <Input placeholder="Item Name" defaultValue={data.name} readOnly />}
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={['items', `${index}`, 'Productprice']}
+                        <Form.Item name={['items', `${index}`, 'productprice']}
                         // rules={[{ required: true }]}
                         >
                           <InputNumber
                             className="moneyInput"
                             onChange={updatePrice}
-                            name={`items[${index}][Productprice]`}
+
                             readOnly
                             min={0}
                             controls={false}
                             addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                             addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
                             defaultValue={data.price}
-                            value={data.price}
                           />
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={3}>
-                        <Form.Item name={['items', `${index}`, 'quantity']}
+                        <Form.Item name={['items', `${index}`, 'productquantity']}
                         // rules={[{ required: true }]} 
                         >
                           <InputNumber style={{ width: '100%' }} min={0}
@@ -1258,7 +1254,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
 
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={['items', `${index}`, 'total']}>
+                        <Form.Item name={['items', `${index}`, 'producttotal']}>
                           <InputNumber
                             // readOnly
                             className="moneyInput"
@@ -1274,7 +1270,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
 
                       <Col className="gutter-row" span={7}>
-                        <Form.Item name={[`${i}`, `${index}`, 'productremarks']} >
+                        <Form.Item name={['items', `${index}`, 'productremarks']} >
                           <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
                         </Form.Item>
                       </Col>
@@ -1283,7 +1279,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     </Row>
                   ))}
                 </div >
-              </Collapse.Panel >
+              </Collapse.Panel>
             </>
           ))}
         </Collapse>
