@@ -87,7 +87,7 @@ export default function CreateItem({ config, CreateForm }) {
     return () => { };
   }, [isSuccess]);
 
-  const onSubmit = (fieldsValue) => { 
+  const onSubmit = (fieldsValue) => {
     console.log({ fieldsValue });
     if (fieldsValue) {
       if (entity === "items") {
@@ -137,12 +137,12 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-
+        console.log({ fieldsValue })
         const Leader = {
-          user : fieldsValue.LeadWorker,
-          startTime : fieldsValue.startTime,
-          endTime : fieldsValue.endTime,
-          isLeader : true
+          user: fieldsValue.LeadWorker,
+          startTime: fieldsValue.startTime,
+          endTime: fieldsValue.endTime,
+          isLeader: true
         }
         const Worker = [
           {
@@ -159,9 +159,9 @@ export default function CreateItem({ config, CreateForm }) {
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
         const EndTime = new Date(startTime + expectedRequiredTime).toLocaleString();
-            fielduser.map((item) => {
-              item.endTime= EndTime
-            })
+        fielduser.map((item) => {
+          item.endTime = EndTime
+        })
 
 
 
@@ -180,7 +180,7 @@ export default function CreateItem({ config, CreateForm }) {
           serviceList: fieldsValue.serviceList,
           subscription: fieldsValue.subscription,
           fieldUsers: fielduser,
-          customService: { 
+          customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
@@ -196,11 +196,11 @@ export default function CreateItem({ config, CreateForm }) {
           ],
           customItems: [
             {
-              item: fieldsValue.items.CustomitemName,
-              quantity: fieldsValue.items.Customquantity,
-              price: fieldsValue.items.Customprice,
-              total: fieldsValue.items.Customtotal,
-              remarks: fieldsValue.items.Customremarks
+              item: fieldsValue.customItems.CustomitemName,
+              quantity: fieldsValue.customItems.Customquantity,
+              price: fieldsValue.customItems.Customprice,
+              total: fieldsValue.customItems.Customtotal,
+              remarks: fieldsValue.customItems.Customremarks
             }
           ],
           adjustment: {
@@ -213,7 +213,7 @@ export default function CreateItem({ config, CreateForm }) {
 
         console.log({ Data })
 
-        // fieldsValue = Data
+        fieldsValue = Data
 
       }
     }
