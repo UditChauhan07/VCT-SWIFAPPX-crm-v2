@@ -97,6 +97,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
       <Col className="gutter-row" span={4}>
         <Form.Item name={[field.name, 'total']}>
           <Form.Item>
+
             <InputNumber
               readOnly
               className="moneyInput"
