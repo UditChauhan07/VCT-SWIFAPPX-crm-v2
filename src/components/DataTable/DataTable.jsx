@@ -3,6 +3,7 @@ import { EnterOutlined, HomeOutlined } from '@ant-design/icons';
 import {
   EyeOutlined,
   EditOutlined,
+  RedoOutlined,
   DeleteOutlined,
   EllipsisOutlined,
   PlusOutlined,
@@ -145,7 +146,7 @@ export default function DataTable({ config, extra = [] }) {
     readBox.open();
   };
   function handleEdit(record) {
-    
+
     dispatch(crud.currentItem({ data: record }));
     dispatch(crud.currentAction({ actionType: 'update', data: record }));
     editBox.open();
@@ -264,7 +265,7 @@ export default function DataTable({ config, extra = [] }) {
         title={DATATABLE_TITLE}
         ghost={false}
         extra={[
-          <Button onClick={handelDataTableLoad} key={`${uniqueId()}`}>
+          <Button onClick={handelDataTableLoad} key={`${uniqueId()}`} icon={<RedoOutlined />}>
             {translate('Refresh')}
           </Button>,
           permissions?.[entity + '_create'] || isSAAS == true ? (
