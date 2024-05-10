@@ -87,8 +87,8 @@ export default function CreateItem({ config, CreateForm }) {
     return () => { };
   }, [isSuccess]);
 
-  const onSubmit = (fieldsValue) => {
-    // console.log({ fieldsValue });
+  const onSubmit = (fieldsValue) => { 
+    console.log({ fieldsValue });
     if (fieldsValue) {
       if (entity === "items") {
         let newList = [...fieldsValue.items];
@@ -101,7 +101,6 @@ export default function CreateItem({ config, CreateForm }) {
         };
       }
       if (entity === "serviceCategory") {
-        console.log('10tty', { fieldsValue });
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.serviceCategory,
@@ -123,11 +122,9 @@ export default function CreateItem({ config, CreateForm }) {
             data: []
           };
           for (let j = 0; j < Object.keys(option).length - 1; j++) {
-            // for (let j = 0; j < (Object.keys(option).length / 2); j++) {
             console.log("jiji", j);
             let price = option[`price${j}`];
             let name = fieldsValue[Object.keys(fieldsValue).filter((ele) => ele === `name${j}`)?.[0]];
-            // let name = option[`name${j}`];
             subscriptions.data.push({
               name: name,
               price: price?.toString()
@@ -139,8 +136,88 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = requestBody;
 
       }
+      if (entity === "workorder") {
+
+        const Leader = {
+          user : fieldsValue.LeadWorker,
+          startTime : fieldsValue.startTime,
+          endTime : fieldsValue.endTime,
+          isLeader : true
+        }
+        const Worker = [
+          {
+            user: fieldsValue.SelectWorkers,
+            startTime: fieldsValue.startTime,
+            endTime: fieldsValue.endTime,
+          }
+        ]
+        const fielduser = [
+          Leader,
+          ...Worker
+        ];
+
+        const startTime = new Date(fieldsValue.startTime).getTime();
+        const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
+        const EndTime = new Date(startTime + expectedRequiredTime).toLocaleString();
+            fielduser.map((item) => {
+              item.endTime= EndTime
+            })
+
+
+
+        let Data = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendworkorderEmail: fieldsValue.sendworkorderEmail,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.salesPersonContact,
+          startDate: fieldsValue.startDate,
+          endDate: fieldsValue.endDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceList,
+          subscription: fieldsValue.subscription,
+          fieldUsers: fielduser,
+          customService: { 
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription
+          },
+          items: [
+            {
+              item: fieldsValue.item,
+              quantity: fieldsValue.productquantity,
+              price: fieldsValue.productprice,
+              total: fieldsValue.producttotal,
+              remarks: fieldsValue.productremarks
+            }
+          ],
+          customItems: [
+            {
+              item: fieldsValue.items.CustomitemName,
+              quantity: fieldsValue.items.Customquantity,
+              price: fieldsValue.items.Customprice,
+              total: fieldsValue.items.Customtotal,
+              remarks: fieldsValue.items.Customremarks
+            }
+          ],
+          adjustment: {
+            type: fieldsValue.Adjustment,
+            value: fieldsValue.AdjustmentValue
+          },
+          remarks: fieldsValue.InitialRemarks,
+          discount: fieldsValue.discount
+        };
+
+        console.log({ Data })
+
+        // fieldsValue = Data
+
+      }
     }
-    console.log(fieldsValue)
+    // console.log(fieldsValue)
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
   };
 

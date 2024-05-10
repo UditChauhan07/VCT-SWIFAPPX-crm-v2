@@ -419,6 +419,18 @@ const request = {
       return errorHandler(error);
     }
   },
+  getSubscriptiononetime: async () => {
+    try {
+      const response = await axios.get(`/subscriptiontype/oneTime`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+
+
 };
+
 
 export default request;

@@ -62,14 +62,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
   const [serviceCategory, setserviceCategory] = useState([]);
-  const [serviceCategoryNam, setserviceCategoryNam] = useState();
+  const [subscriptiononetime, setsubscriptiononetime] = useState([]);
+  
 
   const [SalesPerson, setSalesPerson] = useState()
   const [WorkLead, setWorkLead] = useState()
   const [Workers, setWorkers] = useState()
   const [CheckedId, setCheckedId] = useState()
-
-
   const [customerAddress, setCustomerAddress] = useState([])
   const [customerSelect, setcustomSelect] = useState()
   const [subscriptionData, setSubscriptionData] = useState({});
@@ -77,7 +76,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
   const [selectedSalesPerson, setSelectedSalesPerson] = useState()
 
-
+  
 
   const handleDropdownChange = async (value) => {
     setSelectedOption(value);
@@ -136,31 +135,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error({ er });
     }
   }
-  // const getClientHandler = async () => {
-  //   console.log("first")
-  //   try {
-  //     const productListRes = await request.getSearchclintAddress({ id: "" });
-  //     if (productListRes.success) {
-  //       setCustomeraddress(productListRes.result);
-  //       console.log({ productListResresult: productListRes.result })
-  //     } else {
-  //       setProductList([]);
-  //     }
-  //     console.log({ productListRes });
-  //   } catch (er) {
-  //     console.error({ er });
-  //   }
-  // }
-
-
-
-
-
+ 
   const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState(null);
   const [ShowServiceId, setShowServiceId] = useState();
-
+  const [isLead, setisLead] = useState(false);
 
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -203,20 +183,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
 
-
   const handleFirstDropdownChange = async (event) => {
-    console.log("event", event);
     try {
       const response = await request.getSearchClientAddress(event);
       console.log("response", response);
       if (response.success) {
         setCustomerAddress(response.result)
         // Set options state based on API response
-      } else {
-
-      }
+      } 
     } catch (error) {
-
       console.error('Error fetching data:', error);
     }
 
@@ -257,8 +232,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setQuantity(value);
   };
   const updatePrice = (value) => {
-    console.log(value)
-    // setPrice(value);
+    setPrice(value);
   };
   const updateName = (value) => {
     setName(value);
@@ -267,10 +241,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   useEffect(() => {
     if (current) {
-      // When it accesses the /payment/ endpoint,
-      // it receives an invoice.item instead of just item
-      // and breaks the code, but now we can check if items exists,
-      // and if it doesn't we can access invoice.items.
+   
 
       const { items, invoice } = current;
 
@@ -293,16 +264,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [current]);
 
   useEffect(() => {
-    const currentTotal = calculate.multiply(CheckedId, quantity);
+    const currentTotal = calculate.multiply(price, quantity);
     console.log(currentTotal)
     setTotal2(currentTotal);
-  }, [CheckedId, quantity]);
+  }, [price, quantity]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await request.getServiceCategoryOptions();
-        console.log(response)
         if (response.success) {
           setserviceCategoryOptions(response.result);
         }
@@ -362,20 +332,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, []);
 
 
-  const handleserviceId = async (event) => {
-    try {
-      const response = await request.getServiceCategoryName(event);
-      if (response.success) {
-        setserviceCategoryNam(response.result)
-      } else {
-
-      }
-    } catch (error) {
-
-      console.error('Error fetching data:', error);
-    }
-
-  };
+  
   const [salesContactNumber, setSalesContactNumber] = useState();
   useEffect(() => {
     if (selectedSalesPerson) {
@@ -390,7 +347,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   useEffect(() => { }, [selectedSalesPerson])
   const ContactHandler = ({ salesContactNumber }) => {
-    return (<Form.Item label={translate('Sales Person Contact')} name="Sales Person Contact" rules={[
+    return (<Form.Item label={translate('Sales Person Contact')} name="salesPersonContact" rules={[
       {
         required: true,
       },
@@ -467,6 +424,27 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
 
+  // One Time Subscription
+
+  useEffect(()=>{
+
+    const handleoneTimeSubscription = async () => {
+      try {
+        const response = await request.getSubscriptiononetime();
+        if (response.success) {
+          setsubscriptiononetime(response.result._id)
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    handleoneTimeSubscription();
+
+  },[])
+  
+
+
+
 
   return (
     <>
@@ -496,7 +474,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="Customer Address"
+            name="clientAddress"
             label={translate('Customer Address')}
             rules={[
               {
@@ -520,7 +498,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="BillingAddress"
+            name="billingAddress"
             label={translate('Billing Address')}
             rules={[
               {
@@ -566,7 +544,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }}>
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="date"
+            name="startDate"
             label={translate('Start Date')}
             rules={[
               {
@@ -581,7 +559,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="expiredDate"
+            name="endDate"
             label={translate('Expire Date')}
             rules={[
               {
@@ -609,7 +587,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="expectedTimeRequired"
+            name="expectedRequiredTime"
             label={translate('Expected Time Required')}
             rules={[
               {
@@ -624,7 +602,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "20px" }}>
         <Col className="gutter-row" span={8}>
           <Form.Item
-            name="SalesPerson" f
+            name="salesPerson" 
             label={translate('Sales Person')}
             rules={[
               {
@@ -638,7 +616,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
 
               }}
-              // onChange={(event) => setcustomSelect(event) }
               onChange={(event) => setSelectedSalesPerson(event)}
 
             >
@@ -655,14 +632,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-        <Col className="gutter-row" span={8}>
+        <Col className="gutter-row" span={8} >
           <ContactHandler salesContactNumber={salesContactNumber} />
         </Col>
 
 
         <Col className="gutter-row" span={8}>
           <Form.Item label={translate('Files')} name="Files"
-
           >
             <Input type='file' />
           </Form.Item>
@@ -672,10 +648,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "20px" }}>
         <Col className="gutter-row" span={8}>
           <Form.Item
-            name="SelectRole/Type" f
+            name="SelectRole/Type" 
             label={translate('Select Role/Type')}
-
-
           >
             <Select
               style={{
@@ -690,7 +664,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
         <Col className="gutter-row" span={8}>
           <Form.Item
-            name="LeadWorker" f
+            name='LeadWorker'
+         
             label={translate('Lead Worker')}
             rules={[
               {
@@ -705,7 +680,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               onChange={(event) => setWorkers(event)}
             >
               {WorkLead?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
+                <Select.Option key={option._id} onClick={ () => setisLead(true)} value={option._id} >{option.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
@@ -713,7 +688,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         <Col className="gutter-row" span={8}>
           <Form.Item
-            name="SelectWorkers" f
+            name="SelectWorkers" 
             label={translate('Select Workers')}
             rules={[
               {
@@ -757,9 +732,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-
               onChange={getCategorySubscriptionHandler}
-
             >
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
@@ -770,7 +743,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
         <Col className="gutter-row" span={12}>
           <Form.Item
-            name="serviceName"
+            name="serviceList"
             label={translate('Service Name')}
             rules={[
               {
@@ -785,9 +758,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               // defaultValue="Select"
               onSelect={(value) => {
                 if (value === 'custom') {
+                  // handleoneTimeSubscription()
+                  subscriptiononetime
                   IsActiveness(2);
                   IsActiveSelect(1)
-                }
+                } 
                 else {
                   const selectedOption = ShowServiceList.find(option => option._id === value);
                   if (selectedOption) {
@@ -812,9 +787,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
             >
               {/* <Select.Option value="Select">Select</Select.Option> */}
-              <Select.Option key="custom" value="custom">Custom Service (One Time)</Select.Option>
+              <Select.Option key="custom" value="custom" >Custom Service (One Time)</Select.Option>
               {ShowServiceList?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}  >{option.name}</Select.Option>
+                <Select.Option key={option._id} value={option._id} >{option.name}</Select.Option>
               ))}
             </Select>
 
@@ -888,23 +863,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
                               <Col className="gutter-row" span={4} >
                                 <Form.Item
-                                  name={['itemName']}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: 'Missing itemName name',
-                                    },
-                                    {
-                                      pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                                      message: 'Item Name must contain alphanumeric or special characters',
-                                    },
-                                  ]}
+                                  name={['CustomitemName']}
+                                  // rules={[
+                                  //   {
+                                  //     required: true,
+                                  //     message: 'Missing itemName name',
+                                  //   },
+                                  //   {
+                                  //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                                  //     message: 'Item Name must contain alphanumeric or special characters',
+                                  //   },
+                                  // ]}
                                 >
                                   <Input placeholder="Item Name" />
                                 </Form.Item>
                               </Col>
                               <Col className="gutter-row" span={4}>
-                                <Form.Item name={['price']} rules={[{ required: true }]}>
+                                <Form.Item name={['Customprice']} 
+                                // rules={[{ required: true }]}
+                                >
                                   <InputNumber
                                     className="moneyInput"
                                     onChange={updatePrice}
@@ -916,15 +893,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                 </Form.Item>
                               </Col>
                               <Col className="gutter-row" span={3}>
-                                <Form.Item name={['quantity']} rules={[{ required: true }]}>
+                                <Form.Item name={['Customquantity']} 
+                                // rules={[{ required: true }]}
+                                >
                                   <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
                                 </Form.Item>
                               </Col>
                               <Col className="gutter-row" span={4}>
-                                <Form.Item name={['total']}>
+                                <Form.Item name={['Customtotal']}>
                                   <Form.Item>
                                     <InputNumber
-                                      readOnly
+                                      // readOnly
                                       className="moneyInput"
                                       value={totalState}
                                       min={0}
@@ -937,8 +916,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                 </Form.Item>
                               </Col>
                               <Col className="gutter-row" span={7}>
-                                <Form.Item name={['remarks']}>
-                                  <Input placeholder=" Remarks for Quotation" />
+                                <Form.Item name={['Customremarks']}>
+                                  <Input placeholder=" Remarks for Workorder" />
                                 </Form.Item>
                               </Col>
                             </Row>
@@ -990,16 +969,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           <Col className="gutter-row" span={4}>
                             <Form.Item
                               name={data.name}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Missing itemName name',
-                                },
-                                {
-                                  pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                                  message: 'Item Name must contain alphanumeric or special characters',
-                                },
-                              ]}
+                              // rules={[
+                              //   {
+                              //     required: true,
+                              //     message: 'Missing itemName name',
+                              //   },
+                              //   {
+                              //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                              //     message: 'Item Name must contain alphanumeric or special characters',
+                              //   },
+                              // ]}
                               key={[`${i}`, `${data._id}`]}
                             >
 
@@ -1007,7 +986,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={4}>
-                            <Form.Item name={[`${i}`, `${index}`, 'price']} rules={[{ required: true }]} >
+                            <Form.Item name={[`${i}`, `${index}`, 'price']}
+                            //  rules={[{ required: true }]} 
+                             >
                               <InputNumber
                                 className="moneyInput"
                                 onChange={updatePrice}
@@ -1022,7 +1003,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={3}>
-                            <Form.Item name={[`${i}`, `${index}`, 'quantity']} rules={[{ required: true }]} >
+                            <Form.Item name={[`${i}`, `${index}`, 'quantity']} 
+                            // rules={[{ required: true }]} 
+                            >
                               <InputNumber style={{ width: '100%' }} min={0}
                                 onChange={updateQt}
 
@@ -1091,7 +1074,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Col>
           </Row>
         </Col>
-
         <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "5%" }}>
           {productList?.map((mainData, i) => (
             <>
@@ -1123,23 +1105,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
                           <Col className="gutter-row" span={4} >
                             <Form.Item
-                              name={['itemName']}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Missing itemName name',
-                                },
-                                {
-                                  pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                                  message: 'Item Name must contain alphanumeric or special characters',
-                                },
-                              ]}
+                              name='CustomitemName'
+                              // rules={[
+                              //   {
+                              //     required: true,
+                              //     message: 'Missing itemName name',
+                              //   },
+                              //   {
+                              //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                              //     message: 'Item Name must contain alphanumeric or special characters',
+                              //   },
+                              // ]}
                             >
                               <Input placeholder="Item Name" />
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={4}>
-                            <Form.Item name={['price']} rules={[{ required: true }]}>
+                            <Form.Item name='Customprice'
+                            rules={[{ required: true }]}
+                            >
                               <InputNumber
                                 className="moneyInput"
                                 onChange={updatePrice}
@@ -1151,12 +1135,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={3}>
-                            <Form.Item name={['quantity']} rules={[{ required: true }]}>
+                            <Form.Item name='Customquantity' rules={[{ required: true }]}>
                               <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={4}>
-                            <Form.Item name={['total']}>
+                            <Form.Item name={['Customtotal']}>
                               <Form.Item>
                                 <InputNumber
                                   readOnly
@@ -1172,14 +1156,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={7}>
-                            <Form.Item name={['remarks']}>
-                              <Input placeholder=" Remarks for Quotation" />
+                            <Form.Item name='Customremarks'>
+                              <Input placeholder=" Remarks for Workorder" />
                             </Form.Item>
                           </Col>
                         </Row>
 
 
-                        {fields.map((field) => (
+                        {fields?.map((field) => (
                           <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
                         ))}
                         <Form.Item>
@@ -1225,24 +1209,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       <Col className="gutter-row" span={4}>
                         <Form.Item
                           name={data.name}
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Missing itemName name',
-                            },
-                            {
-                              pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                              message: 'Item Name must contain alphanumeric or special characters',
-                            },
-                          ]}
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: 'Missing itemName name',
+                          //   },
+                          //   {
+                          //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                          //     message: 'Item Name must contain alphanumeric or special characters',
+                          //   },
+                          // ]}
                           key={[`${i}`, `${data._id}`]}
                         >
-
                           {data?.name && <Input placeholder="Item Name" defaultValue={data.name} readOnly />}
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={[`${i}`, `${index}`, 'price']} rules={[{ required: true }]} >
+                        <Form.Item name={[`${i}`, `${index}`, 'productprice']} 
+                        // rules={[{ required: true }]}
+                         >
                           <InputNumber
                             className="moneyInput"
                             onChange={updatePrice}
@@ -1257,7 +1242,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={3}>
-                        <Form.Item name={[`${i}`, `${index}`, 'quantity']} rules={[{ required: true }]} >
+                        <Form.Item name={[`${i}`, `${index}`, 'productquantity']} 
+                        // rules={[{ required: true }]} 
+                        >
                           <InputNumber style={{ width: '100%' }} min={0}
                             onChange={updateQt}
 
@@ -1266,7 +1253,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
 
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={[`${i}`, `${index}`, 'total']} >
+                        <Form.Item name={[`${i}`, `${index}`, 'producttotal']}>
                           <InputNumber
                             // readOnly
                             className="moneyInput"
@@ -1282,8 +1269,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
 
                       <Col className="gutter-row" span={7}>
-                        <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
-                          <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
+                        <Form.Item name={[`${i}`, `${index}`, 'productremarks']} >
+                          <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
                         </Form.Item>
                       </Col>
 
@@ -1318,8 +1305,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Radio.Group style={{ display: "flex", gap: "20px" }} >
-              <Radio value="0" onClick={() => IsActive(2)} >Addition</Radio>
-              <Radio value="1" onClick={() => IsActive(3)}>Subtraction</Radio>
+              <Radio value="Addition" onClick={() => IsActive(2)} >Addition</Radio>
+              <Radio value="Subtraction" onClick={() => IsActive(3)}>Subtraction</Radio>
             </Radio.Group>
           </Form.Item>
 
@@ -1350,9 +1337,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
 
 
-
-
-
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
@@ -1370,7 +1354,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
         <Col className="gutter-row" span={12}>
           <Form.Item
-            name="Discount"
+            name="discount"
             label={translate('Discount')}
             rules={[
               {
