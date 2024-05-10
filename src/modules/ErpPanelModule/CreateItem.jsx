@@ -139,6 +139,67 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = requestBody;
 
       }
+//       if (entity === "Quote") {
+//         console.log({hello})
+//         // const fieldData =
+       
+//         //  {
+//         //   client: fieldsValue.client,
+//         //   clientAddress: fieldsValue.clientAddress,
+//         //   billingAddress: fieldsValue.billingAddress,
+//         //   sendQuotationEmail: fieldsValue.sendQuotationEmail,
+//         //   startDate: fieldsValue.startDate,
+//         //   expiredDate: fieldsValue.expiredDate,
+//         //   startTime: fieldsValue.startTime,
+//         //   expectedRequiredTime: fieldsValue.expectedRequiredTime,
+//         //   salesPerson: fieldsValue.salesPerson,
+//         //   salesPersonContact: fieldsValue.salesPersonContact,
+//         //   serviceCategory: fieldsValue.serviceCategory,
+//         //   serviceList: fieldsValue.serviceName,
+//         //   subscriptions: [],
+//         //   isCustom: true,
+//         //   customService: {
+//         //     name: fieldsValue.ServiceName,
+//         //     price: fieldsValue.ServicePrice ,
+//         //     description: fieldsValue.ServiceDescription
+//         //   },
+//         //   items: [
+//         //     {
+//         //       item: fieldsValue.itemName ,
+//         //       quantity: fieldsValue.quantity,
+//         //       price: fieldsValue.price ,
+//         //       total: fieldsValue.total ,
+//         //       remarks: fieldsValue.remarks
+//         //     }
+//         //   ],
+//         //   customItems: [
+//         //     {
+//         //       item: fieldsValue.item ,
+//         //       quantity: fieldsValue.quantity ,
+//         //       price: fieldsValue.price ,
+//         //       total: fieldsValue.total ,
+//         //       remarks: fieldsValue.remarks,
+//         //     }
+//         //   ],
+//         //   adjustment: {
+//         //     type: fieldsValue.type,
+//         //     value: fieldsValue.value,
+//         //   },
+
+//         //   remarks: fieldsValue.remarks,
+//         //   discount: fieldsValue.discount,
+
+//         // }
+     
+
+//         // fieldsValue = data
+// ; 
+
+//         console.log(fieldData)
+
+
+//       }
+     
     }
     console.log(fieldsValue)
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
