@@ -74,6 +74,7 @@ export default function ItemRow({ field, remove, current = null, response  }) {
 
 
   return (
+
     <>
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -101,6 +102,7 @@ export default function ItemRow({ field, remove, current = null, response  }) {
         </Col>
         <Col className="gutter-row" span={4}>
           <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
+
             <InputNumber
               className="moneyInput"
               onChange={updatePrice}

@@ -137,7 +137,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-        console.log(fieldsValue[0])
+
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -184,27 +184,12 @@ export default function CreateItem({ config, CreateForm }) {
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
           },
+
           items: fieldsValue[0],
-          //  [
-          //   {
-          //     item: fieldsValue.productquantity,
-          //     quantity: fieldsValue.productquantity,
-          //     price: fieldsValue.productprice,
-          //     total: fieldsValue.producttotal,
-          //     remarks: fieldsValue.productremarks
-          //   }
-          // ],
+        
           customItems: fieldsValue.customItems,
-          //  [
-          //   {
-          //     item: fieldsValue.items.CustomitemName,
-          //     quantity: fieldsValue.items.Customquantity,
-          //     price: fieldsValue.items.Customprice,
-          //     total: fieldsValue.items.Customtotal,
-          //     remarks: fieldsValue.items.Customremarks
-          //   }
-          // ]
-       
+
+
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
@@ -215,7 +200,7 @@ export default function CreateItem({ config, CreateForm }) {
 
         console.log({ Data })
 
-        // fieldsValue = Data
+        fieldsValue = Data
 
       }
     }
