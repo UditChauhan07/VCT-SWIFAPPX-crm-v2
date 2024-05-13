@@ -48,12 +48,12 @@ export default function CreateItem({ config, CreateForm }) {
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
   const handelValuesChange = (changedValues, values) => {
-    const items = values['items'];
+    const item = values['items'];
     let subTotal = 0;
     let subOfferTotal = 0;
 
-    if (items) {
-      items.map((item) => {
+    if (item) {
+      // items.map((item) => {
         if (item) {
           if (item.offerPrice && item.quantity) {
             let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
@@ -65,7 +65,7 @@ export default function CreateItem({ config, CreateForm }) {
             subTotal = calculate.add(subTotal, total);
           }
         }
-      });
+      // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
     }
@@ -139,66 +139,66 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = requestBody;
 
       }
-//       if (entity === "Quote") {
-//         console.log({hello})
-//         // const fieldData =
+      if (entity === "Quote") {
+        console.log({hello})
+        const fieldData =
        
-//         //  {
-//         //   client: fieldsValue.client,
-//         //   clientAddress: fieldsValue.clientAddress,
-//         //   billingAddress: fieldsValue.billingAddress,
-//         //   sendQuotationEmail: fieldsValue.sendQuotationEmail,
-//         //   startDate: fieldsValue.startDate,
-//         //   expiredDate: fieldsValue.expiredDate,
-//         //   startTime: fieldsValue.startTime,
-//         //   expectedRequiredTime: fieldsValue.expectedRequiredTime,
-//         //   salesPerson: fieldsValue.salesPerson,
-//         //   salesPersonContact: fieldsValue.salesPersonContact,
-//         //   serviceCategory: fieldsValue.serviceCategory,
-//         //   serviceList: fieldsValue.serviceName,
-//         //   subscriptions: [],
-//         //   isCustom: true,
-//         //   customService: {
-//         //     name: fieldsValue.ServiceName,
-//         //     price: fieldsValue.ServicePrice ,
-//         //     description: fieldsValue.ServiceDescription
-//         //   },
-//         //   items: [
-//         //     {
-//         //       item: fieldsValue.itemName ,
-//         //       quantity: fieldsValue.quantity,
-//         //       price: fieldsValue.price ,
-//         //       total: fieldsValue.total ,
-//         //       remarks: fieldsValue.remarks
-//         //     }
-//         //   ],
-//         //   customItems: [
-//         //     {
-//         //       item: fieldsValue.item ,
-//         //       quantity: fieldsValue.quantity ,
-//         //       price: fieldsValue.price ,
-//         //       total: fieldsValue.total ,
-//         //       remarks: fieldsValue.remarks,
-//         //     }
-//         //   ],
-//         //   adjustment: {
-//         //     type: fieldsValue.type,
-//         //     value: fieldsValue.value,
-//         //   },
+         {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendQuotationEmail: fieldsValue.sendQuotationEmail,
+          startDate: fieldsValue.startDate,
+          expiredDate: fieldsValue.expiredDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.salesPersonContact,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceName,
+          subscriptions: [],
+          isCustom: true,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice ,
+            description: fieldsValue.ServiceDescription
+          },
+          items: [
+            {
+              item: fieldsValue.itemName ,
+              quantity: fieldsValue.quantity,
+              price: fieldsValue.price ,
+              total: fieldsValue.total ,
+              remarks: fieldsValue.remarks
+            }
+          ],
+          customItems: [
+            {
+              item: fieldsValue.item ,
+              quantity: fieldsValue.quantity ,
+              price: fieldsValue.price ,
+              total: fieldsValue.total ,
+              remarks: fieldsValue.remarks,
+            }
+          ],
+          adjustment: {
+            type: fieldsValue.type,
+            value: fieldsValue.value,
+          },
 
-//         //   remarks: fieldsValue.remarks,
-//         //   discount: fieldsValue.discount,
+          remarks: fieldsValue.remarks,
+          discount: fieldsValue.discount,
 
-//         // }
+        }
      
 
-//         // fieldsValue = data
-// ; 
+        fieldsValue = data
+; 
 
-//         console.log(fieldData)
+        console.log(fieldData)
 
 
-//       }
+      }
      
     }
     console.log(fieldsValue)

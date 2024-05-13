@@ -25,6 +25,17 @@ export default function ItemRow({ field, remove, current = null, response }) {
   };
   const [form] = useForm();
 
+  console.log(current && current.items && current.items.length > 0, "abc")
+  useEffect(() => {
+    if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
+      const firstItem = current.items[0];
+      form.setFieldsValue({ [field.name]: firstItem });
+      setName(firstItem.itemName || '');
+      setPrice(firstItem.price || 0);
+      setQuantity(firstItem.quantity || 0);
+    }
+  }, [current, form]);
+
   useEffect(() => {
     if (current) {
       // When it accesses the /payment/ endpoint,
@@ -58,6 +69,8 @@ export default function ItemRow({ field, remove, current = null, response }) {
     setTotal(currentTotal);
   }, [price, quantity]);
 
+  console.log(field, "field")
+
   return (
     <>
 
@@ -65,7 +78,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
         {/* <Col className="gutter-row" >
           <Checkbox></Checkbox>
         </Col> */}
-        
+
 
         <Col className="gutter-row" span={4}>
           <Form.Item
@@ -81,7 +94,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
               },
             ]}
           >
-            <Input placeholder="Item Name" />
+            <Input onChange={updateName} placeholder="Item Name" />
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
@@ -124,10 +137,11 @@ export default function ItemRow({ field, remove, current = null, response }) {
             <Input placeholder=" Remarks for Quotation" />
           </Form.Item>
         </Col>
-
-        <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
-          <DeleteOutlined onClick={() => remove(field.name)} />
-        </div>
+        {field &&
+          <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
+            <DeleteOutlined onClick={() => remove(field.name)} />
+          </div>
+        }
       </Row>
     </>
   );
