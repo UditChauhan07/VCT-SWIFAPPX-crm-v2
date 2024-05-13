@@ -84,7 +84,7 @@ export default function ItemRow({ field, remove, current = null, response  }) {
 
         <Col className="gutter-row" span={4}>
           <Form.Item
-            name={[field.name, 'itemName']}
+            name={[field.name, 'item']}
             rules={[
               {
                 required: true,
@@ -124,6 +124,7 @@ export default function ItemRow({ field, remove, current = null, response  }) {
                 readOnly
                 className="moneyInput"
                 value={totalState}
+                // initialValue={totalState}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}

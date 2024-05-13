@@ -23,7 +23,7 @@ import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 import { useMoney, useDate } from '@/settings';
 import useMail from '@/hooks/useMail';
 import { useNavigate } from 'react-router-dom';
-import { tagColor } from '@/utils/statusTagColor';
+// import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
   const { moneyFormatter } = useMoney();
@@ -132,16 +132,16 @@ export default function ReadItem({ config, selectedItem }) {
         }}
         title={`${ENTITY_NAME} # ${currentErp.number}/${currentErp.year || ''}`}
         ghost={false}
-        tags={[
-          <Tag color={tagColor(currentErp.status)?.color} key="status">
-            {currentErp.status && translate(currentErp.status)}
-          </Tag>,
-          currentErp.paymentStatus && (
-            <Tag color={tagColor(currentErp.paymentStatus)?.color} key="paymentStatus">
-              {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
-            </Tag>
-          ),
-        ]}
+        // tags={[
+        //   <Tag color={tagColor(currentErp.status)?.color} key="status">
+        //     {currentErp.status && translate(currentErp.status)}
+        //   </Tag>,
+        //   currentErp.paymentStatus && (
+        //     <Tag color={tagColor(currentErp.paymentStatus)?.color} key="paymentStatus">
+        //       {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
+        //     </Tag>
+        //   ),
+        // ]}
         extra={[
           <Button
             key={`${uniqueId()}`}
@@ -232,11 +232,11 @@ export default function ReadItem({ config, selectedItem }) {
         </Row>
       </PageHeader>
       <Divider dashed />
-      <Descriptions title={`Client : ${currentErp.client.name}`}>
+      {/* <Descriptions title={`Client : ${currentErp.client.name}`}>
         <Descriptions.Item label={translate('Address')}>{client.address}</Descriptions.Item>
         <Descriptions.Item label={translate('email')}>{client.email}</Descriptions.Item>
         <Descriptions.Item label={translate('Phone')}>{client.phone}</Descriptions.Item>
-      </Descriptions>
+      </Descriptions> */}
       <Divider />
       <Row gutter={[12, 0]}>
         <Col className="gutter-row" span={11}>

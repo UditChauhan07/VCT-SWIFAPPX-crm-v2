@@ -50,10 +50,12 @@ const statusTagColorList = (tags = []) => {
   return list;
 };
 
-const tagColor = (status) => {
-  const element = colors.find((obj) => obj?.value?.toLowerCase() === status?.toLowerCase());
-  if (element) return element;
-  else return { value: status, label: status };
-};
+// const tagColor = (status) => {
+//   const element = colors.find((obj) => obj?.value?.toLowerCase() === status?.toLowerCase());
+//   if (element) return element;
+//   else return { value: status, label: status };
+// };
 
-export { statusTagColorList, tagColor };
+export { statusTagColorList,
+  //  tagColor
+   };

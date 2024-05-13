@@ -137,7 +137,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-        console.log(fieldsValue[0])
+        console.log(fieldsValue.items)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -157,7 +157,7 @@ export default function CreateItem({ config, CreateForm }) {
         ];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
-        const EndTime = new Date(startTime + expectedRequiredTime).toLocaleString();
+        const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
         fielduser.map((item) => {
           item.endTime = EndTime
         })
@@ -184,26 +184,8 @@ export default function CreateItem({ config, CreateForm }) {
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
           },
-          items: fieldsValue[0],
-          //  [
-          //   {
-          //     item: fieldsValue.productquantity,
-          //     quantity: fieldsValue.productquantity,
-          //     price: fieldsValue.productprice,
-          //     total: fieldsValue.producttotal,
-          //     remarks: fieldsValue.productremarks
-          //   }
-          // ],
+          items: fieldsValue.items,
           customItems: fieldsValue.customItems,
-          //  [
-          //   {
-          //     item: fieldsValue.items.CustomitemName,
-          //     quantity: fieldsValue.items.Customquantity,
-          //     price: fieldsValue.items.Customprice,
-          //     total: fieldsValue.items.Customtotal,
-          //     remarks: fieldsValue.items.Customremarks
-          //   }
-          // ]
        
           adjustment: {
             type: fieldsValue.Adjustment,
@@ -213,9 +195,9 @@ export default function CreateItem({ config, CreateForm }) {
           discount: fieldsValue.discount
         };
 
-        console.log({ Data })
+        // console.log({ Data })
 
-        // fieldsValue = Data
+        fieldsValue = Data
 
       }
     }

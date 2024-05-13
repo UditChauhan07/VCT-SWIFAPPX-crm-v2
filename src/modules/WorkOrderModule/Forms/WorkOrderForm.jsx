@@ -442,7 +442,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [])
 
 
-
+  const optionsss = ['Addition', 'Substraction'];
 
 
   return (
@@ -1656,15 +1656,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   {/* <Form.List name="items" >
                     <> */}
                   {mainData.products?.map((data, index) => (
-
+                                 
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
                       <Col className="gutter-row mt-2">
                         <Checkbox onChange={() => setCheckedId(data.price)} />
                       </Col>
                       <Col className="gutter-row" span={4}>
                         <Form.Item
-                          name={['items', index, '_id']}
-                     
+                          name={['items', index, 'item']}
                           initialValue={data._id}
                           rules={[
                             {
@@ -1684,14 +1683,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             },
                           ]}
                         >
-                          <Input placeholder="Item Name"  readOnly />
+                          {/* <Input placeholder="Item Name"   readOnly /> */}
+
+                            <span>{data.name}</span>
+                   
                     
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={4}>
                         <Form.Item
-                          name={['items', index, 'productprice']}
+                          name={['items', index, 'price']}
                           rules={[]}
+                          initialValue={data.price}
                         >
                           <InputNumber
                             className="moneyInput"
@@ -1700,7 +1703,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             controls={false}
                             addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                             addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                            defaultValue={data.price} // Use defaultValue for default value
+                            defaultValue={data.price}
+                             // Use defaultValue for default value
                           />
                         </Form.Item>
                       </Col>
@@ -1716,7 +1720,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
 
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={[`items`, `${index}`, 'total']} >
+                        <Form.Item
+                         name={[`items`, `${index}`, 'total']} 
+                          initialValue={totalState}
+                          >
                           <InputNumber
                             // readOnly
                             className="moneyInput"
@@ -1726,7 +1733,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                             addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
                             formatter={(value) => money.amountFormatter({ amount: value })}
-
+                            // initialValue={totalState}
                           />
                         </Form.Item>
                       </Col>
@@ -1769,9 +1776,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
-            <Radio.Group style={{ display: "flex", gap: "20px" }} >
+            {/* <Radio.Group style={{ display: "flex", gap: "20px" }} >
               <Radio value="Addition" onClick={() => IsActive(2)} >Addition</Radio>
               <Radio value="Subtraction" onClick={() => IsActive(3)}>Subtraction</Radio>
+            </Radio.Group> */}
+           
+            <Radio.Group style={{ display: "flex", gap: "20px" }} >
+              {optionsss.map((option, index) => (
+                <Radio key={index} value={option} onClick={() => IsActive(index + 2)}>
+                  {option}
+                </Radio>
+              ))}
             </Radio.Group>
           </Form.Item>
 
