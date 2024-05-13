@@ -4,6 +4,7 @@ import {
   RedoOutlined,
   EyeOutlined,
   EditOutlined,
+  RedoOutlined,
   DeleteOutlined,
   EllipsisOutlined,
   PlusOutlined,

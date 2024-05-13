@@ -137,7 +137,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-        console.log({ fieldsValue })
+
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -155,7 +155,6 @@ export default function CreateItem({ config, CreateForm }) {
           Leader,
           ...Worker
         ];
-
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
         const EndTime = new Date(startTime + expectedRequiredTime).toLocaleString();
@@ -185,24 +184,12 @@ export default function CreateItem({ config, CreateForm }) {
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
           },
-          items: [
-            {
-              item: fieldsValue.item,
-              quantity: fieldsValue.productquantity,
-              price: fieldsValue.productprice,
-              total: fieldsValue.producttotal,
-              remarks: fieldsValue.productremarks
-            }
-          ],
-          customItems: [
-            {
-              item: fieldsValue.customItems.CustomitemName,
-              quantity: fieldsValue.customItems.Customquantity,
-              price: fieldsValue.customItems.Customprice,
-              total: fieldsValue.customItems.Customtotal,
-              remarks: fieldsValue.customItems.Customremarks
-            }
-          ],
+
+          items: fieldsValue[0],
+        
+          customItems: fieldsValue.customItems,
+
+
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
@@ -217,7 +204,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
     }
-    // console.log(fieldsValue)
+    console.log(fieldsValue)
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
   };
 

@@ -427,10 +427,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
-
-
 };
-
 
 export default request;
