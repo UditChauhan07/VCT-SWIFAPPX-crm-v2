@@ -87,7 +87,7 @@ export default function CreateItem({ config, CreateForm }) {
     return () => { };
   }, [isSuccess]);
 
-  const onSubmit = (fieldsValue) => { 
+  const onSubmit = (fieldsValue) => {
     console.log({ fieldsValue });
     if (fieldsValue) {
       if (entity === "items") {
@@ -137,12 +137,12 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-
+        console.log(fieldsValue[0])
         const Leader = {
-          user : fieldsValue.LeadWorker,
-          startTime : fieldsValue.startTime,
-          endTime : fieldsValue.endTime,
-          isLeader : true
+          user: fieldsValue.LeadWorker,
+          startTime: fieldsValue.startTime,
+          endTime: fieldsValue.endTime,
+          isLeader: true
         }
         const Worker = [
           {
@@ -155,13 +155,12 @@ export default function CreateItem({ config, CreateForm }) {
           Leader,
           ...Worker
         ];
-
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
         const EndTime = new Date(startTime + expectedRequiredTime).toLocaleString();
-            fielduser.map((item) => {
-              item.endTime= EndTime
-            })
+        fielduser.map((item) => {
+          item.endTime = EndTime
+        })
 
 
 
@@ -180,29 +179,32 @@ export default function CreateItem({ config, CreateForm }) {
           serviceList: fieldsValue.serviceList,
           subscription: fieldsValue.subscription,
           fieldUsers: fielduser,
-          customService: { 
+          customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
           },
-          items: [
-            {
-              item: fieldsValue.item,
-              quantity: fieldsValue.productquantity,
-              price: fieldsValue.productprice,
-              total: fieldsValue.producttotal,
-              remarks: fieldsValue.productremarks
-            }
-          ],
-          customItems: [
-            {
-              item: fieldsValue.items.CustomitemName,
-              quantity: fieldsValue.items.Customquantity,
-              price: fieldsValue.items.Customprice,
-              total: fieldsValue.items.Customtotal,
-              remarks: fieldsValue.items.Customremarks
-            }
-          ],
+          items: fieldsValue[0],
+          //  [
+          //   {
+          //     item: fieldsValue.productquantity,
+          //     quantity: fieldsValue.productquantity,
+          //     price: fieldsValue.productprice,
+          //     total: fieldsValue.producttotal,
+          //     remarks: fieldsValue.productremarks
+          //   }
+          // ],
+          customItems: fieldsValue.customItems,
+          //  [
+          //   {
+          //     item: fieldsValue.items.CustomitemName,
+          //     quantity: fieldsValue.items.Customquantity,
+          //     price: fieldsValue.items.Customprice,
+          //     total: fieldsValue.items.Customtotal,
+          //     remarks: fieldsValue.items.Customremarks
+          //   }
+          // ]
+       
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
@@ -217,7 +219,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
     }
-    // console.log(fieldsValue)
+    console.log(fieldsValue)
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
   };
 

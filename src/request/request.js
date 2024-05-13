@@ -367,14 +367,6 @@ const request = {
       console.log({ lll: error });
       return errorHandler(error);
     }
-  getServiceCategoryName: async (id) => {
-    try {
-      const response = await axios.get(`/servicelist/show/${id}`);
-      return response.data;
-    } catch (error) {
-      console.log({ lll: error });
-      return errorHandler(error);
-    }
   },
   getSalesPerson: async () => {
     try {
@@ -388,7 +380,6 @@ const request = {
   getLeadWorker: async () => {
     try {
       const response = await axios.get('/worker/listAll');
-
 
       return response.data;
     } catch (error) {
@@ -436,10 +427,6 @@ const request = {
       return errorHandler(error);
     }
   },
-
-
-
 };
-
 
 export default request;
