@@ -140,6 +140,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
+
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -163,7 +164,7 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
-        console.log(fieldsValue.customItems)
+        // console.log(fieldsValue.customItems)
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -184,24 +185,17 @@ export default function CreateItem({ config, CreateForm }) {
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
           },
+
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
-       
-          adjustment: {
-            type: fieldsValue.Adjustment,
-            value: fieldsValue.AdjustmentValue
-          },
-          remarks: fieldsValue.InitialRemarks,
-          discount: fieldsValue.discount
-        };
+        }
 
         fieldsValue = Data
-
       }
-    }
-    console.log(fieldsValue)
-    dispatch(erp.create({ entity, jsonData: fieldsValue }));
-  };
+      // console.log(fieldsValue)
+      dispatch(erp.create({ entity, jsonData: fieldsValue }));
+    };
+  }
 
   return (
     <>

@@ -704,6 +704,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             >
               {WorkLead?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id} >{option.name}</Select.Option>
+
               ))}
             </Select>
           </Form.Item>
@@ -1217,7 +1218,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
                       <Col className="gutter-row" span={4}>
                         <Form.Item
-                          name={data.name}
+                          name={['items', `${index}`, '_id']}
                           // rules={[
                           //   {
                           //     required: true,
@@ -1228,13 +1229,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           //     message: 'Item Name must contain alphanumeric or special characters',
                           //   },
                           // ]}
-                          key={[`${i}`, `${data._id}`]}
+                          key={['items', `${data._id}`]}
+                          value={data._id}
                         >
                           {data?.name && <Input placeholder="Item Name" defaultValue={data.name} readOnly />}
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={[`${i}`, `${index}`, 'productprice']}
+
+                        <Form.Item name={['items', `${index}`, 'productprice']}
+
                         // rules={[{ required: true }]}
                         >
                           <InputNumber
@@ -1251,7 +1255,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={3}>
-                        <Form.Item name={[`${i}`, `${index}`, 'productquantity']}
+
+                        <Form.Item name={['items', `${index}`, 'productquantity']}
+
                         // rules={[{ required: true }]} 
                         >
                           <InputNumber style={{ width: '100%' }} min={0}
@@ -1262,7 +1268,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
 
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={[`${i}`, `${index}`, 'producttotal']}>
+                        <Form.Item name={['items', `${index}`, 'producttotal']}>
                           <InputNumber
                             // readOnly
                             className="moneyInput"
@@ -1278,7 +1284,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
 
                       <Col className="gutter-row" span={7}>
-                        <Form.Item name={[`${i}`, `${index}`, 'productremarks']} >
+                        <Form.Item name={['items', `${index}`, 'productremarks']} >
                           <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
                         </Form.Item>
                       </Col>
