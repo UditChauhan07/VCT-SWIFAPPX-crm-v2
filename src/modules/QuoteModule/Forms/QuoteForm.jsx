@@ -676,6 +676,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Col>
 
 
+
       {/* ---------------NEW SERVICE CATEGORY------------ */}
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
