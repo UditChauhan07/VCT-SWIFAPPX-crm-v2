@@ -316,7 +316,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     fetchData3()
   }, []);
-
+useEffect(()=>{
   const hendleOneTime = async () => {
     try {
       const response = await request.getSubscriptiontypeOneTime();
@@ -328,7 +328,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching data:', error);
     }
   };
-
+  hendleOneTime()
+},[])
+  
   const handleserviceId = async (event) => {
     try {
       const response = await request.getServiceCategoryName(event);
@@ -355,10 +357,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // console.log({ number, salesContactNumber });
     }
   }, [selectedSalesPerson, salesContactNumber])
-
+  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
   useEffect(() => { }, [selectedSalesPerson])
   const ContactHandler = ({ salesContactNumber }) => {
-    return (<Form.Item label={translate('Sales Person Contact')} name="Sales Person Contact" rules={[
+    return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
       {
         required: true,
       },
@@ -389,21 +391,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return subscriptionNames;
   };
 
-  const columns = [
-    {
-      title: 'Subscription',
-      dataIndex: 'Subscription',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'Name',
-    },
-    {
-      title: 'Price',
-      dataIndex: 'Price',
-    },
-  ];
-
   const generateColumns = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const columns = [
@@ -425,20 +412,45 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
   // ...................
 
+  // const generateTableData = () => {
+  //   const subscriptionNames = getUniqueSubscriptionNames();
+  //   const tableData = [];
+  //   ShowServiceId.forEach((ele, index) => {
+  //     console.log({ ele: ele })
+
+  //     const rowData = {
+  //       Subscription: ele.subscription.name,
+  //     };
+
+  //     subscriptionNames.forEach((name) => {
+  //       const matchingItem = ele.data.find(item => item.name === name);
+  //       rowData[name] = matchingItem ? (
+  //         <Checkbox>{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
+  //       ) : null;
+  //     });
+
+  //     tableData.push(rowData);
+  //   });
+
+  //   return tableData;
+  // };
+  // ;
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
     ShowServiceId.forEach((ele, index) => {
-      console.log({ ele: ele })
+      console.log({ ele: ele });
 
       const rowData = {
         Subscription: ele.subscription.name,
       };
 
       subscriptionNames.forEach((name) => {
-        const matchingItem = ele.data.find(item => item.name === name);
+        const matchingItem = ele.data.find((item) => item.name === name);
         rowData[name] = matchingItem ? (
-          <Checkbox>{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
+          <Checkbox
+            onClick={() => handleCheckboxClick(matchingItem._id, ele.subscription._id)}
+          >{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
         ) : null;
       });
 
@@ -447,8 +459,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     return tableData;
   };
-  ;
 
+  const handleCheckboxClick = (itemId, subscriptionId) => {
+    // Update state with the clicked item ID and subscription ID
+    setSelectedIds({ itemId, subscriptionId });
+  };
 
   const handleSelectChange = (value) => {
     if (value === 'custom') {
@@ -470,6 +485,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     }
   };
+  const optionsss = ['Addition', 'Substraction'];
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
@@ -654,7 +670,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Select>
           </Form.Item>
         </Col>
-        <Col className="gutter-row" name="salesPersonContact" span={8}>
+        
+        <Col className="gutter-row"  span={8}>
           <ContactHandler salesContactNumber={salesContactNumber} />
         </Col>
 
@@ -695,9 +712,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
           </Form.Item>
         </Col>
-        <Col className="gutter-row" span={12}>
+         <Col className="gutter-row" span={12}>
           <Form.Item
-            name="serviceList"
+            name="serviceName"
             label={translate('Service Name')}
             rules={[
               {
@@ -709,45 +726,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-              // defaultValue="Select"
-              // onSelect={(value) => {
-              //   if (value === 'custom') {
-              //     // handleoneTimeSubscription()
-              //     subscriptiononetime
-              //     IsActiveness(2);
-              //     IsActiveSelect(1)
-              //   }
-              //   else {
-              //     const selectedOption = ShowServiceList.find(option => option._id === value);
-              //     if (selectedOption) {
-              //       setShowServiceId(selectedOption.subscriptions);
-              //       IsActiveSelect(2);
-              //       IsActiveness(1);
-              //     } else {
-              //       IsActiveness(0);
-              //       IsActiveSelect(0)
-              //     }
-              //   }
-
-              //   // else if (value === 'Dynamic') {
-              //   //   IsActiveSelect(2)
-              //   //   IsActiveness(1);
-              //   // }
-              //   // else {
-              //   //   IsActiveness(0);
-              //   //   IsActiveSelect(0)
-              //   // }
-              // }}
+              
               onChange={handleSelectChange}
-
-
-            >
+              subscriptionOneTime
+                >
               <Select.Option value="Select">Select</Select.Option>
-              {/* {subscriptionOneTime?.map((option, index) => { */}
-              <Select.Option value="custom">Custom Service (One Time)</Select.Option>
-              {/* })} */}
+            
+               <Select.Option value="custom">Custom Service (One Time)</Select.Option>
+             
 
-              {isFirstServiceCategorySelect &&
+               {isFirstServiceCategorySelect &&
                 ShowServiceList?.map((option) => (
                   <Select.Option key={option._id} value={option._id}>
                     {option.name}
@@ -756,7 +744,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Select>
 
           </Form.Item>
-        </Col>
+        </Col> 
 
       </Row>
 
@@ -818,12 +806,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
                         </Col>
                       </Row>
-                      <Form.List name="customItems">
+                      <Form.List name="customItems"
+                        initialValue={[{
+                          itemName: '',
+                          price: "",
+                          quantity: "",
+                          total: "",
+                          remarks: '',
+                        }]}
+                      >
                         {(fields, { add, remove }) => (
-
                           <>
-
-                            {fields.map((field) => (
+                          {fields.map((field) => (
                               <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
                             ))}
                             <Form.Item>
@@ -864,81 +858,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       {/* <Form.List name="items" >
                         <> */}
                           {mainData.products?.map((data, index) => (
-                            // <Row gutter={[12, 12]} style={{ position: 'relative' }} key={[`${i}`, `${data._id}`]}>
-                            //   <Col className="gutter-row mt-2" >
-                            //     <Checkbox onChange={() => setCheckedId(data.price)}></Checkbox>
-                            //   </Col>
-                            //   <Col className="gutter-row" span={4}>
-                            //     <Form.Item
-                            //       name={data.name}
-                            //       // rules={[
-                            //       //   {
-                            //       //     required: true,
-                            //       //     message: 'Missing itemName name',
-                            //       //   },
-                            //       //   {
-                            //       //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                            //       //     message: 'Item Name must contain alphanumeric or special characters',
-                            //       //   },
-                            //       // ]}
-                            //       key={[`${i}`, `${data._id}`]}
-                            //     >
-
-                            //       {data?.name && <Input placeholder="Item Name" defaultValue={data.name} readOnly />}
-                            //     </Form.Item>
-                            //   </Col>
-                            //   <Col className="gutter-row" span={4}>
-                            //     <Form.Item name={[`${i}`, `${index}`, 'price']}
-                            //     //  rules={[{ required: true }]}
-                            //     >
-                            //       <InputNumber
-                            //         className="moneyInput"
-                            //         onChange={updatePrice}
-
-                            //         readOnly
-                            //         min={0}
-                            //         controls={false}
-                            //         addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                            //         addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                            //         defaultValue={data.price}
-                            //       />
-                            //     </Form.Item>
-                            //   </Col>
-                            //   <Col className="gutter-row" span={3}>
-                            //     <Form.Item name={[`${i}`, `${index}`, 'quantity']}
-                            //     // rules={[{ required: true }]}
-                            //     >
-                            //       <InputNumber style={{ width: '100%' }} min={0}
-                            //         onChange={updateQt}
-
-                            //       />
-                            //     </Form.Item>
-                            //   </Col>
-
-                            //   <Col className="gutter-row" span={4}>
-                            //     <Form.Item name={[`${i}`, `${index}`, 'total']} >
-                            //       <InputNumber
-                            //         // readOnly
-                            //         className="moneyInput"
-                            //         value={totalState}
-                            //         min={0}
-                            //         controls={false}
-                            //         addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                            //         addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                            //         formatter={(value) => money.amountFormatter({ amount: value })}
-
-                            //       />
-                            //     </Form.Item>
-                            //   </Col>
-
-                            //   <Col className="gutter-row" span={7}>
-                            //     <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
-                            //       <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
-                            //     </Form.Item>
-                            //   </Col>
-
-
-                            // </Row>
+                          
                             <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
                               <Col className="gutter-row mt-2">
                                 <Checkbox onChange={() => setCheckedId(data.price)} />
@@ -946,16 +866,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               <Col className="gutter-row" span={4}>
                                 <Form.Item
                                   name={['items', index, '_id']}
-                                  // rules={[
-                                  //   {
-                                  //     required: true,
-                                  //     message: 'Missing itemName name',
-                                  //   },
-                                  //   {
-                                  //     pattern: /^(?!\s*$)[\s\S]+$/,
-                                  //     message: 'Item Name must contain alphanumeric or special characters',
-                                  //   },
-                                  // ]}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: 'Missing item name',
+                                      // Add a validator to allow the default value to pass
+                                      validator: (_, value) => {
+                                        if (value || data.name) { // Allow the default value to pass
+                                          return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Item name is required'));
+                                      },
+                                    },
+                                    {
+                                      pattern: /^(?!\s*$)[\s\S]+$/,
+                                      message: 'Item Name must contain alphanumeric or special characters',
+                                    },
+                                  ]}
                                 >
                                   <Input placeholder="Item Name" defaultValue={data.name} readOnly />
                                 </Form.Item>
@@ -963,7 +890,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               <Col className="gutter-row" span={4}>
                                 <Form.Item
                                   name={['items', index, 'productprice']}
-                                  // rules={[{ required: true }]}
+                                  rules={[]}
                                 >
                                   <InputNumber
                                     className="moneyInput"
@@ -972,20 +899,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                     controls={false}
                                     addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                                     addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                                  // Do not use defaultValue here
-                                  // defaultValue={data.price}
+                                    defaultValue={data.price} // Use defaultValue for default value
                                   />
                                 </Form.Item>
                               </Col>
                               <Col className="gutter-row" span={3}>
                                 <Form.Item name={[`${i}`, `${index}`, 'quantity']}
-                                // rules={[{ required: true }]} 
+                                rules={[{ required: true }]} 
                                 >
-                                  <InputNumber style={{ width: '100%' }} min={0}
-                                    onChange={updateQt}
-
-                                  />
-                                </Form.Item>
+                                  <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
+                                  </Form.Item>
                               </Col>
 
                               <Col className="gutter-row" span={4}>
@@ -1010,6 +933,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                 </Form.Item>
                               </Col>
                             </Row>
+                            
                           ))}
                         {/* </>
                       </Form.List> */}
@@ -1069,12 +993,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
                     </Col>
                   </Row>
-                  <Form.List name="customItems" initialValue={[{
+                  <Form.List name="customItems" 
+                  initialValue={[{
                     itemName: '',
                     price: "",
                     quantity: "",
+                    total: "",
                     remarks: '',
-                  }]}>
+                  }]}
+                  >
+                    
                     {(fields, { add, remove }) => (
 
                       <>
@@ -1120,59 +1048,61 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   {/* <Form.List name="items" >
                     <> */}
                       {mainData.products?.map((data, index) => (
-                        // <Row gutter={[12, 12]} style={{ position: 'relative' }} key={[`${i}`, `${data._id}`]}>
-                        //   <Col className="gutter-row mt-2" >
-                        //     <Checkbox onChange={() => setCheckedId(data.price)}></Checkbox>
+                        
+                        // <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
+                        //   <Col className="gutter-row mt-2">
+                        //     <Checkbox onChange={() => setCheckedId(data.price)} />
                         //   </Col>
                         //   <Col className="gutter-row" span={4}>
                         //     <Form.Item
-                        //       name={['items', `${index}`, '_id']}
+                        //       name={['items', index, '_id']}
                         //       rules={[
                         //         {
                         //           required: true,
-                        //           message: 'Missing itemName name',
+                        //           message: 'Missing item name',
+                        //           // Add a validator to allow the default value to pass
+                        //           validator: (_, value) => {
+                        //             if (value || data.name) { // Allow the default value to pass
+                        //               return Promise.resolve();
+                        //             }
+                        //             return Promise.reject(new Error('Item name is required'));
+                        //           },
                         //         },
                         //         {
-                        //           pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                        //           pattern: /^(?!\s*$)[\s\S]+$/,
                         //           message: 'Item Name must contain alphanumeric or special characters',
                         //         },
                         //       ]}
-                        //       key={['items', `${data._id}`]}
-                        //       value={data._id}
                         //     >
-                        //       {data?.name && <Input placeholder="Item Name" defaultValue={data.name} readOnly />}
+                        //       <Input placeholder="Item Name" defaultValue={data.name} readOnly />
                         //     </Form.Item>
                         //   </Col>
                         //   <Col className="gutter-row" span={4}>
-                        //     <Form.Item name={['items', `${index}`, 'productprice']}
-                        //     rules={[{ required: true }]}
+                        //     <Form.Item
+                        //       name={['items', index, 'productprice']}
+                        //       rules={[]}
                         //     >
                         //       <InputNumber
                         //         className="moneyInput"
                         //         onChange={updatePrice}
-
-                        //         readOnly
                         //         min={0}
                         //         controls={false}
                         //         addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                         //         addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                        //         defaultValue={data.price}
+                        //         defaultValue={data.price} // Use defaultValue for default value
                         //       />
                         //     </Form.Item>
                         //   </Col>
                         //   <Col className="gutter-row" span={3}>
-                        //     <Form.Item name={['items', `${index}`, 'productquantity']}
-                        //     rules={[{ required: true }]}
+                        //     <Form.Item name={[`${i}`, `${index}`, 'quantity']}
+                        //       rules={[]}
                         //     >
-                        //       <InputNumber style={{ width: '100%' }} min={0}
-                        //         onChange={updateQt}
-
-                        //       />
+                        //       <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
                         //     </Form.Item>
                         //   </Col>
 
                         //   <Col className="gutter-row" span={4}>
-                        //     <Form.Item name={['items', `${index}`, 'producttotal']}>
+                        //     <Form.Item name={[`${i}`, `${index}`, 'total']} >
                         //       <InputNumber
                         //         // readOnly
                         //         className="moneyInput"
@@ -1188,38 +1118,50 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         //   </Col>
 
                         //   <Col className="gutter-row" span={7}>
-                        //     <Form.Item name={['items', `${index}`, 'productremarks']} >
-                        //       <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
+                        //     <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
+                        //       <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
                         //     </Form.Item>
                         //   </Col>
-
-
                         // </Row>
+
                         <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
                           <Col className="gutter-row mt-2">
                             <Checkbox onChange={() => setCheckedId(data.price)} />
                           </Col>
                           <Col className="gutter-row" span={4}>
                             <Form.Item
-                              name={['items', index, '_id']}
-                              // rules={[
-                              //   {
-                              //     required: true,
-                              //     message: 'Missing itemName name',
-                              //   },
-                              //   {
-                              //     pattern: /^(?!\s*$)[\s\S]+$/,
-                              //     message: 'Item Name must contain alphanumeric or special characters',
-                              //   },
-                              // ]}
+                              name={['items', index, 'item']}
+                              initialValue={data._id}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Missing item name',
+                                  // Add a validator to allow the default value to pass
+                                  validator: (_, value) => {
+                                    if (value || data.name) { // Allow the default value to pass
+                                      return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('Item name is required'));
+                                  },
+                                },
+                                {
+                                  pattern: /^(?!\s*$)[\s\S]+$/,
+                                  message: 'Item Name must contain alphanumeric or special characters',
+                                },
+                              ]}
                             >
-                              <Input placeholder="Item Name" defaultValue={data.name} readOnly />
+                              {/* <Input placeholder="Item Name"   readOnly /> */}
+
+                              <span>{data.name}</span>
+
+
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={4}>
                             <Form.Item
-                              name={['items', index, 'productprice']}
-                              // rules={[{ required: true }]}
+                              name={['items', index, 'price']}
+                              rules={[]}
+                              initialValue={data.price}
                             >
                               <InputNumber
                                 className="moneyInput"
@@ -1228,14 +1170,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                 controls={false}
                                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                                 addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                              // Do not use defaultValue here
-                              // defaultValue={data.price}
+                                defaultValue={data.price}
+                              // Use defaultValue for default value
                               />
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={3}>
-                            <Form.Item name={[`${i}`, `${index}`, 'quantity']}
-                            // rules={[{ required: true }]} 
+                            <Form.Item name={[`items`, `${index}`, 'quantity']}
+                              rules={[{ required: true }]}
                             >
                               <InputNumber style={{ width: '100%' }} min={0}
                                 onChange={updateQt}
@@ -1245,7 +1187,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           </Col>
 
                           <Col className="gutter-row" span={4}>
-                            <Form.Item name={[`${i}`, `${index}`, 'total']} >
+                            <Form.Item
+                              name={[`items`, `${index}`, 'total']}
+                              initialValue={totalState}
+                            >
                               <InputNumber
                                 // readOnly
                                 className="moneyInput"
@@ -1255,13 +1200,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                                 addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
                                 formatter={(value) => money.amountFormatter({ amount: value })}
-
+                              // initialValue={totalState}
                               />
                             </Form.Item>
                           </Col>
 
                           <Col className="gutter-row" span={7}>
-                            <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
+                            <Form.Item name={[`items`, `${index}`, 'remarks']} >
                               <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
                             </Form.Item>
                           </Col>
@@ -1284,7 +1229,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "30px" }} >
 
-        <Col className="gutter-row" span={12} >
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="Adjustment"
             label={translate('Adjustment')}
@@ -1295,15 +1240,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
+            {/* <Radio.Group style={{ display: "flex", gap: "20px" }} >
+              <Radio value="Addition" onClick={() => IsActive(2)} >Addition</Radio>
+              <Radio value="Subtraction" onClick={() => IsActive(3)}>Subtraction</Radio>
+            </Radio.Group> */}
+           
             <Radio.Group style={{ display: "flex", gap: "20px" }} >
-              <Radio value="0" onClick={() => IsActive(2)} >Addition</Radio>
-              <Radio value="1" onClick={() => IsActive(3)}>Subtraction</Radio>
+              {optionsss.map((option, index) => (
+                <Radio key={index} value={option} onClick={() => IsActive(index + 2)}>
+                  {option}
+                </Radio>
+              ))}
             </Radio.Group>
           </Form.Item>
 
           {
             active == 3 && (
-              <Form.Item name="type" rules={[
+              <Form.Item name="AdjustmentType" rules={[
                 {
                   required: true,
                 },
@@ -1315,7 +1268,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
           {
             active == 2 && (
-              <Form.Item name="value" rules={[
+              <Form.Item name="AdjustmentValue" rules={[
                 {
                   required: true,
                 },
@@ -1342,10 +1295,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Row>
 
 
+
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
-
-
-
         <Col className="gutter-row" span={12}>
           <Form.Item
             name="discount"

@@ -44,6 +44,7 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
+  console.log(result)
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
@@ -82,14 +83,16 @@ export default function CreateItem({ config, CreateForm }) {
       }
       else {
         navigate(`/${entity.toLowerCase()}/read/${result._id}`);
+
       }
     }
     return () => { };
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-    // console.log({ fieldsValue });
+    console.log({ entity});
     if (fieldsValue) {
+
       if (entity === "items") {
         let newList = [...fieldsValue.items];
         newList.map((item) => {
@@ -139,11 +142,10 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = requestBody;
 
       }
-      if (entity === "Quote") {
-        console.log({hello})
-        const fieldData =
-       
-         {
+      if (entity === "quote") {
+     
+        const fieldData = 
+       {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
@@ -153,52 +155,33 @@ export default function CreateItem({ config, CreateForm }) {
           startTime: fieldsValue.startTime,
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.salesPersonContact,
+            salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceName,
-          subscriptions: [],
-          isCustom: true,
+          subscriptions: fieldsValue.itemId,
+            isCustom: true ,
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice ,
             description: fieldsValue.ServiceDescription
           },
-          items: [
-            {
-              item: fieldsValue.itemName ,
-              quantity: fieldsValue.quantity,
-              price: fieldsValue.price ,
-              total: fieldsValue.total ,
-              remarks: fieldsValue.remarks
-            }
-          ],
-          customItems: [
-            {
-              item: fieldsValue.item ,
-              quantity: fieldsValue.quantity ,
-              price: fieldsValue.price ,
-              total: fieldsValue.total ,
-              remarks: fieldsValue.remarks,
-            }
-          ],
+           items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+        
           adjustment: {
-            type: fieldsValue.type,
-            value: fieldsValue.value,
+            type: fieldsValue.Adjustmenttype,
+            value: fieldsValue.AdjustmentValue,
           },
 
-          remarks: fieldsValue.remarks,
+            InitialRemarks: fieldsValue.InitialRemarks,
           discount: fieldsValue.discount,
 
         }
      
-
-        fieldsValue = data
+        // console.log({ fieldData })
+        fieldsValue = fieldData
 ; 
-
-        console.log(fieldData)
-
-
-      }
+ }
      
     }
     console.log(fieldsValue)

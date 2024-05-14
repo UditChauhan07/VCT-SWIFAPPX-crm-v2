@@ -8,6 +8,8 @@ import { useForm } from 'antd/lib/form/Form';
 import { Checkbox } from 'antd/lib';
 
 export default function ItemRow({ field, remove, current = null, response }) {
+
+
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
   const [name, setName] = useState('');
@@ -25,7 +27,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
   };
   const [form] = useForm();
 
-  console.log(current && current.items && current.items.length > 0, "abc")
+
   useEffect(() => {
     if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
       const firstItem = current.items[0];
@@ -69,9 +71,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
     setTotal(currentTotal);
   }, [price, quantity]);
 
-  console.log(field, "field")
-
-  return (
+return (
     <>
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -82,7 +82,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
 
         <Col className="gutter-row" span={4}>
           <Form.Item
-            name={[field.name, 'itemName']}
+            name={[field.name, 'item']}
             rules={[
               {
                 required: true,
@@ -122,6 +122,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
                 readOnly
                 className="moneyInput"
                 value={totalState}
+                // initialValue={totalState}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
