@@ -7,9 +7,8 @@ import calculate from '@/utils/calculate';
 import { useForm } from 'antd/lib/form/Form';
 import { Checkbox } from 'antd/lib';
 
-export default function ItemRow({ field, remove, current = null, response  }) {
-
-
+export default function ItemRow({ field, remove, current = null, response, isFirstRow  }) {
+   
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
   const [name, setName] = useState('');
@@ -118,13 +117,18 @@ export default function ItemRow({ field, remove, current = null, response  }) {
         </Col>
 
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'total']}>
+          <Form.Item 
+            name={[field.name, 'total']}
+            initialValue={totalState}
+            shouldUpdate={(prevValues, currentValues) =>
+              prevValues[field.name]?.total !== currentValues[field.name]?.total
+            }
+          >
             <Form.Item>
               <InputNumber
                 readOnly
                 className="moneyInput"
                 value={totalState}
-                // initialValue={totalState}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
@@ -137,14 +141,24 @@ export default function ItemRow({ field, remove, current = null, response  }) {
 
         <Col className="gutter-row" span={7}>
           <Form.Item name={[field.name, 'remarks']}>
-            <Input placeholder=" Remarks for Quotation" />
+            <Input placeholder=" Remarks " />
           </Form.Item>
         </Col>
-        {field &&
+        {/* {field  &&
           <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
             <DeleteOutlined onClick={() => remove(field.name)} />
           </div>
+        } */}
+
+        {
+          !isFirstRow && (
+            <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
+              <DeleteOutlined onClick={() => remove(field.name)} />
+            </div>
+          )
         }
+
+
       </Row>
     </>
   );

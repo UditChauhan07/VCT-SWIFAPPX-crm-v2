@@ -66,6 +66,8 @@ const PublicHoliday = lazy(() => import('@/pages/PublicHoliday'));
 const WorkOrder = lazy(() => import('@/pages/WorkOrder'));
 const WorkCreate = lazy(() => import('@/pages/WorkOrder/WorkCreate'));
 const WorkRead = lazy(() => import('@/pages/WorkOrder/WorkRead'));
+const Contracts = lazy(() => import('@/pages/Contracts'));
+const ContractCreate = lazy(() => import('@/pages/Contracts/ContractCreate'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -321,6 +323,14 @@ export default function AppRouter() {
     {
       path: '/workorder/read/:id',
       element: <WorkRead />,
+    },
+    {
+      path: '/contract',
+      element: <Contracts/>,
+    },
+    {
+      path: '/contract/create',
+      element: <ContractCreate/>,
     },
     {
       path: '*',

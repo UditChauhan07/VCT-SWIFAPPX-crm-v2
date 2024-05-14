@@ -137,7 +137,6 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-        console.log(fieldsValue.items)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -161,9 +160,7 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
-
-
-
+        console.log(fieldsValue.customItems)
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -194,8 +191,6 @@ export default function CreateItem({ config, CreateForm }) {
           remarks: fieldsValue.InitialRemarks,
           discount: fieldsValue.discount
         };
-
-        // console.log({ Data })
 
         fieldsValue = Data
 

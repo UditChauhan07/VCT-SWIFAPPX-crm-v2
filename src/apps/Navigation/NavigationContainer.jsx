@@ -32,6 +32,7 @@ import {
   BarsOutlined,
   ReconciliationOutlined,
   TeamOutlined,
+  ControlOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -140,6 +141,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'quote',
       icon: <FileSyncOutlined />,
       label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
+    },
+    {
+      key: 'contract',
+      icon: <ControlOutlined />,
+      label: <Link to={'/contract'}>{translate('Contracts')}</Link>,
     },
     {
       key: 'workorder',
