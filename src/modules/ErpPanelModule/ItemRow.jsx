@@ -109,7 +109,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
             ]}
           >
             <Input onChange={updateName} placeholder="Item Name" />
-            <Input onChange={updateName} placeholder="Item Name" />
+         
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
