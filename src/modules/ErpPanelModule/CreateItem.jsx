@@ -44,16 +44,17 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
+  console.log(result)
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
   const handelValuesChange = (changedValues, values) => {
-    const items = values['items'];
+    const item = values['items'];
     let subTotal = 0;
     let subOfferTotal = 0;
 
-    if (items) {
-      items.map((item) => {
+    if (item) {
+      // items.map((item) => {
         if (item) {
           if (item.offerPrice && item.quantity) {
             let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
@@ -65,7 +66,7 @@ export default function CreateItem({ config, CreateForm }) {
             subTotal = calculate.add(subTotal, total);
           }
         }
-      });
+      // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
     }
@@ -82,6 +83,7 @@ export default function CreateItem({ config, CreateForm }) {
       }
       else {
         navigate(`/${entity.toLowerCase()}/read/${result._id}`);
+
       }
     }
     return () => { };
@@ -90,6 +92,7 @@ export default function CreateItem({ config, CreateForm }) {
   const onSubmit = (fieldsValue) => {
     console.log({ fieldsValue });
     if (fieldsValue) {
+
       if (entity === "items") {
         let newList = [...fieldsValue.items];
         newList.map((item) => {

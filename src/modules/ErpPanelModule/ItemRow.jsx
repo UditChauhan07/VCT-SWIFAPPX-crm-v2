@@ -37,6 +37,17 @@ export default function ItemRow({ field, remove, current = null, response, isFir
     }
   }, [current, form]);
 
+
+  useEffect(() => {
+    if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
+      const firstItem = current.items[0];
+      form.setFieldsValue({ [field.name]: firstItem });
+      setName(firstItem.itemName || '');
+      setPrice(firstItem.price || 0);
+      setQuantity(firstItem.quantity || 0);
+    }
+  }, [current, form]);
+
   useEffect(() => {
     if (current) {
       // When it accesses the /payment/ endpoint,
@@ -81,9 +92,11 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         </Col> */}
 
 
+
         <Col className="gutter-row" span={4}>
           <Form.Item
             name={[field.name, 'item']}
+          
             rules={[
               {
                 required: true,
@@ -95,6 +108,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
               },
             ]}
           >
+            <Input onChange={updateName} placeholder="Item Name" />
             <Input onChange={updateName} placeholder="Item Name" />
           </Form.Item>
         </Col>
@@ -129,6 +143,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
                 readOnly
                 className="moneyInput"
                 value={totalState}
+                // initialValue={totalState}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
