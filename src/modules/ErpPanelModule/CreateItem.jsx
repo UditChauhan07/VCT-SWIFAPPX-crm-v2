@@ -157,13 +157,11 @@ export default function CreateItem({ config, CreateForm }) {
         ];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
-        const EndTime = new Date(startTime + expectedRequiredTime).toLocaleString();
+        const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
         fielduser.map((item) => {
           item.endTime = EndTime
         })
-
-
-
+        console.log(fieldsValue.customItems)
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -185,20 +183,17 @@ export default function CreateItem({ config, CreateForm }) {
             description: fieldsValue.ServiceDescription
           },
 
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+       
+
+
           items: fieldsValue[0],
         
           customItems: fieldsValue.customItems,
 
-
-          adjustment: {
-            type: fieldsValue.Adjustment,
-            value: fieldsValue.AdjustmentValue
-          },
-          remarks: fieldsValue.InitialRemarks,
-          discount: fieldsValue.discount
-        };
-
         console.log({ Data })
+
 
         fieldsValue = Data
 
