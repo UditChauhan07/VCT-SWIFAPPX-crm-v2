@@ -380,7 +380,7 @@ const request = {
   getLeadWorker: async () => {
     try {
       const response = await axios.get('/worker/listAll');
-
+      console.log(response);
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -405,13 +405,21 @@ const request = {
   },
   getServiceListShow: async ({ id }) => {
     try {
+      const response = await axios.get(`/servicelist/service/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceListShows: async ({ id }) => {
+    try {
       const response = await axios.get(`/servicelist/show/${id}`);
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
-  getSubscriptiontypeOneTime: async () => {
+  getSubscriptiononetime: async () => {
     try {
       const response = await axios.get(`/subscriptiontype/oneTime`);
       return response.data;

@@ -99,6 +99,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                 dataIndex: 'subscription',
             },
             ...currentErp.subscriptions.map((item, key) => ({
+        
                 title: item.data[key]?.name,
                 dataIndex: item.data[key]?.name,
             })),
@@ -107,7 +108,7 @@ export default function ReadServiceList({ config, selectedItem }) {
             //     dataIndex: subitem.name,
             // }))))
         ];
-        console.log({ columns });
+
         return columns;
     };
 
@@ -115,14 +116,14 @@ export default function ReadServiceList({ config, selectedItem }) {
     const generateTableData = () => {
         const subscriptionNames = getSubscriptionNames();
         const priceValues = getPriceValues();
-        console.log(subscriptionNames, priceValues);
+       
         const tableData = subscriptionNames.map((subscription, index) => {
             // console.log(subscription);
             const rowData = {
                 subscription: subscription,
             };
             priceValues[index].forEach((price, idx) => {
-                // console.log(currentErp.subscriptions, idx, price);
+                console.log([currentErp.subscriptions[index].data[idx].name] = price);
                 rowData[currentErp.subscriptions[index].data[idx].name] = price;
             });
             return rowData;

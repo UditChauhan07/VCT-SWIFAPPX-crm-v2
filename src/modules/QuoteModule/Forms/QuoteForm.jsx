@@ -158,7 +158,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     const fetchData3 = async () => {
       try {
-        const response = await request.getServiceListShow({ id: value });
+        const response = await request.getServiceListShows({ id: value });
         console.log(response)
         if (response.success) {
           setShowServiceList(response.result);
@@ -378,6 +378,7 @@ useEffect(()=>{
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
+
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
@@ -410,7 +411,7 @@ useEffect(()=>{
 
     return columns;
   };
-  // ...................
+
 
   // const generateTableData = () => {
   //   const subscriptionNames = getUniqueSubscriptionNames();
@@ -687,6 +688,7 @@ useEffect(()=>{
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }}>
         {translate('Quotation Services')}
       </Col>
+
 
 
       {/* ---------------NEW SERVICE CATEGORY------------ */}
@@ -1279,6 +1281,9 @@ useEffect(()=>{
           }
 
         </Col>
+
+
+
 
 
         <Col className="gutter-row" span={12}>

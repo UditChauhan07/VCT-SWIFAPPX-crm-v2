@@ -23,7 +23,7 @@ import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 import { useMoney, useDate } from '@/settings';
 import useMail from '@/hooks/useMail';
 import { useNavigate } from 'react-router-dom';
-import { tagColor } from '@/utils/statusTagColor';
+// import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
   const { moneyFormatter } = useMoney();
@@ -132,16 +132,16 @@ export default function ReadItem({ config, selectedItem }) {
         }}
         title={`${ENTITY_NAME} # ${currentErp.number}/${currentErp.year || ''}`}
         ghost={false}
-        tags={[
-          <Tag color={tagColor(currentErp.status)?.color} key="status">
-            {currentErp.status && translate(currentErp.status)}
-          </Tag>,
-          currentErp.paymentStatus && (
-            <Tag color={tagColor(currentErp.paymentStatus)?.color} key="paymentStatus">
-              {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
-            </Tag>
-          ),
-        ]}
+        // tags={[
+        //   <Tag color={tagColor(currentErp.status)?.color} key="status">
+        //     {currentErp.status && translate(currentErp.status)}
+        //   </Tag>,
+        //   currentErp.paymentStatus && (
+        //     <Tag color={tagColor(currentErp.paymentStatus)?.color} key="paymentStatus">
+        //       {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
+        //     </Tag>
+        //   ),
+        // ]}
         extra={[
           <Button
             key={`${uniqueId()}`}
@@ -180,7 +180,7 @@ export default function ReadItem({ config, selectedItem }) {
               dispatch(erp.convert({ entity, id: currentErp._id }));
             }}
             icon={<RetweetOutlined />}
-            style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
+          // style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
           >
             {translate('Convert to Invoice')}
           </Button>,
@@ -206,7 +206,7 @@ export default function ReadItem({ config, selectedItem }) {
           padding: '20px 0px',
         }}
       >
-        <Row>
+        {/* <Row>
           <Statistic title="Status" value={currentErp.status} />
           <Statistic
             title={translate('SubTotal')}
@@ -229,16 +229,53 @@ export default function ReadItem({ config, selectedItem }) {
               margin: '0 32px',
             }}
           />
-        </Row>
+        </Row> */}
       </PageHeader>
-      <Divider dashed />
-      <Descriptions title={`Client : ${currentErp.client.name}`}>
-        <Descriptions.Item label={translate('Address')}>{client.address}</Descriptions.Item>
-        <Descriptions.Item label={translate('email')}>{client.email}</Descriptions.Item>
-        <Descriptions.Item label={translate('Phone')}>{client.phone}</Descriptions.Item>
-      </Descriptions>
-      <Divider />
-      <Row gutter={[12, 0]}>
+      {/* <Divider dashed /> */}
+
+      <h3>Customer Details</h3>
+      <Row className="gutter-row">
+        <Col span={24}>
+
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+
+          </div>
+
+        </Col>
+
+
+      </Row>
+
+
+      <Row className="gutter-row" style={{ marginTop: "20px" }}>
+        <Col span={12}>
+          <h3>Basic WorkOrder Details</h3>
+          <div className='' style={{ width: "97%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+
+          </div>
+
+        </Col>
+        <Col span={12}>
+          <h3>WorkOrder Details</h3>
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+
+          </div>
+
+        </Col>
+
+      </Row>
+
+
+      <Row className="gutter-row" style={{ marginTop: "20px" }}>
+        <h3>WorkOrder Billing Detail</h3>
+        <Col span={24}>
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+          </div>
+        </Col>
+      </Row>
+
+
+      <Row gutter={[12, 0]} style={{ marginTop: "20px" }}>
         <Col className="gutter-row" span={11}>
           <p>
             <strong>{translate('Product')}</strong>

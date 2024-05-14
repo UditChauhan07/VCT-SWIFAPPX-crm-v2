@@ -7,8 +7,9 @@ import calculate from '@/utils/calculate';
 import { useForm } from 'antd/lib/form/Form';
 import { Checkbox } from 'antd/lib';
 
-export default function ItemRow({ field, remove, current = null, response }) {
 
+export default function ItemRow({ field, remove, current = null, response, isFirstRow  }) {
+   
 
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
@@ -71,6 +72,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
     setTotal(currentTotal);
   }, [price, quantity]);
 
+
 return (
     <>
 
@@ -99,6 +101,7 @@ return (
         </Col>
         <Col className="gutter-row" span={4}>
           <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
+
             <InputNumber
               className="moneyInput"
               onChange={updatePrice}
@@ -116,7 +119,13 @@ return (
         </Col>
 
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'total']}>
+          <Form.Item 
+            name={[field.name, 'total']}
+            initialValue={totalState}
+            shouldUpdate={(prevValues, currentValues) =>
+              prevValues[field.name]?.total !== currentValues[field.name]?.total
+            }
+          >
             <Form.Item>
               <InputNumber
                 readOnly
@@ -135,14 +144,25 @@ return (
 
         <Col className="gutter-row" span={7}>
           <Form.Item name={[field.name, 'remarks']}>
-            <Input placeholder=" Remarks for Quotation" />
+            <Input placeholder=" Remarks " />
           </Form.Item>
         </Col>
-        {field &&
+
+        {/* {field  &&
           <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
             <DeleteOutlined onClick={() => remove(field.name)} />
           </div>
+        } */}
+
+        {
+          !isFirstRow && (
+            <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
+              <DeleteOutlined onClick={() => remove(field.name)} />
+            </div>
+          )
         }
+
+
       </Row>
     </>
   );
