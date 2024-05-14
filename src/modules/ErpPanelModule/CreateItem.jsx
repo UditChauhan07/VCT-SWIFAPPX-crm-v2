@@ -44,16 +44,17 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
+  console.log(result)
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
   const handelValuesChange = (changedValues, values) => {
-    const items = values['items'];
+    const item = values['items'];
     let subTotal = 0;
     let subOfferTotal = 0;
 
-    if (items) {
-      items.map((item) => {
+    if (item) {
+      // items.map((item) => {
         if (item) {
           if (item.offerPrice && item.quantity) {
             let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
@@ -65,7 +66,7 @@ export default function CreateItem({ config, CreateForm }) {
             subTotal = calculate.add(subTotal, total);
           }
         }
-      });
+      // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
     }
@@ -82,14 +83,16 @@ export default function CreateItem({ config, CreateForm }) {
       }
       else {
         navigate(`/${entity.toLowerCase()}/read/${result._id}`);
+
       }
     }
     return () => { };
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-    console.log({ fieldsValue });
+
     if (fieldsValue) {
+
       if (entity === "items") {
         let newList = [...fieldsValue.items];
         newList.map((item) => {
@@ -136,6 +139,52 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = requestBody;
 
       }
+
+      if (entity === "quote") {
+     
+        const fieldData = 
+       {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendQuotationEmail: fieldsValue.sendQuotationEmail,
+          startDate: fieldsValue.startDate,
+          expiredDate: fieldsValue.expiredDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          salesPerson: fieldsValue.salesPerson,
+            salesPersonContact: fieldsValue.SalesPersonContact,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceName,
+          subscriptions: fieldsValue.itemId,
+            isCustom: true ,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice ,
+            description: fieldsValue.ServiceDescription
+          },
+           items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+        
+          adjustment: {
+            type: fieldsValue.Adjustmenttype,
+            value: fieldsValue.AdjustmentValue,
+          },
+
+            InitialRemarks: fieldsValue.InitialRemarks,
+          discount: fieldsValue.discount,
+
+        }
+     
+        // console.log({ fieldData })
+        fieldsValue = fieldData
+
+ }
+     
+    }
+    console.log(fieldsValue)
+    dispatch(erp.create({ entity, jsonData: fieldsValue }));
+  };
       if (entity === "workorder") {
 
         const Leader = {
@@ -193,6 +242,7 @@ export default function CreateItem({ config, CreateForm }) {
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     };
   }
+
 
   return (
     <>
