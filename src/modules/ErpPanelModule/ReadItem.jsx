@@ -100,7 +100,10 @@ export default function ReadItem({ config, selectedItem }) {
 
   const [itemslist, setItemsList] = useState([]);
   const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
+  console.log(currentErp)
   const [client, setClient] = useState({});
+  const [Dates, setDates] = useState();
+
 
   useEffect(() => {
     if (currentResult) {
@@ -126,13 +129,73 @@ export default function ReadItem({ config, selectedItem }) {
     }
   }, [currentErp]);
 
+
+ 
+  const date = new Date(currentErp.startDate);
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'long' });
+  const year = date.getFullYear();
+
+  let daySuffix;
+  if (day > 3 && day < 21) {
+    daySuffix = 'th';
+  } else {
+    switch (day % 10) {
+      case 1: daySuffix = 'st'; break;
+      case 2: daySuffix = 'nd'; break;
+      case 3: daySuffix = 'rd'; break;
+      default: daySuffix = 'th';
+    }
+  }
+
+  const Time = new Date(currentErp.startTime);
+  const hours = Time.getHours();
+  const minutes = Time.getMinutes().toString(); 
+ 
+  const ExpectedTime = new Date(currentErp.expectedRequiredTime);
+  const Expectedhours = ExpectedTime.getHours();
+  const Expectedminutes = ExpectedTime.getMinutes().toString();
+  
+  function getStatusText(status) {
+  
+    switch (status) {
+      case 1:
+        return { text: 'Pending', color: '#fdf2ff', backgroundColor: 'blue' };
+      case 2:
+        return { text: 'In Process', color: '#fdf2ff', backgroundColor: 'green' };
+      case 3:
+        return { text: 'Completed', color: '#fdf2ff', backgroundColor: 'purple' };
+      case 4:
+        return { text: 'Rescheduled', color: '#fdf2ff', backgroundColor: 'orange' };
+      case 5:
+        return { text: 'Cancelled', color: '#fdf2ff', backgroundColor: 'red' };
+      case 6:
+        return { text: 'Request for Reshedule', color: '#fdf2ff', backgroundColor: 'brown' };
+      case 7:
+        return { text: 'Request for Cancel', color: '#fdf2ff', backgroundColor: 'gray' };
+      case 8:
+        return { text: 'Terminate', color: '#fdf2ff', backgroundColor: 'black' };
+      case 9:
+        return { text: 'Hold', color: '#fdf2ff', backgroundColor: 'yellow' };
+      default:
+        return { text: 'Pending', color: '#fdf2ff', backgroundColor: 'blue' };
+    }
+  }
+
+  // const status = currentErp.status
+  const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp.status);
+
+
+
+ 
+
   return (
     <>
       <PageHeader
         onBack={() => {
           navigate(`/${entity.toLowerCase()}`);
         }}
-        title={`${ENTITY_NAME} # ${currentErp.number}/${currentErp.year || ''}`}
+        title={` #${currentErp.code}`}
         ghost={false}
         // tags={[
         //   <Tag color={tagColor(currentErp.status)?.color} key="status">
@@ -187,22 +250,22 @@ export default function ReadItem({ config, selectedItem }) {
             {translate('Convert to Invoice')}
           </Button>,
 
-          <Button
-            key={`${uniqueId()}`}
-            onClick={() => {
-              dispatch(
-                erp.currentAction({
-                  actionType: 'update',
-                  data: currentErp,
-                })
-              );
-              navigate(`/${entity.toLowerCase()}/update/${currentErp._id}`);
-            }}
-            type="primary"
-            icon={<EditOutlined />}
-          >
-            {translate('Edit')}
-          </Button>,
+          // <Button
+          //   key={`${uniqueId()}`}
+          //   onClick={() => {
+          //     dispatch(
+          //       erp.currentAction({
+          //         actionType: 'update',
+          //         data: currentErp,
+          //       })
+          //     );
+          //     navigate(`/${entity.toLowerCase()}/update/${currentErp._id}`);
+          //   }}
+          //   type="primary"
+          //   icon={<EditOutlined />}
+          // >
+          //   {translate('Edit')}
+          // </Button>,
         ]}
         style={{
           padding: '20px 0px',
@@ -239,59 +302,87 @@ export default function ReadItem({ config, selectedItem }) {
       <Row className="gutter-row">
         <Col span={24}>
 
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "257px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "250px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
             <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Bill To')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Jane</span></p>
+                <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Bill To')} :<br/>
+
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp.client.name}</span><br />
+                 
+                  </p>
+                  
+
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Client Address')} :<br></br>
+
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.clientAddress.contactNumber}</span><br />
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.clientAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br />
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.clientAddress.zipCode}</span><br />
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.clientAddress.country}</span><br />
+                </p>
+
+              </Col>
+              <Col className="gutter-row" span={12} style={{marginTop:"-6%"}}>
+                <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Billing Address')} :<br></br>
+
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.billingAddress.contactNumber}</span><br />
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.billingAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br/>
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.billingAddress.zipCode}</span><br />
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.billingAddress.country}</span><br />
+                </p>
 
               </Col>
 
-              <Col className="gutter-row" span={12}>
+              {/* <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "15px" }}>
                   {translate('Contact Person')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> 132545</span>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}>Tel: {currentErp.clientAddress.contactNumber}</span>
                 </p>
 
 
-              </Col>
+              </Col> */}
 
 
-              <Col className="gutter-row" span={12}>
+              {/* <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "15px" }} >
                   {translate('Bill To Contact')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span> <br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Email: Jane@email.com</span>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Name: {currentErp.billingAddress.contactPerson}</span><br/>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: {currentErp.billingAddress.contactNumber}</span><br/>
+
                 </p>
 
-              </Col>
+              </Col> */}
 
-              <Col className="gutter-row" span={12}>
+              {/* <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "15px" }}>
                   {translate('Work Site Contact')} :<br></br>
                   <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span>
                 </p>
 
 
-              </Col>
+              </Col> */}
 
 
-              <Col className="gutter-row" span={12} >
+              {/* <Col className="gutter-row" span={12} >
                 <p style={{ fontSize: "15px" }}>{translate('Billing Address')} :
                   <br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}>{currentErp.billingAddress.block},</span>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}>{currentErp.billingAddress.street},</span>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}>{currentErp.billingAddress.state},</span>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}>{currentErp.billingAddress.zipCode}</span>
                 </p>
 
-              </Col>
-              <Col className="gutter-row" span={12}>
+              </Col> */}
+              {/* <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "15px" }}>
                   {translate('Work Address')} :<br></br>
                   <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
                 </p>
 
 
-              </Col>
+              </Col> */}
 
             </Row>
           </div>
@@ -320,7 +411,7 @@ export default function ReadItem({ config, selectedItem }) {
 
 
 
-      <h3>Basic WorkOrder Details</h3>
+      <h3 style={{marginTop: "4%"}}>Basic WorkOrder Details</h3>
       <Row className="gutter-row">
         <Col span={24}>
           <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "260px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -331,7 +422,7 @@ export default function ReadItem({ config, selectedItem }) {
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder No')} .:<br></br>
                     </p></Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('WOGR-O2404-00004')} <br></br>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.workOrderNumber}<br></br>
                     </p>
                   </Col>
                 </Row>
@@ -342,10 +433,10 @@ export default function ReadItem({ config, selectedItem }) {
                   <Col span={12}>
                     <p style={{
                       fontSize: "14px", fontWeight: "600", color:
-                        "#fdf2ff", backgroundColor: "#faad09", width: "90px",
+                        textColor, backgroundColor: bgColor, width: "90px",
                       textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
                     }}>
-                      {translate('Scheduled')} <br></br>
+                      {statusText} <br></br>
                     </p>
 
                   </Col>
@@ -355,7 +446,7 @@ export default function ReadItem({ config, selectedItem }) {
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Date')} :<br></br>
                     </p></Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('23 April,2024')} <br></br>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${day}${daySuffix} ${month} ${year}` }<br></br>
                     </p>
 
 
@@ -366,32 +457,36 @@ export default function ReadItem({ config, selectedItem }) {
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Time')} :<br></br>
                     </p></Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('09:00 Hrs')} <br></br>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${hours}:${minutes} hrs`} <br></br>
                     </p>
 
 
                   </Col>
                 </Row>
+               
+              </Col>
+
+              <Col span={12}>
+               
+
                 <Row className="gutter-row" >
                   <Col span={12}>
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Expected Time Required')} :<br></br>
                     </p></Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('04:00 Hrs')} <br></br>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${Expectedhours}:${Expectedminutes} hrs`}  <br></br>
                     </p>
 
 
                   </Col>
                 </Row>
-              </Col>
 
-              <Col span={12}>
                 <Row className="gutter-row" >
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Sales Person:')} .:<br></br>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Sales Person')}:<br></br>
                     </p></Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Super Admin')} <br></br>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPerson.name} <br></br>
                     </p>
                   </Col>
                 </Row>
@@ -400,11 +495,12 @@ export default function ReadItem({ config, selectedItem }) {
                     <p style={{ fontSize: "15px", fontWeight: "600", marginTop: "19px" }}>{translate('Sales Person Contact')} :<br></br>
                     </p> </Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('101')} <br></br></p>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPersonContact} <br></br></p>
 
                   </Col>
                 </Row>
-                <Row className="gutter-row">
+
+                {/* <Row className="gutter-row">
                   <Col span={12}>
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Work Leader')} :<br></br>
                     </p></Col>
@@ -414,8 +510,8 @@ export default function ReadItem({ config, selectedItem }) {
 
 
                   </Col>
-                </Row>
-                <Row className="gutter-row" >
+                </Row> */}
+                {/* <Row className="gutter-row" >
                   <Col span={12}>
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workers')} :<br></br>
                     </p></Col>
@@ -425,7 +521,7 @@ export default function ReadItem({ config, selectedItem }) {
 
 
                   </Col>
-                </Row>
+                </Row> */}
               </Col>
             </Row>
           </div>
@@ -434,78 +530,27 @@ export default function ReadItem({ config, selectedItem }) {
         </Col>
 
       </Row>
-      <h3>WorkOrder Billing Detail</h3>
+
+      <h3 style={{ marginTop: "4%" }}>WorkOrder Billing Detail</h3>
       <Row className="gutter-row" style={{ marginTop: "20px" }}>
         <Col span={24}>
           <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "257px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
-            <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Bill To')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Jane</span></p>
-
-              </Col>
-
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
-                  {translate('Contact Person')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> 132545</span>
-                </p>
-
-
-              </Col>
-
-
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }} >
-                  {translate('Bill To Contact')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span> <br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Email: Jane@email.com</span>
-                </p>
-
-              </Col>
-
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
-                  {translate('Work Site Contact')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span>
-                </p>
-
-
-              </Col>
-
-
-              <Col className="gutter-row" span={12} >
-                <p style={{ fontSize: "15px" }}>{translate('Billing Address')} :
-                  <br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
-                </p>
-
-              </Col>
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
-                  {translate('Work Address')} :<br></br>
-                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
-                </p>
-
-
-              </Col>
-
-            </Row>
+          
           </div>
         </Col>
       </Row>
       {/* .................. */}
       <Row className="gutter-row" style={{ marginTop: "20px" }}>
         <Col span={12}>
-          <h3>Other detail</h3>
+          <h3 style={{ marginTop: "4%" }}>Other detail</h3>
           <div className='' style={{ width: "97%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
           </div>
 
         </Col>
         <Col span={12}>
-          <h3>Worker Attendance detail</h3>
+          <h3 style={{ marginTop: "4%" }} >Worker Attendance detail</h3>
           <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
           </div>
