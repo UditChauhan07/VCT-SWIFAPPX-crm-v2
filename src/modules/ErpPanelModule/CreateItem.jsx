@@ -156,7 +156,7 @@ export default function CreateItem({ config, CreateForm }) {
           salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceName,
-          subscriptions: fieldsValue.itemId,
+          subscriptions: fieldsValue.subscriptions,
           isCustom: true,
           customService: {
             name: fieldsValue.ServiceName,

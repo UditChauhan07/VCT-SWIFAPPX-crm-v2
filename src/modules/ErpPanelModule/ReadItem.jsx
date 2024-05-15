@@ -23,6 +23,8 @@ import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 import { useMoney, useDate } from '@/settings';
 import useMail from '@/hooks/useMail';
 import { useNavigate } from 'react-router-dom';
+import { displayName } from 'react-quill';
+import color from '@/utils/color';
 // import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
@@ -233,26 +235,77 @@ export default function ReadItem({ config, selectedItem }) {
       </PageHeader>
       {/* <Divider dashed /> */}
 
-      <h3>Customer Details</h3>
+      <h3 className='' style={{ marginLeft: "5px" }}>Customer Details</h3>
       <Row className="gutter-row">
         <Col span={24}>
 
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "257px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
+            <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Bill To')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Jane</span></p>
+
+              </Col>
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Contact Person')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> 132545</span>
+                </p>
+
+
+              </Col>
+
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }} >
+                  {translate('Bill To Contact')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span> <br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Email: Jane@email.com</span>
+                </p>
+
+              </Col>
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Work Site Contact')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span>
+                </p>
+
+
+              </Col>
+
+
+              <Col className="gutter-row" span={12} >
+                <p style={{ fontSize: "15px" }}>{translate('Billing Address')} :
+                  <br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
+                </p>
+
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Work Address')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
+                </p>
+
+
+              </Col>
+
+            </Row>
           </div>
 
-        </Col>
+        </Col >
 
 
-      </Row>
+      </Row >
 
 
-      <Row className="gutter-row" style={{ marginTop: "20px" }}>
+      {/* <Row className="gutter-row" style={{ marginTop: "20px" }}>
         <Col span={12}>
           <h3>Basic WorkOrder Details</h3>
-          <div className='' style={{ width: "97%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
-
-          </div>
+         
 
         </Col>
         <Col span={12}>
@@ -263,15 +316,202 @@ export default function ReadItem({ config, selectedItem }) {
 
         </Col>
 
-      </Row>
+      </Row> */}
 
 
-      <Row className="gutter-row" style={{ marginTop: "20px" }}>
-        <h3>WorkOrder Billing Detail</h3>
+
+      <h3>Basic WorkOrder Details</h3>
+      <Row className="gutter-row">
         <Col span={24}>
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "260px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+            <Row className="gutter-row" style={{ padding: "0px 0px 0px 20px" }}>
+              <Col span={12}>
+                <Row className="gutter-row" >
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder No')} .:<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('WOGR-O2404-00004')} <br></br>
+                    </p>
+                  </Col>
+                </Row>
+                <Row className="gutter-row" >
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Workorder Status')} :<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{
+                      fontSize: "14px", fontWeight: "600", color:
+                        "#fdf2ff", backgroundColor: "#faad09", width: "90px",
+                      textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
+                    }}>
+                      {translate('Scheduled')} <br></br>
+                    </p>
+
+                  </Col>
+                </Row>
+                <Row className="gutter-row">
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Date')} :<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('23 April,2024')} <br></br>
+                    </p>
+
+
+                  </Col>
+                </Row>
+                <Row className="gutter-row" >
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Time')} :<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('09:00 Hrs')} <br></br>
+                    </p>
+
+
+                  </Col>
+                </Row>
+                <Row className="gutter-row" >
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Expected Time Required')} :<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('04:00 Hrs')} <br></br>
+                    </p>
+
+
+                  </Col>
+                </Row>
+              </Col>
+
+              <Col span={12}>
+                <Row className="gutter-row" >
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Sales Person:')} .:<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Super Admin')} <br></br>
+                    </p>
+                  </Col>
+                </Row>
+                <Row className="gutter-row" >
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600", marginTop: "19px" }}>{translate('Sales Person Contact')} :<br></br>
+                    </p> </Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('101')} <br></br></p>
+
+                  </Col>
+                </Row>
+                <Row className="gutter-row">
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Work Leader')} :<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Test Leader')} <br></br>
+                    </p>
+
+
+                  </Col>
+                </Row>
+                <Row className="gutter-row" >
+                  <Col span={12}>
+                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workers')} :<br></br>
+                    </p></Col>
+                  <Col span={12}>
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Alfreda Byers,Carly Alvarez')} <br></br>
+                    </p>
+
+
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </div>
+
+
+        </Col>
+
+      </Row>
+      <h3>WorkOrder Billing Detail</h3>
+      <Row className="gutter-row" style={{ marginTop: "20px" }}>
+        <Col span={24}>
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "257px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+
+            <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Bill To')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Jane</span></p>
+
+              </Col>
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Contact Person')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> 132545</span>
+                </p>
+
+
+              </Col>
+
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }} >
+                  {translate('Bill To Contact')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span> <br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Email: Jane@email.com</span>
+                </p>
+
+              </Col>
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Work Site Contact')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> Tel: 46747474</span>
+                </p>
+
+
+              </Col>
+
+
+              <Col className="gutter-row" span={12} >
+                <p style={{ fontSize: "15px" }}>{translate('Billing Address')} :
+                  <br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
+                </p>
+
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Work Address')} :<br></br>
+                  <span style={{ fontSize: "13px", color: "#a3a3a3" }}> block,street,unit,Armenia,2662</span>
+                </p>
+
+
+              </Col>
+
+            </Row>
           </div>
         </Col>
+      </Row>
+      {/* .................. */}
+      <Row className="gutter-row" style={{ marginTop: "20px" }}>
+        <Col span={12}>
+          <h3>Other detail</h3>
+          <div className='' style={{ width: "97%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+
+          </div>
+
+        </Col>
+        <Col span={12}>
+          <h3>Worker Attendance detail</h3>
+          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+
+          </div>
+
+        </Col>
+
       </Row>
 
 
@@ -310,9 +550,11 @@ export default function ReadItem({ config, selectedItem }) {
         </Col>
         <Divider />
       </Row>
-      {itemslist.map((item) => (
-        <Item key={item._id} item={item}></Item>
-      ))}
+      {
+        itemslist.map((item) => (
+          <Item key={item._id} item={item}></Item>
+        ))
+      }
       <div
         style={{
           width: '300px',
