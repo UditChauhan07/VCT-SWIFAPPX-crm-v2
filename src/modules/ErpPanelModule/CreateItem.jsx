@@ -44,7 +44,7 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
-  console.log(result)
+
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
@@ -55,17 +55,17 @@ export default function CreateItem({ config, CreateForm }) {
 
     if (item) {
       // items.map((item) => {
-        if (item) {
-          if (item.offerPrice && item.quantity) {
-            let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
-            subOfferTotal = calculate.add(subOfferTotal, offerTotal);
-          }
-          if (item.quantity && item.price) {
-            let total = calculate.multiply(item['quantity'], item['price']);
-            //sub total
-            subTotal = calculate.add(subTotal, total);
-          }
+      if (item) {
+        if (item.offerPrice && item.quantity) {
+          let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
+          subOfferTotal = calculate.add(subOfferTotal, offerTotal);
         }
+        if (item.quantity && item.price) {
+          let total = calculate.multiply(item['quantity'], item['price']);
+          //sub total
+          subTotal = calculate.add(subTotal, total);
+        }
+      }
       // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
@@ -164,7 +164,7 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
-        // console.log(fieldsValue.customItems)
+  
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -178,7 +178,7 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.subscription,
+          subscription: fieldsValue.Subscription,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -192,6 +192,62 @@ export default function CreateItem({ config, CreateForm }) {
 
         fieldsValue = Data
       }
+
+      if (entity === "contract") {
+        const Leader = {
+          user: fieldsValue.LeadWorker,
+          startTime: fieldsValue.startTime,
+          endTime: fieldsValue.endTime,
+          isLeader: true
+        }
+        const Worker = [
+          {
+            user: fieldsValue.SelectWorkers,
+            startTime: fieldsValue.startTime,
+            endTime: fieldsValue.endTime,
+          }
+        ]
+        const fielduser = [
+          Leader,
+          ...Worker
+        ];
+        const startTime = new Date(fieldsValue.startTime).getTime();
+        const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
+        const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
+        fielduser.map((item) => {
+          item.endTime = EndTime
+        })
+        let Data = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendworkorderEmail: fieldsValue.sendworkorderEmail,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.salesPersonContact,
+          startDate: fieldsValue.startDate,
+          endDate: fieldsValue.endDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceList,
+          subscription: fieldsValue.Hardly,
+          fieldUsers: fielduser,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription
+          },
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          adjustment: {
+            type: fieldsValue.Adjustment,
+            value: fieldsValue.AdjustmentValue
+          }
+        }
+        fieldsValue = Data
+        console.log(fieldsValue)
+      }
+
       // console.log(fieldsValue)
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     };
