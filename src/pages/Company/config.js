@@ -17,6 +17,7 @@ export const fields = {
   },
   phone: {
     type: 'phone',
+    required: true,
   },
   email: {
     type: 'email',
