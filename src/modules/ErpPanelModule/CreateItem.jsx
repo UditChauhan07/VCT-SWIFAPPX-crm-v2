@@ -66,6 +66,19 @@ export default function CreateItem({ config, CreateForm }) {
             subTotal = calculate.add(subTotal, total);
           }
         }
+
+//       if (item) {
+//         if (item.offerPrice && item.quantity) {
+//           let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
+//           subOfferTotal = calculate.add(subOfferTotal, offerTotal);
+//         }
+//         if (item.quantity && item.price) {
+//           let total = calculate.multiply(item['quantity'], item['price']);
+//           //sub total
+//           subTotal = calculate.add(subTotal, total);
+//         }
+//       }
+
       // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
@@ -90,7 +103,7 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-    console.log({ fieldsValue });
+
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -139,46 +152,25 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = requestBody;
 
       }
-      if (entity === "workorder") {
-        const Leader = {
-          user: fieldsValue.LeadWorker,
-          startTime: fieldsValue.startTime,
-          endTime: fieldsValue.endTime,
-          isLeader: true
-        }
-        const Worker = [
-          {
-            user: fieldsValue.SelectWorkers,
-            startTime: fieldsValue.startTime,
-            endTime: fieldsValue.endTime,
-          }
-        ]
-        const fielduser = [
-          Leader,
-          ...Worker
-        ];
-        const startTime = new Date(fieldsValue.startTime).getTime();
-        const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
-        const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
-        fielduser.map((item) => {
-          item.endTime = EndTime
-        })
-        console.log(fieldsValue.customItems)
-        let Data = {
+
+      if (entity === "quote") {
+
+        const fieldData =
+        {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
-          sendworkorderEmail: fieldsValue.sendworkorderEmail,
-          salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.salesPersonContact,
+          sendQuotationEmail: fieldsValue.sendQuotationEmail,
           startDate: fieldsValue.startDate,
-          endDate: fieldsValue.endDate,
+          expiredDate: fieldsValue.expiredDate,
           startTime: fieldsValue.startTime,
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
-          serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.subscription,
-          fieldUsers: fielduser,
+          serviceList: fieldsValue.serviceName,
+          subscriptions: fieldsValue.itemId,
+          isCustom: true,
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
@@ -186,22 +178,84 @@ export default function CreateItem({ config, CreateForm }) {
           },
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
-       
-          adjustment: {
-            type: fieldsValue.Adjustment,
-            value: fieldsValue.AdjustmentValue
-          },
-          remarks: fieldsValue.InitialRemarks,
-          discount: fieldsValue.discount
-        };
 
-        fieldsValue = Data
+          adjustment: {
+            type: fieldsValue.Adjustmenttype,
+            value: fieldsValue.AdjustmentValue,
+          },
+
+          InitialRemarks: fieldsValue.InitialRemarks,
+          discount: fieldsValue.discount,
+
+        }
+
+        // console.log({ fieldData })
+        fieldsValue = fieldData
 
       }
+
     }
     console.log(fieldsValue)
     dispatch(erp.create({ entity, jsonData: fieldsValue }));
+
+    if (entity === "workorder") {
+
+      const Leader = {
+        user: fieldsValue.LeadWorker,
+        startTime: fieldsValue.startTime,
+        endTime: fieldsValue.endTime,
+        isLeader: true
+      }
+      const Worker = [
+        {
+          user: fieldsValue.SelectWorkers,
+          startTime: fieldsValue.startTime,
+          endTime: fieldsValue.endTime,
+        }
+      ]
+      const fielduser = [
+        Leader,
+        ...Worker
+      ];
+      const startTime = new Date(fieldsValue.startTime).getTime();
+      const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
+      const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
+      fielduser.map((item) => {
+        item.endTime = EndTime
+      })
+      // console.log(fieldsValue.customItems)
+      let Data = {
+        client: fieldsValue.client,
+        clientAddress: fieldsValue.clientAddress,
+        billingAddress: fieldsValue.billingAddress,
+        sendworkorderEmail: fieldsValue.sendworkorderEmail,
+        salesPerson: fieldsValue.salesPerson,
+        salesPersonContact: fieldsValue.salesPersonContact,
+        startDate: fieldsValue.startDate,
+        endDate: fieldsValue.endDate,
+        startTime: fieldsValue.startTime,
+        expectedRequiredTime: fieldsValue.expectedRequiredTime,
+        serviceCategory: fieldsValue.serviceCategory,
+        serviceList: fieldsValue.serviceList,
+        subscription: fieldsValue.subscription,
+        fieldUsers: fielduser,
+        customService: {
+          name: fieldsValue.ServiceName,
+          price: fieldsValue.ServicePrice,
+          description: fieldsValue.ServiceDescription
+        },
+
+        items: fieldsValue.items,
+        customItems: fieldsValue.customItems,
+      }
+
+      fieldsValue = Data
+    }
+    // console.log(fieldsValue)
+    dispatch(erp.create({ entity, jsonData: fieldsValue }));
   };
+
+
 
   return (
     <>

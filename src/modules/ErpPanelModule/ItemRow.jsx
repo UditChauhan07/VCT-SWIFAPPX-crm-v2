@@ -7,8 +7,10 @@ import calculate from '@/utils/calculate';
 import { useForm } from 'antd/lib/form/Form';
 import { Checkbox } from 'antd/lib';
 
+
 export default function ItemRow({ field, remove, current = null, response, isFirstRow  }) {
    
+
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
   const [name, setName] = useState('');
@@ -82,8 +84,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
   }, [price, quantity]);
 
 
-
-  return (
+return (
     <>
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -114,6 +115,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         </Col>
         <Col className="gutter-row" span={4}>
           <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
+
             <InputNumber
               className="moneyInput"
               onChange={updatePrice}
@@ -159,6 +161,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
             <Input placeholder=" Remarks " />
           </Form.Item>
         </Col>
+
         {/* {field  &&
           <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
             <DeleteOutlined onClick={() => remove(field.name)} />

@@ -378,6 +378,7 @@ useEffect(()=>{
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
+
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
@@ -410,7 +411,7 @@ useEffect(()=>{
 
     return columns;
   };
-  // ...................
+
 
   // const generateTableData = () => {
   //   const subscriptionNames = getUniqueSubscriptionNames();
@@ -689,6 +690,7 @@ useEffect(()=>{
       </Col>
 
 
+
       {/* ---------------NEW SERVICE CATEGORY------------ */}
 
 
@@ -905,7 +907,9 @@ useEffect(()=>{
                               </Col>
                               <Col className="gutter-row" span={3}>
                                 <Form.Item name={[`${i}`, `${index}`, 'quantity']}
+
                                 rules={[{ required: true }]} 
+
                                 >
                                   <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
                                   </Form.Item>
@@ -1177,9 +1181,11 @@ useEffect(()=>{
                           </Col>
                           <Col className="gutter-row" span={3}>
                             <Form.Item name={[`items`, `${index}`, 'quantity']}
-                              rules={[{ required: true }]}
+
+                              rules={[]}
                             >
-                              <InputNumber style={{ width: '100%' }} min={0}
+                              <InputNumber style={{ width: '100%' }} defaultValue={1} min={0}
+
                                 onChange={updateQt}
 
                               />
