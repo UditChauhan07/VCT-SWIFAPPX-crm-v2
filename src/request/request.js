@@ -411,6 +411,15 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  getServiceListShowContract: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicelist/show/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getServiceListShows: async ({ id }) => {
     try {
       const response = await axios.get(`/servicelist/show/${id}`);

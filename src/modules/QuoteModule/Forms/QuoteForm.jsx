@@ -378,7 +378,6 @@ useEffect(()=>{
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
-
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
@@ -1182,9 +1181,9 @@ useEffect(()=>{
                           <Col className="gutter-row" span={3}>
                             <Form.Item name={[`items`, `${index}`, 'quantity']}
 
-                              rules={[]}
+                              rules={[{ required: true }]}
                             >
-                              <InputNumber style={{ width: '100%' }} defaultValue={1} min={0}
+                              <InputNumber style={{ width: '100%' }} min={0}
 
                                 onChange={updateQt}
 
