@@ -45,8 +45,6 @@ export default function CreateItem({ config, CreateForm }) {
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
 
-  console.log(result)
-
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
@@ -57,7 +55,6 @@ export default function CreateItem({ config, CreateForm }) {
 
     if (item) {
       // items.map((item) => {
-
       if (item) {
         if (item.offerPrice && item.quantity) {
           let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
@@ -69,7 +66,17 @@ export default function CreateItem({ config, CreateForm }) {
           subTotal = calculate.add(subTotal, total);
         }
       }
-
+      if (item) {
+        if (item.offerPrice && item.quantity) {
+          let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
+          subOfferTotal = calculate.add(subOfferTotal, offerTotal);
+        }
+        if (item.quantity && item.price) {
+          let total = calculate.multiply(item['quantity'], item['price']);
+          //sub total
+          subTotal = calculate.add(subTotal, total);
+        }
+      }
       // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
@@ -94,7 +101,7 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-
+    console.log({ fieldsValue });
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -143,7 +150,7 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = requestBody;
 
       }
-
+      if (entity === "workorder") {
 
         const Leader = {
           user: fieldsValue.LeadWorker,
@@ -168,103 +175,34 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
-  
-        let Data = {
 
+        let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
-          sendQuotationEmail: fieldsValue.sendQuotationEmail,
+          sendworkorderEmail: fieldsValue.sendworkorderEmail,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.salesPersonContact,
           startDate: fieldsValue.startDate,
-          expiredDate: fieldsValue.expiredDate,
+          endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
-          salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
-
           serviceList: fieldsValue.serviceList,
           subscription: fieldsValue.Subscription,
           fieldUsers: fielduser,
-
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
           },
+
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
-
-          adjustment: {
-            type: fieldsValue.Adjustmenttype,
-            value: fieldsValue.AdjustmentValue,
-          },
-
-          InitialRemarks: fieldsValue.InitialRemarks,
-          discount: fieldsValue.discount,
-
         }
 
-        // console.log({ fieldData })
-        fieldsValue = fieldData
-
+        fieldsValue = Data
       }
-
-    }
-    console.log(fieldsValue)
-    dispatch(erp.create({ entity, jsonData: fieldsValue }));
-
-    if (entity === "workorder") {
-
-      const Leader = {
-        user: fieldsValue.LeadWorker,
-        startTime: fieldsValue.startTime,
-        endTime: fieldsValue.endTime,
-        isLeader: true
-      }
-      const Worker = [
-        {
-          user: fieldsValue.SelectWorkers,
-          startTime: fieldsValue.startTime,
-          endTime: fieldsValue.endTime,
-        }
-      ]
-      const fielduser = [
-        Leader,
-        ...Worker
-      ];
-      const startTime = new Date(fieldsValue.startTime).getTime();
-      const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
-      const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
-      fielduser.map((item) => {
-        item.endTime = EndTime
-      })
-      // console.log(fieldsValue.customItems)
-      let Data = {
-        client: fieldsValue.client,
-        clientAddress: fieldsValue.clientAddress,
-        billingAddress: fieldsValue.billingAddress,
-        sendworkorderEmail: fieldsValue.sendworkorderEmail,
-        salesPerson: fieldsValue.salesPerson,
-        salesPersonContact: fieldsValue.salesPersonContact,
-        startDate: fieldsValue.startDate,
-        endDate: fieldsValue.endDate,
-        startTime: fieldsValue.startTime,
-        expectedRequiredTime: fieldsValue.expectedRequiredTime,
-        serviceCategory: fieldsValue.serviceCategory,
-        serviceList: fieldsValue.serviceList,
-        subscription: fieldsValue.subscription,
-        fieldUsers: fielduser,
-        customService: {
-          name: fieldsValue.ServiceName,
-          price: fieldsValue.ServicePrice,
-          description: fieldsValue.ServiceDescription
-        },
-
-        items: fieldsValue.items,
-        customItems: fieldsValue.customItems,
-      }
-
 
       if (entity === "contract") {
         const Leader = {
@@ -325,7 +263,6 @@ export default function CreateItem({ config, CreateForm }) {
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     };
   }
-
 
   return (
     <>
