@@ -378,6 +378,7 @@ useEffect(()=>{
   }
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
+
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
@@ -449,8 +450,9 @@ useEffect(()=>{
         const matchingItem = ele.data.find((item) => item.name === name);
         rowData[name] = matchingItem ? (
           <Checkbox
+        
             onClick={() => handleCheckboxClick(matchingItem._id, ele.subscription._id)}
-          >{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
+          >{`${matchingItem.price}.00 /${ele.subscription.name}`} </Checkbox>
         ) : null;
       });
 
@@ -462,7 +464,7 @@ useEffect(()=>{
 
   const handleCheckboxClick = (itemId, subscriptionId) => {
     // Update state with the clicked item ID and subscription ID
-    setSelectedIds({ itemId, subscriptionId });
+    ([ itemId, subscriptionId ]);
   };
 
   const handleSelectChange = (value) => {
@@ -906,7 +908,7 @@ useEffect(()=>{
                               </Col>
                               <Col className="gutter-row" span={3}>
                                 <Form.Item name={[`${i}`, `${index}`, 'quantity']}
-                                rules={[{ required: true }]} 
+                                rules={[]} 
                                 >
                                   <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
                                   </Form.Item>
@@ -1178,9 +1180,9 @@ useEffect(()=>{
                           </Col>
                           <Col className="gutter-row" span={3}>
                             <Form.Item name={[`items`, `${index}`, 'quantity']}
-                              rules={[{ required: true }]}
+                              rules={[]}
                             >
-                              <InputNumber style={{ width: '100%' }} min={0}
+                              <InputNumber style={{ width: '100%' }} defaultValue={1} min={0}
                                 onChange={updateQt}
 
                               />
