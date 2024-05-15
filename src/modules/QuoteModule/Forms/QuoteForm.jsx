@@ -907,7 +907,9 @@ useEffect(()=>{
                               </Col>
                               <Col className="gutter-row" span={3}>
                                 <Form.Item name={[`${i}`, `${index}`, 'quantity']}
-                                rules={[]} 
+
+                                rules={[{ required: true }]} 
+
                                 >
                                   <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
                                   </Form.Item>
@@ -1179,9 +1181,11 @@ useEffect(()=>{
                           </Col>
                           <Col className="gutter-row" span={3}>
                             <Form.Item name={[`items`, `${index}`, 'quantity']}
+
                               rules={[]}
                             >
                               <InputNumber style={{ width: '100%' }} defaultValue={1} min={0}
+
                                 onChange={updateQt}
 
                               />

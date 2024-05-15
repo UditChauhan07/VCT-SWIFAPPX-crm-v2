@@ -39,6 +39,17 @@ export default function ItemRow({ field, remove, current = null, response, isFir
     }
   }, [current, form]);
 
+
+  useEffect(() => {
+    if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
+      const firstItem = current.items[0];
+      form.setFieldsValue({ [field.name]: firstItem });
+      setName(firstItem.itemName || '');
+      setPrice(firstItem.price || 0);
+      setQuantity(firstItem.quantity || 0);
+    }
+  }, [current, form]);
+
   useEffect(() => {
     if (current) {
       // When it accesses the /payment/ endpoint,
@@ -82,9 +93,11 @@ return (
         </Col> */}
 
 
+
         <Col className="gutter-row" span={4}>
           <Form.Item
             name={[field.name, 'item']}
+          
             rules={[
               {
                 required: true,
@@ -97,6 +110,7 @@ return (
             ]}
           >
             <Input onChange={updateName} placeholder="Item Name" />
+         
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
