@@ -97,14 +97,20 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         <Col className="gutter-row" span={4}>
           <Form.Item
             name={[field.name, 'item']}
-          
             rules={[
+              // {
+              //   required: true,
+              //   message: 'Missing item name',
+              //   // Add a validator to allow the default value to pass
+              //   validator: (_, value) => {
+              //     if (value || data.name) { // Allow the default value to pass
+              //       return Promise.resolve();
+              //     }
+              //     return Promise.reject(new Error('Item name is required'));
+              //   },
+              // },
               {
-                required: true,
-                message: 'Missing itemName name',
-              },
-              {
-                pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                pattern: /^(?!\s*$)[\s\S]+$/,
                 message: 'Item Name must contain alphanumeric or special characters',
               },
             ]}
@@ -114,7 +120,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
+          <Form.Item name={[field.name, 'price']} rules={[]}>
 
             <InputNumber
               className="moneyInput"
@@ -127,7 +133,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={3}>
-          <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
+          <Form.Item name={[field.name, 'quantity']} rules={[]}>
             <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt}  />
           </Form.Item>
         </Col>

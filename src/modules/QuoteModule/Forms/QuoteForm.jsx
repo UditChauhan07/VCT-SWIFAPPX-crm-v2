@@ -506,59 +506,7 @@ useEffect(()=>{
   };
 
 
-  // const generateTableData = () => {
-  //   const subscriptionNames = getUniqueSubscriptionNames();
-  //   const tableData = [];
-  //   ShowServiceId.forEach((ele, index) => {
-  //     console.log({ ele: ele })
-
-  //     const rowData = {
-  //       Subscription: ele.subscription.name,
-  //     };
-
-  //     subscriptionNames.forEach((name) => {
-  //       const matchingItem = ele.data.find(item => item.name === name);
-  //       rowData[name] = matchingItem ? (
-  //         <Checkbox>{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
-  //       ) : null;
-  //     });
-
-  //     tableData.push(rowData);
-  //   });
-
-  //   return tableData;
-  // };
-  // ;
-  // const generateTableData = () => {
-  //   const subscriptionNames = getUniqueSubscriptionNames();
-  //   const tableData = [];
-  //   ShowServiceId.forEach((ele, index) => {
-  //     console.log({ ele: ele });
-
-  //     const rowData = {
-  //       Subscription: ele.subscription.name,
-  //     };
-
-  //     subscriptionNames.forEach((name) => {
-  //       const matchingItem = ele.data.find((item) => item.name === name);
-  //       rowData[name] = matchingItem ? (
-  //         <Checkbox
-        
-  //           onClick={() => handleCheckboxClick(matchingItem._id, ele.subscription._id)}
-  //         >{`${matchingItem.price}.00 /${ele.subscription.name}`} </Checkbox>
-  //       ) : null;
-  //     });
-
-  //     tableData.push(rowData);
-  //   });
-
-  //   return tableData;
-  // };
-
-  // const handleCheckboxClick = (itemId, subscriptionId) => {
-  //   // Update state with the clicked item ID and subscription ID
-  //   ([ itemId, subscriptionId ]);
-  // };
+  
 
   const handleSelectChange = (value) => {
     if (value === 'custom') {
@@ -1002,7 +950,7 @@ useEffect(()=>{
                               <Col className="gutter-row" span={3}>
                                 <Form.Item name={[`${i}`, `${index}`, 'quantity']}
 
-                                rules={[{ required: true }]} 
+                                rules={[]} 
 
                                 >
                                   <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
@@ -1203,9 +1151,9 @@ useEffect(()=>{
                           <Col className="gutter-row" span={3}>
                             <Form.Item name={[`items`, `${index}`, 'quantity']}
 
-                              rules={[{ required: true }]}
+                              rules={[]}
                             >
-                              <InputNumber style={{ width: '100%' }} min={0}
+                              <InputNumber style={{ width: '100%' }} defaultValue={1} min={0}
 
                                 onChange={updateQt}
 
