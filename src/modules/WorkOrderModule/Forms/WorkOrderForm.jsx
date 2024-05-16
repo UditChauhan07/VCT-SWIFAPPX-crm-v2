@@ -1299,7 +1299,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Workorder For</li>
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Per Workorder Cost</li>
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Adjustment</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Discount(%)</li>
+                  <li style={{ borderBottom: '0.5px solid #fff' }}>Discount({discountValue}%)</li>
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Subtotal</li>
                 </ul>
               </th>
