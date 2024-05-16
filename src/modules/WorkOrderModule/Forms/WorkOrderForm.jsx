@@ -459,12 +459,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             if (active == 3) {
               subTotal -= parseInt(adjustmentvalue);
             }
+            let discount = 0;
             if (discountValue) {
-              subTotal -= parseInt(discountValue)
-              // subTotal -= (subTotal * (parseInt(discountValue) / 100))
+              subTotal -= (subTotal * (parseInt(discountValue) / 100))
+              discount = (subTotal * (parseInt(discountValue) / 100))
             }
             if (subscriptionIds.includes(subscription._id)) {
-              return (<td style={{ border: '0.5px solid #000', padding: '10px' }}><ul style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}><li>{subscription.name}:{subscriptions.subscription.name}</li><li>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li><li>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li><li>{parseFloat(discountValue || 0).toFixed(2)}</li><li>{parseFloat(subTotal).toFixed(2)}</li></ul></td>)
+              return (<td style={{ border: '0.5px solid #000', padding: '10px' }}><ul style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}><li>{subscription.name}:{subscriptions.subscription.name}</li><li>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li><li>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li><li>{parseFloat(discount || 0).toFixed(2)}</li><li>{parseFloat(subTotal).toFixed(2)}</li></ul></td>)
             }
           }
           )
@@ -1298,7 +1299,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Workorder For</li>
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Per Workorder Cost</li>
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Adjustment</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Discount</li>
+                  <li style={{ borderBottom: '0.5px solid #fff' }}>Discount(%)</li>
                   <li style={{ borderBottom: '0.5px solid #fff' }}>Subtotal</li>
                 </ul>
               </th>
