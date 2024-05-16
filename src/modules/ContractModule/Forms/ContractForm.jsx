@@ -361,10 +361,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
 
-
-
-
-
     const getUniqueSubscriptionNames = () => {
         const subscriptionNames = [];
         ShowServiceId.forEach((ele) => {
@@ -376,8 +372,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         });
         return subscriptionNames;
     };
-
-
 
     const generateColumns = () => {
         const subscriptionNames = getUniqueSubscriptionNames();
