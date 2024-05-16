@@ -41,14 +41,11 @@
 }
 .w_100px {
   width: 100px;
-
 }
 .bold_text {
   /* font-weight: 900; */
   font-size: larger;
 }
-
-
 
 .ant-collapse-item-arrow {
   display: none;
