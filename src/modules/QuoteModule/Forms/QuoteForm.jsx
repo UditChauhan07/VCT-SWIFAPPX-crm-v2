@@ -70,8 +70,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [accordionData, setAccordionData] = useState([]);
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
   const [selectedSalesPerson, setSelectedSalesPerson] = useState()
-
-
+  const [isMainid, seTisMainid] = useState();
+  console.log(isMainid)
 
   const handleDropdownChange = async (value) => {
     setSelectedOption(value);
@@ -316,6 +316,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     fetchData3()
   }, []);
+
 useEffect(()=>{
   const hendleOneTime = async () => {
     try {
@@ -381,7 +382,7 @@ useEffect(()=>{
 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
-    ShowServiceId.forEach((ele) => {
+    ShowServiceId?.forEach((ele) => {
       console.log(ele)
       ele.data.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
@@ -529,6 +530,45 @@ useEffect(()=>{
   //   return tableData;
   // };
   // ;
+
+  const handleRadioChange = (e, id) => {
+    for (const subscriptionObj of ShowServiceId) {
+      for (const dataObj of subscriptionObj.data) {
+        if (dataObj._id === id) {
+          return seTisMainid(subscriptionObj.subscription._id)
+        }
+      }
+    }
+    return null;
+  }
+
+
+  const generateTableData = () => {
+    const subscriptionNames = getUniqueSubscriptionNames();
+    const tableData = [];
+    ShowServiceId?.forEach((ele, index) => {
+      const rowData = {
+        Subscription: ele.subscription.name,
+      };
+
+      subscriptionNames?.forEach((name) => {
+        const matchingItem = ele.data.find(item => item.name === name);
+
+        rowData[name] = matchingItem ? (
+          <Checkbox.Group key={matchingItem._id} onChange={(e) => handleRadioChange(e, matchingItem._id)} >
+            <Checkbox
+              value={matchingItem._id} >{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
+          </Checkbox.Group>
+
+        ) : null;
+      });
+
+      tableData.push(rowData);
+    });
+    return tableData;
+  };
+
+
   // const generateTableData = () => {
   //   const subscriptionNames = getUniqueSubscriptionNames();
   //   const tableData = [];
@@ -559,6 +599,7 @@ useEffect(()=>{
   //   // Update state with the clicked item ID and subscription ID
   //   ([ itemId, subscriptionId ]);
   // };
+
 
   const handleSelectChange = (value) => {
     if (value === 'custom') {
@@ -1056,6 +1097,13 @@ useEffect(()=>{
         <Col className="gutter-row " span={24} >
 
           <Row gutter={[12, 12]}>
+            <Form.Item
+              name="subscriptions"
+              initialValue={[isMainid]}
+              hidden={true}
+            >
+              <Input type="hidden" />
+            </Form.Item>
             <Col span={24}>
               <Table
                 // columns={columns}
