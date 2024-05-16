@@ -98,23 +98,23 @@ export default function ItemRow({ field, remove, current = null, response, isFir
           <Form.Item
             name={[field.name, 'item']}
           
-            rules={[
-              {
-                required: true,
-                message: 'Missing itemName name',
-              },
-              {
-                pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                message: 'Item Name must contain alphanumeric or special characters',
-              },
-            ]}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: 'Missing itemName name',
+            //   },
+            //   {
+            //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+            //     message: 'Item Name must contain alphanumeric or special characters',
+            //   },
+            // ]}
           >
             <Input onChange={updateName} placeholder="Item Name" />
          
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
+          <Form.Item name={[field.name, 'price']} >
 
             <InputNumber
               className="moneyInput"
@@ -127,7 +127,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={3}>
-          <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
+          <Form.Item name={[field.name, 'quantity']}>
             <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt}  />
           </Form.Item>
         </Col>

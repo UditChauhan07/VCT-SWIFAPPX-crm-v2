@@ -183,13 +183,9 @@ export default function ReadItem({ config, selectedItem }) {
     }
   }
 
-  // const status = currentErp.status
+ 
   const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp.status);
-
-
   const Createddate = new Date(currentErp.created);
-
-  // Define month names
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -207,6 +203,7 @@ export default function ReadItem({ config, selectedItem }) {
 
   return (
     <>
+    
       <PageHeader
         onBack={() => {
           navigate(`/${entity.toLowerCase()}`);
@@ -272,8 +269,8 @@ export default function ReadItem({ config, selectedItem }) {
       >
 
       </PageHeader>
-      {/* <Divider dashed /> */}
 
+     
       <h3 className='' style={{ marginLeft: "5px" }}>Customer Details</h3>
       <Row className="gutter-row">
         <Col span={24}>
@@ -467,8 +464,8 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
             </Row>
           </div>
-        </Col >
-      </Row >
+        </Col>
+      </Row>
 
 
       {/* ................. */}
@@ -848,3 +845,6 @@ export default function ReadItem({ config, selectedItem }) {
     </>
   );
 }
+
+
+

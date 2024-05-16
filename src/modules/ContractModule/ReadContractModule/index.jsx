@@ -1,14 +1,14 @@
 import NotFound from '@/components/NotFound';
 import { ErpLayout } from '@/layout';
 import ReadItem from '@/modules/ErpPanelModule/ReadItem';
-
 import PageLoader from '@/components/PageLoader';
 import { erp } from '@/redux/erp/actions';
-
+import ReadContract from '@/modules/ErpPanelModule/ReadContract';
 import { selectReadItem } from '@/redux/erp/selectors';
 import { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
 
 export default function ReadContractModule({ config }) {
     const dispatch = useDispatch();
@@ -30,7 +30,8 @@ export default function ReadContractModule({ config }) {
         return (
             <ErpLayout>
                 {isSuccess ? (
-                    <ReadItem config={config} selectedItem={currentResult} />
+                    <ReadContract config={config} selectedItem={currentResult} />
+                    
                 ) : (
                     <NotFound entity={config.entity} />
                 )}

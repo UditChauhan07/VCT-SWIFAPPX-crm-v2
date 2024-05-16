@@ -32,7 +32,7 @@ function SaveForm({ form }) {
   );
 }
 
-export default function CreateItem({ config, CreateForm }) {
+export default function CreateItem({ config, CreateForm })  {
   const translate = useLanguage();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -111,7 +111,11 @@ export default function CreateItem({ config, CreateForm }) {
     return () => { };
   }, [isSuccess]);
 
+
+ 
   const onSubmit = (fieldsValue) => {
+    const storedId = localStorage.getItem('SubscriptionId');
+    const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
     console.log({ fieldsValue });
     if (fieldsValue) {
 
@@ -162,7 +166,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-           console.log(fieldsValue)
+          
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -187,6 +191,8 @@ export default function CreateItem({ config, CreateForm }) {
           item.endTime = EndTime
         })
 
+     
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -200,7 +206,7 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.Subscription,
+          subscription: WorkOrderstoredId,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -217,6 +223,7 @@ export default function CreateItem({ config, CreateForm }) {
       }
 
       if (entity === "contract") {
+        console.log(fieldsValue)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -240,6 +247,8 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
+
+       
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -253,7 +262,7 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.Hardly,
+          subscription: storedId,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -262,13 +271,14 @@ export default function CreateItem({ config, CreateForm }) {
           },
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
           }
         }
         fieldsValue = Data
-        console.log(fieldsValue)
+        // console.log(fieldsValue)
       }
 
       // console.log(fieldsValue)
