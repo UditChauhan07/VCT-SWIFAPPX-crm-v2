@@ -77,6 +77,17 @@ export default function CreateItem({ config, CreateForm }) {
           subTotal = calculate.add(subTotal, total);
         }
       }
+      if (item) {
+        if (item.offerPrice && item.quantity) {
+          let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
+          subOfferTotal = calculate.add(subOfferTotal, offerTotal);
+        }
+        if (item.quantity && item.price) {
+          let total = calculate.multiply(item['quantity'], item['price']);
+          //sub total
+          subTotal = calculate.add(subTotal, total);
+        }
+      }
       // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
@@ -197,9 +208,9 @@ export default function CreateItem({ config, CreateForm }) {
             description: fieldsValue.ServiceDescription
           },
 
-          items: fieldsValue.items,
-          customItems: fieldsValue.customItems,
-        }
+        items: fieldsValue.items,
+        customItems: fieldsValue.customItems,
+      }
 
         fieldsValue = Data
       }
