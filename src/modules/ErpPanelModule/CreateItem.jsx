@@ -224,7 +224,7 @@ export default function CreateItem({ config, CreateForm }) {
         expectedRequiredTime: fieldsValue.expectedRequiredTime,
         serviceCategory: fieldsValue.serviceCategory,
         serviceList: fieldsValue.serviceList,
-        subscription: fieldsValue.subscription,
+        subscriptions: fieldsValue.subscriptions,
         fieldUsers: fielduser,
         customService: {
           name: fieldsValue.ServiceName,
