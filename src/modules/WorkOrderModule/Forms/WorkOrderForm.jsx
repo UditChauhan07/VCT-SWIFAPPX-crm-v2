@@ -136,7 +136,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [ShowServiceList, setShowServiceList] = useState(null);
   const [ShowServiceId, setShowServiceId] = useState();
   console.log(ShowServiceId)
-  const [isLead, setisLead] = useState(false);
+  const [isSubId, setSubId] = useState({});
+  console.log(isSubId)
 
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -423,13 +424,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // EDITABLE
 
   const handleRadioChange = (e, id) => {
+    const { value } = e.target;
+    setSubId(prevState => {
+      const updatedState = { ...prevState };
+      Object.keys(updatedState).forEach(key => {
+        if (key !== id) {
+          updatedState[key] = undefined;
+        }
+      });
+      updatedState[id] = value;
+      return updatedState;
+    });
+
     for (const subscriptionObj of ShowServiceId) {
       for (const dataObj of subscriptionObj.data) {
         if (dataObj._id === id) {
           return seTisMainid(subscriptionObj.subscription._id)
         }
       }
-    }
+    } 
     return null;
   }
 
@@ -446,7 +459,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         const matchingItem = ele.data.find(item => item.name === name);
         
         rowData[name] = matchingItem ? (
-          <Radio.Group key={matchingItem._id} onChange={(e) => handleRadioChange(e, matchingItem._id)} >
+          <Radio.Group key={matchingItem._id} 
+            value={isSubId[matchingItem._id]}
+            // value={matchingItem._id === isMainid ? isMainid : undefined} 
+            onChange={(e) => handleRadioChange(e, matchingItem._id)} >
             <Radio
               value={matchingItem._id} >{`${matchingItem.price}.00 /One Time`}</Radio>
           </Radio.Group> 
@@ -463,7 +479,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // One Time Subscription
 
   useEffect(() => {
-
     const handleoneTimeSubscription = async () => {
       try {
         const response = await request.getSubscriptiononetime();

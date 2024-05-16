@@ -162,7 +162,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-
+           console.log(fieldsValue)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -210,6 +210,7 @@ export default function CreateItem({ config, CreateForm }) {
 
         items: fieldsValue.items,
         customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks
       }
 
         fieldsValue = Data
