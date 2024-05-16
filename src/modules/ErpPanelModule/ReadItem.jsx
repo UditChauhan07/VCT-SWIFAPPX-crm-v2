@@ -536,29 +536,107 @@ export default function ReadItem({ config, selectedItem }) {
         <Col span={24}>
           <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
-          
+            <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder For')} :<br></br>
+                </p>
+
+              </Col>
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                  {translate('Lawn Care:One Time')} <br></br>
+
+                </p>
+
+
+              </Col>
+
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }} >
+                  {translate('Per Workorder Cost')} :<br></br>
+
+                </p> </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
+                  {translate('300.00 /Workorder')} <br></br>
+                </p> </Col>
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Adjustment')} :<br></br>
+
+                </p> </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                  {translate(`${(+10.00)}`)} <br></br>
+
+                </p> </Col>
+
+
+              <Col className="gutter-row" span={12} >
+                <p style={{ fontSize: "15px" }}>{translate(`Discount1`)} :
+                  <br></br>
+
+                </p>
+
+              </Col>
+              <Col className="gutter-row" span={12} >
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{translate('3.06')}
+                  <br></br>
+
+                </p>
+
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Package SubTotal')} :<br></br>
+
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                  {translate('306.90/One Time')} <br></br>
+
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <sp style={{ fontSize: "15px" }}>
+                  {translate('Tax 20')} :<br></br>
+
+                </sp>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                  {translate('61.38')} <br></br>
+
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Total Package Cost')} :<br></br>
+
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                  {translate('368.28/One Time')} <br></br>
+
+                </p>
+              </Col>
+
+            </Row>
           </div>
         </Col>
       </Row>
-      {/* .................. */}
-      {/* <Row className="gutter-row" style={{ marginTop: "20px" }}>
-        <Col span={12}>
-          <h3 style={{ marginTop: "4%" }}>Other detail</h3>
-          <div className='' style={{ width: "97%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+     
+      
 
-          </div>
 
-        </Col>
-        <Col span={12}>
-          <h3 style={{ marginTop: "4%" }} >Worker Attendance detail</h3>
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "240px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
-          </div>
 
-        </Col>
-
-      </Row> */}
-      <h3>Basic WorkOrder Details</h3>
+      <h3>Basic Attendence Details</h3>
       <Row className="gutter-row">
         <Col span={24}>
           <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "400px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
