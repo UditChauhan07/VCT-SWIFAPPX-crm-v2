@@ -112,7 +112,7 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
-    console.log({ fieldsValue });
+   
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -268,6 +268,43 @@ export default function CreateItem({ config, CreateForm }) {
         }
         fieldsValue = Data
         console.log(fieldsValue)
+      }
+// ................
+      if (entity === "quote") {
+        const storedId = localStorage.getItem(['SubscriptionId']); // Correct key name
+        const fieldData = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendQuotationEmail: fieldsValue.sendQuotationEmail,
+          startDate: fieldsValue.startDate,
+          expiredDate: fieldsValue.expiredDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.SalesPersonContact,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceName,
+          subscriptions: [storedId], // Use storedId here
+          isCustom: true,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription
+          },
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          adjustment: {
+            type: fieldsValue.Adjustmenttype,
+            value: fieldsValue.AdjustmentValue,
+          },
+          InitialRemarks: fieldsValue.InitialRemarks,
+          discount: fieldsValue.discount,
+        };
+
+         console.log({ fieldData })
+        // fieldsValue = fieldData
+
       }
 
       // console.log(fieldsValue)
