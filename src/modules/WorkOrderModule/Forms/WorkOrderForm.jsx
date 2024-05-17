@@ -568,28 +568,29 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
             {Subitems.map((item, index) => {
               itemPrice += parseFloat(item.total);
+              console.log({ aa: item.total });
               if (discountValue) {
                 itemPrice -= (itemPrice * (parseInt(discountValue) / 100))
                 discount = (parseFloat(item.total) * parseInt(discountValue) / 100)
               }
               if (tax.taxValue) {
-                taxValue = (itemPrice * (parseInt(tax.taxValue) / 100))
+                taxValue = (parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100))
               }
+
+              localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + itemPrice + taxValue).toFixed(2));
+              additionalCost.subTotal = parseFloat(itemPrice).toFixed(2);
+              additionalCost.tax = parseFloat(taxValue).toFixed(2)
+              additionalCost.totalPackageCost = parseFloat(subscriptionSubTotal + itemPrice + taxValue).toFixed(2);
+              localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
               return (
                 <>
                   item:{item.name}
                   {index != Subitems.length && <br />}
                 </>
               )
-            })}
+            })
+            }
           </li>
-          {
-            localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + itemPrice + taxValue).toFixed(2))
-          }
-          {additionalCost.subTotal = parseFloat(itemPrice).toFixed(2)}
-          {additionalCost.tax = parseFloat(taxValue).toFixed(2)}
-          {additionalCost.totalPackageCost = parseFloat(subscriptionSubTotal + itemPrice + taxValue).toFixed(2)}
-          {localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost))}
           <li
             style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}
 
