@@ -480,7 +480,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   useEffect(() => { }, [subscriptionCount, subItemCount])
   const [adjustmentvalue, setadjustment] = useState(null);
   const [discountValue, setdiscount] = useState(null);
+  const [Taxes, setTaxes] = useState([]);
+  const [ItemTotal, setItemTotal] = useState();
   let subscriptionSubTotal = 0;
+
+
   const CalculatorFilled = () => {
     return (
       ShowServiceList.map((element, _id) => (
@@ -519,62 +523,108 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const CalculatorFilledItem = () => {
     let itemPrice = 0;
     let discount = 0;
+   
+   
+    let  Fetchtaxes = async () => {
+      try {
+        const response = await request.getTaxes();
+        if (response.success) {
+          setTaxes(response.result)
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    Fetchtaxes()
+   
     return (
       <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
         <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
             {Subitems.map((item, index) => {
-              
               itemPrice += parseFloat(item.total);
               if (discountValue) {
                 itemPrice -= (itemPrice * (parseInt(discountValue) / 100))
                 discount = (parseFloat(item.total) * parseInt(discountValue) / 100)
-              }
+              } 
               return (
                 <>
-                  item:{item.name} (x{item.qty})
+                  item:{item.name} 
                   {index != Subitems.length && <br />}
                 </>
               )
             })}
           </li>
+        
+          <li 
+          style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}
+          
+          
+          >00</li>
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{discount.toFixed(2)}</li>
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{itemPrice.toFixed(2)}</li>
-          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>0</li>
+          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{Taxes.taxValue}</li>
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{itemPrice.toFixed(2)}</li>
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(parseFloat(subscriptionSubTotal + itemPrice)).toFixed(2)}</li>
         </ul></td>
     )
   }
+  // const ItemHandler = (element) => {
+  //   console.log(element)
+  //   setCheckedId(element.price);
+  //   let tempId = subItemIds;
+  //   let temp = Subitems;
+  //   element.total = element.price * quantityvalue
+  //   element.qty = 1
+  //   if (temp.length > 0) {
+  //     if (tempId.includes(element._id)) {
+  //       temp.map((item, index) => {
+  //         if (item._id == element._id) {
+  //           temp.splice(index)
+  //         }
+  //       })
+  //     } else {
+  //       temp.push(element)
+  //     }
+  //   } else {
+  //     temp.push(element)
+  //   }
+  //   if (tempId.includes(element._id)) {
+  //     tempId.splice(tempId.indexOf(element._id))
+  //   } else {
+  //     tempId.push(element._id)
+  //   }
+  //   setSubItemId(tempId)
+  //   setItems(temp)
+  //   setSubItemCount(temp.length)
+  // }
   const ItemHandler = (element) => {
-    console.log(element)
+    console.log(element);
     setCheckedId(element.price);
-    let tempId = subItemIds;
-    let temp = Subitems;
-    element.total = element.price * quantityvalue
-    element.qty = 1
-    if (temp.length > 0) {
-      if (tempId.includes(element._id)) {
-        temp.map((item, index) => {
-          if (item._id == element._id) {
-            temp.splice(index)
-          }
-        })
-      } else {
-        temp.push(element)
+
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+
+    element.total = element.price * quantityvalue;
+    element.qty = 1;
+
+    const selectedIndex = tempId.indexOf(element._id);
+    if (selectedIndex !== -1) {
+      tempId.splice(selectedIndex, 1);
+      const itemIndex = temp.findIndex(item => item._id === element._id);
+      if (itemIndex !== -1) {
+        temp.splice(itemIndex, 1);
       }
     } else {
-      temp.push(element)
+      tempId.push(element._id);
+      temp.push(element);
     }
-    if (tempId.includes(element._id)) {
-      tempId.splice(tempId.indexOf(element._id))
-    } else {
-      tempId.push(element._id)
-    }
-    setSubItemId(tempId)
-    setItems(temp)
-    setSubItemCount(temp.length)
-  }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+
+
 
   const priceHandler = ({ id, price }) => {
 
@@ -644,7 +694,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // const [checkedId, setCheckedId] = useState(null);
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
-  
+
   const [totals, setTotals] = useState({});
   console.log(totals)
 
@@ -1560,7 +1610,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             <tr>
               <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
                 <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Contract For</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Workorder For</li>
                   <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
                   <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
                   <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
@@ -1578,10 +1628,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 <tr>
                   <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
                     <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Service Items Included(per workorder)</li>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" } 
+                    }>Service Items Included(per workorder)</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Item Total</li>
                       <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
                       <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Sub Total</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax (0%)</li>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax (%)</li>
                       <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total Service Items Cost</li>
                       <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Grand Total</li>
                     </ul>
