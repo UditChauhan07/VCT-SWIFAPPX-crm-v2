@@ -17,6 +17,7 @@ import {
   ContainerOutlined,
   FileSyncOutlined,
   DashboardOutlined,
+  LineChartOutlined,
   TagOutlined,
   TagsOutlined,
   UserOutlined,
@@ -29,6 +30,9 @@ import {
   InsertRowAboveOutlined,
   ProfileOutlined,
   BarsOutlined,
+  ReconciliationOutlined,
+  TeamOutlined,
+  ControlOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -57,11 +61,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <DashboardOutlined />,
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
-    {
-      key: 'pricingmodel',
-      icon: <InsertRowAboveOutlined />,
-      label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
-    },
+    // {
+    //   key: 'pricingmodel',
+    //   icon: <InsertRowAboveOutlined />,
+    //   label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
+    // },
     {
       key: 'subscriptiontype',
       icon: <ProfileOutlined />,
@@ -112,6 +116,24 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <ShopOutlined />,
       label: <Link to={'/company'}>{translate('companies')}</Link>,
     },
+
+    {
+      key: 'quote',
+      icon: <FileSyncOutlined />,
+      label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
+    },
+    {
+      key: 'contract',
+      icon: <ControlOutlined />,
+      label: <Link to={'/contract'}>{translate('Contracts')}</Link>,
+    },
+    {
+      key: 'workorder',
+      icon: <LineChartOutlined />,
+      label: <Link to={'/workorder'}>{translate('Work Order')}</Link>,
+    },
+
+
     {
       key: 'lead',
       icon: <FilterOutlined />,
@@ -122,43 +144,32 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <FileOutlined />,
       label: <Link to={'/offer'}>{translate('offers')}</Link>,
     },
-    {
-      key: 'invoice',
-      icon: <ContainerOutlined />,
-      label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
-    },
     // {
-    //   key: 'quote',
-    //   icon: <FileSyncOutlined />,
-    //   label: <Link to={'/quote'}>{translate('proforma invoices')}</Link>,
+    //   key: 'invoice',
+    //   icon: <ContainerOutlined />,
+    //   label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
     // },
 
-    {
-      key: 'quote',
-      icon: <FileSyncOutlined />,
-      label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
-    },
-    {
-      key: 'payment',
-      icon: <CreditCardOutlined />,
-      label: <Link to={'/payment'}>{translate('payments')}</Link>,
-    },
-    {
-      key: 'expenses',
-      icon: <WalletOutlined />,
-      label: <Link to={'/expenses'}>{translate('expenses')}</Link>,
-    },
-    {
-      key: 'expensesCategory',
-      // icon: <ReconciliationOutlined />,
-      label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
-    },
+    // {
+    //   key: 'payment',
+    //   icon: <CreditCardOutlined />,
+    //   label: <Link to={'/payment'}>{translate('payments')}</Link>,
+    // },
+    // {
+    //   key: 'expenses',
+    //   icon: <WalletOutlined />,
+    //   label: <Link to={'/expenses'}>{translate('expenses')}</Link>,
+    // },
+    // {
+    //   key: 'expensesCategory',
+    //   icon: <ReconciliationOutlined />,
+    //   label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
+    // },
     // {
     //   key: 'employee',
     //   icon: <UserOutlined />,
     //   label: <Link to={'/employee'}>{translate('employee')}</Link>,
     // },
-
     {
       label: translate('Settings'),
       key: 'settings',
@@ -166,7 +177,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       children: [
         {
           key: 'admin',
-          // icon: <TeamOutlined />,
+          icon: <TeamOutlined />,
           label: <Link to={'/admin'}>{translate('admin')}</Link>,
         },
         {
@@ -178,16 +189,20 @@ function Sidebar({ collapsible, isMobile = false }) {
           label: <Link to={'/roles'}>{translate('roles')}</Link>,
         },
         {
-          key: 'currency',
-          label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
+          key: 'publicholiday',
+          label: <Link to={'/publicholiday'}>{translate('public_holiday')}</Link>,
         },
+        // {
+        //   key: 'currency',
+        //   label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
+        // },
         // {
         //   key: 'emailTemplates',
         //   label: <Link to={'/email'}>{translate('email_templates')}</Link>,
         // },
         {
           key: 'paymentMode',
-          label: <Link to={'/payment/mode'}>{translate('payments_mode')}</Link>,
+          label: <Link to={'/payment/mode'}>{translate('payment_mode')}</Link>,
         },
         {
           key: 'taxes',
@@ -253,7 +268,7 @@ function Sidebar({ collapsible, isMobile = false }) {
 
         {showLogoApp && (
           <img
-            src={logoText}
+            src={logoIcon}
             alt="Logo"
             style={{ marginTop: '3px', marginLeft: '10px', height: '38px' }}
           />

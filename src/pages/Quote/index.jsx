@@ -19,7 +19,7 @@ export default function Quote() {
   const dataTableColumns = [
     {
       title: translate('Number'),
-      dataIndex: 'number',
+      dataIndex: 'code',
     },
     {
       title: translate('Client'),
@@ -39,22 +39,22 @@ export default function Quote() {
         return dayjs(date).format(dateFormat);
       },
     },
+    // {
+    //   title: translate('Sub Total'),
+    //   dataIndex: 'subTotal',
+    //   onCell: () => {
+    //     return {
+    //       style: {
+    //         textAlign: 'right',
+    //         whiteSpace: 'nowrap',
+    //       },
+    //     };
+    //   },
+    //   render: (subTotal) => moneyFormatter({ amount: subTotal }),
+    // },
     {
-      title: translate('Sub Total'),
-      dataIndex: 'subTotal',
-      onCell: () => {
-        return {
-          style: {
-            textAlign: 'right',
-            whiteSpace: 'nowrap',
-          },
-        };
-      },
-      render: (subTotal) => moneyFormatter({ amount: subTotal }),
-    },
-    {
-      title: translate('Total'),
-      dataIndex: 'total',
+      title: translate('grand_total'),
+      dataIndex: 'grandTotal',
       onCell: () => {
         return {
           style: {
@@ -66,20 +66,20 @@ export default function Quote() {
       render: (total) => moneyFormatter({ amount: total }),
     },
 
-    {
-      title: translate('Status'),
-      dataIndex: 'status',
-      render: (status) => {
-        let tagStatus = tagColor(status);
+    // {
+    //   title: translate('Status'),
+    //   dataIndex: 'status',
+    //   render: (status) => {
+    //     let tagStatus = tagColor(status);
 
-        return (
-          <Tag color={tagStatus.color}>
-            {/* {tagStatus.icon + ' '} */}
-            {status && translate(tagStatus.label)}
-          </Tag>
-        );
-      },
-    },
+    //     return (
+    //       <Tag color={tagStatus.color}>
+    //         {/* {tagStatus.icon + ' '} */}
+    //         {status && translate(tagStatus.label)}
+    //       </Tag>
+    //     );
+    //   },
+    // },
   ];
 
   const Labels = {

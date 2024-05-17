@@ -1,7 +1,15 @@
 import { useState, useEffect } from 'react';
-// import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag } from 'antd';
-
-import { DatePicker, Input, Form, Select, InputNumber, Switch, Tag, Checkbox, notification } from 'antd';
+import {
+  DatePicker,
+  Input,
+  Form,
+  Select,
+  InputNumber,
+  Switch,
+  Tag,
+  Checkbox,
+  notification,
+} from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
 import { useMoney, useDate } from '@/settings';
@@ -14,9 +22,13 @@ import { request } from '@/request';
 import { useSelector } from 'react-redux';
 import { selectUpdatedItem } from '@/redux/crud/selectors';
 import { useCrudContext } from '@/context/crud';
+import { useParams } from 'react-router-dom';
+
+
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
+
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
@@ -40,6 +52,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 
     fetchData();
   }, []);
+
   if (fields.subscription_type) {
     useEffect(() => {
       // Fetch data from API
@@ -70,6 +83,13 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
       fetchData();
     }, []);
   }
+
+  // if (fields.client) {
+  //   let { id } = useParams();
+  //   // console.log(typeof id);
+
+  // }
+
   return (
     <>
       {Object.keys(fields).map((key) => {
@@ -81,12 +101,19 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
           if (field.hasFeedback)
             return <FormElement setFeedback={setFeedback} key={key} field={field} />;
           else if (field.hasRoles) {
-            return <FormElement setFeedback={setSelectedRole} key={key} field={field} roles={roles} />;
-          }
-          else if (field.hasOptions) {
-            return <FormElement setFeedback={setcheckedOption} key={key} field={field} checkboxes={checkboxes} />;
-          }
-          else if (feedback && field.feedback) {
+            return (
+              <FormElement setFeedback={setSelectedRole} key={key} field={field} roles={roles} />
+            );
+          } else if (field.hasOptions) {
+            return (
+              <FormElement
+                setFeedback={setcheckedOption}
+                key={key}
+                field={field}
+                checkboxes={checkboxes}
+              />
+            );
+          } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
             return <FormElement key={key} field={field} />;
@@ -103,6 +130,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
   const { dateFormat } = useDate();
 
   const { label, options } = field;
+  // let { id } = useParams();
 
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
@@ -120,6 +148,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
     password: <Input.Password autoComplete="new-password" />,
     boolean: <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
+    // getclientId : <Input defaultValue={id} />,   
     date: (
       <DatePicker
         placeholder={translate('select_date')}
@@ -170,7 +199,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
         }}
       >
         {field.options?.map((option) => (
-          <Select.Option key={`${uniqueId()}`} value={option.value}>
+          <Select.Option key={`${uniqueId()}`} value={option.value} >
             {translate(option.label)}
           </Select.Option>
         ))}
@@ -199,11 +228,12 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
           width: '100%',
         }}
       >
-        {Array.isArray(roles) && roles.map((role, index) => (
-          <Select.Option key={index} value={role._id}>
-            {role.name}
-          </Select.Option>
-        ))}
+        {Array.isArray(roles) &&
+          roles.map((role, index) => (
+            <Select.Option key={index} value={role._id}>
+              {role.name}
+            </Select.Option>
+          ))}
       </Select>
     ),
     color: (
@@ -348,7 +378,9 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
         {field.label}
       </Checkbox>
     ),
-    checkoxes: (<Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />),
+    checkoxes: (
+      <Checkbox.Group options={options} onChange={handleCheckboxChange} value={selectedOptions} />
+    ),
     checkoxesCustom: (
       <Checkbox.Group onChange={handleCheckboxChange} value={selectedOptions}>
         {checkboxes.map((item) => (
@@ -356,10 +388,9 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
             {item.name}
           </Checkbox>
         ))}
-      </Checkbox.Group>)
+      </Checkbox.Group>
+    ),
   };
-
-
 
   const filedType = {
     string: 'string',
@@ -374,14 +405,13 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
     // array: 'array',
     // object: 'object',
     // enum: 'enum',
-    // date: 'date',
+    date: 'date',
     url: 'url',
     website: 'url',
     email: 'email',
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-
   return (
     <Form.Item
       label={translate(field.label)}
@@ -390,18 +420,21 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
-          validator: field.type === 'phone' ? (rule, value, callback) => {
-            if (!value) {
-              callback(); // Allow empty values if not required
-              return;
-            }
-            const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
-            if (!pattern.test(value)) {
-              callback('Please enter a valid 10-digit mobile number ');
-            } else {
-              callback(); // Success
-            }
-          } : undefined,
+          validator:
+            field.type === 'phone'
+              ? (rule, value, callback) => {
+                if (!value) {
+                  callback(); // Allow empty values if not required
+                  return;
+                }
+                const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
+                if (!pattern.test(value)) {
+                  callback('Please enter a valid 10-digit mobile number ');
+                } else {
+                  callback(); // Success
+                }
+              }
+              : undefined,
         },
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}

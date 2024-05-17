@@ -45,7 +45,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
   };
   const [currentErp, setCurrentErp] = useState(current ?? resetErp);
   var initialAdminLevel
-  console.log(form.getFieldValue("is_worker"));
+  // console.log(form.getFieldValue("is_worker"));
 
   const [admin, setAdmin] = useState([]);
   const [authUser, setAuthUser] = useState({});
@@ -63,7 +63,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
   adminLevel = role?.admin_level
   isSAAS = role?.is_saas
 
-  console.log({ isSAAS });
+  // console.log({ isSAAS });
 
   useEffect(() => {
     if (isSuccess) {
@@ -94,14 +94,14 @@ function LoadRoleForm({ isUpdateForm = false }) {
       // }
       form.resetFields();
       form.setFieldsValue(formData);
-      console.log({ formData });
+      // console.log({ formData });
     }
   }, [current]);
-  console.log(current);
+  // console.log(current);
 
   // console.log({ current });
 
-  let entities = ['people', 'client', 'worker', 'company', 'lead', 'offer', 'invoice', 'quote', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype', 'servicecategory', 'servicelist', 'publicholiday']
+  let entities = ['people', 'api_access', 'company', 'lead', 'client', 'clientaddress', 'offer', 'invoice', 'quote', 'contract', 'workorder', 'payment', 'product', 'productcategory', 'expense', 'expensecategory', 'admin', 'roles', 'paymentMode', 'taxes', 'pricingmodel', 'subscriptiontype', 'servicecategory', 'servicelist', 'publicholiday', 'worker']
 
   // console.log('current?.admin_level --- ', current?.admin_level);
   const [moduleAccessPermission, setModuleAccessPermission] = useState(true);

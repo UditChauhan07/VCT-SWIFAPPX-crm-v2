@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 
 export default function ReadOfferModule({ config }) {
+  
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();

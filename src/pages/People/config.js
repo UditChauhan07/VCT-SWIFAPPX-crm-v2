@@ -2,12 +2,12 @@ export const fields = {
   firstname: {
     type: 'string',
     required: true,
-    label : 'First Name',
+    label: 'First Name',
   },
   lastname: {
     type: 'string',
     required: true,
-    label : 'Last Name',
+    label: 'Last Name',
   },
   company: {
     type: 'search',
@@ -22,9 +22,11 @@ export const fields = {
   },
   phone: {
     type: 'phone',
+    required: true,
   },
   email: {
     type: 'email',
+    required: true,
   },
   // bio: {
   //   type: 'string',

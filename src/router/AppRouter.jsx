@@ -53,6 +53,7 @@ const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
 const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
+const CustomerAddresses =  lazy(() => import('@/pages/Address'));
 
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
@@ -62,6 +63,12 @@ const ServiceListCreate = lazy(() => import('@/pages/ServiceList/Create'));
 const ServiceListRead = lazy(() => import('@/pages/ServiceList/Read'));
 const ServiceListUpdate = lazy(() => import('@/pages/ServiceList/Update'));
 const PublicHoliday = lazy(() => import('@/pages/PublicHoliday'));
+const WorkOrder = lazy(() => import('@/pages/WorkOrder'));
+const WorkCreate = lazy(() => import('@/pages/WorkOrder/WorkCreate'));
+const WorkRead = lazy(() => import('@/pages/WorkOrder/WorkRead'));
+const Contracts = lazy(() => import('@/pages/Contracts'));
+const ContractCreate = lazy(() => import('@/pages/Contracts/ContractCreate'));
+const ContractRead = lazy(() => import('@/pages/Contracts/ContractRead'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -301,6 +308,34 @@ export default function AppRouter() {
     {
       path: '/offer/update/:id',
       element: <OfferUpdate />,
+    },
+    {
+      path: '/customer/address/:id',
+      element: <CustomerAddresses/>,
+    },
+    {
+      path: '/workorder',
+      element: <WorkOrder />,
+    },
+    {
+      path: '/workorder/create',
+      element: <WorkCreate />,
+    },
+    {
+      path: '/workorder/read/:id',
+      element: <WorkRead />,
+    },
+    {
+      path: '/contract',
+      element: <Contracts/>,
+    },
+    {
+      path: '/contract/create',
+      element: <ContractCreate/>,
+    },
+    {
+      path: '/contract/read/:id',
+      element: <ContractRead /> ,
     },
     {
       path: '*',

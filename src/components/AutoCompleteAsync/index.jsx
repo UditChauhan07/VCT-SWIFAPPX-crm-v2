@@ -10,25 +10,28 @@ export default function AutoCompleteAsync({
   entity,
   displayLabels,
   searchFields,
-  outputValue = '_id',
+  outputValue = '_id',  
   value, /// this is for update
   onChange, /// this is for update
-}) {
+  client
+}) 
+
+{ 
+ 
+  
   const [selectOptions, setOptions] = useState([]);
   const [currentValue, setCurrentValue] = useState(undefined);
-
   const isUpdating = useRef(true);
   const isSearching = useRef(false);
 
   const [searching, setSearching] = useState(false);
-
+ 
   const [valToSearch, setValToSearch] = useState('');
   const [debouncedValue, setDebouncedValue] = useState('');
-
   const [searchResult, setSearchResult] = useState(null);
 
 
-  const [, cancel] = useDebounce(
+const [, cancel] = useDebounce(
     () => {
       //  setState("Typing stopped");
       setDebouncedValue(valToSearch);
@@ -38,7 +41,9 @@ export default function AutoCompleteAsync({
   );
 
   const asyncSearch = async (options) => {
+
     const response = await request.search({ entity, options });
+    console.log({ entity, options })
     if (response.success) {
       const data = await response.result;
       const firstResult = data[0];
@@ -46,6 +51,7 @@ export default function AutoCompleteAsync({
     }
     return response;
   };
+
 
   let { onFetch, result, isSuccess, isLoading } = useOnFetch();
 
@@ -67,6 +73,8 @@ export default function AutoCompleteAsync({
       cancel();
     };
   }, [debouncedValue]);
+
+
 
   const onSearch = (searchText) => {
     if (searchText && searchText != '') {
@@ -113,7 +121,7 @@ export default function AutoCompleteAsync({
       value={currentValue}
       onSearch={onSearch}
       onChange={(newValue) => {
-        console.log('107', { newValue });
+        // console.log('107', { newValue });
         if (onChange) {
           if (newValue) onChange(newValue[outputValue] || newValue);
         }
@@ -125,7 +133,9 @@ export default function AutoCompleteAsync({
       }}
     >
       {selectOptions.map((optionField) => (
+        
         <Select.Option
+        
           key={optionField[outputValue] || optionField}
           value={optionField[outputValue] || optionField}
         >

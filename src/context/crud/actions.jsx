@@ -5,6 +5,7 @@ const contextActions = (dispatch) => {
     modal: {
       open: () => {
         dispatch({ type: actionTypes.OPEN_MODAL });
+        
       },
       close: () => {
         dispatch({ type: actionTypes.CLOSE_MODAL });
