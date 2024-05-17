@@ -15,7 +15,6 @@ import { selectCurrentItem } from '@/redux/crud/selectors';
 import useLanguage from '@/locale/useLanguage';
 import { crud } from '@/redux/crud/actions';
 import { useCrudContext } from '@/context/crud';
-
 import { CrudLayout } from '@/layout';
 
 let data = JSON.parse(localStorage.getItem('auth'))
@@ -147,6 +146,7 @@ function FixHeaderPanel({ config }) {
 }
 
 function CrudModule({ config, createForm, updateForm, withUpload = false }) {
+
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -163,7 +163,9 @@ function CrudModule({ config, createForm, updateForm, withUpload = false }) {
       }
     >
       <DataTable config={config} />
+
       <DeleteModal config={config} />
+     
     </CrudLayout>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { crud } from '@/redux/crud/actions';
@@ -10,9 +10,10 @@ import useLanguage from '@/locale/useLanguage';
 import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
-export default function CreateForm({ config, formElements, withUpload = false }) {
+export default function CreateForm({ config, formElements, withUpload = false  }) {
+  let { entity,  } = config;
 
-  let { entity } = config;
+
   const dispatch = useDispatch();
   const { isLoading, isSuccess } = useSelector(selectCreatedItem);
   const { crudContextAction } = useCrudContext();
@@ -20,8 +21,9 @@ export default function CreateForm({ config, formElements, withUpload = false })
   const [form] = Form.useForm();
   const translate = useLanguage();
   const onSubmit = (fieldsValue) => {
-
+      console.log(fieldsValue)
     // Manually trim values before submission
+
     if (fieldsValue.file && withUpload) {
       fieldsValue.file = fieldsValue.file[0].originFileObj;
     }
@@ -31,7 +33,16 @@ export default function CreateForm({ config, formElements, withUpload = false })
       return acc;
     }, {});
 
-    dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload }));
+    // console.log(trimmedValues)  
+
+    if (entity === 'clientaddress') {
+      const ClientId = localStorage.getItem('key');
+      dispatch(crud.create({ entity, jsonData: trimmedValues, id:ClientId, withUpload }));
+    } else {
+      dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload }));
+    }
+        
+    // dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload   }));
   };
 
   useEffect(() => {
@@ -47,10 +58,10 @@ export default function CreateForm({ config, formElements, withUpload = false })
 
   return (
     <Loading isLoading={isLoading}>
-      <Form form={form} layout="vertical" onFinish={onSubmit}>
+      <Form form={form} layout="vertical"  onFinish={onSubmit}>
         {formElements}
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" >
             {translate('Submit')}
           </Button>
         </Form.Item>
