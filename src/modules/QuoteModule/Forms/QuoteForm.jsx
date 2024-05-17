@@ -413,34 +413,69 @@ useEffect(()=>{
   };
   const [subscriptionIds, setSubscriptionIds] = useState([]);
   const [subscriptionCount, setSubscriptionCount] = useState(0);
+  const [isSubscriptionID, seTisSubscriptionID] = useState(null);
 
-  const handleCheckboxClick = (e, id) => {
+  // const handleCheckboxClick = (e, id) => {
+  //   let temp = [...subscriptionIds]; // Create a copy of the current subscriptionIds state
+  //   if (temp.includes(id)) {
+  //     temp = temp.filter(item => item !== id); // Remove the id if it exists
+  //   } else {
+  //     temp.push(id); // Add the id if it does not exist
+  //   }
+  //   setSubscriptionIds(temp);
+  //   setSubscriptionCount(temp.length);
+
+  //   for (const subscriptionObj of ShowServiceId) {
+  //     for (const dataObj of subscriptionObj.data) {
+  //       if (dataObj._id === id) {
+  //         const subscriptionId = subscriptionObj.subscription._id;
+  //         console.log(subscriptionId)
+  //         localStorage.setItem('SubscriptionId', subscriptionId);
+  //         seTisSubscriptionID(subscriptionId);
+  //         seTisMainid(subscriptionId);
+  //         return;
+  //       }
+  //     }
+  //   }
+  //   return null;
+  // };
+  // ....................
+const handleCheckboxClick = (e, id) => {
     let temp = [...subscriptionIds]; // Create a copy of the current subscriptionIds state
+
+    // Toggle the subscription id in the state
     if (temp.includes(id)) {
       temp = temp.filter(item => item !== id); // Remove the id if it exists
     } else {
       temp.push(id); // Add the id if it does not exist
     }
+
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
 
+    let subscriptionsArray = [];
+
+    // Update local storage and state for the selected subscription
     for (const subscriptionObj of ShowServiceId) {
       for (const dataObj of subscriptionObj.data) {
-        if (dataObj._id === id) {
-          const subscriptionId = subscriptionObj.subscription._id;
-          localStorage.setItem('SubscriptionId', subscriptionId);
-          seTisSubscriptionID(subscriptionId);
-          seTisMainid(subscriptionId);
-          return;
+        if (temp.includes(dataObj._id)) {
+          const subscription = subscriptionObj.subscription._id;
+          const subModule = dataObj._id; // The data object ID you want to send
+          subscriptionsArray.push({
+            subscription: subscription,
+            subModule: subModule
+          });
         }
       }
     }
-    return null;
+
+    localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray));
   };
 
   useEffect(() => { }, [subscriptionCount])
   const [adjustmentvalue, setadjustment] = useState(null);
   const [discountValue, setdiscount] = useState(null);
+ 
   const CalculatorFilled = () => {
     return (
       ShowServiceList.map((element, _id) => (
@@ -456,19 +491,27 @@ useEffect(()=>{
             }
             let discount = 0;
             if (discountValue) {
-              subTotal -= (subTotal * (parseInt(discountValue) / 100))
-              discount = (subTotal * (parseInt(discountValue) / 100))
+              subTotal -= (subTotal * (parseInt(discountValue) / 100));
+              discount = (subTotal * (parseInt(discountValue) / 100));
             }
             if (subscriptionIds.includes(subscription._id)) {
-              return (<td style={{ border: '0.5px solid #000', padding: '10px' }}><ul style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}><li>{subscription.name}:{subscriptions.subscription.name}</li><li>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li><li>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li><li>{parseFloat(discount || 0).toFixed(2)}</li><li>{parseFloat(subTotal).toFixed(2)}</li></ul></td>)
+              return (
+                <td style={{ padding: '10px', borderRight: 'none' }} key={subscription._id}>
+                  <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{subscription.name}:{subscriptions.subscription.name}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(discount || 0).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li>
+                  </ul>
+                </td>
+              );
             }
-          }
-          )
+          })
         ))
       ))
-    )
-  }
-
+    );
+  };
   const AdjustmentValueHandler = (event) => {
     setadjustment(event.target.value)
   }
@@ -485,7 +528,7 @@ useEffect(()=>{
         Subscription: ele.subscription.name,
       };
 
-      subscriptionNames.forEach((name) => {
+      subscriptionNames?.forEach((name) => {
         const matchingItem = ele.data.find(item => item.name === name);
 
         rowData[name] = matchingItem ? (
@@ -514,7 +557,7 @@ useEffect(()=>{
       IsActiveness(2);
       IsActiveSelect(1);
     } else {
-      const option = ShowServiceList.find((option) => option._id === value);
+      const option = ShowServiceList?.find((option) => option._id === value);
       console.log(option)
       if (option) {
         setSelectedOption(option);
@@ -526,7 +569,97 @@ useEffect(()=>{
         IsActiveness(0);
         IsActiveSelect(0);
       }
+
+      // Clear previous subscription selection when switching options
+      setSubscriptionIds([]);
+      setSubscriptionCount(0);
+      setadjustment(null);
+      setdiscount(null);
     }
+  };
+   const [prices, setPrices] = useState({});
+  const [quantities, setQuantities] = useState({});
+
+  const [totals, setTotals] = useState({});
+ console.log(totals)
+
+  // useEffect(() => {
+  //   const initialPrices = {};
+  //   const initialQuantities = {};
+  //   const initialTotals = {};
+  //   productList?.map((ele) => 
+  //     ele.products?.forEach((product, index) => {
+  //       initialPrices[product._id] = product.price;
+  //         initialQuantities[product._id] = 1;
+  //         initialTotals[product._id] = product.price;
+  //     })
+  // )
+
+  //   setPrices(initialPrices);
+  //   setQuantities(initialQuantities);
+  //   setTotals(initialTotals);
+  // }, [productList]);
+// ..................................
+
+  useEffect(() => {
+    const initialPrices = {};
+    const initialQuantities = {};
+    const initialTotals = {};
+    productList?.forEach((ele) =>
+      ele.products?.forEach((product) => {
+        initialPrices[product._id] = product.price;
+        initialQuantities[product._id] = 1;
+        initialTotals[product._id] = product.price;
+      })
+    );
+
+    setPrices(initialPrices);
+    setQuantities(initialQuantities);
+    setTotals(initialTotals);
+
+    // Initialize the form with the initial totals
+    form.setFieldsValue({
+      items: productList?.flatMap(ele =>
+        ele.products?.map(product => ({
+          item: product._id,
+          price: product.price,
+          quantity: 1,
+          total: product.price,
+          remarks: product.description
+        }))
+      )
+    });
+  }, [productList]);
+  // const updateQuantity = (productId, value) => {
+  //   const updatedQuantities = { ...quantities, [productId]: value };
+  //   setQuantities(updatedQuantities);
+  //   // const updatedTotals = { ...totals, [productId]: prices[productId] * value };
+  //   // setTotals(updatedTotals);
+
+  //   const updatedTotals = { ...totals };
+  //   updatedTotals[productId] = prices[productId] * value;
+  //   setTotals(updatedTotals);
+  // };
+// ..............
+  const updateQuantity = (productId, value) => {
+    const updatedQuantities = { ...quantities, [productId]: value };
+    setQuantities(updatedQuantities);
+
+    const updatedTotals = { ...totals, [productId]: prices[productId] * value };
+    setTotals(updatedTotals);
+
+    // Update the form's state directly with the new total value
+    form.setFieldsValue({
+      items: mainData.products?.map((product, index) => {
+        if (product._id === productId) {
+          return {
+            ...form.getFieldValue(['items', index]),
+            total: prices[productId] * value,
+          };
+        }
+        return form.getFieldValue(['items', index]);
+      })
+    });
   };
   const optionsss = ['Addition', 'Substraction'];
   return (
@@ -850,19 +983,19 @@ useEffect(()=>{
                           <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
                         </Col>
                       </Row>
-                      <Form.List name="customItems"
-                        initialValue={[{
-                          itemName: '',
-                          price: "",
-                          quantity: "",
-                          total: "",
-                          remarks: '',
-                        }]}
-                      >
+                      <Form.List name="customItems" initialValue={[{
+                        itemName: '',
+                        price: "",
+                        quantity: "",
+                        total: "",
+                        remarks: '',
+                      }]}>
                         {(fields, { add, remove }) => (
+
                           <>
-                          {fields.map((field,index) => (
-                            <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current}></ItemRow>
+
+                            {fields?.map((field, index) => (
+                              <ItemRow key={field.key} remove={remove} field={field} current={current} isFirstRow={index === 0}></ItemRow>
                             ))}
                             <Form.Item>
                               <Button
@@ -884,106 +1017,90 @@ useEffect(()=>{
                     <div key={`${i}`}>
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                         <Col className="gutter-row" span={4}>
-                          <p>{translate('Sub-Item')}</p>
+                          <p style={{ marginLeft: "20%" }}>{translate('Sub-Item')}</p>
                         </Col>
                         <Col className="gutter-row" span={4}>
-                          <p>{translate('Price')}</p>
+                          <p style={{ marginLeft: "20%" }}>{translate('Price')}</p>
                         </Col>
                         <Col className="gutter-row" span={3}>
-                          <p>{translate('Quantity')}</p>{' '}
+                          <p style={{ marginLeft: "20%" }}>{translate('Quantity')}</p>{' '}
                         </Col>
                         <Col className="gutter-row" span={4}>
-                          <p>{translate('Total')}</p>
+                          <p style={{ marginLeft: "40%" }}>{translate('Total')}</p>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                          <p>{translate('Remarks')}</p>
+                          <p style={{ marginLeft: "15%" }}>{translate('Remarks')}</p>
                         </Col>
                       </Row>
                       {/* <Form.List name="items" >
-                        <> */}
-                          {mainData.products?.map((data, index) => (
-                          
-                            <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
-                              <Col className="gutter-row mt-2">
-                                <Checkbox onChange={() => setCheckedId(data.price)} />
-                              </Col>
-                              <Col className="gutter-row" span={4}>
-                                <Form.Item
-                                  name={['items', index, '_id']}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: 'Missing item name',
-                                      // Add a validator to allow the default value to pass
-                                      validator: (_, value) => {
-                                        if (value || data.name) { // Allow the default value to pass
-                                          return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('Item name is required'));
-                                      },
-                                    },
-                                    {
-                                      pattern: /^(?!\s*$)[\s\S]+$/,
-                                      message: 'Item Name must contain alphanumeric or special characters',
-                                    },
-                                  ]}
-                                >
-                                  <Input placeholder="Item Name" defaultValue={data.name} readOnly />
-                                </Form.Item>
-                              </Col>
-                              <Col className="gutter-row" span={4}>
-                                <Form.Item
-                                  name={['items', index, 'productprice']}
-                                  rules={[]}
-                                >
-                                  <InputNumber
-                                    className="moneyInput"
-                                    onChange={updatePrice}
-                                    min={0}
-                                    controls={false}
-                                    addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                                    addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                                    defaultValue={data.price} // Use defaultValue for default value
-                                  />
-                                </Form.Item>
-                              </Col>
-                              <Col className="gutter-row" span={3}>
-                                <Form.Item name={[`${i}`, `${index}`, 'quantity']}
+                    <> */}
+                      {mainData.products?.map((data, index) => (
+                        <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
+                          <Col className="gutter-row mt-2">
+                            <Checkbox onChange={() => setCheckedId(data.price)} />
+                          </Col>
+                          <Col className="gutter-row" span={4}>
+                            <Form.Item
+                              name={['items', index, 'item']}
+                              initialValue={data._id}
+                              rules={[
+                                {
+                                  validator: (_, value) => {
+                                    if (value || data.name) { // Allow the default value to pass
+                                      return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('Item name is required'));
+                                  },
+                                },
+                              ]}
+                            >
+                              <span>{data.name}</span>
+                            </Form.Item>
+                          </Col>
+                          <Col className="gutter-row" span={4}>
+                            <Form.Item
+                              name={['items', index, 'price']}
+                              initialValue={prices[data._id]}
+                            >
+                              <InputNumber
+                                className="moneyInput"
+                                min={0}
+                                controls={false}
+                                addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                                addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+                                value={prices[data._id]}
+                                readOnly
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col className="gutter-row" span={3}>
+                            <Form.Item name={['items', index, 'quantity']}>
+                              <InputNumber
+                                style={{ width: '100%' }}
+                                min={0}
+                                defaultValue={1}
+                                onChange={(value) => updateQuantity(data._id, value)}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col className="gutter-row" span={4}>
+                            <Form.Item
+                              name={['items', index, 'total']}
+                              initialValue={totals[data._id]}
+                            >
+                              <span style={{ marginLeft: "24%" }}>{totals[data._id]}</span>
+                            </Form.Item>
+                          </Col>
+                          <Col className="gutter-row" span={7}>
+                            <Form.Item name={['items', index, 'remarks']}>
+                              <Input placeholder="Remarks for Workorder" defaultValue={data.description} />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      ))}
 
-                                rules={[]} 
-
-                                >
-                                  <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
-                                  </Form.Item>
-                              </Col>
-
-                              <Col className="gutter-row" span={4}>
-                                <Form.Item name={[`${i}`, `${index}`, 'total']} >
-                                  <InputNumber
-                                    // readOnly
-                                    className="moneyInput"
-                                    value={totalState}
-                                    min={0}
-                                    controls={false}
-                                    addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                                    addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                                    formatter={(value) => money.amountFormatter({ amount: value })}
-
-                                  />
-                                </Form.Item>
-                              </Col>
-
-                              <Col className="gutter-row" span={7}>
-                                <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
-                                  <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
-                                </Form.Item>
-                              </Col>
-                            </Row>
-                            
-                          ))}
-                        {/* </>
-                      </Form.List> */}
-
+                      {/* </>
+                  </Form.List> */}
                     </div >
                   </Collapse.Panel>
                 </>
@@ -1039,22 +1156,19 @@ useEffect(()=>{
                       <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
                     </Col>
                   </Row>
-                  <Form.List name="customItems" 
-                  initialValue={[{
+                  <Form.List name="customItems" initialValue={[{
                     itemName: '',
                     price: "",
                     quantity: "",
                     total: "",
                     remarks: '',
-                  }]}
-                  >
-                    
+                  }]}>
                     {(fields, { add, remove }) => (
 
                       <>
 
-                        {fields?.map((field,index) => (
-                          <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current}></ItemRow>
+                        {fields?.map((field, index) => (
+                          <ItemRow key={field.key} remove={remove} field={field} current={current} isFirstRow={index === 0}></ItemRow>
                         ))}
                         <Form.Item>
                           <Button
@@ -1076,118 +1190,117 @@ useEffect(()=>{
                 <div key={`${i}`}>
                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                     <Col className="gutter-row" span={4}>
-                      <p>{translate('Sub-Item')}</p>
+                      <p style={{ marginLeft: "20%" }}>{translate('Sub-Item')}</p>
                     </Col>
                     <Col className="gutter-row" span={4}>
-                      <p>{translate('Price')}</p>
+                      <p style={{ marginLeft: "20%" }}>{translate('Price')}</p>
                     </Col>
                     <Col className="gutter-row" span={3}>
-                      <p>{translate('Quantity')}</p>{' '}
+                      <p style={{ marginLeft: "20%" }}>{translate('Quantity')}</p>{' '}
                     </Col>
                     <Col className="gutter-row" span={4}>
-                      <p>{translate('Total')}</p>
+                      <p style={{ marginLeft: "40%" }}>{translate('Total')}</p>
                     </Col>
                     <Col className="gutter-row" span={6}>
-                      <p>{translate('Remarks')}</p>
+                      <p style={{ marginLeft: "15%" }}>{translate('Remarks')}</p>
                     </Col>
                   </Row>
                   {/* <Form.List name="items" >
                     <> */}
-                      {mainData.products?.map((data, index) => (
-                        
-                        
+                  {mainData.products?.map((data, index) => (
 
-                        <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
-                          <Col className="gutter-row mt-2">
-                            <Checkbox onChange={() => setCheckedId(data.price)} />
-                          </Col>
-                          <Col className="gutter-row" span={4}>
-                            <Form.Item
-                              name={['items', index, 'item']}
-                              initialValue={data._id}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Missing item name',
-                                  // Add a validator to allow the default value to pass
-                                  validator: (_, value) => {
-                                    if (value || data.name) { // Allow the default value to pass
-                                      return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('Item name is required'));
-                                  },
-                                },
-                                {
-                                  pattern: /^(?!\s*$)[\s\S]+$/,
-                                  message: 'Item Name must contain alphanumeric or special characters',
-                                },
-                              ]}
-                            >
-                              {/* <Input placeholder="Item Name"   readOnly /> */}
+                    <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
+                      <Col className="gutter-row mt-2">
+                        <Checkbox onChange={() => setCheckedId(data.price)} />
+                      </Col>
+                      <Col className="gutter-row" span={4}>
+                        <Form.Item
+                          name={['items', index, 'item']}
+                          initialValue={data._id}
+                          rules={[
+                            {
+                              validator: (_, value) => {
+                                if (value || data.name) { // Allow the default value to pass
+                                  return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('Item name is required'));
+                              },
+                            },
+                          ]}
+                        >
+                          {/* <Input placeholder="Item Name"   readOnly /> */}
 
-                              <span>{data.name}</span>
+                          <span>{data.name}</span>
 
 
-                            </Form.Item>
-                          </Col>
-                          <Col className="gutter-row" span={4}>
-                            <Form.Item
-                              name={['items', index, 'price']}
-                              rules={[]}
-                              initialValue={data.price}
-                            >
-                              <InputNumber
-                                className="moneyInput"
-                                onChange={updatePrice}
-                                min={0}
-                                controls={false}
-                                addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                                addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                                defaultValue={data.price}
-                              // Use defaultValue for default value
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col className="gutter-row" span={3}>
-                            <Form.Item name={[`items`, `${index}`, 'quantity']}
+                        </Form.Item>
+                      </Col>
+                      <Col className="gutter-row" span={4}>
+                        <Form.Item
+                          name={['items', index, 'price']}
+                          // initialValue={data.price}
+                          initialValue={prices[data._id]}
 
-                              rules={[]}
-                            >
-                              <InputNumber style={{ width: '100%' }} defaultValue={1} min={0}
 
-                                onChange={updateQt}
+                        >
+                          {/* <span style={{marginLeft:"-17%"}}>{data.price}</span> */}
+                          <InputNumber
+                            className="moneyInput"
+                            onChange={updatePrice}
+                            min={0}
+                            controls={false}
+                            addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                            addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+                            // defaultValue={data.price}
+                            value={prices[data._id]}
+                            readOnly
 
-                              />
-                            </Form.Item>
-                          </Col>
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col className="gutter-row" span={3}>
+                        <Form.Item name={[`items`, `${index}`, 'quantity']}
+                        // rules={[{ required: true }]}
+                        >
+                          <InputNumber style={{ width: '100%' }} min={0}
+                            // onChange={updateQt} 
+                            defaultValue={1}
+                            onChange={(value) => updateQuantity(data._id, value)}
 
-                          <Col className="gutter-row" span={4}>
-                            <Form.Item
-                              name={[`items`, `${index}`, 'total']}
-                              initialValue={totalState}
-                            >
-                              <InputNumber
-                                // readOnly
-                                className="moneyInput"
-                                value={totalState}
-                                min={0}
-                                controls={false}
-                                addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                                addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                                formatter={(value) => money.amountFormatter({ amount: value })}
-                              // initialValue={totalState}
-                              />
-                            </Form.Item>
-                          </Col>
+                          />
+                        </Form.Item>
+                      </Col>
 
-                          <Col className="gutter-row" span={7}>
-                            <Form.Item name={[`items`, `${index}`, 'remarks']} >
-                              <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                      ))}
-                    {/* </>
+                      <Col className="gutter-row" span={4}>
+                        <Form.Item
+                          name={[`items`, `${index}`, 'total']}
+                          initialValue={totals[data._id]}
+                        >
+                          <span style={{ marginLeft: "24%" }}>{totals[data._id]}</span>
+                          {/* <InputNumber
+                              readOnly
+                              className="moneyInput"
+                              // value={totalState}
+                              defaultValue={totals[data._id]}
+                              // value={totals[data._id]}
+                              min={0}
+                              controls={false}
+                              addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                              addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+                              formatter={(value) => money.amountFormatter({ amount: value })}
+                            // initialValue={totalState}
+                            /> */}
+                        </Form.Item>
+                      </Col>
+
+                      <Col className="gutter-row" span={7}>
+                        <Form.Item name={[`items`, `${index}`, 'remarks']} >
+                          <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  ))}
+                  {/* </>
                   </Form.List> */}
                 </div >
               </Collapse.Panel>
@@ -1195,24 +1308,7 @@ useEffect(()=>{
           ))}
         </Collapse>
       </>}
-      {subscriptionIds.length > 0 && <><Divider dashed />
-        <table>
-          <tbody>
-            <tr>
-              <th style={{ background: '#6f42c1', color: '#ffffff', padding: '10px' }}>
-                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Workorder For</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Per Workorder Cost</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Adjustment</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Discount({discountValue}%)</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Subtotal</li>
-                </ul>
-              </th>
-              {CalculatorFilled()}
-            </tr>
-          </tbody>
-        </table>
-      </>}
+    
       <Divider dashed />
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
@@ -1265,7 +1361,7 @@ useEffect(()=>{
                   required: true,
                 },
               ]}>
-                <Input />
+                <Input onChange={AdjustmentValueHandler} />
               </Form.Item>
             )
           }
@@ -1273,10 +1369,7 @@ useEffect(()=>{
         </Col>
 
 
-
-
-
-        <Col className="gutter-row" span={12}>
+ <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
             {
               required: true,
@@ -1328,8 +1421,29 @@ useEffect(()=>{
           </Form.Item>
         </Col>
       </Row>
-
-
+    
+      {subscriptionIds.length > 0 && <>
+        <Divider dashed />
+        <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
+          {translate('Selected Quotation Billing Details')}
+        </Col>
+        <table style={{ border: '0.2px solid #000', width: "100%", height: "220px", marginTop: "3%" }}>
+          <tbody>
+            <tr>
+              <th style={{  padding: '10px', borderRight: 'none' }}>
+                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Contract For</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Subtotal</li>
+                </ul>
+              </th>
+              {CalculatorFilled()}
+            </tr>
+          </tbody>
+        </table>
+      </>}
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
         <Row gutter={[12, -5]}>

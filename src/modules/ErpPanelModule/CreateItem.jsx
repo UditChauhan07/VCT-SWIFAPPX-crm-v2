@@ -273,7 +273,20 @@ export default function CreateItem({ config, CreateForm }) {
       }
       // ................
       if (entity === "quote") {
-        const storedId = localStorage.getItem(['SubscriptionId']); // Correct key name
+       
+        // const storedSubscriptionIds = JSON.parse(localStorage.getItem('SubscriptionIds')); // Retrieve array of subscription IDs
+        // const storedDataObjIds = JSON.parse(localStorage.getItem('DataObjIds')); // Retrieve array of data object IDs
+
+        // const subscriptions = storedSubscriptionIds?.map((subscriptionId, index) => ({
+        //   subscriptionId: subscriptionId,
+        //   dataObjId: storedDataObjIds[index]
+        // })) || [];
+
+        // console.log(subscriptions);
+        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')); // Retrieve array of subscription objects
+
+        console.log(storedSubscriptions);
+        
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -287,7 +300,8 @@ export default function CreateItem({ config, CreateForm }) {
           salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceName,
-          subscriptions: [storedId], // Use storedId here
+          // subscriptions: [{subscriptions}], // Use storedId here
+          subscriptions: storedSubscriptions, // Use the subscriptions array here
           isCustom: true,
           customService: {
             name: fieldsValue.ServiceName,
@@ -305,7 +319,7 @@ export default function CreateItem({ config, CreateForm }) {
         };
 
         console.log({ fieldData })
-        // fieldsValue = fieldData
+        fieldsValue = fieldData
 
       }
 
