@@ -6,6 +6,7 @@ import {
   FilePdfOutlined,
   RedoOutlined,
   PlusOutlined,
+  PayCircleOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons';
 import { Dropdown, Table, Button } from 'antd';
@@ -44,6 +45,7 @@ function AddNewItem({ config }) {
 
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
+  // console.log(config)
 
   const handleClick = () => {
     navigate(`/${entity.toLowerCase()}/create`);
@@ -59,7 +61,6 @@ function AddNewItem({ config }) {
       </Button>
     ) : null
   );
-
 }
 
 export default function DataTable({ config, extra = [] }) {
@@ -67,11 +68,8 @@ export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, disableAdd = false } = config;
 
   const { DATATABLE_TITLE } = config;
-
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
-
   const { pagination, items: dataSource } = listResult;
-
   const { erpContextAction } = useErpContext();
   const { modal } = erpContextAction;
   role = user?.role_id
@@ -95,6 +93,14 @@ export default function DataTable({ config, extra = [] }) {
       icon: <EditOutlined />,
     })
   }
+  // if (entity === "servicelist" && (permissions?.[entity + '_edit'] == true || isSAAS == true)) {
+  //   items.push({
+  //     label: translate('Pricing Model'),
+  //     key: 'price_model',
+  //     icon: <PayCircleOutlined />,
+  //   })
+  // }
+
 
   items.push(...extra,
     {
@@ -129,11 +135,25 @@ export default function DataTable({ config, extra = [] }) {
     dispatch(erp.currentAction({ actionType: 'delete', data: record }));
     modal.open();
   };
+  const handlePriceModel = (record) => {
+    const data = { ...record };
+    console.log("data", data);
+    dispatch(erp.currentAction({ actionType: 'update', data }));
+    navigate(`/${entity}/update/pricing/${record._id}`);
+  };
 
   const handleRecordPayment = (record) => {
     dispatch(erp.currentItem({ data: record }));
     navigate(`/invoice/pay/${record._id}`);
   };
+
+  // const handleClientAddress = (record) => {
+  //   console.log(record)
+  //   dispatch(erp.currentItem({ data: record }));
+  //   navigate(`/customer/address/${record}`);
+  // };
+
+
 
   dataTableColumns = [
     ...dataTableColumns,
@@ -166,9 +186,14 @@ export default function DataTable({ config, extra = [] }) {
                 case 'delete':
                   handleDelete(record);
                   break;
+                case 'price_model':
+                  handlePriceModel(record);
+                  break;
                 case 'recordPayment':
                   handleRecordPayment(record);
-                  break;
+                // case 'clientaddress':
+                //   handleClientAddress(record);
+                // break;
                 default:
                   break;
               }

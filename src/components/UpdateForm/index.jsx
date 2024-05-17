@@ -60,7 +60,8 @@ export default function UpdateForm({ config, formElements, withUpload = false })
       if (newValues.date) {
         newValues = {
           ...newValues,
-          date: dayjs(newValues['date']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+          // date: dayjs(newValues['date']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+          date: dayjs(newValues['date']),
         };
       }
       if (newValues.expiredDate) {

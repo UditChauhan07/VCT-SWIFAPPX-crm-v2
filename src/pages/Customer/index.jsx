@@ -18,6 +18,7 @@ export default function Customer() {
     DATATABLE_TITLE: translate('client_list'),
     ADD_NEW_ENTITY: translate('add_new_client'),
     ENTITY_NAME: translate('client'),
+    
   };
   const configPage = {
     entity,
@@ -29,8 +30,11 @@ export default function Customer() {
     readColumns,
     searchConfig,
     deleteModalLabels,
+ 
   };
-  return (
+
+  return (  
+
     <CrudModule
       createForm={<DynamicForm fields={fields} />}
       updateForm={<DynamicForm fields={fields} />}
@@ -38,3 +42,4 @@ export default function Customer() {
     />
   );
 }
+

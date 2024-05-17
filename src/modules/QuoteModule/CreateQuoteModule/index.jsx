@@ -6,6 +6,7 @@ export default function CreateQuoteModule({ config }) {
   return (
     <ErpLayout>
       <CreateItem config={config} CreateForm={QuoteForm} />
+    
     </ErpLayout>
   );
 }
