@@ -321,19 +321,19 @@ export default function QuoteReadPage({ config, selectedItem }) {
             <h3 style={{ marginTop: "4%" }}>Basic Quotation Details</h3>
             <Row className="gutter-row">
                 <Col span={24}>
-                    <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "260px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+                    <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "150px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
                         <Row className="gutter-row" style={{ padding: "0px 0px 0px 20px" }}>
                             <Col span={12}>
                                 <Row className="gutter-row" >
                                     <Col span={12}>
-                                        <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder No')} .:<br></br>
+                                        <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Quotation No')} .:<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.workOrderNumber}<br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.quoteNumber}<br></br>
                                         </p>
                                     </Col>
                                 </Row>
-                                <Row className="gutter-row" >
+                                {/* <Row className="gutter-row" >
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Workorder Status')} :<br></br>
                                         </p></Col>
@@ -347,7 +347,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                         </p>
 
                                     </Col>
-                                </Row>
+                                </Row> */}
                                 <Row className="gutter-row">
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Date')} :<br></br>
@@ -407,28 +407,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                     </Col>
                                 </Row>
 
-                                {/* <Row className="gutter-row">
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Work Leader')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Test Leader')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
-                                {/* <Row className="gutter-row" >
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workers')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Alfreda Byers,Carly Alvarez')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
+                              
                             </Col>
                         </Row>
                     </div>
@@ -462,7 +441,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {currentErp.customService.description}<br></br>
+                                    {/* {currentErp.customService.description}<br></br> */}
                                 </p>
                             </Col>
                         </Row>
@@ -472,7 +451,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
 
             {/* ................. */}
-            <h3 style={{ marginTop: "4%" }}>Quotation Billing Detail</h3>
+            {/* <h3 style={{ marginTop: "4%" }}>Quotation Billing Detail</h3>
             <Row className="gutter-row" style={{ marginTop: "20px" }}>
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -570,10 +549,10 @@ export default function QuoteReadPage({ config, selectedItem }) {
                         </Row>
                     </div>
                 </Col>
-            </Row>
+            </Row> */}
 
 {/* ............................ */}
-         <h3 style={{ marginTop: "4%" }}>Other detail</h3>
+         {/* <h3 style={{ marginTop: "4%" }}>Other detail</h3>
             <Row className="gutter-row">
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "290px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -625,7 +604,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                         </Row>
                     </div>
                 </Col>
-            </Row>
+            </Row> */}
 
 
             <Row gutter={[12, 0]} style={{ marginTop: "40px" }}>
