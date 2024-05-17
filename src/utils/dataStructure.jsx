@@ -12,7 +12,7 @@ export const dataForRead = ({ fields, translate }) => {
     let field = fields[key];
     columns.push({
       title: field.label ? field.label : key,
-      dataIndex: field.dataIndex ? field.dataIndex.join('.') : key,
+      dataIndex: field.dataIndex ? field.datajoin('.') : key,
       isDate: field.type === 'date',
     });
   });

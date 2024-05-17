@@ -45,6 +45,8 @@ export default function CreateItem({ config, CreateForm }) {
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
 
+  console.log({ isLoading, isSuccess, result });
+
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
@@ -100,7 +102,7 @@ export default function CreateItem({ config, CreateForm }) {
       dispatch(erp.resetAction({ actionType: 'create' }));
       setSubTotal(0);
       setOfferSubTotal(0);
-      if (entity == 'roles') {
+      if (entity == 'roles' || entity == 'quote') {
         navigate(`/${entity}`);
       }
       else {

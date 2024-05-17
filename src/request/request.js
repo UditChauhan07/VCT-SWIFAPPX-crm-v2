@@ -428,6 +428,7 @@ const request = {
       return errorHandler(error);
     }
   },
+  
   getSubscriptiononetime: async () => {
     try {
       const response = await axios.get(`/subscriptiontype/oneTime`);
