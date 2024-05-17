@@ -127,7 +127,7 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
-      if (entity === "serviceCategory") {
+      if (entity === "serviceList") {
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.serviceCategory,

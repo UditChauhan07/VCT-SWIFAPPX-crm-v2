@@ -861,8 +861,8 @@ useEffect(()=>{
                       >
                         {(fields, { add, remove }) => (
                           <>
-                          {fields.map((field) => (
-                              <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
+                          {fields.map((field,index) => (
+                            <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current}></ItemRow>
                             ))}
                             <Form.Item>
                               <Button
@@ -1053,8 +1053,8 @@ useEffect(()=>{
 
                       <>
 
-                        {fields?.map((field) => (
-                          <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
+                        {fields?.map((field,index) => (
+                          <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current}></ItemRow>
                         ))}
                         <Form.Item>
                           <Button
