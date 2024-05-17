@@ -21,6 +21,7 @@ export default function Customer() {
       title: translate('Service Category'),
       dataIndex: 'serviceCategory',
       render: (serviceCategory) => (
+            
         <span>
           <Tag color='#6f42c1'>
             {serviceCategory.name}

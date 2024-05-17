@@ -29,13 +29,12 @@ import { current } from '@reduxjs/toolkit';
 // import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
-    console.log(item)
     const { moneyFormatter } = useMoney();
     return (
         <Row gutter={[12, 0]} key={item._id}>
             <Col className="gutter-row" span={11}>
                 <p style={{ marginBottom: 5 }}>
-                    <strong>{item.item.name}</strong>
+                    <strong>{item.itemName}</strong>
                 </p>
                 <p>{item.description}</p>
             </Col>
@@ -72,7 +71,7 @@ const Item = ({ item }) => {
     );
 };
 
-export default function ReadContract({ config, selectedItem }) {
+export default function QuoteReadPage({ config, selectedItem }) {
     const translate = useLanguage();
     const { entity, ENTITY_NAME } = config;
     const dispatch = useDispatch();
@@ -184,9 +183,13 @@ export default function ReadContract({ config, selectedItem }) {
         }
     }
 
-
+    // const status = currentErp.status
     const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp.status);
+
+
     const Createddate = new Date(currentErp.created);
+
+    // Define month names
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -204,7 +207,6 @@ export default function ReadContract({ config, selectedItem }) {
 
     return (
         <>
-
             <PageHeader
                 onBack={() => {
                     navigate(`/${entity.toLowerCase()}`);
@@ -270,7 +272,7 @@ export default function ReadContract({ config, selectedItem }) {
             >
 
             </PageHeader>
-
+            {/* <Divider dashed /> */}
 
             <h3 className='' style={{ marginLeft: "5px" }}>Customer Details</h3>
             <Row className="gutter-row">
@@ -316,7 +318,7 @@ export default function ReadContract({ config, selectedItem }) {
 
             </Row >
 
-            <h3 style={{ marginTop: "4%" }}>Basic Contract Details</h3>
+            <h3 style={{ marginTop: "4%" }}>Basic Quotation Details</h3>
             <Row className="gutter-row">
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "260px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -324,14 +326,28 @@ export default function ReadContract({ config, selectedItem }) {
                             <Col span={12}>
                                 <Row className="gutter-row" >
                                     <Col span={12}>
-                                        <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Contract No')} .:<br></br>
+                                        <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder No')} .:<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.contractNumber}<br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.workOrderNumber}<br></br>
                                         </p>
                                     </Col>
                                 </Row>
-                                
+                                <Row className="gutter-row" >
+                                    <Col span={12}>
+                                        <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Workorder Status')} :<br></br>
+                                        </p></Col>
+                                    <Col span={12}>
+                                        <p style={{
+                                            fontSize: "14px", fontWeight: "600", color:
+                                                textColor, backgroundColor: bgColor, width: "90px",
+                                            textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
+                                        }}>
+                                            {statusText} <br></br>
+                                        </p>
+
+                                    </Col>
+                                </Row>
                                 <Row className="gutter-row">
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Date')} :<br></br>
@@ -354,6 +370,12 @@ export default function ReadContract({ config, selectedItem }) {
 
                                     </Col>
                                 </Row>
+
+                            </Col>
+
+                            <Col span={12}>
+
+
                                 <Row className="gutter-row" >
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Expected Time Required')} :<br></br>
@@ -365,13 +387,6 @@ export default function ReadContract({ config, selectedItem }) {
 
                                     </Col>
                                 </Row>
-
-                            </Col>
-
-                            <Col span={12}>
-
-
-               
 
                                 <Row className="gutter-row" >
                                     <Col span={12}>
@@ -424,7 +439,7 @@ export default function ReadContract({ config, selectedItem }) {
             </Row>
 
 
-            <h3 className='' style={{ marginLeft: "5px", marginTop: "4%" }}>Contract Details</h3>
+            <h3 className='' style={{ marginLeft: "5px", marginTop: "4%" }}>Quotation Details</h3>
             <Row className="gutter-row">
                 <Col span={24}>
 
@@ -452,19 +467,19 @@ export default function ReadContract({ config, selectedItem }) {
                             </Col>
                         </Row>
                     </div>
-                </Col>
-            </Row>
+                </Col >
+            </Row >
 
 
             {/* ................. */}
-            <h3 style={{ marginTop: "4%" }}>Contract Billing Detail</h3>
+            <h3 style={{ marginTop: "4%" }}>Quotation Billing Detail</h3>
             <Row className="gutter-row" style={{ marginTop: "20px" }}>
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
                         <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Contract For')} :<br></br>
+                                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder For')} :<br></br>
                                 </p>
 
                             </Col>
@@ -472,6 +487,7 @@ export default function ReadContract({ config, selectedItem }) {
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
                                     {translate('Lawn Care:One Time')} <br></br>
+
                                 </p>
 
 
@@ -556,9 +572,8 @@ export default function ReadContract({ config, selectedItem }) {
                 </Col>
             </Row>
 
-
-    
-            <h3 style={{ marginTop: "4%" }}>Other detail</h3>
+{/* ............................ */}
+         <h3 style={{ marginTop: "4%" }}>Other detail</h3>
             <Row className="gutter-row">
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "290px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -569,11 +584,25 @@ export default function ReadContract({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Initial Remarks')} .:<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.remarks} <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('NA')} <br></br>
                                         </p>
                                     </Col>
                                 </Row>
-                               
+                                <Row className="gutter-row" >
+                                    <Col span={12}>
+                                        <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Picture Uploaded')} :<br></br>
+                                        </p></Col>
+                                    <Col span={12}>
+                                        <p style={{
+                                            fontSize: "14px", fontWeight: "600", color:
+                                                "#fdf2ff", backgroundColor: "#808080", width: "100px",
+                                            textAlign: "center", padding: "40px 10px 40px 10px", borderRadius: "14px"
+                                        }}>
+                                            +Add Image <br></br>
+                                        </p>
+
+                                    </Col>
+                                </Row>
                                 <Row className="gutter-row">
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Created By')} :<br></br>
@@ -674,6 +703,3 @@ export default function ReadContract({ config, selectedItem }) {
         </>
     );
 }
-
-
-
