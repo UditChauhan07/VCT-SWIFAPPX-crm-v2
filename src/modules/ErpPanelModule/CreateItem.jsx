@@ -169,7 +169,6 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -193,8 +192,17 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
-
-
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
 
         let Data = {
           client: fieldsValue.client,
@@ -219,7 +227,10 @@ export default function CreateItem({ config, CreateForm }) {
 
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
-          remarks: fieldsValue.InitialRemarks
+          remarks: fieldsValue.InitialRemarks,
+          serviceCost,
+          additionalCost,
+          grandTotal
         }
 
         fieldsValue = Data
