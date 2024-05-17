@@ -441,7 +441,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     //   temp.push(id)
     // }
     setSubscriptionIds(id);
-  
+
 
     // setSubscriptionIds(temp);
 
@@ -466,16 +466,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       for (const dataObj of subscriptionObj.data) {
         if (dataObj._id === id) {
           return localStorage.setItem('WorkOrderSubId', subscriptionObj.subscription._id)
-          
+
           seTisMainid(subscriptionObj.subscription._id)
         }
       }
-    } 
+    }
     return null;
   }
-  useEffect(() => { }, [subscriptionCount])
+  const [Subitems, setItems] = useState([]);
+  const [subItemIds, setSubItemId] = useState([]);
+  const [subItemCount, setSubItemCount] = useState(0);
+  useEffect(() => { }, [subscriptionCount, subItemCount])
   const [adjustmentvalue, setadjustment] = useState(null);
   const [discountValue, setdiscount] = useState(null);
+  let subscriptionSubTotal = 0;
   const CalculatorFilled = () => {
     return (
       ShowServiceList.map((element, _id) => (
@@ -491,10 +495,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             }
             let discount = 0;
             if (discountValue) {
-              subTotal -= (subTotal * (parseInt(discountValue) / 100))
               discount = (subTotal * (parseInt(discountValue) / 100))
+              subTotal -= (subTotal * (parseInt(discountValue) / 100))
             }
             if (subscriptionIds.includes(subscription._id)) {
+              subscriptionSubTotal = subTotal;
               return (
                 <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                   <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
@@ -509,6 +514,67 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         ))
       ))
     )
+  }
+  const CalculatorFilledItem = () => {
+    let itemPrice = 0;
+    let discount = 0;
+    return (
+      <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+        <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
+            {Subitems.map((item, index) => {
+              itemPrice += parseFloat(item.total);
+              if (discountValue) {
+                itemPrice -= (itemPrice * (parseInt(discountValue) / 100))
+                discount = (parseFloat(item.total) * parseInt(discountValue) / 100)
+              }
+              return (
+                <>
+                  item:{item.name} (x{item.qty})
+                  {index != Subitems.length && <br />}
+                </>
+              )
+            })}
+          </li>
+          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{discount.toFixed(2)}</li>
+          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{itemPrice.toFixed(2)}</li>
+          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>0</li>
+          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{itemPrice.toFixed(2)}</li>
+          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(parseFloat(subscriptionSubTotal + itemPrice)).toFixed(2)}</li>
+        </ul></td>
+    )
+  }
+  const ItemHandler = (element) => {
+    setCheckedId(element.price);
+    let tempId = subItemIds;
+    let temp = Subitems;
+    element.total = element.price * 1
+    element.qty = 1
+    if (temp.length > 0) {
+      if (tempId.includes(element._id)) {
+        temp.map((item, index) => {
+          if (item._id == element._id) {
+            temp.splice(index)
+          }
+        })
+      } else {
+        temp.push(element)
+      }
+    } else {
+      temp.push(element)
+    }
+    if (tempId.includes(element._id)) {
+      tempId.splice(tempId.indexOf(element._id))
+    } else {
+      tempId.push(element._id)
+    }
+    setSubItemId(tempId)
+    setItems(temp)
+    setSubItemCount(temp.length)
+  }
+
+  const priceHandler = ({ id, price }) => {
+
   }
 
   const AdjustmentValueHandler = (event) => {
@@ -531,7 +597,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         const matchingItem = ele.data.find(item => item.name === name);
 
         rowData[name] = matchingItem ? (
-          <Radio.Group key={matchingItem._id} 
+          <Radio.Group key={matchingItem._id}
             value={isSubId[matchingItem._id]}
             // value={matchingItem._id === isMainid ? isMainid : undefined} 
             onChange={(e) => handleRadioChange(e, matchingItem._id)} >
@@ -1064,7 +1130,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
                         <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
                           <Col className="gutter-row mt-2">
-                            <Checkbox onChange={() => setCheckedId(data.price)} />
+                            <Checkbox onChange={() => { ItemHandler(data); }} />
                           </Col>
                           <Col className="gutter-row" span={4}>
                             <Form.Item
@@ -1174,7 +1240,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Col>
 
           <Col className="gutter-row " span={24} >
-{/* 
+            {/* 
             <Form.Item
               name="Subscription"
               initialValue={isMainid}
@@ -1274,7 +1340,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
                         <Col className="gutter-row mt-2">
-                          <Checkbox onChange={() => setCheckedId(data.price)} />
+                          <Checkbox onChange={() => { ItemHandler(data); }} />
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
@@ -1323,7 +1389,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={3}>
                           <Form.Item name={[`items`, `${index}`, 'quantity']}
-                            // rules={[{ required: true }]}
+                          // rules={[{ required: true }]}
                           >
                             <InputNumber style={{ width: '100%' }} min={0}
                               // onChange={updateQt} 
@@ -1516,6 +1582,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               </th>
               {CalculatorFilled()}
             </tr>
+            {Subitems.length > 0 &&
+              <>
+                <tr>Additional Service Items</tr>
+                <tr>
+                  <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
+                    <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Service Items Included(per workorder)</li>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Sub Total</li>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax (0%)</li>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total Service Items Cost</li>
+                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Grand Total</li>
+                    </ul>
+                  </th>
+                  {CalculatorFilledItem()}
+                </tr>
+              </>
+            }
           </tbody>
         </table>
       </>}
