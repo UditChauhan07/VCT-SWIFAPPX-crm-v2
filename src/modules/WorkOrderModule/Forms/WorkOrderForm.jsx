@@ -580,7 +580,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + itemPrice + taxValue).toFixed(2));
               additionalCost.subTotal = parseFloat(itemPrice).toFixed(2);
               additionalCost.tax = parseFloat(taxValue).toFixed(2)
-              additionalCost.totalPackageCost = parseFloat(subscriptionSubTotal + itemPrice + taxValue).toFixed(2);
+              additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue).toFixed(2);
               localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
               return (
                 <>

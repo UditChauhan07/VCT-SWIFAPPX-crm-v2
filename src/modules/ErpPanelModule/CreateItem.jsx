@@ -236,6 +236,7 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = Data
       }
       console.log({ fieldsValue });
+      return;
 
       if (entity === "contract") {
         console.log(fieldsValue)
