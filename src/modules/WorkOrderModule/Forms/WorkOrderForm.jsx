@@ -113,7 +113,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // console.log({ serviceOptions });
 
   const [productList, setProductList] = useState([])
- 
+
   useEffect(() => {
     getProductHandler()
     // getClientHandler()
@@ -223,7 +223,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [totalState, setTotal2] = useState(undefined);
   console.log(totalState)
   const [price, setPrice] = useState();
-  
+
 
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
@@ -241,7 +241,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
   const [form] = useForm();
 
-  
+
 
 
 
@@ -476,6 +476,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
   const [subItemCount, setSubItemCount] = useState(0);
+  const [quantityvalue, setQuantiyvalue] = useState();
   useEffect(() => { }, [subscriptionCount, subItemCount])
   const [adjustmentvalue, setadjustment] = useState(null);
   const [discountValue, setdiscount] = useState(null);
@@ -523,6 +524,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
             {Subitems.map((item, index) => {
+              
               itemPrice += parseFloat(item.total);
               if (discountValue) {
                 itemPrice -= (itemPrice * (parseInt(discountValue) / 100))
@@ -545,10 +547,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     )
   }
   const ItemHandler = (element) => {
+    console.log(element)
     setCheckedId(element.price);
     let tempId = subItemIds;
     let temp = Subitems;
-    element.total = element.price * 1
+    element.total = element.price * quantityvalue
     element.qty = 1
     if (temp.length > 0) {
       if (tempId.includes(element._id)) {
@@ -641,21 +644,21 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // const [checkedId, setCheckedId] = useState(null);
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
-
+  
   const [totals, setTotals] = useState({});
- console.log(totals)
+  console.log(totals)
 
   useEffect(() => {
     const initialPrices = {};
     const initialQuantities = {};
     const initialTotals = {};
-    productList?.map((ele) => 
+    productList?.map((ele) =>
       ele.products.forEach((product, index) => {
         initialPrices[product._id] = product.price;
-          initialQuantities[product._id] = 1;
-          initialTotals[product._id] = product.price;
+        initialQuantities[product._id] = 1;
+        initialTotals[product._id] = product.price;
       })
-  )
+    )
 
     setPrices(initialPrices);
     setQuantities(initialQuantities);
@@ -663,6 +666,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [productList]);
 
   const updateQuantity = (productId, value) => {
+    setQuantiyvalue(value)
     const updatedQuantities = { ...quantities, [productId]: value };
     setQuantities(updatedQuantities);
     // const updatedTotals = { ...totals, [productId]: prices[productId] * value };
@@ -1319,7 +1323,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   <div key={`${i}`}>
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                       <Col className="gutter-row" span={4}>
-                        <p style={{marginLeft:"20%"}}>{translate('Sub-Item')}</p>
+                        <p style={{ marginLeft: "20%" }}>{translate('Sub-Item')}</p>
                       </Col>
                       <Col className="gutter-row" span={4}>
                         <p style={{ marginLeft: "20%" }}>{translate('Price')}</p>
@@ -1367,10 +1371,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         <Col className="gutter-row" span={4}>
                           <Form.Item
                             name={['items', index, 'price']}
-                                                      // initialValue={data.price}
+                            // initialValue={data.price}
                             initialValue={prices[data._id]}
-                           
-                            
+
+
                           >
                             {/* <span style={{marginLeft:"-17%"}}>{data.price}</span> */}
                             <InputNumber
@@ -1439,24 +1443,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </>
       }
 
-      {/* {subscriptionIds.length > 0 && <><Divider dashed />
-        <table>
-          <tbody>
-            <tr>
-              <th style={{ background: '#6f42c1', color: '#ffffff', padding: '10px' }}>
-                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Workorder For</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Per Workorder Cost</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Adjustment</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Discount({discountValue}%)</li>
-                  <li style={{ borderBottom: '0.5px solid #fff' }}>Subtotal</li>
-                </ul>
-              </th>
-              {CalculatorFilled()}
-            </tr>
-          </tbody>
-        </table>
-      </>} */}
+
       <Divider dashed />
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
@@ -1514,8 +1501,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
         <Col className="gutter-row" span={12}>
-          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" 
-         
+          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks"
+
           >
             <Input />
           </Form.Item>
@@ -1584,7 +1571,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </tr>
             {Subitems.length > 0 &&
               <>
-                <tr>Additional Service Items</tr>
+                <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginBottom: "" }} >
+                  {translate('Additional Service Items')}
+                </Col>
+                {/* <tr>Additional Service Items</tr> */}
                 <tr>
                   <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
                     <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
@@ -1603,6 +1593,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </tbody>
         </table>
       </>}
+
+
 
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
