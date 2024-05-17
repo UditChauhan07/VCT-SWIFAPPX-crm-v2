@@ -32,7 +32,7 @@ function SaveForm({ form }) {
   );
 }
 
-export default function CreateItem({ config, CreateForm })  {
+export default function CreateItem({ config, CreateForm }) {
   const translate = useLanguage();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -112,7 +112,7 @@ export default function CreateItem({ config, CreateForm })  {
   }, [isSuccess]);
 
 
- 
+
   const onSubmit = (fieldsValue) => {
     const storedId = localStorage.getItem('SubscriptionId');
     const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
@@ -129,7 +129,8 @@ export default function CreateItem({ config, CreateForm })  {
           items: newList,
         };
       }
-      if (entity === "serviceCategory") {
+      if (entity === "servicelist") {
+
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.serviceCategory,
@@ -161,12 +162,12 @@ export default function CreateItem({ config, CreateForm })  {
           }
           requestBody.subscriptions.push(subscriptions)
         }
-
+        console.log(requestBody)
         fieldsValue = requestBody;
 
       }
       if (entity === "workorder") {
-          
+
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -191,7 +192,7 @@ export default function CreateItem({ config, CreateForm })  {
           item.endTime = EndTime
         })
 
-     
+
 
         let Data = {
           client: fieldsValue.client,
@@ -214,10 +215,10 @@ export default function CreateItem({ config, CreateForm })  {
             description: fieldsValue.ServiceDescription
           },
 
-        items: fieldsValue.items,
-        customItems: fieldsValue.customItems,
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks
-      }
+        }
 
         fieldsValue = Data
       }
@@ -248,7 +249,7 @@ export default function CreateItem({ config, CreateForm })  {
           item.endTime = EndTime
         })
 
-       
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,

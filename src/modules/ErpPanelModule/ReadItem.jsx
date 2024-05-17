@@ -459,7 +459,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                  {currentErp.customService.description}<br></br>
+                  {/* {currentErp.customService.description}<br></br> */}
                 </p>
               </Col>
             </Row>

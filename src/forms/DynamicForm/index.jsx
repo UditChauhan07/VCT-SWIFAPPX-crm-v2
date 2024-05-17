@@ -58,7 +58,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
       // Fetch data from API
       const fetchData = async () => {
         try {
-          const response = await request.getCategory();
+          const response = await request.getCategorySubscription();
           if (response.success) {
             console.log({ response });
             setCheckBoxes(response.result);
