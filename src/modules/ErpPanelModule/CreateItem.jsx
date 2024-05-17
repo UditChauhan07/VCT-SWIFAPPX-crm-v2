@@ -111,8 +111,12 @@ export default function CreateItem({ config, CreateForm }) {
     return () => { };
   }, [isSuccess]);
 
+
+
   const onSubmit = (fieldsValue) => {
-   
+    const storedId = localStorage.getItem('SubscriptionId');
+    const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
+    console.log({ fieldsValue });
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -125,7 +129,8 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
-      if (entity === "serviceCategory") {
+      if (entity === "servicelist") {
+
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.serviceCategory,
@@ -157,7 +162,7 @@ export default function CreateItem({ config, CreateForm }) {
           }
           requestBody.subscriptions.push(subscriptions)
         }
-
+        console.log(requestBody)
         fieldsValue = requestBody;
 
       }
@@ -187,6 +192,8 @@ export default function CreateItem({ config, CreateForm }) {
           item.endTime = EndTime
         })
 
+
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -200,7 +207,7 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.Subscription,
+          subscription: WorkOrderstoredId,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -208,14 +215,16 @@ export default function CreateItem({ config, CreateForm }) {
             description: fieldsValue.ServiceDescription
           },
 
-        items: fieldsValue.items,
-        customItems: fieldsValue.customItems,
-      }
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks
+        }
 
         fieldsValue = Data
       }
 
       if (entity === "contract") {
+        console.log(fieldsValue)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -239,6 +248,8 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
+
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -252,7 +263,7 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.Hardly,
+          subscription: storedId,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -261,107 +272,14 @@ export default function CreateItem({ config, CreateForm }) {
           },
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
           }
         }
         fieldsValue = Data
-        console.log(fieldsValue)
-      }
-// ................
-      if (entity === "quote") {
-        const storedId = localStorage.getItem(['SubscriptionId']); // Correct key name
-        const fieldData = {
-          client: fieldsValue.client,
-          clientAddress: fieldsValue.clientAddress,
-          billingAddress: fieldsValue.billingAddress,
-          sendQuotationEmail: fieldsValue.sendQuotationEmail,
-          startDate: fieldsValue.startDate,
-          expiredDate: fieldsValue.expiredDate,
-          startTime: fieldsValue.startTime,
-          expectedRequiredTime: fieldsValue.expectedRequiredTime,
-          salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.SalesPersonContact,
-          serviceCategory: fieldsValue.serviceCategory,
-          serviceList: fieldsValue.serviceName,
-          subscriptions: [storedId], // Use storedId here
-          isCustom: true,
-          customService: {
-            name: fieldsValue.ServiceName,
-            price: fieldsValue.ServicePrice,
-            description: fieldsValue.ServiceDescription
-          },
-          items: fieldsValue.items,
-          customItems: fieldsValue.customItems,
-          adjustment: {
-            type: fieldsValue.Adjustmenttype,
-            value: fieldsValue.AdjustmentValue,
-          },
-          InitialRemarks: fieldsValue.InitialRemarks,
-          discount: fieldsValue.discount,
-        };
-
-
-        }
-
-        // console.log({ fieldData })
-        fieldsValue = fieldData
-
-      }
-
-    }
-    console.log(fieldsValue)
-    dispatch(erp.create({ entity, jsonData: fieldsValue }));
-
-    if (entity === "workorder") {
-
-      const Leader = {
-        user: fieldsValue.LeadWorker,
-        startTime: fieldsValue.startTime,
-        endTime: fieldsValue.endTime,
-        isLeader: true
-      }
-      const Worker = [
-        {
-          user: fieldsValue.SelectWorkers,
-          startTime: fieldsValue.startTime,
-          endTime: fieldsValue.endTime,
-        }
-      ]
-      const fielduser = [
-        Leader,
-        ...Worker
-      ];
-      const startTime = new Date(fieldsValue.startTime).getTime();
-      const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
-      const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
-      fielduser.map((item) => {
-        item.endTime = EndTime
-      })
-      // console.log(fieldsValue.customItems)
-      let Data = {
-        client: fieldsValue.client,
-        clientAddress: fieldsValue.clientAddress,
-        billingAddress: fieldsValue.billingAddress,
-        sendworkorderEmail: fieldsValue.sendworkorderEmail,
-        salesPerson: fieldsValue.salesPerson,
-        salesPersonContact: fieldsValue.salesPersonContact,
-        startDate: fieldsValue.startDate,
-        endDate: fieldsValue.endDate,
-        startTime: fieldsValue.startTime,
-        expectedRequiredTime: fieldsValue.expectedRequiredTime,
-        serviceCategory: fieldsValue.serviceCategory,
-        serviceList: fieldsValue.serviceList,
-        subscriptions: fieldsValue.subscriptions,
-        fieldUsers: fielduser,
-        customService: {
-          name: fieldsValue.ServiceName,
-          price: fieldsValue.ServicePrice,
-          description: fieldsValue.ServiceDescription
-        },
-
-
+        // console.log(fieldsValue)
       }
 
       // console.log(fieldsValue)

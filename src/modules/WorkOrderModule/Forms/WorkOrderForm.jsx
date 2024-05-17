@@ -136,7 +136,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [ShowServiceList, setShowServiceList] = useState(null);
   const [ShowServiceId, setShowServiceId] = useState();
   console.log(ShowServiceId)
-  const [isLead, setisLead] = useState(false);
+  const [isSubId, setSubId] = useState({});
+  console.log(isSubId)
 
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -425,22 +426,45 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [subscriptionIds, setSubscriptionIds] = useState([]);
   const [subscriptionCount, setSubscriptionCount] = useState(0);
 
+
   const handleRadioChange = (e, id) => {
-    let temp = subscriptionIds;
-    if (temp.includes(id)) {
-      temp.slice(temp.indexOf(id))
-    } else {
-      temp.push(id)
-    }
-    setSubscriptionIds(temp);
+    // let temp = subscriptionIds;
+    // if (temp.includes(id)) {
+    //   temp.slice(temp.indexOf(id))
+    // } else {
+    //   temp.push(id)
+    // }
+    setSubscriptionIds(id);
+  
+
+    // setSubscriptionIds(temp);
+
+    // setSubscriptionIds(temp); 
     setSubscriptionCount(subscriptionIds.length)
+
+
+    const { value } = e.target;
+    setSubId(prevState => {
+      const updatedState = { ...prevState };
+      Object.keys(updatedState).forEach(key => {
+        if (key !== id) {
+          updatedState[key] = undefined;
+        }
+      });
+      updatedState[id] = value;
+      return updatedState;
+    });
+
+
     for (const subscriptionObj of ShowServiceId) {
       for (const dataObj of subscriptionObj.data) {
         if (dataObj._id === id) {
-          return seTisMainid(subscriptionObj.subscription._id)
+          return localStorage.setItem('WorkOrderSubId', subscriptionObj.subscription._id)
+          
+          seTisMainid(subscriptionObj.subscription._id)
         }
       }
-    }
+    } 
     return null;
   }
   useEffect(() => { }, [subscriptionCount])
@@ -465,7 +489,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               discount = (subTotal * (parseInt(discountValue) / 100))
             }
             if (subscriptionIds.includes(subscription._id)) {
-              return (<td style={{ border: '0.5px solid #000', padding: '10px' }}><ul style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}><li>{subscription.name}:{subscriptions.subscription.name}</li><li>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li><li>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li><li>{parseFloat(discount || 0).toFixed(2)}</li><li>{parseFloat(subTotal).toFixed(2)}</li></ul></td>)
+              return (
+                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+                  <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>{subscription.name}:{subscriptions.subscription.name}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(discount || 0).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li></ul></td>)
             }
           }
           )
@@ -494,7 +525,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         const matchingItem = ele.data.find(item => item.name === name);
 
         rowData[name] = matchingItem ? (
-          <Radio.Group key={matchingItem._id} onChange={(e) => handleRadioChange(e, matchingItem._id)} >
+          <Radio.Group key={matchingItem._id} 
+            value={isSubId[matchingItem._id]}
+            // value={matchingItem._id === isMainid ? isMainid : undefined} 
+            onChange={(e) => handleRadioChange(e, matchingItem._id)} >
             <Radio
               value={matchingItem._id} >{`${matchingItem.price}.00 /One Time`}</Radio>
           </Radio.Group>
@@ -511,7 +545,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // One Time Subscription
 
   useEffect(() => {
-
     const handleoneTimeSubscription = async () => {
       try {
         const response = await request.getSubscriptiononetime();
@@ -1022,7 +1055,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           <Col className="gutter-row" span={4}>
                             <Form.Item
                               name={['items', index, 'price']}
-                              rules={[]}
+                        
                               initialValue={data.price}
                             >
                               <InputNumber
@@ -1039,7 +1072,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           </Col>
                           <Col className="gutter-row" span={3}>
                             <Form.Item name={[`items`, `${index}`, 'quantity']}
-                              rules={[{ required: true }]}
+                             
                             >
                               <InputNumber style={{ width: '100%' }} min={0}
                                 onChange={updateQt} defaultValue={1}
@@ -1069,7 +1102,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
                           <Col className="gutter-row" span={7}>
                             <Form.Item name={[`items`, `${index}`, 'remarks']} >
-                              <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
+                              <Input placeholder=" Remarks for workorder" defaultValue={data.description} />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -1095,14 +1128,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Col>
 
           <Col className="gutter-row " span={24} >
-
+{/* 
             <Form.Item
               name="Subscription"
               initialValue={isMainid}
               hidden={true}
             >
               <Input type="hidden" />
-            </Form.Item>
+            </Form.Item> */}
 
             <Row gutter={[12, 12]}>
               <Col span={24}>
@@ -1245,7 +1278,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={3}>
                           <Form.Item name={[`items`, `${index}`, 'quantity']}
-                            rules={[{ required: true }]}
+                            // rules={[{ required: true }]}
                           >
                             <InputNumber style={{ width: '100%' }} min={0}
                               onChange={updateQt} defaultValue={1}
@@ -1275,7 +1308,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
                         <Col className="gutter-row" span={7}>
                           <Form.Item name={[`items`, `${index}`, 'remarks']} >
-                            <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
+                            <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
                           </Form.Item>
                         </Col>
                       </Row>
@@ -1290,7 +1323,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </>
       }
 
-      {subscriptionIds.length > 0 && <><Divider dashed />
+      {/* {subscriptionIds.length > 0 && <><Divider dashed />
         <table>
           <tbody>
             <tr>
@@ -1307,7 +1340,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </tr>
           </tbody>
         </table>
-      </>}
+      </>} */}
       <Divider dashed />
 
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
@@ -1414,6 +1447,30 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
       </Row>
 
+
+
+      {subscriptionIds.length > 0 && <>
+        <Divider dashed />
+        <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
+          {translate('Selected Work Order Billing Details')}
+        </Col>
+        <table style={{ width: "100%", height: "220px", marginTop: "3%" }}>
+          <tbody>
+            <tr>
+              <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
+                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Contract For</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Subtotal</li>
+                </ul>
+              </th>
+              {CalculatorFilled()}
+            </tr>
+          </tbody>
+        </table>
+      </>}
 
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>

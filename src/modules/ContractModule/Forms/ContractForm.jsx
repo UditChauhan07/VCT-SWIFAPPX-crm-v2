@@ -25,6 +25,7 @@ import styles from './styles.module.css'; // Import the CSS module
 import { useForm } from 'antd/lib/form/Form';
 import { request } from '@/request';
 import ItemRow from '@/modules/ErpPanelModule/ItemRow';
+import CreateItem from '@/modules/ErpPanelModule/CreateItem';
 const { Option } = Select;
 const { Panel } = Collapse;
 
@@ -134,7 +135,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const [ShowServiceList, setShowServiceList] = useState(null);
     console.log(ShowServiceList)
     const [ShowServiceId, setShowServiceId] = useState();
-    const [isSubscriptionID, seTisSubscriptionID] = useState();
+    const [isSubscriptionID, seTisSubscriptionID] = useState({});
+    const [isSubId, setSubId] = useState({});
 
 
     const getCategorySubscriptionHandler = (value) => {
@@ -234,6 +236,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         setName(value);
     };
     const [form] = useForm();
+  
 
     useEffect(() => {
         if (current) {
@@ -392,45 +395,164 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         return columns;
     };
 
-    const handleRadioChange = (e, id) => {
+    // const handleRadioChange = (e, id) => {
+    //     for (const subscriptionObj of ShowServiceId){
+    //         for (const dataObj of subscriptionObj.data) {
+    //             if (dataObj._id === id){
+    //                 return localStorage.setItem('SubscriptionId',subscriptionObj.subscription._id)
+    //                 // seTisSubscriptionID(subscriptionObj.subscription._id)
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
 
-        for (const subscriptionObj of ShowServiceId){
+    // const generateTableData = () => {
+    //     const subscriptionNames = getUniqueSubscriptionNames();
+    //     const tableData = [];
+    //     ShowServiceId.forEach((ele, index) => {
+    //         // console.log(index)
+    //         const rowData = {
+    //             Subscription: ele.subscription.name,
+    //         };
+
+    //         subscriptionNames.forEach((name) => {
+    //             const matchingItem = ele.data.find(item => item.name === name);
+    //             // console.log(matchingItem)
+    //             rowData[name] = matchingItem ? (
+    //                 <Form.Item >
+    //                     <Radio.Group key={matchingItem._id} onChange={(e) => handleRadioChange(e, matchingItem._id)}>
+    //                         <Radio key={matchingItem._id}
+    //                             value={matchingItem._id}>{`${matchingItem.price}.00 /One Time`}</Radio>
+    //                     </Radio.Group>
+    //                 </Form.Item>
+                   
+    //             ) : null;
+    //         });
+    //         tableData.push(rowData);
+    //     });
+    //     return tableData;
+    // };
+
+    // EDITABLE NEW VIEW CONTRACT 
+    //cal handler
+    const [subscriptionIds, setSubscriptionIds] = useState([]);
+    const [subscriptionCount, setSubscriptionCount] = useState(0);
+
+
+    const handleRadioChange = (e, id) => {
+        // let temp = subscriptionIds;
+        // if (temp.includes(id)) {
+        //   temp.slice(temp.indexOf(id))
+        // } else {
+        //   temp.push(id)
+        // }
+        setSubscriptionIds(id);
+
+
+        // setSubscriptionIds(temp);
+
+        // setSubscriptionIds(temp); 
+        setSubscriptionCount(subscriptionIds.length)
+
+
+        const { value } = e.target;
+        setSubId(prevState => {
+            const updatedState = { ...prevState };
+            Object.keys(updatedState).forEach(key => {
+                if (key !== id) {
+                    updatedState[key] = undefined;
+                }
+            });
+            updatedState[id] = value;
+            return updatedState;
+        });
+
+
+        for (const subscriptionObj of ShowServiceId) {
             for (const dataObj of subscriptionObj.data) {
-                if (dataObj._id === id){
-                    return seTisSubscriptionID(subscriptionObj.subscription._id)
-                    
+                if (dataObj._id === id) {
+                    return localStorage.setItem('SubscriptionId', subscriptionObj.subscription._id)
+                    // seTisMainid(subscriptionObj.subscription._id)
                 }
             }
         }
         return null;
     }
+    useEffect(() => { }, [subscriptionCount])
+    const [adjustmentvalue, setadjustment] = useState(null);
+    const [discountValue, setdiscount] = useState(null);
+    const CalculatorFilled = () => {
+        return (
+            ShowServiceList.map((element, _id) => (
+                element.subscriptions.map((subscriptions, __id) => (
+                    subscriptions.data.map((subscription, ___id) => {
+                        let package_divider = parseInt(subscriptions.subscription.package_divider);
+                        let subTotal = parseInt(subscription.price / package_divider);
+                        if (active == 2) {
+                            subTotal += parseInt(adjustmentvalue);
+                        }
+                        if (active == 3) {
+                            subTotal -= parseInt(adjustmentvalue);
+                        }
+                        let discount = 0;
+                        if (discountValue) {
+                            subTotal -= (subTotal * (parseInt(discountValue) / 100))
+                            discount = (subTotal * (parseInt(discountValue) / 100))
+                        }
+                        if (subscriptionIds.includes(subscription._id)) {
+                            return (
+                                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+                                    <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+                                        <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color:"rgb(49,91,140)", }}>{subscription.name}:{subscriptions.subscription.name}</li>
+                                        <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
+                                        <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li>
+                                        <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(discount || 0).toFixed(2)}</li>
+                                        <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop:"", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li></ul></td>)
+                        }
+                    }
+                    )
+                ))
+            ))
+        )
+    }
+
+    const AdjustmentValueHandler = (event) => {
+        setadjustment(event.target.value)
+    }
+    const DiscountValueHandler = (event) => {
+        setdiscount(event)
+    }
+
 
     const generateTableData = () => {
         const subscriptionNames = getUniqueSubscriptionNames();
         const tableData = [];
         ShowServiceId.forEach((ele, index) => {
-            // console.log(index)
             const rowData = {
                 Subscription: ele.subscription.name,
             };
 
             subscriptionNames.forEach((name) => {
                 const matchingItem = ele.data.find(item => item.name === name);
-                // console.log(matchingItem)
+
                 rowData[name] = matchingItem ? (
-                    <Form.Item >
-                        <Radio.Group key={matchingItem._id} onChange={(e) => handleRadioChange(e, matchingItem._id)}>
-                            <Radio key={matchingItem._id}
-                                value={matchingItem._id}>{`${matchingItem.price}.00 /One Time`}</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-                   
+                    <Radio.Group key={matchingItem._id}
+                        value={isSubId[matchingItem._id]}
+                        // value={matchingItem._id === isMainid ? isMainid : undefined} 
+                        onChange={(e) => handleRadioChange(e, matchingItem._id)} >
+                        <Radio
+                            value={matchingItem._id} >{`${matchingItem.price}.00 /One Time`}</Radio>
+                    </Radio.Group>
+
                 ) : null;
             });
+
             tableData.push(rowData);
         });
         return tableData;
     };
+
 
 
     // One Time Subscription
@@ -454,6 +576,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     const optionsss = ['Addition', 'Substraction'];
 
+   
 
     return (
         <>
@@ -967,10 +1090,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                                     </Col>
                                                     <Col className="gutter-row" span={3}>
                                                         <Form.Item name={[`items`, `${index}`, 'quantity']}
-                                                            rules={[{ required: true }]}
+                                                          
                                                         >
                                                             <InputNumber style={{ width: '100%' }} min={0}
-                                                                onChange={updateQt}
+                                                                onChange={updateQt} defaultValue={1}
 
                                                             />
                                                         </Form.Item>
@@ -1023,13 +1146,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     </Col>
 
                     <Col className="gutter-row " span={24} >
-                        <Form.Item
-                            name={['Hardly']}
-                            initialValue={isSubscriptionID} // Set your initial value here
-                            hidden={true}
-                        >
-                            <Input type="hidden"/>
-                        </Form.Item>
+
+                            {/* <Form.Item
+                                name='ContractSubscription'
+                                initialValue={isSubscriptionID} 
+                                hidden={true}
+                            >
+                                <Input type="hidden" />
+                            </Form.Item> */}
+
+                       
+
+                     
 
 
                         <Row gutter={[12, 12]} >
@@ -1174,10 +1302,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                                 </Col>
                                                 <Col className="gutter-row" span={3}>
                                                     <Form.Item name={[`items`, `${index}`, 'quantity']}
-                                                        rules={[{ required: true }]}
+                                                       
                                                     >
                                                         <InputNumber style={{ width: '100%' }} min={0}
-                                                            onChange={updateQt}
+                                                            onChange={updateQt} defaultValue={1}
 
                                                         />
                                                     </Form.Item>
@@ -1253,7 +1381,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                     required: true,
                                 },
                             ]}>
-                                <Input />
+                                <Input onChange={AdjustmentValueHandler} />
                             </Form.Item>
                         )
                     }
@@ -1265,7 +1393,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                     required: true,
                                 },
                             ]}>
-                                <Input />
+                                <Input onChange={AdjustmentValueHandler} />
                             </Form.Item>
                         )
                     }
@@ -1298,7 +1426,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             },
                         ]}
                     >
-                        <InputNumber style={{ width: '100%' }} />
+                        <InputNumber style={{ width: '100%' }} onChange={DiscountValueHandler} />
                     </Form.Item>
                 </Col>
 
@@ -1324,6 +1452,34 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     </Form.Item>
                 </Col>
             </Row>
+
+         
+           
+           
+        
+            {subscriptionIds.length > 0 && <>
+                <Divider dashed /> 
+                <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
+                    {translate('Selected Contract Billing Details')}
+                </Col>
+                <table style={{ width: "100%", height: "220px", marginTop: "3%" }}>
+                    <tbody>
+                        <tr>
+                            <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight:"none" }}>
+                                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight:"2.1" }}>
+                                    <li style={{ borderBottom: '1px solid #fff', fontSize:"16px" }}>Contract For</li>
+                                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
+                                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
+                                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Subtotal</li>
+                                </ul>
+                            </th>
+                            {CalculatorFilled()}
+                        </tr>
+                    </tbody>
+                </table>
+            </>}
+            <Divider dashed />
 
 
 
