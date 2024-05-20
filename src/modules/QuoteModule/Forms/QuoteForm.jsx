@@ -31,33 +31,33 @@ const { Panel } = Collapse;
 export default function QuoteForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
-  return <LoadQuoteForm subTotal={subTotal} current={current} />;
+  return <LoadQuoteForm subTotal={subTotal} current={current} />
 }
 
 function LoadQuoteForm({ subTotal = 0, current = null }) {
-  const translate = useLanguage();
-  const { dateFormat } = useDate();
-  const { last_quote_number } = useSelector(selectFinanceSettings);
-  const [lastNumber, setLastNumber] = useState(() => last_quote_number + 1);
-  const [total, setTotal] = useState(0);
-  const [taxRate, setTaxRate] = useState(0);
-  const [taxTotal, setTaxTotal] = useState(0);
-  const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
-  const [active, IsActive] = useState(1);
-  const [activeness, IsActiveness] = useState(1);
-  const [activeSelect, IsActiveSelect] = useState(1);
+  const translate = useLanguage()
+  const { dateFormat } = useDate()
+  const { last_quote_number } = useSelector(selectFinanceSettings)
+  const [lastNumber, setLastNumber] = useState(() => last_quote_number + 1)
+  const [total, setTotal] = useState(0)
+  const [taxRate, setTaxRate] = useState(0)
+  const [taxTotal, setTaxTotal] = useState(0)
+  const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear())
+  const [active, IsActive] = useState(1)
+  const [activeness, IsActiveness] = useState(1)
+  const [activeSelect, IsActiveSelect] = useState(1)
   console.log(activeSelect)
 
   const handelTaxChange = (value) => {
-    setTaxRate(value / 100);
-  };
-  const { TextArea } = Input;
-  const money = useMoney();
-  const [options, setOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
-  const [serviceCategory, setserviceCategory] = useState([]);
-  const [serviceCategoryNam, setserviceCategoryNam] = useState();
+    setTaxRate(value / 100)
+  }
+  const { TextArea } = Input
+  const money = useMoney()
+  const [options, setOptions] = useState([])
+  const [selectedOption, setSelectedOption] = useState(null)
+  const [secondDropdownOptions, setSecondDropdownOptions] = useState([])
+  const [serviceCategory, setserviceCategory] = useState([])
+  const [serviceCategoryNam, setserviceCategoryNam] = useState()
 
   const [SalesPerson, setSalesPerson] = useState()
   const [WorkLead, setWorkLead] = useState()
@@ -66,9 +66,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // console.log(CheckedId)
   const [customerAddress, setCustomerAddress] = useState([])
 
-  const [subscriptionData, setSubscriptionData] = useState({});
-  const [accordionData, setAccordionData] = useState([]);
-  const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
+  const [subscriptionData, setSubscriptionData] = useState({})
+  const [accordionData, setAccordionData] = useState([])
+  const [serviceCategoryOptions, setserviceCategoryOptions] = useState([])
   const [selectedSalesPerson, setSelectedSalesPerson] = useState()
 
 
@@ -82,7 +82,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     } catch (error) {
       console.error('Error fetching accordion data:', error);
     }
-  };
+  }
 
   useEffect(() => {
     if (current) {
@@ -91,14 +91,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       setCurrentYear(year);
       setLastNumber(number);
     }
-  }, [current]);
+  }, [current])
   useEffect(() => {
     const currentTotal = calculate.add(calculate.multiply(subTotal, taxRate), subTotal);
     setTaxTotal(Number.parseFloat(calculate.multiply(subTotal, taxRate)));
     setTotal(Number.parseFloat(currentTotal));
-  }, [subTotal, taxRate]);
+  }, [subTotal, taxRate])
 
-  const addField = useRef("");
+  const addField = useRef("")
 
   useEffect(() => {
     // Check if addField.current is not null before clicking
@@ -106,7 +106,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       addField.current.click();
     }
 
-  }, []); // This effect runs only once when the component mounts
+  }, []) // This effect runs only once when the component mounts
 
   // console.log({ serviceOptions });
 
@@ -135,12 +135,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
   }
 
-  const [selectedValue, setSelectedValue] = useState('');
-  const [serviceOptions, setServiceOptions] = useState(null);
-  const [ShowServiceList, setShowServiceList] = useState(null);
+  const [selectedValue, setSelectedValue] = useState('')
+  const [serviceOptions, setServiceOptions] = useState(null)
+  const [ShowServiceList, setShowServiceList] = useState(null)
   const [subscriptionOneTime, setSubcriptionOneTime] = useState()
-  const [ShowServiceId, setShowServiceId] = useState();
-  const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
+  const [ShowServiceId, setShowServiceId] = useState()
+  const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true)
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
     setItems([]);
@@ -188,7 +188,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     fetchData2();
     fetchData3();
-  };
+  }
 
   const handleFirstDropdownChange = async (event) => {
     console.log("event", event);
@@ -206,7 +206,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching data:', error);
     }
 
-  };
+  }
 
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
@@ -227,30 +227,30 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
-  const [accordionActiveKey, setAccordionActiveKey] = useState([]);
+  }
+  const [accordionActiveKey, setAccordionActiveKey] = useState([])
   const handleChange = (key) => {
     setAccordionActiveKey(key);
-  };
-  // const translate = useLanguage();
+  }
+  // const translate = useLanguage()
   const [totalState, setTotal2] = useState(undefined);
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState()
 
-  const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState(0);
+  const [name, setName] = useState('')
+  const [quantity, setQuantity] = useState(0)
 
   // const money = useMoney();
   const updateQt = (value) => {
     setQuantity(value);
-  };
+  }
   // const updatePrice = (value) => {
   //   console.log(value)
   //   // setPrice(value);
   // };
   const updateName = (value) => {
     setName(value);
-  };
-  const [form] = useForm();
+  }
+  const [form] = useForm()
 
   useEffect(() => {
     if (current) {
@@ -277,7 +277,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       }
     }
-  }, [current]);
+  }, [current])
 
   useEffect(() => {
     const currentTotal = calculate.multiply(CheckedId, quantity);
@@ -315,7 +315,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     fetchData1()
-  }, []);
+  }, [])
 
   useEffect(() => {
     const fetchData3 = async () => {
@@ -330,7 +330,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     fetchData3()
-  }, []);
+  }, [])
   useEffect(() => {
     const hendleOneTime = async () => {
       try {
@@ -359,7 +359,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching data:', error);
     }
 
-  };
+  }
 
   const [salesContactNumber, setSalesContactNumber] = useState();
   useEffect(() => {
@@ -372,7 +372,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // console.log({ number, salesContactNumber });
     }
   }, [selectedSalesPerson, salesContactNumber])
-  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
+  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null })
   useEffect(() => { }, [selectedSalesPerson])
   const ContactHandler = ({ salesContactNumber }) => {
     return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
@@ -392,7 +392,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     )
   }
 
-  const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
+  const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers)
 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
@@ -405,7 +405,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       });
     });
     return subscriptionNames;
-  };
+  }
 
   const generateColumns = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
@@ -425,10 +425,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     });
 
     return columns;
-  };
-  const [subscriptionIds, setSubscriptionIds] = useState([]);
-  const [subscriptionCount, setSubscriptionCount] = useState(0);
-  const [isSubscriptionID, seTisSubscriptionID] = useState(null);
+  }
+  const [subscriptionIds, setSubscriptionIds] = useState([])
+  const [subscriptionCount, setSubscriptionCount] = useState(0)
+  const [isSubscriptionID, seTisSubscriptionID] = useState(null)
 
   // const handleCheckboxClick = (e, id) => {
   //   let temp = [...subscriptionIds]; // Create a copy of the current subscriptionIds state
@@ -485,15 +485,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
 
     localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray));
-  };
+  }
 
-  const [adjustmentvalue, setadjustment] = useState(null);
-  const [discountValue, setdiscount] = useState(null);
-  const [Subitems, setItems] = useState([]);
+  const [adjustmentvalue, setadjustment] = useState(null)
+  const [discountValue, setdiscount] = useState(null)
+  const [Subitems, setItems] = useState([])
   const [subItemIds, setSubItemId] = useState([]);
-  const [subItemCount, setSubItemCount] = useState(0);
-  const [quantityvalue, setQuantiyvalue] = useState();
-  ;
+  const [subItemCount, setSubItemCount] = useState(0)
+  const [quantityvalue, setQuantiyvalue] = useState()
   useEffect(() => { }, [subscriptionCount, subItemCount])
   let subscriptionSubTotal = 0;
   let subscritionAmount = 0;
@@ -521,7 +520,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemId(tempId);
     setItems(temp);
     setSubItemCount(temp.length);
-  };
+  }
 
   let serviceCost = {
     servicePerWO: null,
@@ -586,7 +585,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         ))
       ))
     );
-  };
+  }
 
   const CalculatorFilledItem = () => {
     let itemPrice = 0;
@@ -643,7 +642,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setdiscount(event)
   }
 
-
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
@@ -670,10 +668,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       tableData.push(rowData);
     });
     return tableData;
-  };
-
-
-
+  }
 
   const handleSelectChange = (value) => {
     // setadjustment(null);
@@ -700,9 +695,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // setadjustment(null);
       // setdiscount(null);
     }
-  };
-
-
+  }
 
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
@@ -736,7 +729,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }))
       )
     });
-  }, [productList]);
+  }, [productList])
 
   useEffect(() => {
     const newTotals = {};
@@ -746,7 +739,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       newTotals[id] = price * quantity;
     });
     setTotals(newTotals);
-  }, [prices, quantities]);
+  }, [prices, quantities])
 
   useEffect(() => {
     form.setFieldsValue({
@@ -760,11 +753,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }))
       )
     });
-  }, [totals]);
+  }, [totals])
 
   const updatePrice = (id, value) => {
     setPrices((prev) => ({ ...prev, [id]: value }));
-  };
+  }
 
   // const updateQuantity = (id, value) => {
   //   setQuantities((prev) => ({ ...prev, [id]: value }));
@@ -773,9 +766,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const handleSubmit = (values) => {
     console.log('Form Values:', values);
     // Perform the API call to submit the form values
-  };
-
-
+  }
 
   const updateQuantity = (productId, value) => {
     setQuantiyvalue(value)
@@ -787,9 +778,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const updatedTotals = { ...totals };
     updatedTotals[productId] = prices[productId] * value;
     setTotals(updatedTotals);
-  };
+  }
 
-  const optionsss = ['Addition', 'Substraction'];
+  const optionsss = ['Addition', 'Substraction']
+
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
@@ -1549,5 +1541,5 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       </div>
     </>
-  );
+  )
 }
