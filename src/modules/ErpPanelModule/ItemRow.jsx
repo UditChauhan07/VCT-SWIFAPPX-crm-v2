@@ -7,7 +7,8 @@ import calculate from '@/utils/calculate';
 import { useForm } from 'antd/lib/form/Form';
 import { Checkbox } from 'antd/lib';
 
-export default function ItemRow({ field, remove, current = null, response }) {
+export default function ItemRow({ field, remove, current = null, response, isFirstRow  }) {
+   
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
   const [name, setName] = useState('');
@@ -25,13 +26,31 @@ export default function ItemRow({ field, remove, current = null, response }) {
   };
   const [form] = useForm();
 
+
+  useEffect(() => {
+    if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
+      const firstItem = current.items[0];
+      form.setFieldsValue({ [field.name]: firstItem });
+      setName(firstItem.itemName || '');
+      setPrice(firstItem.price || 0);
+      setQuantity(firstItem.quantity || 0);
+    }
+  }, [current, form]);
+
+
+  // useEffect(() => {
+  //   if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
+  //     const firstItem = current.items[0];
+  //     form.setFieldsValue({ [field.name]: firstItem });
+  //     setName(firstItem.itemName || '');
+  //     setPrice(firstItem.price || 0);
+  //     setQuantity(firstItem.quantity || 0);
+  //   }
+  // }, [current, form]);
+
   useEffect(() => {
     if (current) {
-      // When it accesses the /payment/ endpoint,
-      // it receives an invoice.item instead of just item
-      // and breaks the code, but now we can check if items exists,
-      // and if it doesn't we can access invoice.items.
-
+       
       const { items, invoice } = current;
 
       if (invoice) {
@@ -43,7 +62,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
         }
       } else {
         const item = items[field.fieldKey];
-
+         
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
@@ -54,35 +73,44 @@ export default function ItemRow({ field, remove, current = null, response }) {
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
-
     setTotal(currentTotal);
   }, [price, quantity]);
 
+
+
   return (
+
     <>
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-  
+        {/* <Col className="gutter-row" >
+          <Checkbox></Checkbox>
+        </Col> */}
+
+
 
         <Col className="gutter-row" span={4}>
           <Form.Item
-            name={[field.name, 'itemName']}
-            rules={[
-              {
-                required: true,
-                message: 'Missing itemName name',
-              },
-              {
-                pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                message: 'Item Name must contain alphanumeric or special characters',
-              },
-            ]}
+            name={[field.name, 'item']}
+          
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: 'Missing itemName name',
+            //   },
+            //   {
+            //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+            //     message: 'Item Name must contain alphanumeric or special characters',
+            //   },
+            // ]}
           >
-            <Input placeholder="Item Name" />
+            <Input onChange={updateName} placeholder="Item Name" />
+         
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
+          <Form.Item name={[field.name, 'price']} >
+
             <InputNumber
               className="moneyInput"
               onChange={updatePrice}
@@ -94,18 +122,25 @@ export default function ItemRow({ field, remove, current = null, response }) {
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={3}>
-          <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
-            <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
+          <Form.Item name={[field.name, 'quantity']}>
+            <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt}  />
           </Form.Item>
         </Col>
 
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'total']}>
+          <Form.Item 
+            name={[field.name, 'total']}
+            initialValue={totalState}
+            shouldUpdate={(prevValues, currentValues) =>
+              prevValues[field.name]?.total !== currentValues[field.name]?.total
+            }
+          >
             <Form.Item>
               <InputNumber
                 readOnly
                 className="moneyInput"
                 value={totalState}
+                // initialValue={totalState}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
@@ -118,13 +153,24 @@ export default function ItemRow({ field, remove, current = null, response }) {
 
         <Col className="gutter-row" span={7}>
           <Form.Item name={[field.name, 'remarks']}>
-            <Input placeholder=" Remarks for Quotation" />
+            <Input placeholder=" Remarks " />
           </Form.Item>
         </Col>
+        {/* {field  &&
+          <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
+            <DeleteOutlined onClick={() => remove(field.name)} />
+          </div>
+        } */}
 
-        <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
-          <DeleteOutlined onClick={() => remove(field.name)} />
-        </div>
+        {
+          !isFirstRow && (
+            <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
+              <DeleteOutlined onClick={() => remove(field.name)} />
+            </div>
+          )
+        }
+
+
       </Row>
     </>
   );

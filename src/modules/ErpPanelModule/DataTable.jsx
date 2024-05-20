@@ -45,7 +45,7 @@ function AddNewItem({ config }) {
 
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
-  console.log(config)
+  // console.log(config)
 
   const handleClick = () => {
     navigate(`/${entity.toLowerCase()}/create`);
@@ -61,20 +61,15 @@ function AddNewItem({ config }) {
       </Button>
     ) : null
   );
-
 }
 
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
-  // console.log(entity)
 
   const { DATATABLE_TITLE } = config;
-
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
-
   const { pagination, items: dataSource } = listResult;
-
   const { erpContextAction } = useErpContext();
   const { modal } = erpContextAction;
   role = user?.role_id
@@ -91,7 +86,7 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  if (permissions?.[entity + '_edit'] == true || isSAAS == true) {
+  if ((permissions?.[entity + '_edit'] === true || isSAAS === true) && entity !== 'workorder' && entity !== 'contract') {
     items.push({
       label: translate('Edit'),
       key: 'edit',
@@ -108,12 +103,12 @@ export default function DataTable({ config, extra = [] }) {
 
 
   items.push(...extra,
-    {
-      type: 'divider',
-    },
+    // {
+    //   type: 'divider',
+    // },
   )
 
-  if (permissions?.[entity + '_delete'] || isSAAS == true) {
+  if ((permissions?.[entity + '_delete'] || isSAAS === true) && entity !== 'workorder' && entity !== 'contract') {
     items.push({
       label: translate('Delete'),
       key: 'delete',

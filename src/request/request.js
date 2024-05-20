@@ -318,6 +318,14 @@ const request = {
       return errorHandler(error);
     }
   },
+  getTaxes: async () => {
+    try {
+      const response = await axios.get(`/taxes/show`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getCateGorySubscription: async ({ id }) => {
     try {
       const response = await axios.get(`/servicecategory/subscriptions/${id}`);
@@ -345,19 +353,6 @@ const request = {
       });
       return response.data;
     } catch (error) {
-      return errorHandler(error);
-    }
-  },
-
-  getSearchclintAddress: async () => {
-    try {
-      // const response = await axios.get(`/clientaddress/search?q=ho&client=${getLocalUserData.current._id}&fields=label`);
-      const response = await axios.get(
-        `/clientaddress/search?q=ho&client=${'660f885915289c0cee5e2b8f'}&fields=label`
-      ); // 660f885915289c0cee5e2b8f
-      return response.data;
-    } catch (error) {
-      console.log({ lll: error });
       return errorHandler(error);
     }
   },
@@ -416,6 +411,14 @@ const request = {
       return errorHandler(error);
     }
   },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getServiceListShow: async ({ id }) => {
     try {
       const response = await axios.get(`/servicelist/service/${id}`);
@@ -424,17 +427,32 @@ const request = {
       return errorHandler(error);
     }
   },
-  // getnewShow: async ({ id }) => {
-  //   try {
-  //     // const response = await axios.get(`/clientaddress/search?q=ho&client=${getLocalUserData.current._id}&fields=label`);
-  //     const response = await axios.get(
-  //       `/clientaddress/search?q=ho&client=${'660f885915289c0cee5e2b8f'}&fields=label`
-  //     ); // 660f885915289c0cee5e2b8f
-  //     return response.data;
-  //   } catch (error) {
-  //     return errorHandler(error);
-  //   }
-  // },
+
+  getServiceListShowContract: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicelist/show/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceListShows: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicelist/show/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  getSubscriptiononetime: async () => {
+    try {
+      const response = await axios.get(`/subscriptiontype/oneTime`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
 
 export default request;

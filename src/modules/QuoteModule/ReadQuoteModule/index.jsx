@@ -1,6 +1,7 @@
 import NotFound from '@/components/NotFound';
 import { ErpLayout } from '@/layout';
-import ReadItem from '@/modules/ErpPanelModule/ReadItem';
+// import ReadItem from '@/modules/ErpPanelModule/ReadItem';
+import QuoteReadPage from '@/modules/ErpPanelModule/QuoteReadPage'
 
 import PageLoader from '@/components/PageLoader';
 import { erp } from '@/redux/erp/actions';
@@ -30,7 +31,7 @@ export default function ReadQuoteModule({ config }) {
     return (
       <ErpLayout>
         {isSuccess ? (
-          <ReadItem config={config} selectedItem={currentResult} />
+          <QuoteReadPage config={config} selectedItem={currentResult} />
         ) : (
           <NotFound entity={config.entity} />
         )}

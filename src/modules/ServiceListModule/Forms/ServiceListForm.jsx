@@ -29,7 +29,7 @@ export default function ServiceListForm() {
 
     fetchData(); // Call fetchData function when component mounts
   }, []);
-useEffect(() => {
+  useEffect(() => {
     // Fetch data from API
     const fetchData = async () => {
       try {
@@ -143,6 +143,7 @@ useEffect(() => {
     })
   }
   const handleOptionNameChange = (name, position) => {
+    // console.log(name)
     setSubscriptions((subscriptions) => {
       const updatedSubscriptions = [...subscriptions]
       updatedSubscriptions?.forEach(subscription => {
@@ -156,6 +157,7 @@ useEffect(() => {
   }
 
   const handleOptionPriceChange = (price, position, subscriptionId) => {
+  
     setSubscriptions((subscriptions) => {
       const updatedSubscriptions = [...subscriptions]
       updatedSubscriptions.forEach(subscription => {
@@ -245,6 +247,7 @@ useEffect(() => {
 
 
             subscriptions.map((subscription, index) => {
+           
               const data = responseData.find(data => data.subscription._id === subscription.id)
               // console.log(data, subscription)
               return (
@@ -262,7 +265,7 @@ useEffect(() => {
 
                   {subscription.options.map((option, i) => (
                     <div key={[`${subscription.id}-${option.position}-${i}`]}>
-                      {/* {console.log(index)} */}
+                     
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                         <Col className="gutter-row" span={10}>
                           <Form.Item
@@ -274,7 +277,6 @@ useEffect(() => {
                             ]}
                             value={option.name}
                             onChange={(event) => handleOptionNameChange(event.target.value, option.position)}
-
                           >
                             <Input placeholder={`Enter ${data.subscription.name} Service Name`}
                             />
@@ -284,15 +286,16 @@ useEffect(() => {
                           <Form.Item
                             name={[`${index}`, `price${option.position}`]}
                             // name={[`${ option.position }`, 'price']}
-
                             rules={[
                               {
                                 required: true,
                               },
                             ]}
-                            value={option.price} onChange={(value) => handleOptionPriceChange(value, option.position, subscription.id)}
+                            value={option.price}
+                    
+                            onChange={(event) => handleOptionPriceChange(event.target.value, option.position, subscription.id)}
                           >
-                            <InputNumber className="moneyInput" placeholder='Enter Price'
+                            <InputNumber className="moneyInput" placeholder='Enter Price' 
                             // value={option.price} onChange={(value) => handleOptionPriceChange(value, option.position, subscription.id)}
                             />
                           </Form.Item>

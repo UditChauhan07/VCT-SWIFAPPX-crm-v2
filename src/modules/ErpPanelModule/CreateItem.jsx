@@ -44,28 +44,53 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
+
+  console.log({ isLoading, isSuccess, result });
+
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
   const handelValuesChange = (changedValues, values) => {
-    const items = values['items'];
+    const item = values['items'];
     let subTotal = 0;
     let subOfferTotal = 0;
 
-    if (items) {
-      items.map((item) => {
-        if (item) {
-          if (item.offerPrice && item.quantity) {
-            let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
-            subOfferTotal = calculate.add(subOfferTotal, offerTotal);
-          }
-          if (item.quantity && item.price) {
-            let total = calculate.multiply(item['quantity'], item['price']);
-            //sub total
-            subTotal = calculate.add(subTotal, total);
-          }
+    if (item) {
+      // items.map((item) => {
+      if (item) {
+        if (item.offerPrice && item.quantity) {
+          let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
+          subOfferTotal = calculate.add(subOfferTotal, offerTotal);
         }
-      });
+        if (item.quantity && item.price) {
+          let total = calculate.multiply(item['quantity'], item['price']);
+          //sub total
+          subTotal = calculate.add(subTotal, total);
+        }
+      }
+      if (item) {
+        if (item.offerPrice && item.quantity) {
+          let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
+          subOfferTotal = calculate.add(subOfferTotal, offerTotal);
+        }
+        if (item.quantity && item.price) {
+          let total = calculate.multiply(item['quantity'], item['price']);
+          //sub total
+          subTotal = calculate.add(subTotal, total);
+        }
+      }
+      if (item) {
+        if (item.offerPrice && item.quantity) {
+          let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
+          subOfferTotal = calculate.add(subOfferTotal, offerTotal);
+        }
+        if (item.quantity && item.price) {
+          let total = calculate.multiply(item['quantity'], item['price']);
+          //sub total
+          subTotal = calculate.add(subTotal, total);
+        }
+      }
+      // });
       setSubTotal(subTotal);
       setOfferSubTotal(subOfferTotal);
     }
@@ -77,20 +102,26 @@ export default function CreateItem({ config, CreateForm }) {
       dispatch(erp.resetAction({ actionType: 'create' }));
       setSubTotal(0);
       setOfferSubTotal(0);
-      if (entity == 'roles') {
+      if (entity == 'roles' || entity == 'quote') {
         navigate(`/${entity}`);
       }
       else {
         navigate(`/${entity.toLowerCase()}/read/${result._id}`);
+
       }
     }
     return () => { };
   }, [isSuccess]);
 
+
+
   const onSubmit = (fieldsValue) => {
-    // console.log({ fieldsValue });
+    const storedId = localStorage.getItem('SubscriptionId');
+    const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
+    console.log({ fieldsValue });
     if (fieldsValue) {
-      if (fieldsValue.items) {
+
+      if (entity === "items") {
         let newList = [...fieldsValue.items];
         newList.map((item) => {
           item.total = calculate.multiply(item.quantity, item.price);
@@ -100,8 +131,8 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
-      if (fieldsValue.serviceCategory) {
-        console.log('10tty', { fieldsValue });
+      if (entity === "servicelist") {
+
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.serviceCategory,
@@ -123,11 +154,9 @@ export default function CreateItem({ config, CreateForm }) {
             data: []
           };
           for (let j = 0; j < Object.keys(option).length - 1; j++) {
-            // for (let j = 0; j < (Object.keys(option).length / 2); j++) {
             console.log("jiji", j);
             let price = option[`price${j}`];
             let name = fieldsValue[Object.keys(fieldsValue).filter((ele) => ele === `name${j}`)?.[0]];
-            // let name = option[`name${j}`];
             subscriptions.data.push({
               name: name,
               price: price?.toString()
@@ -135,14 +164,142 @@ export default function CreateItem({ config, CreateForm }) {
           }
           requestBody.subscriptions.push(subscriptions)
         }
-
+        console.log(requestBody)
         fieldsValue = requestBody;
 
       }
-    }
-    console.log(fieldsValue)
-    dispatch(erp.create({ entity, jsonData: fieldsValue }));
-  };
+      if (entity === "workorder") {
+        const Leader = {
+          user: fieldsValue.LeadWorker,
+          startTime: fieldsValue.startTime,
+          endTime: fieldsValue.endTime,
+          isLeader: true
+        }
+        const Worker = [
+          {
+            user: fieldsValue.SelectWorkers,
+            startTime: fieldsValue.startTime,
+            endTime: fieldsValue.endTime,
+          }
+        ]
+        const fielduser = [
+          Leader,
+          ...Worker
+        ];
+        const startTime = new Date(fieldsValue.startTime).getTime();
+        const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
+        const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
+        fielduser.map((item) => {
+          item.endTime = EndTime
+        })
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
+
+        let Data = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendworkorderEmail: fieldsValue.sendworkorderEmail,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.salesPersonContact,
+          startDate: fieldsValue.startDate,
+          endDate: fieldsValue.endDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceList,
+          subscription: WorkOrderstoredId,
+          fieldUsers: fielduser,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription
+          },
+
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
+          serviceCost,
+          additionalCost,
+          grandTotal
+        }
+
+        fieldsValue = Data
+      }
+      console.log({ fieldsValue });
+
+      if (entity === "contract") {
+        console.log(fieldsValue)
+        const Leader = {
+          user: fieldsValue.LeadWorker,
+          startTime: fieldsValue.startTime,
+          endTime: fieldsValue.endTime,
+          isLeader: true
+        }
+        const Worker = [
+          {
+            user: fieldsValue.SelectWorkers,
+            startTime: fieldsValue.startTime,
+            endTime: fieldsValue.endTime,
+          }
+        ]
+        const fielduser = [
+          Leader,
+          ...Worker
+        ];
+        const startTime = new Date(fieldsValue.startTime).getTime();
+        const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
+        const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
+        fielduser.map((item) => {
+          item.endTime = EndTime
+        })
+
+
+        let Data = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendworkorderEmail: fieldsValue.sendworkorderEmail,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.salesPersonContact,
+          startDate: fieldsValue.startDate,
+          endDate: fieldsValue.endDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceList,
+          subscription: storedId,
+          fieldUsers: fielduser,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription
+          },
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
+          adjustment: {
+            type: fieldsValue.Adjustment,
+            value: fieldsValue.AdjustmentValue
+          }
+        }
+        fieldsValue = Data
+        // console.log(fieldsValue)
+      }
+
+      // console.log(fieldsValue)
+      dispatch(erp.create({ entity, jsonData: fieldsValue }));
+    };
+  }
 
   return (
     <>
