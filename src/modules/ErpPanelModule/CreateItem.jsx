@@ -308,9 +308,9 @@ export default function CreateItem({ config, CreateForm }) {
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
         // Ensure discount is properly parsed and defaulted
-        let discountValue = parseFloat(fieldsValue.discount);
-        if (isNaN(discountValue)) {
-          discountValue = "";
+        let discountValueParsed = parseFloat(fieldsValue.discount);
+        if (isNaN(discountValueParsed)) {
+          discountValueParsed = 0;
         }
 
         const fieldData = {
@@ -345,13 +345,12 @@ export default function CreateItem({ config, CreateForm }) {
             value: fieldsValue.AdjustmentValue,
           },
           InitialRemarks: fieldsValue.InitialRemarks,
-          discount: discountValue,
+          discount: discountValueParsed,
         };
 
         console.log({ fieldData });
         fieldsValue = fieldData;
       }
-
 
 
 

@@ -535,9 +535,10 @@ const [adjustmentvalue, setadjustment] = useState(null);
         if (temp.includes(dataObj._id)) {
           const subscription = subscriptionObj.subscription._id;
           const subModule = dataObj._id; // The data object ID you want to send
+          const discountValueParsed = parseFloat(discountValue) || 0; // Ensure discountValue is parsed and default to 0 if NaN
           const serviceCost = {
             servicePerWO: parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2),
-            discount: parseFloat((dataObj.price / subscriptionObj.subscription.package_divider) * (parseInt(discountValue) / 100)).toFixed(2),
+            discount: parseFloat((dataObj.price / subscriptionObj.subscription.package_divider) * (discountValueParsed / 100)).toFixed(2),
             subTotal: parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2),
             tax: parseFloat((dataObj.price / subscriptionObj.subscription.package_divider) * (parseInt(tax.taxValue) / 100)).toFixed(2),
             totalPackageCost: parseFloat((dataObj.price / subscriptionObj.subscription.package_divider) + (dataObj.price / subscriptionObj.subscription.package_divider) * (parseInt(tax.taxValue) / 100)).toFixed(2),
