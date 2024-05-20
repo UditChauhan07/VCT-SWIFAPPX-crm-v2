@@ -3,14 +3,14 @@ export const fields = {
     type: 'string',
     required: true,
   },
-  mainContact: {
+  people: {
     type: 'search',
     renderAsTag: true,
     label: 'Contact',
     entity: 'people',
     displayLabels: ['firstname', 'lastname'],
     searchFields: 'firstname,lastname',
-    dataIndex: ['mainContact', 'firstname'],
+    dataIndex: ['people', 'firstname'],
   },
   country: {
     type: 'country',

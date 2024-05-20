@@ -318,6 +318,14 @@ const request = {
       return errorHandler(error);
     }
   },
+  getTaxes: async () => {
+    try {
+      const response = await axios.get(`/taxes/show`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getCateGorySubscription: async ({ id }) => {
     try {
       const response = await axios.get(`/servicecategory/subscriptions/${id}`);
@@ -398,6 +406,14 @@ const request = {
   getProductList: async () => {
     try {
       const response = await axios.get('/productcategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
       return response.data;
     } catch (error) {
       return errorHandler(error);

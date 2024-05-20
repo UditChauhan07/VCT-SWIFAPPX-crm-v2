@@ -113,8 +113,12 @@ export default function CreateItem({ config, CreateForm }) {
     return () => { };
   }, [isSuccess]);
 
-  const onSubmit = (fieldsValue) => {
 
+
+  const onSubmit = (fieldsValue) => {
+    const storedId = localStorage.getItem('SubscriptionId');
+    const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
+    console.log({ fieldsValue });
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -127,7 +131,8 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
-      if (entity === "serviceList") {
+      if (entity === "servicelist") {
+
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.serviceCategory,
@@ -159,12 +164,11 @@ export default function CreateItem({ config, CreateForm }) {
           }
           requestBody.subscriptions.push(subscriptions)
         }
-
+        console.log(requestBody)
         fieldsValue = requestBody;
 
       }
       if (entity === "workorder") {
-
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -188,6 +192,17 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
 
         let Data = {
           client: fieldsValue.client,
@@ -202,7 +217,7 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.Subscription,
+          subscription: WorkOrderstoredId,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -221,8 +236,10 @@ export default function CreateItem({ config, CreateForm }) {
 
         fieldsValue = Data
       }
+      console.log({ fieldsValue });
 
       if (entity === "contract") {
+        console.log(fieldsValue)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -246,6 +263,8 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
+
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -259,7 +278,7 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: fieldsValue.Hardly,
+          subscription: storedId,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -268,12 +287,14 @@ export default function CreateItem({ config, CreateForm }) {
           },
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
           }
         }
         fieldsValue = Data
+
         console.log(fieldsValue)
       }
       // ................
@@ -341,6 +362,7 @@ export default function CreateItem({ config, CreateForm }) {
 
         console.log({ fieldData })
         fieldsValue = fieldData
+
 
       }
 

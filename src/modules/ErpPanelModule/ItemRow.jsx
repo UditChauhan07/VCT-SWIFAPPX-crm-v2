@@ -38,23 +38,19 @@ export default function ItemRow({ field, remove, current = null, response, isFir
   }, [current, form]);
 
 
-  useEffect(() => {
-    if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
-      const firstItem = current.items[0];
-      form.setFieldsValue({ [field.name]: firstItem });
-      setName(firstItem.itemName || '');
-      setPrice(firstItem.price || 0);
-      setQuantity(firstItem.quantity || 0);
-    }
-  }, [current, form]);
+  // useEffect(() => {
+  //   if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
+  //     const firstItem = current.items[0];
+  //     form.setFieldsValue({ [field.name]: firstItem });
+  //     setName(firstItem.itemName || '');
+  //     setPrice(firstItem.price || 0);
+  //     setQuantity(firstItem.quantity || 0);
+  //   }
+  // }, [current, form]);
 
   useEffect(() => {
     if (current) {
-      // When it accesses the /payment/ endpoint,
-      // it receives an invoice.item instead of just item
-      // and breaks the code, but now we can check if items exists,
-      // and if it doesn't we can access invoice.items.
-
+       
       const { items, invoice } = current;
 
       if (invoice) {
@@ -66,7 +62,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         }
       } else {
         const item = items[field.fieldKey];
-
+         
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
@@ -77,7 +73,6 @@ export default function ItemRow({ field, remove, current = null, response, isFir
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
-
     setTotal(currentTotal);
   }, [price, quantity]);
 
@@ -97,30 +92,24 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         <Col className="gutter-row" span={4}>
           <Form.Item
             name={[field.name, 'item']}
-            rules={[
-              // {
-              //   required: true,
-              //   message: 'Missing item name',
-              //   // Add a validator to allow the default value to pass
-              //   validator: (_, value) => {
-              //     if (value || data.name) { // Allow the default value to pass
-              //       return Promise.resolve();
-              //     }
-              //     return Promise.reject(new Error('Item name is required'));
-              //   },
-              // },
-              {
-                pattern: /^(?!\s*$)[\s\S]+$/,
-                message: 'Item Name must contain alphanumeric or special characters',
-              },
-            ]}
+          
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: 'Missing itemName name',
+            //   },
+            //   {
+            //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+            //     message: 'Item Name must contain alphanumeric or special characters',
+            //   },
+            // ]}
           >
             <Input onChange={updateName} placeholder="Item Name" />
          
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'price']} rules={[]}>
+          <Form.Item name={[field.name, 'price']} >
 
             <InputNumber
               className="moneyInput"
@@ -133,7 +122,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={3}>
-          <Form.Item name={[field.name, 'quantity']} rules={[]}>
+          <Form.Item name={[field.name, 'quantity']}>
             <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt}  />
           </Form.Item>
         </Col>
