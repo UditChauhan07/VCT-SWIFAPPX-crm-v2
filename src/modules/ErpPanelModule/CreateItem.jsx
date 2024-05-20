@@ -210,8 +210,13 @@ export default function CreateItem({ config, CreateForm }) {
             description: fieldsValue.ServiceDescription
           },
 
+        
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
+          serviceCost,
+          additionalCost,
+          grandTotal
         }
 
         fieldsValue = Data
@@ -286,6 +291,17 @@ export default function CreateItem({ config, CreateForm }) {
         const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')); // Retrieve array of subscription objects
 
         console.log(storedSubscriptions);
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
         
         const fieldData = {
           client: fieldsValue.client,
@@ -310,6 +326,11 @@ export default function CreateItem({ config, CreateForm }) {
           },
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
+          serviceCost,
+          additionalCost,
+          grandTotal,
+
           adjustment: {
             type: fieldsValue.Adjustmenttype,
             value: fieldsValue.AdjustmentValue,
