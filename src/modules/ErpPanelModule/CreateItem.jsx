@@ -225,6 +225,7 @@ export default function CreateItem({ config, CreateForm }) {
             description: fieldsValue.ServiceDescription
           },
 
+        
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
@@ -293,7 +294,76 @@ export default function CreateItem({ config, CreateForm }) {
           }
         }
         fieldsValue = Data
-        // console.log(fieldsValue)
+
+        console.log(fieldsValue)
+      }
+      // ................
+      if (entity === "quote") {
+       
+        // const storedSubscriptionIds = JSON.parse(localStorage.getItem('SubscriptionIds')); // Retrieve array of subscription IDs
+        // const storedDataObjIds = JSON.parse(localStorage.getItem('DataObjIds')); // Retrieve array of data object IDs
+
+        // const subscriptions = storedSubscriptionIds?.map((subscriptionId, index) => ({
+        //   subscriptionId: subscriptionId,
+        //   dataObjId: storedDataObjIds[index]
+        // })) || [];
+
+        // console.log(subscriptions);
+        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')); // Retrieve array of subscription objects
+
+        console.log(storedSubscriptions);
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
+        
+        const fieldData = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendQuotationEmail: fieldsValue.sendQuotationEmail,
+          startDate: fieldsValue.startDate,
+          expiredDate: fieldsValue.expiredDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.SalesPersonContact,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceName,
+          // subscriptions: [{subscriptions}], // Use storedId here
+          subscriptions: storedSubscriptions, // Use the subscriptions array here
+          isCustom: true,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription
+          },
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
+          serviceCost,
+          additionalCost,
+          grandTotal,
+
+          adjustment: {
+            type: fieldsValue.Adjustmenttype,
+            value: fieldsValue.AdjustmentValue,
+          },
+          InitialRemarks: fieldsValue.InitialRemarks,
+          discount: fieldsValue.discount,
+        };
+
+        console.log({ fieldData })
+        fieldsValue = fieldData
+
+
       }
 
       // console.log(fieldsValue)
