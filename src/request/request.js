@@ -411,6 +411,14 @@ const request = {
       return errorHandler(error);
     }
   },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getServiceListShow: async ({ id }) => {
     try {
       const response = await axios.get(`/servicelist/service/${id}`);
@@ -440,6 +448,14 @@ const request = {
   getSubscriptiononetime: async () => {
     try {
       const response = await axios.get(`/subscriptiontype/oneTime`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
       return response.data;
     } catch (error) {
       return errorHandler(error);

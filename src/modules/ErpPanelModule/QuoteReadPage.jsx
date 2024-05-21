@@ -34,7 +34,7 @@ const Item = ({ item }) => {
         <Row gutter={[12, 0]} key={item._id}>
             <Col className="gutter-row" span={11}>
                 <p style={{ marginBottom: 5 }}>
-                    <strong>{item.itemName}</strong>
+                    <strong>{item.item.name}</strong>
                 </p>
                 <p>{item.description}</p>
             </Col>
@@ -605,6 +605,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     </div>
                 </Col>
             </Row> */}
+
 
 
             <Row gutter={[12, 0]} style={{ marginTop: "40px" }}>
