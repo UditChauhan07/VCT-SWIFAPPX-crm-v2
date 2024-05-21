@@ -430,8 +430,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [subscriptionCount, setSubscriptionCount] = useState(0)
   const [isSubscriptionID, seTisSubscriptionID] = useState(null)
 
-const [adjustmentvalue, setadjustment] = useState(null);
+  const [adjustmentvalue, setadjustment] = useState(null);
   const [discountValue, setdiscount] = useState(null);
+  // console.log(discountValue)
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
   const [subItemCount, setSubItemCount] = useState(0)
@@ -464,7 +465,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     setItems(temp);
     setSubItemCount(temp.length);
   };
-  
+
   //   return (
   //     ShowServiceList.map((element, _id) => (
   //       element.subscriptions.map((subscriptions, __id) => (
@@ -513,6 +514,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     tax: null,
     totalPackageCost: null
   }
+
   const handleCheckboxClick = (e, id) => {
     // console.log(id)
     let temp = [...subscriptionIds]; // Create a copy of the current subscriptionIds state
@@ -524,9 +526,12 @@ const [adjustmentvalue, setadjustment] = useState(null);
       temp.push(id); // Add the id if it does not exist
     }
 
+    // Update subscription ids and count
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
 
+    // Calculate discount using the current discount value state
+    const discountValueParsed = parseFloat(discountValue) || 0;
     let subscriptionsArray = [];
 
     // Update local storage and state for the selected subscription
@@ -535,14 +540,22 @@ const [adjustmentvalue, setadjustment] = useState(null);
         if (temp.includes(dataObj._id)) {
           const subscription = subscriptionObj.subscription._id;
           const subModule = dataObj._id; // The data object ID you want to send
-          const discountValueParsed = parseFloat(discountValue) || 0; // Ensure discountValue is parsed and default to 0 if NaN
+          console.log(discountValueParsed);
+          const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+          const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+          const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+          const taxValueParsed = parseFloat(tax.taxValue) || 0;
+          const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+          const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
+
           const serviceCost = {
-            servicePerWO: parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2),
-            discount: parseFloat((dataObj.price / subscriptionObj.subscription.package_divider) * (discountValueParsed / 100)).toFixed(2),
-            subTotal: parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2),
-            tax: parseFloat((dataObj.price / subscriptionObj.subscription.package_divider) * (parseInt(tax.taxValue) / 100)).toFixed(2),
-            totalPackageCost: parseFloat((dataObj.price / subscriptionObj.subscription.package_divider) + (dataObj.price / subscriptionObj.subscription.package_divider) * (parseInt(tax.taxValue) / 100)).toFixed(2),
+            servicePerWO,
+            discount,
+            subTotal,
+            tax: taxAmount,
+            totalPackageCost,
           };
+
           subscriptionsArray.push({
             subscription: subscription,
             subModule: subModule,
@@ -556,6 +569,15 @@ const [adjustmentvalue, setadjustment] = useState(null);
     let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
     let grandTotal = parseFloat(grandTotalStr);
   };
+  const DiscountValueHandler = (value) => {
+    setdiscount(value); // Correctly set the discount value
+  };
+
+
+
+
+
+
 
   const CalculatorFilled = () => {
     return (
@@ -660,9 +682,36 @@ const [adjustmentvalue, setadjustment] = useState(null);
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
     console.log({ subTotal });
   }
-  const DiscountValueHandler = (event) => {
-    setdiscount(event)
-  }
+
+
+
+  // const generateTableData = () => {
+  //   const subscriptionNames = getUniqueSubscriptionNames();
+  //   const tableData = [];
+  //   ShowServiceId.forEach((ele, index) => {
+  //     const rowData = {
+  //       Subscription: ele.subscription.name,
+  //     };
+
+  //     subscriptionNames?.forEach((name) => {
+  //       const matchingItem = ele.data.find(item => item.name === name);
+
+  //       rowData[name] = matchingItem ? (
+  //         <Checkbox.Group key={matchingItem._id} onChange={(e) => handleCheckboxClick(e, matchingItem._id)}>
+  //           <Checkbox value={matchingItem._id}>
+  //             {`${matchingItem.price}.00 /${ele.subscription.name}`}
+  //           </Checkbox>
+  //         </Checkbox.Group>
+  //       ) : null;
+  //       // rowData[name] = matchingItem ? (
+  //       //          <Checkbox>{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
+  //       //       ) : null;
+  //     });
+
+  //     tableData.push(rowData);
+  //   });
+  //   return tableData;
+  // };
 
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
@@ -682,16 +731,13 @@ const [adjustmentvalue, setadjustment] = useState(null);
             </Checkbox>
           </Checkbox.Group>
         ) : null;
-        // rowData[name] = matchingItem ? (
-        //          <Checkbox>{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
-        //       ) : null;
       });
 
       tableData.push(rowData);
     });
     return tableData;
   };
-const handleSelectChange = (value) => {
+  const handleSelectChange = (value) => {
     // setadjustment(null);
     // setdiscount(null);
     if (value === 'custom') {
@@ -718,12 +764,11 @@ const handleSelectChange = (value) => {
     }
   };
 
- const [prices, setPrices] = useState({});
+  const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
   const [totals, setTotals] = useState({});
-  const [currentProduct, setCurrentProduct] = useState(current);
-  // const [addField, setAddField] = useState(null);
 
+  console.log(totals)
   useEffect(() => {
     const initialPrices = {};
     const initialQuantities = {};
@@ -762,21 +807,18 @@ const handleSelectChange = (value) => {
       newTotals[id] = price * quantity;
     });
     setTotals(newTotals);
-  }, [prices, quantities])
-
-  useEffect(() => {
     form.setFieldsValue({
       items: productList?.flatMap(ele =>
         ele.products?.map(product => ({
           item: product._id,
           price: prices[product._id],
           quantity: quantities[product._id],
-          total: totals[product._id],
+          total: newTotals[product._id],
           remarks: product.description
         }))
       )
     });
-  }, [totals, prices, quantities, productList, form]);
+  }, [prices, quantities, productList, form]);
 
   const updateQuantity = (productId, value) => {
     const updatedQuantities = { ...quantities, [productId]: value };
@@ -787,6 +829,18 @@ const handleSelectChange = (value) => {
     const updatedPrices = { ...prices, [id]: value };
     setPrices(updatedPrices);
   };
+
+  // const handleSave = () => {
+  //   form.validateFields()
+  //     .then(values => {
+  //       console.log('Saved values:', values);
+  //       // Handle the save action here, e.g., send data to the server
+  //     })
+  //     .catch(errorInfo => {
+  //       console.log('Validation Failed:', errorInfo);
+  //     });
+  // };
+
   // const updateQuantity = (productId, value) => {
   //   const updatedQuantities = { ...quantities, [productId]: value };
   //   setQuantities(updatedQuantities);
@@ -1240,8 +1294,8 @@ const handleSelectChange = (value) => {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={4}>
-                          <Form.Item name={['items', index, 'total']} initialValue={totals[data._id]}>
-                            <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
+                          <Form.Item name={['items', index, 'total']} initialValue={initialTotals[data._id]}>
+                            <span style={{ marginLeft: '24%' }}>{initialTotals[data._id]}</span>
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={7}>
@@ -1334,7 +1388,7 @@ const handleSelectChange = (value) => {
               </Form.List>
             </Collapse.Panel>
             {productList?.map((mainData, i) => (
-              <Collapse.Panel header={mainData.name} key={mainData._id}>
+              <Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                     <Col className="gutter-row" span={4}>
@@ -1412,7 +1466,7 @@ const handleSelectChange = (value) => {
                     </Row>
                   ))}
                 </div>
-              </Collapse.Panel>
+              </Panel>
             ))}
           </Collapse>
         </>
@@ -1516,7 +1570,13 @@ const handleSelectChange = (value) => {
               },
             ]}
           >
-            <InputNumber style={{ width: '100%' }} onChange={DiscountValueHandler} />
+            <InputNumber
+              style={{ width: '100%' }}
+              min={0}
+              max={100}
+              value={discountValue}
+              onChange={DiscountValueHandler} // Use the DiscountValueHandler to set the state
+            />
           </Form.Item>
         </Col>
 

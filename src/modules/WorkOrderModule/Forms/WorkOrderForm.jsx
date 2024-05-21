@@ -515,7 +515,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     tax: null,
     totalPackageCost: null
   }
-  
+
   const CalculatorFilled = () => {
     return (
       ShowServiceList.map((element, _id) => (
@@ -566,6 +566,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       ))
     )
   }
+
   const CalculatorFilledItem = () => {
     let itemPrice = 0;
     let discount = 0;
@@ -613,6 +614,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </ul></td>
     )
   }
+
+  
   // const ItemHandler = (element) => {
   //   console.log(element)
   //   setCheckedId(element.price);
@@ -732,9 +735,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // const [form] = Form.useForm();
 
 
-
   // MULTIPLY LOGIC 
-  // const [checkedId, setCheckedId] = useState(null);
+  // const [checkedId, setCheckedId] = useState(null);w
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
 
