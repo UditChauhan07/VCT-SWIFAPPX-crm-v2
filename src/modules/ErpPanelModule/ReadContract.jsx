@@ -491,12 +491,14 @@ export default function ReadContract({ config, selectedItem }) {
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('Adjustment')} :<br></br>
 
-                                </p> </Col>
+                                </p> 
+                                </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
                                     {currentErp.adjustment.value} <br></br>
 
-                                </p> </Col>
+                                </p> 
+                                </Col>
 
 
                             <Col className="gutter-row" span={12} >
