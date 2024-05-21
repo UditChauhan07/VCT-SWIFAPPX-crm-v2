@@ -451,7 +451,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
 
             {/* ................. */}
-            {/* <h3 style={{ marginTop: "4%" }}>Quotation Billing Detail</h3>
+            <h3 style={{ marginTop: "4%" }}>Quotation Billing Detail</h3>
             <Row className="gutter-row" style={{ marginTop: "20px" }}>
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -549,10 +549,10 @@ export default function QuoteReadPage({ config, selectedItem }) {
                         </Row>
                     </div>
                 </Col>
-            </Row> */}
+            </Row>
 
 {/* ............................ */}
-         {/* <h3 style={{ marginTop: "4%" }}>Other detail</h3>
+         <h3 style={{ marginTop: "4%" }}>Other detail</h3>
             <Row className="gutter-row">
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "290px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -604,7 +604,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                         </Row>
                     </div>
                 </Col>
-            </Row> */}
+            </Row>
 
 
 
@@ -662,7 +662,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     </Col>
 
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.subTotal })}</p>
+                        <p>{moneyFormatter({ amount: currentErp.additionalCost.subTotal })}</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
                         <p>
@@ -670,13 +670,13 @@ export default function QuoteReadPage({ config, selectedItem }) {
                         </p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.taxTotal })}</p>
+                        <p>{moneyFormatter({ amount: currentErp.additionalCost.tax })}</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Total')} :</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.total })}</p>
+                        <p>{moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost })}</p>
                     </Col>
                 </Row>
             </div>
