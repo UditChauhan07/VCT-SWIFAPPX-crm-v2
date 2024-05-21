@@ -308,10 +308,10 @@ export default function CreateItem({ config, CreateForm }) {
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
         // Ensure discount is properly parsed and defaulted
-        let discountValueParsed = parseFloat(fieldsValue.discount);
-        if (isNaN(discountValueParsed)) {
-          discountValueParsed = 0;
-        }
+        // let discountValueParsed = parseFloat(fieldsValue.discount);
+        // if (isNaN(discountValueParsed)) {
+        //   discountValueParsed = 0;
+        // }
         const isCustom = fieldsValue.serviceName === 'custom'; // Determine if custom service is selected
         const fieldData = {
          client: fieldsValue.client,
@@ -336,7 +336,7 @@ export default function CreateItem({ config, CreateForm }) {
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
-          serviceCost,
+          // serviceCost,
           additionalCost,
           grandTotal,
 
@@ -345,10 +345,10 @@ export default function CreateItem({ config, CreateForm }) {
             value: fieldsValue.AdjustmentValue,
           },
           InitialRemarks: fieldsValue.InitialRemarks,
-          discount: discountValueParsed,
+          // discount: discountValueParsed,
         };
 
-        console.log({ fieldData });
+        console.log( fieldData );
         fieldsValue = fieldData;
       }
 
