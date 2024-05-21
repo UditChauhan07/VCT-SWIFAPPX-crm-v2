@@ -312,9 +312,9 @@ export default function CreateItem({ config, CreateForm }) {
         if (isNaN(discountValueParsed)) {
           discountValueParsed = 0;
         }
-
+        const isCustom = fieldsValue.serviceName === 'custom'; // Determine if custom service is selected
         const fieldData = {
-          client: fieldsValue.client,
+         client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
           sendQuotationEmail: fieldsValue.sendQuotationEmail,
@@ -327,7 +327,7 @@ export default function CreateItem({ config, CreateForm }) {
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceName,
           subscriptions: storedSubscriptions, // Use the subscriptions array here
-          isCustom: true,
+          isCustom: isCustom,
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
