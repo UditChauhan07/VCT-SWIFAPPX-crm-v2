@@ -307,6 +307,19 @@ export default function CreateItem({ config, CreateForm }) {
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
+        // let additionalCost = {}
+        // let serviceCost = {}
+        // let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        // let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        // if (serviceCostStr) {
+        //   serviceCost = JSON.parse(serviceCostStr)
+        // }
+        // if (additionalCostStr) {
+        //   additionalCost = JSON.parse(additionalCostStr)
+        // }
+        // let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
+        // let submodule = localStorage.getItem('WO-RadioId')
+
         // Ensure discount is properly parsed and defaulted
         // let discountValueParsed = parseFloat(fieldsValue.discount);
         // if (isNaN(discountValueParsed)) {
@@ -336,7 +349,7 @@ export default function CreateItem({ config, CreateForm }) {
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
-          // serviceCost,
+          serviceCost,
           additionalCost,
           grandTotal,
 
