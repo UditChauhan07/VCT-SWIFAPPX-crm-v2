@@ -514,6 +514,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     totalPackageCost: null
   }
   const handleCheckboxClick = (e, id) => {
+    // console.log(id)
     let temp = [...subscriptionIds]; // Create a copy of the current subscriptionIds state
 
     // Toggle the subscription id in the state

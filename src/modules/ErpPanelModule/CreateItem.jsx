@@ -169,6 +169,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
+
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -192,6 +193,7 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
+
         let additionalCost = {}
         let serviceCost = {}
         let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
@@ -203,6 +205,7 @@ export default function CreateItem({ config, CreateForm }) {
           additionalCost = JSON.parse(additionalCostStr)
         }
         let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
+        let submodule = localStorage.getItem('WO-RadioId')
 
         let Data = {
           client: fieldsValue.client,
@@ -218,6 +221,7 @@ export default function CreateItem({ config, CreateForm }) {
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
           subscription: WorkOrderstoredId,
+          subModule: submodule,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -264,6 +268,20 @@ export default function CreateItem({ config, CreateForm }) {
           item.endTime = EndTime
         })
 
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDBBBB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELmMM") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgxxpp") || 0
+        // let submodule = localStorage.getItem('WO-RadioId')
+
+
 
         let Data = {
           client: fieldsValue.client,
@@ -291,18 +309,17 @@ export default function CreateItem({ config, CreateForm }) {
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
-          }
+          },
+          serviceCost,
+          additionalCost,
+          grandTotal
         }
         fieldsValue = Data
-        // console.log(fieldsValue)
-
-        console.log(fieldsValue)
       }
       // ................
       if (entity === "quote") {
+        console.log(fieldsValue.items)
         const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
-
-        console.log(storedSubscriptions);
         let additionalCost = {};
         let serviceCost = {};
         let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}";

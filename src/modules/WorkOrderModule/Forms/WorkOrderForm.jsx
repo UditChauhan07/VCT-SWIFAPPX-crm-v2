@@ -444,10 +444,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     //   temp.push(id)
     // }
     setSubscriptionIds(id);
+    // console.log(id)
+    // localStorage.setItem('WO-RadioId', id)
+   
+    //  let SubModule = id;
+
 
 
     // setSubscriptionIds(temp);
-
     // setSubscriptionIds(temp); 
     setSubscriptionCount(subscriptionIds.length)
 
@@ -469,13 +473,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       for (const dataObj of subscriptionObj.data) {
         if (dataObj._id === id) {
           return localStorage.setItem('WorkOrderSubId', subscriptionObj.subscription._id)
-
           seTisMainid(subscriptionObj.subscription._id)
         }
       }
     }
     return null;
   }
+
+
+
+
+
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
   const [subItemCount, setSubItemCount] = useState(0);
@@ -507,6 +515,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     tax: null,
     totalPackageCost: null
   }
+  
   const CalculatorFilled = () => {
     return (
       ShowServiceList.map((element, _id) => (
@@ -657,8 +666,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemCount(temp.length);
   };
 
-
-
   const priceHandler = ({ id, price }) => {
 
   }
@@ -732,7 +739,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [quantities, setQuantities] = useState({});
 
   const [totals, setTotals] = useState({});
-  console.log(totals)
+  // console.log(totals)
 
   useEffect(() => {
     const initialPrices = {};
@@ -1285,7 +1292,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               name={[`items`, `${index}`, 'total']}
                               initialValue={totals[data._id]}
                             >
-                              <span style={{ marginLeft: "24%" }}>{totals[data._id]}</span>
+                              <span style={{ marginLeft: "24%" }} defaultValue={totals[data.id]}>{totals[data._id]}</span>
                               {/* <InputNumber
                               readOnly
                               className="moneyInput"
