@@ -420,6 +420,7 @@ const request = {
     }
   },
   getServiceListShow: async ({ id }) => {
+    console.log(id)
     try {
       const response = await axios.get(`/servicelist/service/${id}`);
       return response.data;
