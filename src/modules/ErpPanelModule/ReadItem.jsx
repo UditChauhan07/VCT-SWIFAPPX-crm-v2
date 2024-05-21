@@ -562,10 +562,10 @@ export default function ReadItem({ config, selectedItem }) {
                 </p>
               </Col>
               <Col className="gutter-row" span={12}>
-                <sp style={{ fontSize: "15px" }}>
+                <p style={{ fontSize: "15px" }}>
                   {translate('Tax')} :<br></br>
 
-                </sp>
+                </p>
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>

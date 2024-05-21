@@ -481,6 +481,7 @@ export default function ReadContract({ config, selectedItem }) {
                                     {translate('Per Workorder Cost')} :<br></br>
                                 </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
                                     {currentErp.serviceCost.servicePerWO} <br></br>
@@ -491,14 +492,15 @@ export default function ReadContract({ config, selectedItem }) {
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('Adjustment')} :<br></br>
 
-                                </p> 
-                                </Col>
+                                </p>
+                            </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
                                     {currentErp.adjustment.value} <br></br>
 
-                                </p> 
-                                </Col>
+                                </p>
+                            </Col>
 
 
                             <Col className="gutter-row" span={12} >
@@ -508,6 +510,7 @@ export default function ReadContract({ config, selectedItem }) {
                                 </p>
 
                             </Col>
+
                             <Col className="gutter-row" span={12} >
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.serviceCost.discount}
                                     <br></br>
@@ -515,36 +518,41 @@ export default function ReadContract({ config, selectedItem }) {
                                 </p>
 
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('SubTotal')} :<br></br>
 
                                 </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
                                     {currentErp.serviceCost.subTotal} <br></br>
 
                                 </p>
                             </Col>
-                            <Col className="gutter-row" span={12}>
-                                <sp style={{ fontSize: "15px" }}>
-                                    {translate('Tax')} :<br></br>
 
-                                </sp>
-                            </Col>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp.serviceCost.tax} <br></br>
+                                <p style={{ fontSize: "15px" }}>
+                                    {translate('Tax')} :<br></br>
 
                                 </p>
                             </Col>
+
+                            <Col className="gutter-row" span={12}>
+                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                                    {currentErp.serviceCost.tax} <br></br>
+                                </p>
+                            </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('Total Package Cost')} :<br></br>
 
                                 </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
                                     {currentErp.serviceCost.totalPackageCost} <br></br>
@@ -649,13 +657,14 @@ export default function ReadContract({ config, selectedItem }) {
                 }}
             >
                 <Row gutter={[12, -5]}>
+                    
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Sub Total')} :</p>
                     </Col>
-
                     <Col className="gutter-row" span={12}>
                         <p>{moneyFormatter({ amount: currentErp.additionalCost.subTotal })}</p>
                     </Col>
+
                     <Col className="gutter-row" span={12}>
                         <p>
                             {translate('Tax Total')} :
@@ -664,6 +673,7 @@ export default function ReadContract({ config, selectedItem }) {
                     <Col className="gutter-row" span={12}>
                         <p>{moneyFormatter({ amount: currentErp.additionalCost.tax })}</p>
                     </Col>
+
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Total')} :</p>
                     </Col>
