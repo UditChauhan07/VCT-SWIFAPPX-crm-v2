@@ -28,7 +28,7 @@ import ItemRow from '@/modules/ErpPanelModule/ItemRow';
 const { Option } = Select;
 const { Panel } = Collapse;
 
-export default function WorkOrderForm({ subTotal = 0, current = null }) {
+export default function QuotionForm({initialShowServiceId = [], tax, subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
   return <LoadQuoteForm subTotal={subTotal} current={current} />;
@@ -139,7 +139,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState(null);
   const [subscriptionOneTime, setSubcriptionOneTime] = useState()
-  const [ShowServiceId, setShowServiceId] = useState();
+  // const [ShowServiceId, setShowServiceId] = useState();
   const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -417,12 +417,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     return columns;
   };
-  const [subscriptionIds, setSubscriptionIds] = useState([]);
-  const [subscriptionCount, setSubscriptionCount] = useState(0);
+  // const [subscriptionIds, setSubscriptionIds] = useState([]);
+  // const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [isSubscriptionID, seTisSubscriptionID] = useState(null);
 
 const [adjustmentvalue, setadjustment] = useState(null);
-  const [discountValue, setdiscount] = useState(null);
+  // const [discountValue, setdiscount] = useState(null);
   // console.log(discountValue)
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
@@ -494,75 +494,103 @@ const [adjustmentvalue, setadjustment] = useState(null);
   //   );
   // };
 
-  let serviceCost = {
+  const initialServiceCost = {
     servicePerWO: null,
     discount: null,
     subTotal: null,
     tax: null,
-    totalPackageCost: null
-  }
-  let additionalCost = {
-    subTotal: null,
-    tax: null,
-    totalPackageCost: null
-  }
+    totalPackageCost: null,
+  };
+
  
-  const handleCheckboxClick = (e, id) => {
-    let temp = [...subscriptionIds]; // Create a copy of the current subscriptionIds state
+    const [subscriptionIds, setSubscriptionIds] = useState([]);
+    const [subscriptionCount, setSubscriptionCount] = useState(0);
+  const [discountValue, setdiscount] = useState(0);
+    const [serviceCost, setServiceCost] = useState(initialServiceCost);
+    const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
-    // Toggle the subscription id in the state
+  const handleCheckboxClick = (id) => {
+    let temp = [...subscriptionIds];
     if (temp.includes(id)) {
-      temp = temp.filter(item => item !== id); // Remove the id if it exists
+      temp = temp.filter(item => item !== id);
     } else {
-      temp.push(id); // Add the id if it does not exist
+      temp.push(id);
     }
-
-    // Update subscription ids and count
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
-
-    // Calculate discount using the current discount value state
-    const discountValueParsed = parseFloat(discountValue) || 0;
-    let subscriptionsArray = [];
-
-    // Update local storage and state for the selected subscription
-    for (const subscriptionObj of ShowServiceId) {
-      for (const dataObj of subscriptionObj.data) {
-        if (temp.includes(dataObj._id)) {
-          const subscription = subscriptionObj.subscription._id;
-          const subModule = dataObj._id; // The data object ID you want to send
-          console.log(discountValueParsed);
-          const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-          const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-          const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-          const taxValueParsed = parseFloat(tax.taxValue) || 0;
-          const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-          const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
-
-          const serviceCost = {
-            servicePerWO,
-            discount,
-            subTotal,
-            tax: taxAmount,
-            totalPackageCost,
-          };
-
-          subscriptionsArray.push({
-            subscription: subscription,
-            subModule: subModule,
-            serviceCost: serviceCost,
-          });
-        }
-      }
-    }
-
-    localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray));
-    let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
-    let grandTotal = parseFloat(grandTotalStr);
   };
+
+
+  useEffect(() => {
+    const calculateCosts = () => {
+      const discountValueParsed = parseFloat(discountValue) || 0;
+      let subscriptionsArray = [];
+      let newServiceCost = { ...initialServiceCost };
+
+      ShowServiceId.forEach(subscriptionObj => {
+        subscriptionObj.data.forEach(dataObj => {
+          if (subscriptionIds.includes(dataObj._id)) {
+            const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+            const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+            const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+            const taxValueParsed = parseFloat(tax.taxValue) || 0;
+            const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+            const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
+
+            newServiceCost = {
+              servicePerWO,
+              discount,
+              subTotal,
+              tax: taxAmount,
+              totalPackageCost,
+            };
+
+            subscriptionsArray.push({
+              subscription: subscriptionObj.subscription._id,
+              subModule: dataObj._id,
+              serviceCost: newServiceCost,
+            });
+          }
+        });
+      });
+
+      setServiceCost(newServiceCost);
+      localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray));
+    };
+
+    calculateCosts();
+  }, [subscriptionIds, discountValue, ShowServiceId, tax]);
+
   const DiscountValueHandler = (value) => {
-    setdiscount(value); // Correctly set the discount value
+    setdiscount(value);
   };
+  const generateTableData = () => {
+    const subscriptionNames = getUniqueSubscriptionNames();
+    const tableData = [];
+    ShowServiceId?.forEach(ele => {
+      const rowData = {
+        Subscription: ele.subscription.name,
+      };
+
+      subscriptionNames?.forEach(name => {
+        const matchingItem = ele.data.find(item => item.name === name);
+
+        rowData[name] = matchingItem ? (
+          <Checkbox.Group key={matchingItem._id} onChange={() => handleCheckboxClick(matchingItem._id)}>
+            <Checkbox value={matchingItem._id}>
+              {`${matchingItem.price}.00 /${ele.subscription.name}`}
+            </Checkbox>
+          </Checkbox.Group>
+        ) : null;
+      });
+
+      tableData.push(rowData);
+    });
+    return tableData;
+  };
+  // const DiscountValueHandler = (value) => {
+  //   setdiscount(value); // Correctly set the discount value
+  // };
 
   const CalculatorFilled = () => {
     return (
@@ -666,61 +694,6 @@ const [adjustmentvalue, setadjustment] = useState(null);
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
     console.log({ subTotal });
   }
-
-
-
-  // const generateTableData = () => {
-  //   const subscriptionNames = getUniqueSubscriptionNames();
-  //   const tableData = [];
-  //   ShowServiceId.forEach((ele, index) => {
-  //     const rowData = {
-  //       Subscription: ele.subscription.name,
-  //     };
-
-  //     subscriptionNames?.forEach((name) => {
-  //       const matchingItem = ele.data.find(item => item.name === name);
-
-  //       rowData[name] = matchingItem ? (
-  //         <Checkbox.Group key={matchingItem._id} onChange={(e) => handleCheckboxClick(e, matchingItem._id)}>
-  //           <Checkbox value={matchingItem._id}>
-  //             {`${matchingItem.price}.00 /${ele.subscription.name}`}
-  //           </Checkbox>
-  //         </Checkbox.Group>
-  //       ) : null;
-  //       // rowData[name] = matchingItem ? (
-  //       //          <Checkbox>{`${matchingItem.price}.00 /${ele.subscription.name}`}</Checkbox>
-  //       //       ) : null;
-  //     });
-
-  //     tableData.push(rowData);
-  //   });
-  //   return tableData;
-  // };
-
-  const generateTableData = () => {
-    const subscriptionNames = getUniqueSubscriptionNames();
-    const tableData = [];
-    ShowServiceId.forEach((ele, index) => {
-      const rowData = {
-        Subscription: ele.subscription.name,
-      };
-
-      subscriptionNames?.forEach((name) => {
-        const matchingItem = ele.data.find(item => item.name === name);
-
-        rowData[name] = matchingItem ? (
-          <Checkbox.Group key={matchingItem._id} onChange={(e) => handleCheckboxClick(e, matchingItem._id)}>
-            <Checkbox value={matchingItem._id}>
-              {`${matchingItem.price}.00 /${ele.subscription.name}`}
-            </Checkbox>
-          </Checkbox.Group>
-        ) : null;
-      });
-
-      tableData.push(rowData);
-    });
-    return tableData;
-  };
 const handleSelectChange = (value) => {
     // setadjustment(null);
     // setdiscount(null);
@@ -782,48 +755,7 @@ const handleSelectChange = (value) => {
   };
 
 
-  // const handleSave = () => {
-  //   form.validateFields()
-  //     .then(values => {
-  //       console.log('Saved values:', values);
-  //       // Handle the save action here, e.g., send data to the server
-  //     })
-  //     .catch(errorInfo => {
-  //       console.log('Validation Failed:', errorInfo);
-  //     });
-  // };
-
-  // const updateQuantity = (productId, value) => {
-  //   const updatedQuantities = { ...quantities, [productId]: value };
-  //   setQuantities(updatedQuantities);
-  //   // const updatedTotals = { ...totals, [productId]: prices[productId] * value };
-  //   // setTotals(updatedTotals);
-
-  //   const updatedTotals = { ...totals };
-  //   updatedTotals[productId] = prices[productId] * value;
-  //   setTotals(updatedTotals);
-  // };
-  // ..............
-  // const updateQuantity = (productId, value) => {
-  //   const updatedQuantities = { ...quantities, [productId]: value };
-  //   setQuantities(updatedQuantities);
-
-  //   const updatedTotals = { ...totals, [productId]: prices[productId] * value };
-  //   setTotals(updatedTotals);
-
-  //   // Update the form's state directly with the new total value
-  //   form.setFieldsValue({
-  //     items: mainData.products?.map((product, index) => {
-  //       if (product._id === productId) {
-  //         return {
-  //           ...form.getFieldValue(['items', index]),
-  //           total: prices[productId] * value,
-  //         };
-  //       }
-  //       return form.getFieldValue(['items', index]);
-  //     })
-  //   });
-  // };
+  
   const optionsss = ['Addition', 'Substraction'];
   return (
     <>
@@ -1562,7 +1494,7 @@ const handleSelectChange = (value) => {
               min={0}
               max={100}
               value={discountValue}
-              onChange={DiscountValueHandler} // Use the DiscountValueHandler to set the state
+              onChange={DiscountValueHandler}
             />
           </Form.Item>
         </Col>
