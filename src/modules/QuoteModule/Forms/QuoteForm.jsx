@@ -587,6 +587,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     });
     return tableData;
   };
+
   // const DiscountValueHandler = (value) => {
   //   setdiscount(value); // Correctly set the discount value
   // };
@@ -693,6 +694,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
     console.log({ subTotal });
   }
+  
 const handleSelectChange = (value) => {
     // setadjustment(null);
     // setdiscount(null);

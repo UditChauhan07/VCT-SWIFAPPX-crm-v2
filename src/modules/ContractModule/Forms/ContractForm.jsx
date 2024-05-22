@@ -682,6 +682,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
             subscriptionNames.forEach((name) => {
                 const matchingItem = ele.data.find(item => item.name === name);
+                
 
                 rowData[name] = matchingItem ? (
                     <Radio.Group key={matchingItem._id}
@@ -689,7 +690,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         // value={matchingItem._id === isMainid ? isMainid : undefined} 
                         onChange={(e) => handleRadioChange(e, matchingItem._id)} >
                         <Radio
-                            value={matchingItem._id} >{`${matchingItem.price}.00 /One Time`}</Radio>
+                            value={matchingItem._id} >{`${matchingItem.price}.00 / ${ele.subscription.name}`}</Radio>
                     </Radio.Group>
 
                 ) : null;
