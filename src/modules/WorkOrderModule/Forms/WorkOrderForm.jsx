@@ -446,11 +446,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     // }
     setSubscriptionIds(id);
     // console.log(id)
-    // localStorage.setItem('WO-RadioId', id)
+    localStorage.setItem('WO-RadioId', id) 
 
     //  let SubModule = id;
-
-
 
     // setSubscriptionIds(temp);
     // setSubscriptionIds(temp); 
@@ -469,7 +467,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       return updatedState;
     });
 
-
     for (const subscriptionObj of ShowServiceId) {
       for (const dataObj of subscriptionObj.data) {
         if (dataObj._id === id) {
@@ -480,10 +477,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
     return null;
   }
-
-
-
-
 
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);

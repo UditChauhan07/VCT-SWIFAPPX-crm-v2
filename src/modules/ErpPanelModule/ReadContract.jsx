@@ -496,7 +496,7 @@ export default function ReadContract({ config, selectedItem }) {
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp.adjustment.value} <br></br>
+                                    {currentErp.adjustment && currentErp.adjustment.value ? currentErp.adjustment.value : ""} <br></br>
 
                                 </p>
                             </Col>
