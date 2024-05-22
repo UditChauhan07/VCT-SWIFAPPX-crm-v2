@@ -837,13 +837,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 <Col className="gutter-row" span={6}>
                     <Form.Item
                         name="sendworkorderEmail"
-                        label={translate('Send work order Email')}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select a Send work order Email:',
-                            },
-                        ]}
+                        label={translate('Send Contract Email Email')}
+                        // rules={[
+                        //     {
+                        //         required: true,
+                        //         message: 'Please select a Send work order Email:',
+                        //     },
+                        // ]}
                     >
                         <Radio.Group style={{ display: "flex", gap: "20px" }}>
                             <Radio value="1" selected>Yes</Radio>
@@ -1538,12 +1538,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     <Form.Item
                         name="Adjustment"
                         label={translate('Adjustment')}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select a Adjustment Type:',
-                            },
-                        ]}
+                        // rules={[
+                        //     {
+                        //         required: true,
+                        //         message: 'Please select a Adjustment Type:',
+                        //     },
+                        // ]}
                     >
                         <Radio.Group style={{ display: "flex", gap: "20px" }} >
                             {optionsss.map((option, index) => (
@@ -1557,9 +1557,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     {
                         active == 3 && (
                             <Form.Item name="AdjustmentValue" rules={[
-                                {
-                                    required: true,
-                                },
+                                // {
+                                //     required: true,
+                                // },
                             ]}>
                                 <Input onChange={AdjustmentValueHandler} />
                             </Form.Item>
@@ -1569,9 +1569,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     {
                         active == 2 && (
                             <Form.Item name="AdjustmentValue" rules={[
-                                {
-                                    required: true,
-                                },
+                                // {
+                                //     required: true,
+                                // },
                             ]}>
                                 <Input onChange={AdjustmentValueHandler} />
                             </Form.Item>
@@ -1583,9 +1583,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
                 <Col className="gutter-row" span={12}>
                     <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" rules={[
-                        {
-                            required: true,
-                        },
+                        // {
+                        //     required: true,
+                        // },
                     ]}>
                         <Input />
                     </Form.Item>
@@ -1600,11 +1600,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     <Form.Item
                         name="discount"
                         label={translate('Discount')}
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
+                        // rules={[
+                        //     {
+                        //         required: true,
+                        //     },
+                        // ]}
                     >
                         <InputNumber style={{ width: '100%' }} onChange={DiscountValueHandler} />
                     </Form.Item>

@@ -198,7 +198,6 @@ export default function ReadContract({ config, selectedItem }) {
     const Createdhours = Createddate.getHours();
     const Createdminutes = Createddate.getMinutes();
     const Createdseconds = Createddate.getSeconds();
-
     const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`;
 
 
@@ -657,7 +656,7 @@ export default function ReadContract({ config, selectedItem }) {
                 }}
             >
                 <Row gutter={[12, -5]}>
-                    
+
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Sub Total')} :</p>
                     </Col>
