@@ -400,7 +400,7 @@ export default function CreateItem({ config, CreateForm }) {
           // discount: discountValueParsed,
         };
 
-        console.log( fieldData );
+        console.log(fieldData);
         fieldsValue = fieldData;
       }
 
