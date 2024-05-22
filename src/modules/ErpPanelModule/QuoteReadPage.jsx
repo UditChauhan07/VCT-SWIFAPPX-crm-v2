@@ -184,10 +184,10 @@ export default function QuoteReadPage({ config, selectedItem }) {
     }
 
     // const status = currentErp.status
-    const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp.status);
+    const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp?.status);
 
 
-    const Createddate = new Date(currentErp.created);
+    const Createddate = new Date(currentErp?.created);
 
     // Define month names
     const monthNames = [
@@ -211,7 +211,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 onBack={() => {
                     navigate(`/${entity.toLowerCase()}`);
                 }}
-                title={` #${currentErp.code}`}
+                title={` #${currentErp?.code}`}
                 ghost={false}
                 // tags={[
                 //   <Tag color={tagColor(currentErp.status)?.color} key="status">
@@ -237,7 +237,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                         key={`${uniqueId()}`}
                         onClick={() => {
                             window.open(
-                                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
+                                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp?._id}.pdf`,
                                 '_blank'
                             );
                         }}
@@ -249,7 +249,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                         key={`${uniqueId()}`}
                         loading={mailInProgress}
                         onClick={() => {
-                            send(currentErp._id);
+                            send(currentErp?._id);
                         }}
                         icon={<MailOutlined />}
                     >
@@ -258,7 +258,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     <Button
                         key={`${uniqueId()}`}
                         onClick={() => {
-                            dispatch(erp.convert({ entity, id: currentErp._id }));
+                            dispatch(erp.convert({ entity, id: currentErp?._id }));
                         }}
                         icon={<RetweetOutlined />}
                     // style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
@@ -284,7 +284,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Bill To')} :<br />
 
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp.client.name}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp?.client.name}</span><br />
 
                                 </p>
 
@@ -293,20 +293,20 @@ export default function QuoteReadPage({ config, selectedItem }) {
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Client Address')} :<br></br>
 
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.clientAddress.contactNumber}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.clientAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.clientAddress.zipCode}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.clientAddress.country}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp?.clientAddress.contactNumber}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp?.clientAddress.block}, {currentErp?.billingAddress.street},{currentErp?.billingAddress.state}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp?.clientAddress.zipCode}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp?.clientAddress.country}</span><br />
                                 </p>
 
                             </Col>
                             <Col className="gutter-row" span={12} style={{ marginTop: "-6%" }}>
                                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Billing Address')} :<br></br>
 
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.billingAddress.contactNumber}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.billingAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.billingAddress.zipCode}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.billingAddress.country}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp?.billingAddress.contactNumber}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp?.billingAddress.block}, {currentErp?.billingAddress.street},{currentErp?.billingAddress.state}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp?.billingAddress.zipCode}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp?.billingAddress.country}</span><br />
                                 </p>
 
                             </Col>
@@ -329,7 +329,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Quotation No')} .:<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.quoteNumber}<br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.quoteNumber}<br></br>
                                         </p>
                                     </Col>
                                 </Row>
@@ -393,7 +393,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Sales Person')} :<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPerson.name} <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.salesPerson.name} <br></br>
                                         </p>
                                     </Col>
                                 </Row>
@@ -402,7 +402,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600", marginTop: "19px" }}>{translate('Sales Person Contact')} :<br></br>
                                         </p> </Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPersonContact} <br></br></p>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.salesPersonContact} <br></br></p>
 
                                     </Col>
                                 </Row>
@@ -431,7 +431,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {currentErp.serviceList.name}<br></br>
+                                    {currentErp?.serviceList.name}<br></br>
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
@@ -451,7 +451,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
 
             {/* ................. */}
-            <h3 style={{ marginTop: "4%" }}>Quotation Billing Detail</h3>
+            <h3 style={{ marginTop: "4%" }}>Quotetion Billing Detail</h3>
             <Row className="gutter-row" style={{ marginTop: "20px" }}>
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -465,7 +465,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('Lawn Care:One Time')} <br></br>
+                                    {`${currentErp?.serviceList.name} / One Time`} <br></br>
 
                                 </p>
 
@@ -480,7 +480,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                 </p> </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
-                                    {translate('300.00 /Workorder')} <br></br>
+                                    {currentErp?.serviceCost?.servicePerWO}<br></br>
                                 </p> </Col>
 
                             <Col className="gutter-row" span={12}>
@@ -490,20 +490,20 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                 </p> </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate(`${(+10.00)}`)} <br></br>
+                                    {currentErp.adjustment.value} <br></br>
 
                                 </p> </Col>
 
 
                             <Col className="gutter-row" span={12} >
-                                <p style={{ fontSize: "15px" }}>{translate(`Discount1`)} :
+                                <p style={{ fontSize: "15px" }}>{translate(`Discount`)} :
                                     <br></br>
 
                                 </p>
 
                             </Col>
                             <Col className="gutter-row" span={12} >
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{translate('3.06')}
+                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp?.serviceCost?.discount}
                                     <br></br>
 
                                 </p>
@@ -511,28 +511,29 @@ export default function QuoteReadPage({ config, selectedItem }) {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
-                                    {translate('Package SubTotal')} :<br></br>
+                                    {translate('SubTotal')} :<br></br>
 
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('306.90/One Time')} <br></br>
+                                    {currentErp?.serviceCost?.subTotal} <br></br>
 
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <sp style={{ fontSize: "15px" }}>
-                                    {translate('Tax 20')} :<br></br>
+                                    {translate('Tax')} :<br></br>
 
                                 </sp>
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('61.38')} <br></br>
+                                    {currentErp?.serviceCost?.tax} <br></br>
 
                                 </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('Total Package Cost')} :<br></br>
@@ -541,7 +542,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('368.28/One Time')} <br></br>
+                                    {currentErp?.serviceCost?.totalPackageCost} <br></br>
 
                                 </p>
                             </Col>
@@ -552,7 +553,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
             </Row>
 
 {/* ............................ */}
-         <h3 style={{ marginTop: "4%" }}>Other detail</h3>
+            <h3 style={{ marginTop: "4%" }}>Other detail</h3>
             <Row className="gutter-row">
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "290px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
@@ -563,7 +564,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Initial Remarks')} .:<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('NA')} <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.remarks} <br></br>
                                         </p>
                                     </Col>
                                 </Row>
@@ -587,7 +588,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Created By')} :<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.createdBy.name} <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.createdBy.name} <br></br>
                                         </p>
                                     </Col>
                                 </Row>
@@ -605,7 +606,6 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     </div>
                 </Col>
             </Row>
-
 
 
             <Row gutter={[12, 0]} style={{ marginTop: "40px" }}>
@@ -662,21 +662,21 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     </Col>
 
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.additionalCost.subTotal })}</p>
+                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.subTotal })}</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
                         <p>
-                            {translate('Tax Total')} ({currentErp.taxRate} %) :
+                            {translate('Tax Total')} ({currentErp?.taxRate} %) :
                         </p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.additionalCost.tax })}</p>
+                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.tax })}</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Total')} :</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost })}</p>
+                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.totalPackageCost })}</p>
                     </Col>
                 </Row>
             </div>
