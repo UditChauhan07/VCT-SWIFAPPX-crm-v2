@@ -28,12 +28,47 @@ import ItemRow from '@/modules/ErpPanelModule/ItemRow';
 const { Option } = Select;
 const { Panel } = Collapse;
 
-export default function QuotionForm({initialShowServiceId = [], tax, subTotal = 0, current = null }) {
+export default function QuotionForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
   return <LoadQuoteForm subTotal={subTotal} current={current} />;
 }
+const initialServiceCost = {
+  servicePerWO: null,
+  discount: null,
+  subTotal: null,
+  tax: null,
+  totalPackageCost: null,
+};
 
+const initialShowServiceId = [
+  {
+    subscription: {
+      _id: 'sub1',
+      name: 'Subscription 1',
+      package_divider: 2,
+    },
+    data: [
+      { _id: 'data1', name: 'Service 1', price: 100 },
+      { _id: 'data2', name: 'Service 2', price: 150 },
+    ],
+  },
+  {
+    subscription: {
+      _id: 'sub2',
+      name: 'Subscription 2',
+      package_divider: 3,
+    },
+    data: [
+      { _id: 'data3', name: 'Service 3', price: 200 },
+      { _id: 'data4', name: 'Service 4', price: 250 },
+    ],
+  },
+];
+
+const tax = {
+  taxValue: 10, // Example tax value
+};
 function LoadQuoteForm({ subTotal = 0, current = null }) {
   const translate = useLanguage();
   const { dateFormat } = useDate();
@@ -139,6 +174,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState(null);
   const [subscriptionOneTime, setSubcriptionOneTime] = useState()
+  const [subscriptionCount, setSubscriptionCount] = useState(0);
+  const [subItemCount, setSubItemCount] = useState(0);
   // const [ShowServiceId, setShowServiceId] = useState();
   const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
   const getCategorySubscriptionHandler = (value) => {
@@ -426,7 +463,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
   // console.log(discountValue)
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
-  const [subItemCount, setSubItemCount] = useState(0);
+  
   const [quantityvalue, setQuantiyvalue] = useState();
  ;
   useEffect(() => { }, [subscriptionCount, subItemCount])
@@ -458,41 +495,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     setSubItemCount(temp.length);
   };
   
-  //   return (
-  //     ShowServiceList.map((element, _id) => (
-  //       element.subscriptions.map((subscriptions, __id) => (
-  //         subscriptions.data.map((subscription, ___id) => {
-  //           let package_divider = parseInt(subscriptions.subscription.package_divider);
-  //           let subTotal = parseInt(subscription.price / package_divider);
-  //           if (active == 2) {
-  //             subTotal += parseInt(adjustmentvalue);
-  //           }
-  //           if (active == 3) {
-  //             subTotal -= parseInt(adjustmentvalue);
-  //           }
-  //           let discount = 0;
-  //           if (discountValue) {
-  //             subTotal -= (subTotal * (parseInt(discountValue) / 100));
-  //             discount = (subTotal * (parseInt(discountValue) / 100));
-  //           }
-  //           if (subscriptionIds.includes(subscription._id)) {
-  //             return (
-  //               <td style={{ padding: '10px', borderRight: 'none' }} key={subscription._id}>
-  //                 <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0' }}>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{subscription.name}:{subscriptions.subscription.name}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(discount || 0).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li>
-  //                 </ul>
-  //               </td>
-  //             );
-  //           }
-  //         })
-  //       ))
-  //     ))
-  //   );
-  // };
+  
 
   const initialServiceCost = {
     servicePerWO: null,
@@ -501,11 +504,16 @@ const [adjustmentvalue, setadjustment] = useState(null);
     tax: null,
     totalPackageCost: null,
   };
-
+  let additionalCost = {
+    subTotal: null,
+    tax: null,
+    totalPackageCost: null
+  }
  
     const [subscriptionIds, setSubscriptionIds] = useState([]);
-    const [subscriptionCount, setSubscriptionCount] = useState(0);
+  
   const [discountValue, setdiscount] = useState(0);
+  // const [subItemCount, setSubItemCount] = useState(0); 
     const [serviceCost, setServiceCost] = useState(initialServiceCost);
     const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
@@ -527,7 +535,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
       let subscriptionsArray = [];
       let newServiceCost = { ...initialServiceCost };
 
-      ShowServiceId.forEach(subscriptionObj => {
+      ShowServiceId?.forEach(subscriptionObj => {
         subscriptionObj.data.forEach(dataObj => {
           if (subscriptionIds.includes(dataObj._id)) {
             const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
@@ -564,6 +572,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
   const DiscountValueHandler = (value) => {
     setdiscount(value);
   };
+
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
