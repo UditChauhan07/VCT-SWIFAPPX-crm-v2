@@ -113,6 +113,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // console.log({ serviceOptions });
 
   const [productList, setProductList] = useState([])
+
   const [tax, setTax] = useState({});
 
   useEffect(() => {
@@ -131,7 +132,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       } else {
         setProductList([]);
       }
-      console.log({ productList });
+      // console.log({ productList });
     } catch (er) {
       console.error({ er });
     }
@@ -446,7 +447,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubscriptionIds(id);
     // console.log(id)
     // localStorage.setItem('WO-RadioId', id)
-   
+
     //  let SubModule = id;
 
 
@@ -615,7 +616,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     )
   }
 
-  
+
   // const ItemHandler = (element) => {
   //   console.log(element)
   //   setCheckedId(element.price);
@@ -645,8 +646,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //   setItems(temp)
   //   setSubItemCount(temp.length)
   // }
+
+  //  let ItemsArray = [];
+  //  console.log(ItemsArray)
+
+  const [itemsArray, setItemsArray] = useState([])
+  // console.log('Updated ItemsArray:', itemsArray);
+
+
   const ItemHandler = (element) => {
-    setCheckedId(element.price);
+
+    setItemsArray(prevItemsArray => {
+      const itemIndex = prevItemsArray.findIndex(item => item._id === element._id);
+      if (itemIndex !== -1) {
+        // Item already exists, remove it
+        return prevItemsArray.filter(item => item._id !== element._id);
+      } else {
+        // Item doesn't exist, add it
+        return [...prevItemsArray, element];
+      }
+    });
 
     const tempId = [...subItemIds];
     const temp = [...Subitems];
@@ -762,15 +781,103 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const updateQuantity = (productId, value) => {
     setQuantiyvalue(value)
-    const updatedQuantities = { ...quantities, [productId]: value };
-    setQuantities(updatedQuantities);
+    const updatedQuantities = { ...quantities, [productId]: value }
+    setQuantities(updatedQuantities)
+
     // const updatedTotals = { ...totals, [productId]: prices[productId] * value };
     // setTotals(updatedTotals);
 
-    const updatedTotals = { ...totals };
-    updatedTotals[productId] = prices[productId] * value;
-    setTotals(updatedTotals);
+    const updatedTotals = { ...totals }
+    updatedTotals[productId] = prices[productId] * value
+    setTotals(updatedTotals)
   };
+
+  useEffect(() => {
+    console.log({ quantities44444: quantities });
+  }, [quantities]);
+
+  // -----NEW PRODUCT CODE------
+
+  // const YourComponent = ({ mainData }) => {
+  //   const [itemsss, setItemsss] = useState(mainData.products.map((data) => ({
+  //     item: data._id,
+  //     price: prices[data._id] || 0,
+  //     quantity: 1,
+  //     total: totals[data._id] || 0,
+  //     remarks: data.description || '',
+  //   })));
+  //   console.log(itemsss)
+
+  //   const updatePricees = (index, value) => {
+  //     const updatedItems = [...itemsss];
+  //     updatedItems[index].price = value;
+  //     setItemsss(updatedItems);
+  //   };
+
+  //   const updateQuantityess = (index, value) => {
+  //     const updatedItems = [...itemsss];
+  //     updatedItems[index].quantity = value;
+  //     setItemsss(updatedItems);
+  //   };
+
+  //   const updateRemarks = (index, value) => {
+  //     const updatedItems = [...itemsss];
+  //     updatedItems[index].remarks = value;
+  //     setItemsss(updatedItems);
+  //   };
+
+  //   const handleCheckboxChange = (index) => {
+  //     const updatedItems = [...itemsss];
+  //     updatedItems[index].checked = !updatedItems[index].checked;
+  //     setItemsss(updatedItems);
+  //   };
+
+  //   return (
+  //    <>
+  //       {
+  //         itemsss.map((item, index) => (
+  //           <Row key={index}>
+  //             <Col>
+  //               <Checkbox onChange={() => handleCheckboxChange(index)} />
+  //             </Col>
+  //             <Col>
+  //               <Form.Item name={['items', index, 'item']} initialValue={item.item}>
+  //                 <span>{mainData.products[index].name}</span>
+  //               </Form.Item>
+  //             </Col>
+  //             <Col>
+  //               <Form.Item name={['items', index, 'price']} initialValue={item.price}>
+  //                 <InputNumber value={item.price} onChange={(value) => updatePricees(index, value)} />
+  //               </Form.Item>
+  //             </Col>
+  //             <Col>
+  //               <Form.Item name={['items', index, 'quantity']} initialValue={item.quantity}>
+  //                 <InputNumber value={item.quantity} onChange={(value) => updateQuantityess(index, value)} />
+  //               </Form.Item>
+  //             </Col>
+  //             <Col>
+  //               <Form.Item name={['items', index, 'total']} initialValue={item.total}>
+  //                 <span>{item.total}</span>
+  //               </Form.Item>
+  //             </Col>
+  //             <Col>
+  //               <Form.Item name={['items', index, 'remarks']} initialValue={item.remarks}>
+  //                 <Input value={item.remarks} onChange={(e) => updateRemarks(index, e.target.value)} />
+  //               </Form.Item>
+  //             </Col>
+  //           </Row>
+  //         ))
+  //       }
+  //    </>
+
+
+  //   )
+
+
+
+  // }
+
+
 
 
   return (
@@ -850,12 +957,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="sendworkorderEmail"
             label={translate('Send work order Email')}
-            rules={[
-              {
-                required: true,
-                message: 'Please select a Send work order Email:',
-              },
-            ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: 'Please select a Send work order Email:',
+          //   },
+          // ]}
           >
             <Radio.Group style={{ display: "flex", gap: "20px" }}>
               <Radio value="1" selected>Yes</Radio>
@@ -1153,7 +1260,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "5%" }}>
               {productList?.map((mainData, i) => (
                 <>
-
                   {i == productList.length - 2 &&
                     <Collapse.Panel header={"Custom Item"} key={'custom item'}>
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
@@ -1259,9 +1365,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               // initialValue={data.price}
                               initialValue={prices[data._id]}
 
-
                             >
-                              {/* <span style={{marginLeft:"-17%"}}>{data.price}</span> */}
+                             
                               <InputNumber
                                 className="moneyInput"
                                 onChange={updatePrice}
@@ -1339,14 +1444,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Col>
 
           <Col className="gutter-row " span={24} >
-            {/* 
-            <Form.Item
-              name="Subscription"
-              initialValue={isMainid}
-              hidden={true}
-            >
-              <Input type="hidden" />
-            </Form.Item> */}
+
 
             <Row gutter={[12, 12]}>
               <Col span={24}>
@@ -1360,10 +1458,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               </Col>
             </Row>
           </Col>
+
           <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "5%" }}>
             {productList?.map((mainData, i) => (
               <>
-
                 {i == productList.length - 2 &&
                   <Collapse.Panel header={"Custom Item"} key={'custom item'}>
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
@@ -1433,13 +1531,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         <p style={{ marginLeft: "15%" }}>{translate('Remarks')}</p>
                       </Col>
                     </Row>
-                    {/* <Form.List name="items" >
-                    <> */}
-                    {mainData.products?.map((data, index) => (
 
+                    {mainData.products?.map((data, index) => (
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
                         <Col className="gutter-row mt-2">
-                          <Checkbox onChange={() => { ItemHandler(data); }} />
+                          <Checkbox onChange={() => {ItemHandler(data)}} />
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
@@ -1448,7 +1544,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             rules={[
                               {
                                 validator: (_, value) => {
-                                  if (value || data.name) { // Allow the default value to pass
+                                  if (value || data.name) {
                                     return Promise.resolve();
                                   }
                                   return Promise.reject(new Error('Item name is required'));
@@ -1456,22 +1552,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               },
                             ]}
                           >
-                            {/* <Input placeholder="Item Name"   readOnly /> */}
-
                             <span>{data.name}</span>
-
-
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
                             name={['items', index, 'price']}
-                            // initialValue={data.price}
                             initialValue={prices[data._id]}
-
-
                           >
-                            {/* <span style={{marginLeft:"-17%"}}>{data.price}</span> */}
+
                             <InputNumber
                               className="moneyInput"
                               onChange={updatePrice}
@@ -1479,22 +1568,19 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               controls={false}
                               addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                               addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                              // defaultValue={data.price}
                               value={prices[data._id]}
                               readOnly
-
                             />
+
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={3}>
                           <Form.Item name={[`items`, `${index}`, 'quantity']}
-                          // rules={[{ required: true }]}
                           >
-                            <InputNumber style={{ width: '100%' }} min={0}
-                              // onChange={updateQt} 
+                            <InputNumber 
+                              style={{ width: '100%' }} min={0}
                               defaultValue={1}
                               onChange={(value) => updateQuantity(data._id, value)}
-
                             />
                           </Form.Item>
                         </Col>
@@ -1504,20 +1590,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                             name={[`items`, `${index}`, 'total']}
                             initialValue={totals[data._id]}
                           >
-                            <span style={{ marginLeft: "24%" }}>{totals[data._id]}</span>
-                            {/* <InputNumber
-                              readOnly
-                              className="moneyInput"
-                              // value={totalState}
-                              defaultValue={totals[data._id]}
-                              // value={totals[data._id]}
-                              min={0}
-                              controls={false}
-                              addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                              addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                              formatter={(value) => money.amountFormatter({ amount: value })}
-                            // initialValue={totalState}
-                            /> */}
+                            <span style={{ marginLeft: "24%" }} defaultValue={totals[data.id]}>{totals[data._id]}</span>
+
                           </Form.Item>
                         </Col>
 
@@ -1528,13 +1602,19 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                       </Row>
                     ))}
-                    {/* </>
-                  </Form.List> */}
+
+                    {/* ----------NEW CODE---------- */}
+
+                    {/* <YourComponent mainData={mainData}/> */}
+
+
                   </div >
                 </Collapse.Panel>
               </>
             ))}
           </Collapse>
+
+
         </>
       }
 
@@ -1551,12 +1631,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="Adjustment"
             label={translate('Adjustment')}
-            rules={[
-              {
-                required: true,
-                message: 'Please select a Adjustment Type:',
-              },
-            ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: 'Please select a Adjustment Type:',
+          //   },
+          // ]}
           >
 
             <Radio.Group style={{ display: "flex", gap: "20px" }} >
@@ -1572,7 +1652,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             active == 3 && (
               <Form.Item name="AdjustmentValue" rules={[
                 {
-                  required: true,
+                  // required: true,
                 },
               ]} >
                 <Input onChange={AdjustmentValueHandler} />
@@ -1584,7 +1664,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             active == 2 && (
               <Form.Item name="AdjustmentValue" rules={[
                 {
-                  required: true,
+                  // required: true,
                 },
               ]}>
                 <Input onChange={AdjustmentValueHandler} />
@@ -1610,11 +1690,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="discount"
             label={translate('Discount')}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]}
           >
             <InputNumber style={{ width: '100%' }} onChange={DiscountValueHandler} />
           </Form.Item>
@@ -1692,8 +1772,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </tbody>
         </table>
       </>}
-
-
 
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
