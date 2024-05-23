@@ -29,7 +29,6 @@ import { current } from '@reduxjs/toolkit';
 // import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
-    console.log(item)
     const { moneyFormatter } = useMoney();
     return (
         <Row gutter={[12, 0]} key={item._id}>
@@ -72,7 +71,7 @@ const Item = ({ item }) => {
     );
 };
 
-export default function ReadContract({ config, selectedItem }) {
+export default function QuoteReadPage({ config, selectedItem }) {
     const translate = useLanguage();
     const { entity, ENTITY_NAME } = config;
     const dispatch = useDispatch();
@@ -184,9 +183,13 @@ export default function ReadContract({ config, selectedItem }) {
         }
     }
 
+    // const status = currentErp.status
+    const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp?.status);
 
-    const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp.status);
-    const Createddate = new Date(currentErp.created);
+
+    const Createddate = new Date(currentErp?.created);
+
+    // Define month names
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -198,17 +201,17 @@ export default function ReadContract({ config, selectedItem }) {
     const Createdhours = Createddate.getHours();
     const Createdminutes = Createddate.getMinutes();
     const Createdseconds = Createddate.getSeconds();
+
     const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`;
 
 
     return (
         <>
-
             <PageHeader
                 onBack={() => {
                     navigate(`/${entity.toLowerCase()}`);
                 }}
-                title={` #${currentErp.code}`}
+                title={` #${currentErp?.code}`}
                 ghost={false}
                 // tags={[
                 //   <Tag color={tagColor(currentErp.status)?.color} key="status">
@@ -234,7 +237,7 @@ export default function ReadContract({ config, selectedItem }) {
                         key={`${uniqueId()}`}
                         onClick={() => {
                             window.open(
-                                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
+                                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp?._id}.pdf`,
                                 '_blank'
                             );
                         }}
@@ -246,7 +249,7 @@ export default function ReadContract({ config, selectedItem }) {
                         key={`${uniqueId()}`}
                         loading={mailInProgress}
                         onClick={() => {
-                            send(currentErp._id);
+                            send(currentErp?._id);
                         }}
                         icon={<MailOutlined />}
                     >
@@ -255,7 +258,7 @@ export default function ReadContract({ config, selectedItem }) {
                     <Button
                         key={`${uniqueId()}`}
                         onClick={() => {
-                            dispatch(erp.convert({ entity, id: currentErp._id }));
+                            dispatch(erp.convert({ entity, id: currentErp?._id }));
                         }}
                         icon={<RetweetOutlined />}
                     // style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
@@ -269,7 +272,7 @@ export default function ReadContract({ config, selectedItem }) {
             >
 
             </PageHeader>
-
+            {/* <Divider dashed /> */}
 
             <h3 className='' style={{ marginLeft: "5px" }}>Customer Details</h3>
             <Row className="gutter-row">
@@ -281,7 +284,7 @@ export default function ReadContract({ config, selectedItem }) {
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Bill To')} :<br />
 
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp.client.name}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp?.client.name}</span><br />
 
                                 </p>
 
@@ -290,20 +293,20 @@ export default function ReadContract({ config, selectedItem }) {
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Client Address')} :<br></br>
 
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.clientAddress.contactNumber}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.clientAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.clientAddress.zipCode}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.clientAddress.country}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp?.clientAddress.contactNumber}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp?.clientAddress.block}, {currentErp?.billingAddress.street},{currentErp?.billingAddress.state}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp?.clientAddress.zipCode}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp?.clientAddress.country}</span><br />
                                 </p>
 
                             </Col>
                             <Col className="gutter-row" span={12} style={{ marginTop: "-6%" }}>
                                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Billing Address')} :<br></br>
 
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.billingAddress.contactNumber}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.billingAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.billingAddress.zipCode}</span><br />
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.billingAddress.country}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp?.billingAddress.contactNumber}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp?.billingAddress.block}, {currentErp?.billingAddress.street},{currentErp?.billingAddress.state}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp?.billingAddress.zipCode}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp?.billingAddress.country}</span><br />
                                 </p>
 
                             </Col>
@@ -315,22 +318,36 @@ export default function ReadContract({ config, selectedItem }) {
 
             </Row >
 
-            <h3 style={{ marginTop: "4%" }}>Basic Contract Details</h3>
+            <h3 style={{ marginTop: "4%" }}>Basic Quotation Details</h3>
             <Row className="gutter-row">
                 <Col span={24}>
-                    <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "260px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
+                    <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "150px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
                         <Row className="gutter-row" style={{ padding: "0px 0px 0px 20px" }}>
                             <Col span={12}>
                                 <Row className="gutter-row" >
                                     <Col span={12}>
-                                        <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Contract No')} .:<br></br>
+                                        <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Quotation No')} .:<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.contractNumber}<br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.quoteNumber}<br></br>
                                         </p>
                                     </Col>
                                 </Row>
+                                {/* <Row className="gutter-row" >
+                                    <Col span={12}>
+                                        <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Workorder Status')} :<br></br>
+                                        </p></Col>
+                                    <Col span={12}>
+                                        <p style={{
+                                            fontSize: "14px", fontWeight: "600", color:
+                                                textColor, backgroundColor: bgColor, width: "90px",
+                                            textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
+                                        }}>
+                                            {statusText} <br></br>
+                                        </p>
 
+                                    </Col>
+                                </Row> */}
                                 <Row className="gutter-row">
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Date')} :<br></br>
@@ -353,6 +370,12 @@ export default function ReadContract({ config, selectedItem }) {
 
                                     </Col>
                                 </Row>
+
+                            </Col>
+
+                            <Col span={12}>
+
+
                                 <Row className="gutter-row" >
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Expected Time Required')} :<br></br>
@@ -365,19 +388,12 @@ export default function ReadContract({ config, selectedItem }) {
                                     </Col>
                                 </Row>
 
-                            </Col>
-
-                            <Col span={12}>
-
-
-
-
                                 <Row className="gutter-row" >
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Sales Person')} :<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPerson.name} <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.salesPerson.name} <br></br>
                                         </p>
                                     </Col>
                                 </Row>
@@ -386,33 +402,12 @@ export default function ReadContract({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600", marginTop: "19px" }}>{translate('Sales Person Contact')} :<br></br>
                                         </p> </Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPersonContact} <br></br></p>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.salesPersonContact} <br></br></p>
 
                                     </Col>
                                 </Row>
 
-                                {/* <Row className="gutter-row">
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Work Leader')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Test Leader')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
-                                {/* <Row className="gutter-row" >
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workers')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Alfreda Byers,Carly Alvarez')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
+                              
                             </Col>
                         </Row>
                     </div>
@@ -423,7 +418,7 @@ export default function ReadContract({ config, selectedItem }) {
             </Row>
 
 
-            <h3 className='' style={{ marginLeft: "5px", marginTop: "4%" }}>Contract Details</h3>
+            <h3 className='' style={{ marginLeft: "5px", marginTop: "4%" }}>Quotation Details</h3>
             <Row className="gutter-row">
                 <Col span={24}>
 
@@ -436,7 +431,7 @@ export default function ReadContract({ config, selectedItem }) {
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {currentErp.serviceList.name}<br></br>
+                                    {currentErp?.serviceList.name}<br></br>
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
@@ -446,60 +441,58 @@ export default function ReadContract({ config, selectedItem }) {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {currentErp.customService.description}<br></br>
+                                    {/* {currentErp.customService.description}<br></br> */}
                                 </p>
                             </Col>
                         </Row>
                     </div>
-                </Col>
-            </Row>
+                </Col >
+            </Row >
 
 
             {/* ................. */}
-            <h3 style={{ marginTop: "4%" }}>Contract Billing Detail</h3>
+            <h3 style={{ marginTop: "4%" }}>Quotetion Billing Detail</h3>
             <Row className="gutter-row" style={{ marginTop: "20px" }}>
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
                         <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Contract For')} :<br></br>
+                                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder For')} :<br></br>
                                 </p>
 
                             </Col>
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {`${currentErp.serviceList.name}`} <br></br>
+                                    {`${currentErp?.serviceList.name} / One Time`} <br></br>
+
                                 </p>
+
+
                             </Col>
 
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }} >
                                     {translate('Per Workorder Cost')} :<br></br>
-                                </p>
-                            </Col>
 
+                                </p> </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
-                                    {currentErp.serviceCost.servicePerWO} <br></br>
-                                </p>
-                            </Col>
+                                    {currentErp?.serviceCost?.servicePerWO}<br></br>
+                                </p> </Col>
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('Adjustment')} :<br></br>
 
-                                </p>
-                            </Col>
-
+                                </p> </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp.adjustment && currentErp.adjustment.value ? currentErp.adjustment.value : ""} <br></br>
+                                    {currentErp.adjustment.value} <br></br>
 
-                                </p>
-                            </Col>
+                                </p> </Col>
 
 
                             <Col className="gutter-row" span={12} >
@@ -509,39 +502,35 @@ export default function ReadContract({ config, selectedItem }) {
                                 </p>
 
                             </Col>
-
                             <Col className="gutter-row" span={12} >
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.serviceCost.discount}
+                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp?.serviceCost?.discount}
                                     <br></br>
 
                                 </p>
 
                             </Col>
-
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('SubTotal')} :<br></br>
 
                                 </p>
                             </Col>
-
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp.serviceCost.subTotal} <br></br>
+                                    {currentErp?.serviceCost?.subTotal} <br></br>
 
                                 </p>
                             </Col>
-
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px" }}>
+                                <sp style={{ fontSize: "15px" }}>
                                     {translate('Tax')} :<br></br>
 
-                                </p>
+                                </sp>
                             </Col>
-
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp.serviceCost.tax} <br></br>
+                                    {currentErp?.serviceCost?.tax} <br></br>
+
                                 </p>
                             </Col>
 
@@ -551,10 +540,9 @@ export default function ReadContract({ config, selectedItem }) {
 
                                 </p>
                             </Col>
-
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp.serviceCost.totalPackageCost} <br></br>
+                                    {currentErp?.serviceCost?.totalPackageCost} <br></br>
 
                                 </p>
                             </Col>
@@ -564,8 +552,7 @@ export default function ReadContract({ config, selectedItem }) {
                 </Col>
             </Row>
 
-
-
+{/* ............................ */}
             <h3 style={{ marginTop: "4%" }}>Other detail</h3>
             <Row className="gutter-row">
                 <Col span={24}>
@@ -577,17 +564,31 @@ export default function ReadContract({ config, selectedItem }) {
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Initial Remarks')} .:<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.remarks} <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.remarks} <br></br>
                                         </p>
                                     </Col>
                                 </Row>
+                                <Row className="gutter-row" >
+                                    <Col span={12}>
+                                        <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Picture Uploaded')} :<br></br>
+                                        </p></Col>
+                                    <Col span={12}>
+                                        <p style={{
+                                            fontSize: "14px", fontWeight: "600", color:
+                                                "#fdf2ff", backgroundColor: "#808080", width: "100px",
+                                            textAlign: "center", padding: "40px 10px 40px 10px", borderRadius: "14px"
+                                        }}>
+                                            +Add Image <br></br>
+                                        </p>
 
+                                    </Col>
+                                </Row>
                                 <Row className="gutter-row">
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Created By')} :<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.createdBy.name} <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.createdBy.name} <br></br>
                                         </p>
                                     </Col>
                                 </Row>
@@ -656,36 +657,29 @@ export default function ReadContract({ config, selectedItem }) {
                 }}
             >
                 <Row gutter={[12, -5]}>
-
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Sub Total')} :</p>
                     </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.additionalCost.subTotal })}</p>
-                    </Col>
 
                     <Col className="gutter-row" span={12}>
+                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.subTotal })}</p>
+                    </Col>
+                    <Col className="gutter-row" span={12}>
                         <p>
-                            {translate('Tax Total')} :
+                            {translate('Tax Total')} ({currentErp?.taxRate} %) :
                         </p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.additionalCost.tax })}</p>
+                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.tax })}</p>
                     </Col>
-
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Total')} :</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({
-                            amount: currentErp.additionalCost.totalPackageCost
-                        })}</p>
+                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.totalPackageCost })}</p>
                     </Col>
                 </Row>
             </div>
         </>
     );
 }
-
-
-
