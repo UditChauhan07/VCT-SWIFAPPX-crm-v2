@@ -318,6 +318,14 @@ const request = {
       return errorHandler(error);
     }
   },
+  getTaxes: async () => {
+    try {
+      const response = await axios.get(`/taxes/show`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getCateGorySubscription: async ({ id }) => {
     try {
       const response = await axios.get(`/servicecategory/subscriptions/${id}`);
@@ -403,7 +411,16 @@ const request = {
       return errorHandler(error);
     }
   },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getServiceListShow: async ({ id }) => {
+    console.log(id)
     try {
       const response = await axios.get(`/servicelist/service/${id}`);
       return response.data;
@@ -428,9 +445,18 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getSubscriptiononetime: async () => {
     try {
       const response = await axios.get(`/subscriptiontype/oneTime`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
       return response.data;
     } catch (error) {
       return errorHandler(error);

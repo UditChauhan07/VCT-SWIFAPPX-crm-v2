@@ -45,6 +45,8 @@ export default function CreateItem({ config, CreateForm }) {
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
 
+  console.log({ isLoading, isSuccess, result });
+
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
   const [offerSubTotal, setOfferSubTotal] = useState(0);
@@ -100,7 +102,7 @@ export default function CreateItem({ config, CreateForm }) {
       dispatch(erp.resetAction({ actionType: 'create' }));
       setSubTotal(0);
       setOfferSubTotal(0);
-      if (entity == 'roles') {
+      if (entity == 'roles' || entity == 'quote') {
         navigate(`/${entity}`);
       }
       else {
@@ -192,7 +194,18 @@ export default function CreateItem({ config, CreateForm }) {
           item.endTime = EndTime
         })
 
-
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
+        let submodule = localStorage.getItem('WO-RadioId')
 
         let Data = {
           client: fieldsValue.client,
@@ -208,6 +221,7 @@ export default function CreateItem({ config, CreateForm }) {
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
           subscription: WorkOrderstoredId,
+          subModule: submodule,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
@@ -215,13 +229,18 @@ export default function CreateItem({ config, CreateForm }) {
             description: fieldsValue.ServiceDescription
           },
 
+
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
-          remarks: fieldsValue.InitialRemarks
+          remarks: fieldsValue.InitialRemarks,
+          serviceCost,
+          additionalCost,
+          grandTotal
         }
 
         fieldsValue = Data
       }
+      console.log({ fieldsValue });
 
       if (entity === "contract") {
         console.log(fieldsValue)
@@ -248,6 +267,20 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
+
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDBBBB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELmMM") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgxxpp") || 0
+        // let submodule = localStorage.getItem('WO-RadioId')
+
 
 
         let Data = {
@@ -276,11 +309,102 @@ export default function CreateItem({ config, CreateForm }) {
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
-          }
+          },
+          serviceCost,
+          additionalCost,
+          grandTotal
         }
         fieldsValue = Data
-        // console.log(fieldsValue)
       }
+      // ................
+      if (entity === "quote") {
+        console.log(fieldsValue.items)
+        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
+        let additionalCost = {};
+        let serviceCost = {};
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}";
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
+
+        try {
+          if (serviceCostStr) {
+            serviceCost = JSON.parse(serviceCostStr);
+          }
+        } catch (error) {
+          console.error('Error parsing serviceCostStr:', error);
+          serviceCost = {}; // Default to empty object if parsing fails
+        }
+
+        try {
+          if (additionalCostStr) {
+            additionalCost = JSON.parse(additionalCostStr);
+          }
+        } catch (error) {
+          console.error('Error parsing additionalCostStr:', error);
+          additionalCost = {}; // Default to empty object if parsing fails
+        }
+
+        let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
+        let grandTotal = parseFloat(grandTotalStr) || 0;
+
+        // let additionalCost = {}
+        // let serviceCost = {}
+        // let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
+        // let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
+        // if (serviceCostStr) {
+        //   serviceCost = JSON.parse(serviceCostStr)
+        // }
+        // if (additionalCostStr) {
+        //   additionalCost = JSON.parse(additionalCostStr)
+        // }
+        // let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
+        // let submodule = localStorage.getItem('WO-RadioId')
+
+        // Ensure discount is properly parsed and defaulted
+        // let discountValueParsed = parseFloat(fieldsValue.discount);
+        // if (isNaN(discountValueParsed)) {
+        //   discountValueParsed = 0;
+        // }
+        const isCustom = fieldsValue.serviceName === 'custom'; // Determine if custom service is selected
+        const fieldData = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendQuotationEmail: fieldsValue.sendQuotationEmail,
+          startDate: fieldsValue.startDate,
+          expiredDate: fieldsValue.expiredDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.SalesPersonContact,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceName,
+          subscriptions: storedSubscriptions, // Use the subscriptions array here
+          isCustom: isCustom,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription,
+          },
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
+          serviceCost,
+          additionalCost,
+          grandTotal,
+
+          adjustment: {
+            type: fieldsValue.AdjustmentType,
+            value: fieldsValue.AdjustmentValue,
+          },
+          InitialRemarks: fieldsValue.InitialRemarks,
+          // discount: discountValueParsed,
+        };
+
+        console.log(fieldData);
+        fieldsValue = fieldData;
+      }
+
+
 
       // console.log(fieldsValue)
       dispatch(erp.create({ entity, jsonData: fieldsValue }));

@@ -38,23 +38,19 @@ export default function ItemRow({ field, remove, current = null, response, isFir
   }, [current, form]);
 
 
-  useEffect(() => {
-    if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
-      const firstItem = current.items[0];
-      form.setFieldsValue({ [field.name]: firstItem });
-      setName(firstItem.itemName || '');
-      setPrice(firstItem.price || 0);
-      setQuantity(firstItem.quantity || 0);
-    }
-  }, [current, form]);
+  // useEffect(() => {
+  //   if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
+  //     const firstItem = current.items[0];
+  //     form.setFieldsValue({ [field.name]: firstItem });
+  //     setName(firstItem.itemName || '');
+  //     setPrice(firstItem.price || 0);
+  //     setQuantity(firstItem.quantity || 0);
+  //   }
+  // }, [current, form]);
 
   useEffect(() => {
     if (current) {
-      // When it accesses the /payment/ endpoint,
-      // it receives an invoice.item instead of just item
-      // and breaks the code, but now we can check if items exists,
-      // and if it doesn't we can access invoice.items.
-
+       
       const { items, invoice } = current;
 
       if (invoice) {
@@ -66,7 +62,7 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         }
       } else {
         const item = items[field.fieldKey];
-
+         
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
@@ -77,7 +73,6 @@ export default function ItemRow({ field, remove, current = null, response, isFir
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
-
     setTotal(currentTotal);
   }, [price, quantity]);
 
