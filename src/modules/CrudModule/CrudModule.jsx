@@ -138,7 +138,7 @@ function FixHeaderPanel({ config }) {
       </Col>
       <Col className="gutter-row" span={3}>
         {(permissions?.[entity + '_create'] || isSAAS == true) ?
-          <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
+          <Button onClick={addNewItem} block={true} icon={<PlusOutlined/>}></Button>
           : ""}
       </Col>
     </Row>
