@@ -12,6 +12,7 @@ export default function Customer() {
     searchFields: 'name',
   };
   const deleteModalLabels = ['name'];
+  
   const dataTableColumns = [
     {
       title: translate('Name'),
@@ -32,9 +33,10 @@ export default function Customer() {
     {
       title: translate('Description'),
       dataIndex: ['description'],
+      
     },
     {
-      title: translate('Enabled'),
+      title: translate('Status'),
       dataIndex: 'enabled',
       render: (status) => {
         if (status) {
@@ -49,6 +51,7 @@ export default function Customer() {
       },
     },
   ];
+
 
   const Labels = {
     PANEL_TITLE: translate('service_list'),

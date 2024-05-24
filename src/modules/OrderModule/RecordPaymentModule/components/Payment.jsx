@@ -66,7 +66,7 @@ export default function Payment({ config, currentItem }) {
                 {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
               </Tag>
             }
-            // subTitle="This is cuurent erp page"
+        
             extra={[
               <Button
                 key={`${uniqueId()}`}
