@@ -272,7 +272,7 @@ function Sidebar({ collapsible, isMobile = false }) {
             alt="Logo"
             style={{ marginTop: '3px', marginLeft: '10px', height: '38px' }}
           />
-        )}   */}
+        )} */}
       </div>
       <Menu
         items={items}

@@ -29,11 +29,10 @@ var permissions;
 var isSAAS;
 
 function AddNewItem({ config }) {
-  // console.log({ config });
+
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
-  // console.log({ entity });
   const navigate = useNavigate();
   const handelClick = () => {
     // if (entity == 'admin') {
@@ -52,7 +51,7 @@ function AddNewItem({ config }) {
   };
 
   return (
-    <Button onClick={handelClick} type="primary" icon={<PlusOutlined />}>
+    <Button onClick={handelClick} type="primary" icon={<PlusOutlined/>}>
       {ADD_NEW_ENTITY}
     </Button>
   );
@@ -60,6 +59,8 @@ function AddNewItem({ config }) {
 
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
+ 
+
 
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
@@ -140,19 +141,21 @@ export default function DataTable({ config, extra = [] }) {
   const navigate = useNavigate();
 
   const handleRead = (record) => {
+    console.log(record)
     dispatch(crud.currentItem({ data: record }));
     panel.open();
     collapsedBox.open();
     readBox.open();
   };
+  
   function handleEdit(record) {
-
     dispatch(crud.currentItem({ data: record }));
     dispatch(crud.currentAction({ actionType: 'update', data: record }));
     editBox.open();
     panel.open();
     collapsedBox.open();
   }
+
   function handleDelete(record) {
     console.log(record);
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));

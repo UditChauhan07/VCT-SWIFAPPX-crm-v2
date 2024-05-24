@@ -58,7 +58,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
       // Fetch data from API
       const fetchData = async () => {
         try {
-          const response = await request.getCategory();
+          const response = await request.getCategorySubscription();
           if (response.success) {
             console.log({ response });
             setCheckBoxes(response.result);
@@ -84,11 +84,6 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
     }, []);
   }
 
-  // if (fields.client) {
-  //   let { id } = useParams();
-  //   // console.log(typeof id);
-
-  // }
 
   return (
     <>
@@ -125,6 +120,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
 }
 
 function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
+
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
@@ -412,7 +408,73 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
+
   return (
+    // <Form.Item
+    //   label={translate(field.label)}
+    //   name={field.name}
+    //   rules={[
+    //     {
+    //       required: field.required || false,
+    //       type: filedType[field.type] ?? 'any',
+    //       validator:
+    //         field.type === 'phone'
+    //           ? (rule, value, callback) => {
+    //             if (!value) {
+    //               callback(); // Allow empty values if not required
+    //               return;
+    //             }
+    //             const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
+    //             if (!pattern.test(value)) {
+    //               callback('Please enter a valid 10-digit mobile number ');
+    //             } else {
+    //               callback(); // Success
+    //             }
+    //           }
+    //           : undefined,
+
+
+    //     },
+    //   ]}
+    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
+    // >
+    //   {renderComponent}
+    // </Form.Item>
+
+
+
+    // <Form.Item
+    //   label={translate(field.label)}
+    //   name={field.name}
+    //   rules={[
+    //     {
+    //       required: field.required || false,
+    //       type: filedType[field.type] ?? 'any',
+    //       validator: field.type === 'phone' ? (rule, value) => {
+    //         if (!value) {
+    //           return Promise.resolve();
+    //         }
+    //         const pattern = /^[6-9]\d{9}$/;
+    //         if (!pattern.test(value)) {
+    //           return Promise.reject('Please enter a valid 10-digit mobile number');
+    //         }
+    //         return Promise.resolve();
+    //       } : undefined,
+    //     },
+
+    //     ...(field.name === 'name'
+    //       ? [
+
+    //         { min: 3, message: 'Name must be at least 3 characters' },
+    //         { max: 50, message: 'Name must be in 50 characters' },
+    //       ]
+    //       : []),
+    //   ]}
+    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
+    // >
+    //   {renderComponent}
+    // </Form.Item>
+
     <Form.Item
       label={translate(field.label)}
       name={field.name}
@@ -420,26 +482,32 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
-          validator:
-            field.type === 'phone'
-              ? (rule, value, callback) => {
-                if (!value) {
-                  callback(); // Allow empty values if not required
-                  return;
-                }
-                const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
-                if (!pattern.test(value)) {
-                  callback('Please enter a valid 10-digit mobile number ');
-                } else {
-                  callback(); // Success
-                }
-              }
-              : undefined,
+          validator: field.type === 'phone' ? (rule, value) => {
+            if (!value) {
+              return Promise.resolve();
+            }
+            const pattern = /^[6-9]\d{9}$/;
+            if (!pattern.test(value)) {
+              return Promise.reject('Please enter a valid 10-digit mobile number.');
+            }
+            return Promise.resolve();
+          } : field.name === 'package_divider' ? (rule, value) => {
+            if (isNaN(value)) { // Check if value is not a number
+              return Promise.reject('Only numeric value is accepted.');
+            }
+            return Promise.resolve();
+          } : undefined,
         },
+        ...(field.name === 'name'
+          ? [
+            // { required: true, message: 'Name is required' },
+            { min: 3, message: 'Name must be at least 3 characters.' },
+            { max: 50, message: 'Name must be in 50 characters.' },
+          ]
+          : []),
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-    >
-      {renderComponent}
-    </Form.Item>
+    > {renderComponent}</Form.Item>
+
   );
 }

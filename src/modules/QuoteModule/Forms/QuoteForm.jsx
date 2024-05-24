@@ -70,29 +70,29 @@ const tax = {
   taxValue: 10, // Example tax value
 };
 function LoadQuoteForm({ subTotal = 0, current = null }) {
-  const translate = useLanguage();
-  const { dateFormat } = useDate();
-  const { last_quote_number } = useSelector(selectFinanceSettings);
-  const [lastNumber, setLastNumber] = useState(() => last_quote_number + 1);
-  const [total, setTotal] = useState(0);
-  const [taxRate, setTaxRate] = useState(0);
-  const [taxTotal, setTaxTotal] = useState(0);
-  const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
-  const [active, IsActive] = useState(1);
-  const [activeness, IsActiveness] = useState(1);
-  const [activeSelect, IsActiveSelect] = useState(1);
+  const translate = useLanguage()
+  const { dateFormat } = useDate()
+  const { last_quote_number } = useSelector(selectFinanceSettings)
+  const [lastNumber, setLastNumber] = useState(() => last_quote_number + 1)
+  const [total, setTotal] = useState(0)
+  const [taxRate, setTaxRate] = useState(0)
+  const [taxTotal, setTaxTotal] = useState(0)
+  const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear())
+  const [active, IsActive] = useState(1)
+  const [activeness, IsActiveness] = useState(1)
+  const [activeSelect, IsActiveSelect] = useState(1)
   console.log(activeSelect)
 
   const handelTaxChange = (value) => {
-    setTaxRate(value / 100);
-  };
-  const { TextArea } = Input;
-  const money = useMoney();
-  const [options, setOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
-  const [serviceCategory, setserviceCategory] = useState([]);
-  const [serviceCategoryNam, setserviceCategoryNam] = useState();
+    setTaxRate(value / 100)
+  }
+  const { TextArea } = Input
+  const money = useMoney()
+  const [options, setOptions] = useState([])
+  const [selectedOption, setSelectedOption] = useState(null)
+  const [secondDropdownOptions, setSecondDropdownOptions] = useState([])
+  const [serviceCategory, setserviceCategory] = useState([])
+  const [serviceCategoryNam, setserviceCategoryNam] = useState()
 
   const [SalesPerson, setSalesPerson] = useState()
   const [WorkLead, setWorkLead] = useState()
@@ -101,9 +101,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // console.log(CheckedId)
   const [customerAddress, setCustomerAddress] = useState([])
 
-  const [subscriptionData, setSubscriptionData] = useState({});
-  const [accordionData, setAccordionData] = useState([]);
-  const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
+  const [subscriptionData, setSubscriptionData] = useState({})
+  const [accordionData, setAccordionData] = useState([])
+  const [serviceCategoryOptions, setserviceCategoryOptions] = useState([])
   const [selectedSalesPerson, setSelectedSalesPerson] = useState()
 
 
@@ -117,7 +117,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     } catch (error) {
       console.error('Error fetching accordion data:', error);
     }
-  };
+  }
 
   useEffect(() => {
     if (current) {
@@ -126,14 +126,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       setCurrentYear(year);
       setLastNumber(number);
     }
-  }, [current]);
+  }, [current])
   useEffect(() => {
     const currentTotal = calculate.add(calculate.multiply(subTotal, taxRate), subTotal);
     setTaxTotal(Number.parseFloat(calculate.multiply(subTotal, taxRate)));
     setTotal(Number.parseFloat(currentTotal));
-  }, [subTotal, taxRate]);
+  }, [subTotal, taxRate])
 
-  const addField = useRef("");
+  const addField = useRef("")
 
   useEffect(() => {
     // Check if addField.current is not null before clicking
@@ -141,7 +141,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       addField.current.click();
     }
 
-  }, []); // This effect runs only once when the component mounts
+  }, []) // This effect runs only once when the component mounts
 
   // console.log({ serviceOptions });
 
@@ -170,9 +170,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
   }
 
-  const [selectedValue, setSelectedValue] = useState('');
-  const [serviceOptions, setServiceOptions] = useState(null);
-  const [ShowServiceList, setShowServiceList] = useState(null);
+  const [selectedValue, setSelectedValue] = useState('')
+  const [serviceOptions, setServiceOptions] = useState(null)
+  const [ShowServiceList, setShowServiceList] = useState(null)
   const [subscriptionOneTime, setSubcriptionOneTime] = useState()
   const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [subItemCount, setSubItemCount] = useState(0);
@@ -225,7 +225,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     fetchData2();
     fetchData3();
-  };
+  }
 
   const handleFirstDropdownChange = async (event) => {
     console.log("event", event);
@@ -243,7 +243,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching data:', error);
     }
 
-  };
+  }
 
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
@@ -264,12 +264,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
-  const [accordionActiveKey, setAccordionActiveKey] = useState([]);
+  }
+  const [accordionActiveKey, setAccordionActiveKey] = useState([])
   const handleChange = (key) => {
     setAccordionActiveKey(key);
-  };
-  // const translate = useLanguage();
+  }
+  // const translate = useLanguage()
   const [totalState, setTotal2] = useState(undefined);
   const [price, setPrice] = useState();
   const [name, setName] = useState('');
@@ -285,8 +285,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
   const updateName = (value) => {
     setName(value);
-  };
-  const [form] = useForm();
+  }
+  const [form] = useForm()
 
   useEffect(() => {
     if (current) {
@@ -306,7 +306,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       }
     }
-  }, [current]);
+  }, [current])
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
@@ -343,7 +343,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     fetchData1()
-  }, []);
+  }, [])
 
   useEffect(() => {
     const fetchData3 = async () => {
@@ -358,7 +358,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     fetchData3()
-  }, []);
+  }, [])
   useEffect(() => {
     const hendleOneTime = async () => {
       try {
@@ -387,7 +387,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching data:', error);
     }
 
-  };
+  }
 
   const [salesContactNumber, setSalesContactNumber] = useState();
   useEffect(() => {
@@ -400,7 +400,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // console.log({ number, salesContactNumber });
     }
   }, [selectedSalesPerson, salesContactNumber])
-  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
+  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null })
   useEffect(() => { }, [selectedSalesPerson])
   const ContactHandler = ({ salesContactNumber }) => {
     return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
@@ -420,7 +420,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     )
   }
 
-  const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
+  const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers)
 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
@@ -433,7 +433,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       });
     });
     return subscriptionNames;
-  };
+  }
 
   const generateColumns = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
@@ -597,6 +597,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     });
     return tableData;
   };
+
   // const DiscountValueHandler = (value) => {
   //   setdiscount(value); // Correctly set the discount value
   // };
@@ -703,6 +704,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
     console.log({ subTotal });
   }
+  
 const handleSelectChange = (value) => {
     // setadjustment(null);
     // setdiscount(null);
@@ -1002,7 +1004,7 @@ const handleSelectChange = (value) => {
                 required: true,
               },
             ]}
-            
+
           >
             <Select
               style={{
@@ -1536,7 +1538,7 @@ const handleSelectChange = (value) => {
         <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
           {translate('Selected Quotation Billing Details')}
         </Col>
-        <table style={{  width: "100%", height: "220px", marginTop: "3%" }}>
+        <table style={{ width: "100%", height: "220px", marginTop: "3%" }}>
           <tbody >
             <tr >
               <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
@@ -1592,5 +1594,5 @@ const handleSelectChange = (value) => {
 
       </div>
     </>
-  );
+  )
 }
