@@ -214,7 +214,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 title={` #${currentErp?.code}`}
                 ghost={false}
                 // tags={[
-                //   <Tag color={tagColor(currentErp.status)?.color} key="status">
+                //   <Tag color={tagColor(currentErp.)?.color} key="status">
                 //     {currentErp.status && translate(currentErp.status)}
                 //   </Tag>,
                 //   currentErp.paymentStatus && (
@@ -407,7 +407,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                     </Col>
                                 </Row>
 
-                              
+
                             </Col>
                         </Row>
                     </div>
@@ -552,7 +552,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 </Col>
             </Row>
 
-{/* ............................ */}
+            {/* ............................ */}
             <h3 style={{ marginTop: "4%" }}>Other detail</h3>
             <Row className="gutter-row">
                 <Col span={24}>
