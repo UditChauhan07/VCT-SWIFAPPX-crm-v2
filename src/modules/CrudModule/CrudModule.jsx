@@ -30,14 +30,19 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   // console.log({ entity });
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
+  console.log(crudContextAction)
   const { deleteModalLabels } = config;
   const { modal, editBox } = crudContextAction;
+  // console.log(modal)
 
   const { isReadBoxOpen, isEditBoxOpen } = state;
+  // console.log(isReadBoxOpen)
   const { result: currentItem } = useSelector(selectCurrentItem);
+
   const dispatch = useDispatch();
 
   const [labels, setLabels] = useState('');
+  // console.log(labels)
   useEffect(() => {
     if (currentItem) {
       const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');

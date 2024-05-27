@@ -14,8 +14,8 @@ export const fields = {
   description: {
     type: 'textarea',
   },
-  enabled: {
-    type: 'boolean',
-    label:'status'
-  },
+  // enabled: {
+  //   type: 'boolean',
+  //   label:'status'
+  // },
 };

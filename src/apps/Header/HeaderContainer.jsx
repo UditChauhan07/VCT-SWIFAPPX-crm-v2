@@ -109,6 +109,7 @@ export default function HeaderContent() {
         flexDirection: ' row-reverse',
         justifyContent: ' flex-start',
         gap: ' 15px',
+      //  width:"100%",
       }}
     >
       <Dropdown
