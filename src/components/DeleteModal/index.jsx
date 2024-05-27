@@ -49,6 +49,7 @@ export default function DeleteModal({ config }) {
     panel.close();
     navMenu.collapse();
     dispatch(crud.list({ entity }));
+    dispatch(crud.resetAction({ actionType: "delete" }))
   };
   const handleCancel = () => {
     if (!isLoading) modal.close();

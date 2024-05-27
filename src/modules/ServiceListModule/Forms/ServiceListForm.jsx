@@ -219,7 +219,7 @@ export default function ServiceListForm() {
       <Row gutter={[12, 12]}>
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Status')} name="enabled" valuePropName={'checked'}>
-            <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />
+            <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} defaultValue={true} />
           </Form.Item>
         </Col>
       </Row>

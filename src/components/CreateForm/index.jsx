@@ -40,7 +40,7 @@ export default function CreateForm({ config, formElements, withUpload = false  }
     } else {
       dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload }));
     }
-        
+    
     // dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload   }));
   };
 
