@@ -125,6 +125,7 @@ const Loogout = async () =>{
         flexDirection: ' row-reverse',
         justifyContent: ' flex-start',
         gap: ' 15px',
+      //  width:"100%",
       }}
     >
       <Dropdown

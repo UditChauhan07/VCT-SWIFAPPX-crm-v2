@@ -178,7 +178,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         {field.options?.map((option) => {
           return (
             <Select.Option key={`${uniqueId()}`} value={option.value}>
-              <Tag bordered={false} color={option.color}>
+              <Tag bordered={false} Color={option.color}>
                 {translate(option.label)}
               </Tag>
             </Select.Option>
