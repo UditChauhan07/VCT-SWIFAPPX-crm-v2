@@ -35,7 +35,7 @@
 
 .permissions_checkboxes {
   display: flex;
-  /* justify-content: space-between; */
+
   height: 100%;
   flex-wrap: wrap;
 }
@@ -44,7 +44,7 @@
 
 }
 .bold_text {
-  /* font-weight: 900; */
+
   font-size: larger;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .ant-collapse-item .ant-collapse-header {
-  padding-right: 24px; /* Adjust padding for the plus icon */
+  padding-right: 24px; 
 }
 
 .ant-collapse-item .ant-collapse-header .anticon {

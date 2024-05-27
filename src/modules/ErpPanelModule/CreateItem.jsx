@@ -56,7 +56,6 @@ export default function CreateItem({ config, CreateForm }) {
     let subOfferTotal = 0;
 
     if (item) {
-      // items.map((item) => {
       if (item) {
         if (item.offerPrice && item.quantity) {
           let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
@@ -64,7 +63,6 @@ export default function CreateItem({ config, CreateForm }) {
         }
         if (item.quantity && item.price) {
           let total = calculate.multiply(item['quantity'], item['price']);
-          //sub total
           subTotal = calculate.add(subTotal, total);
         }
       }
@@ -143,13 +141,11 @@ export default function CreateItem({ config, CreateForm }) {
         for (let i = 0; i < 50; i++) {
           lengthOfNameProperty = lengthOfNameProperty + Object.keys(fieldsValue).filter((ele) => ele === `name${i}`).length
         }
-        // for (let i = 0; i < Object.keys(fieldsValue).length - 4; i++) {
-
+       
         for (let i = 0; i < Object.keys(fieldsValue).length - 4 - lengthOfNameProperty; i++) {
           let option = fieldsValue[i];
           console.log("option", option);
           let subscriptions = {
-            // Type: option.type,
             subscription: option?.type,
             data: []
           };
@@ -240,8 +236,6 @@ export default function CreateItem({ config, CreateForm }) {
 
         fieldsValue = Data
       }
-      console.log({ fieldsValue });
-
       if (entity === "contract") {
         console.log(fieldsValue)
         const Leader = {
@@ -279,10 +273,7 @@ export default function CreateItem({ config, CreateForm }) {
           additionalCost = JSON.parse(additionalCostStr)
         }
         let grandTotal = localStorage.getItem("jv1GYkk6plxCpgxxpp") || 0
-        // let submodule = localStorage.getItem('WO-RadioId')
-
-
-
+    
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -331,7 +322,7 @@ export default function CreateItem({ config, CreateForm }) {
           }
         } catch (error) {
           console.error('Error parsing serviceCostStr:', error);
-          serviceCost = {}; // Default to empty object if parsing fails
+          serviceCost = {}; 
         }
 
         try {
@@ -340,31 +331,15 @@ export default function CreateItem({ config, CreateForm }) {
           }
         } catch (error) {
           console.error('Error parsing additionalCostStr:', error);
-          additionalCost = {}; // Default to empty object if parsing fails
+          additionalCost = {}; 
         }
 
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
-        // let additionalCost = {}
-        // let serviceCost = {}
-        // let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
-        // let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
-        // if (serviceCostStr) {
-        //   serviceCost = JSON.parse(serviceCostStr)
-        // }
-        // if (additionalCostStr) {
-        //   additionalCost = JSON.parse(additionalCostStr)
-        // }
-        // let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
-        // let submodule = localStorage.getItem('WO-RadioId')
-
-        // Ensure discount is properly parsed and defaulted
-        // let discountValueParsed = parseFloat(fieldsValue.discount);
-        // if (isNaN(discountValueParsed)) {
-        //   discountValueParsed = 0;
-        // }
-        const isCustom = fieldsValue.serviceName === 'custom'; // Determine if custom service is selected
+       
+     
+        const isCustom = fieldsValue.serviceName === 'custom'; 
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -378,7 +353,7 @@ export default function CreateItem({ config, CreateForm }) {
           salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceName,
-          subscriptions: storedSubscriptions, // Use the subscriptions array here
+          subscriptions: storedSubscriptions, 
           isCustom: isCustom,
           customService: {
             name: fieldsValue.ServiceName,
@@ -388,7 +363,6 @@ export default function CreateItem({ config, CreateForm }) {
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
-          serviceCost,
           additionalCost,
           grandTotal,
 
@@ -397,16 +371,11 @@ export default function CreateItem({ config, CreateForm }) {
             value: fieldsValue.AdjustmentValue,
           },
           InitialRemarks: fieldsValue.InitialRemarks,
-          // discount: discountValueParsed,
         };
 
         console.log(fieldData);
         fieldsValue = fieldData;
       }
-
-
-
-      // console.log(fieldsValue)
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     };
   }
@@ -419,8 +388,6 @@ export default function CreateItem({ config, CreateForm }) {
         }}
         title={translate('New')}
         ghost={false}
-        // tags={entity != 'roles' ? <Tag>{translate('Draft')}</Tag> : ''}
-        // subTitle="This is create page"
         extra={[
           <Button
             key={`${uniqueId()}`}

@@ -280,7 +280,6 @@ export default function ReadItem({ config, selectedItem }) {
               dispatch(erp.convert({ entity, id: currentErp._id }));
             }}
             icon={<RetweetOutlined />}
-          // style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
           >
             {translate('Convert to Invoice')}
           </Button>,
@@ -426,28 +425,7 @@ export default function ReadItem({ config, selectedItem }) {
                   </Col>
                 </Row>
 
-                {/* <Row className="gutter-row">
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Work Leader')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Test Leader')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
-                {/* <Row className="gutter-row" >
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workers')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Alfreda Byers,Carly Alvarez')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
+             
               </Col>
             </Row>
           </div>
