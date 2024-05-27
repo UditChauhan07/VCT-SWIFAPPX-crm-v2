@@ -33,7 +33,7 @@ export default function Customer() {
 
   return (
     <CrudModule
-      createForm={<DynamicForm fields={fields} />}
+      createForm={<DynamicForm fields={fields} entity={entity} />}
       updateForm={<DynamicForm fields={fields} />}
       config={config}
     />

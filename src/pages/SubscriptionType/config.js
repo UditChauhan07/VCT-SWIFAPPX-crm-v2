@@ -30,6 +30,7 @@ export const fields = {
     disableForTable: false,
     // disableForForm: false,
     label: 'Status',
+  
   },
 };
 

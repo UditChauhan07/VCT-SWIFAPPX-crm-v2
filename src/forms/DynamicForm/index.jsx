@@ -26,9 +26,9 @@ import { useParams } from 'react-router-dom';
 
 
 
-export default function DynamicForm({ fields, isUpdateForm = false }) {
+export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
-
+      console.log(fields)
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
@@ -111,7 +111,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
           } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
-            return <FormElement key={key} field={field} />;
+            return <FormElement key={key} field={field}  entity={entity}/>;
           }
         }
       })}
@@ -119,8 +119,8 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   );
 }
 
-function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
-
+function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }) {
+  console.log(field)
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
@@ -143,7 +143,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
     number: <InputNumber style={{ width: '100%' }} />,
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
     password: <Input.Password autoComplete="new-password" />,
-    boolean: <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
+    boolean: <Switch defaultValue={true} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
     // getclientId : <Input defaultValue={id} />,   
     date: (
       <DatePicker
@@ -408,6 +408,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
+  // console.log(renderComponent)
 
   return (
     // <Form.Item
@@ -443,37 +444,6 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
 
 
 
-    // <Form.Item
-    //   label={translate(field.label)}
-    //   name={field.name}
-    //   rules={[
-    //     {
-    //       required: field.required || false,
-    //       type: filedType[field.type] ?? 'any',
-    //       validator: field.type === 'phone' ? (rule, value) => {
-    //         if (!value) {
-    //           return Promise.resolve();
-    //         }
-    //         const pattern = /^[6-9]\d{9}$/;
-    //         if (!pattern.test(value)) {
-    //           return Promise.reject('Please enter a valid 10-digit mobile number');
-    //         }
-    //         return Promise.resolve();
-    //       } : undefined,
-    //     },
-
-    //     ...(field.name === 'name'
-    //       ? [
-
-    //         { min: 3, message: 'Name must be at least 3 characters' },
-    //         { max: 50, message: 'Name must be in 50 characters' },
-    //       ]
-    //       : []),
-    //   ]}
-    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-    // >
-    //   {renderComponent}
-    // </Form.Item>
 
     <Form.Item
       label={translate(field.label)}
@@ -498,16 +468,27 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
             return Promise.resolve();
           } : undefined,
         },
-        ...(field.name === 'name'
-          ? [
+        // ...(field.name === 'name' || 'firstname'   ? [  
+        //     // { required: true, message: 'Name is required' },
+        //     { min: 3, message: 'Name must be at least 3 characters.' },
+        //     { max: 30, message: 'Name must be in 30 characters.' },
+        //   ]
+        //   : []),
+
+        ...(field.name === 'name' || field.name === 'firstname' ? (
+          entity === 'people' || 'subscriptiontype' ? [
             // { required: true, message: 'Name is required' },
             { min: 3, message: 'Name must be at least 3 characters.' },
-            { max: 50, message: 'Name must be in 50 characters.' },
-          ]
-          : []),
+            { max: 30, message: 'Name must be in 30 characters.' },
+          ] : []
+        ) : []),
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-    > {renderComponent}</Form.Item>
+    > 
+    {renderComponent}
+    </Form.Item>
+
+
 
   );
 }

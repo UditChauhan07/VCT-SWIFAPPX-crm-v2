@@ -459,14 +459,12 @@ export default function QuoteReadPage({ config, selectedItem }) {
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
                                     {currentErp.adjustment.value} <br></br>
-
                                 </p> </Col>
 
 
                             <Col className="gutter-row" span={12} >
                                 <p style={{ fontSize: "15px" }}>{translate(`Discount`)} :
                                     <br></br>
-
                                 </p>
 
                             </Col>
