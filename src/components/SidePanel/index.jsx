@@ -9,6 +9,7 @@ const { useBreakpoint } = Grid;
 const { Sider } = Layout;
 
 export default function SidePanel({ config, topContent, bottomContent, fixHeaderPanel }) {
+
   const screens = useBreakpoint();
 
   const { ADD_NEW_ENTITY } = config;

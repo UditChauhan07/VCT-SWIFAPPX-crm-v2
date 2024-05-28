@@ -420,7 +420,7 @@ const request = {
     }
   },
   getServiceListShow: async ({ id }) => {
-    console.log(id)
+    console.log(id);
     try {
       const response = await axios.get(`/servicelist/service/${id}`);
       return response.data;
@@ -457,6 +457,14 @@ const request = {
   getTax: async () => {
     try {
       const response = await axios.get('/taxes/show');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  Loogout: async () => {
+    try {
+      const response = await axios.post('/logout');
       return response.data;
     } catch (error) {
       return errorHandler(error);

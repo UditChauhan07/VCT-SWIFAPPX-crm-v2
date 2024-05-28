@@ -6,7 +6,7 @@ export const fields = {
   },
   lastname: {
     type: 'string',
-    required: true,
+    // required: true,
     label: 'Last Name',
   },
   company: {
@@ -22,74 +22,11 @@ export const fields = {
   },
   phone: {
     type: 'phone',
-    required: true,
+    // required: true,
   },
   email: {
     type: 'email',
-    required: true,
+    // required: true,
   },
-  // bio: {
-  //   type: 'string',
-  // },
-  // idCardNumber: {
-  //   type: 'string',
-  // },
-  // idCardType: {
-  //   type: 'string',
-  // },
-  // securitySocialNbr: {
-  //   type: 'string',
-  // },
-  // taxNumber: {
-  //   type: 'string',
-  // },
-  // birthday: {
-  //   type: 'date',
-  // },
-  // birthplace: {
-  //   type: 'string',
-  // },
-  // gender: {
-  //   type: 'select',
-  //   options: [
-  //     {
-  //       value: 'male',
-  //       label: 'Male',
-  //     },
-  //     {
-  //       value: 'female',
-  //       label: 'Female',
-  //     },
-  //   ],
-  // },
-  // bankName: {
-  //   type: 'string',
-  // },
-  // bankIban: {
-  //   type: 'string',
-  // },
-  // bankSwift: {
-  //   type: 'string',
-  // },
-  // bankNumber: {
-  //   type: 'string',
-  // },
-  // bankRouting: {
-  //   type: 'string',
-  // },
-  // address: {
-  //   type: 'string',
-  // },
-  // city: {
-  //   type: 'string',
-  // },
-  // State: {
-  //   type: 'string',
-  // },
-  // postalCode: {
-  //   type: 'number',
-  // },
-  // website: {
-  //   type: 'string',
-  // },
+
 };

@@ -258,7 +258,7 @@ export default function ReadContract({ config, selectedItem }) {
                             dispatch(erp.convert({ entity, id: currentErp._id }));
                         }}
                         icon={<RetweetOutlined />}
-                    // style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
+                   
                     >
                         {translate('Convert to Invoice')}
                     </Button>,

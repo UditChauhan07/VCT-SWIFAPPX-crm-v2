@@ -25,6 +25,10 @@ export const fields = {
   enabled: {
     type: 'boolean',
     disableForTable: false,
-    label: 'Active',
+
+    // disableForForm: false,
+    label: 'Status',
+  
+
   },
 };
