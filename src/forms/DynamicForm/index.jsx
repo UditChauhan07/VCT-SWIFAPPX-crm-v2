@@ -28,7 +28,7 @@ import { useParams } from 'react-router-dom';
 
 export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
-      console.log(fields)
+      // console.log(fields)
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
