@@ -51,7 +51,7 @@ export const readColumns = {
   },
   // enabled: {
   //   type: 'boolean',
-  //   // disableForForm: false,
+  //   disableForForm: false,
   //   label: 'status',
   // },
 };

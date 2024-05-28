@@ -27,13 +27,17 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const entity = config.entity
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
+  console.log(crudContextAction)
   const { deleteModalLabels } = config;
   const { modal, editBox } = crudContextAction;
   const { isReadBoxOpen, isEditBoxOpen } = state;
+  // console.log(isReadBoxOpen)
   const { result: currentItem } = useSelector(selectCurrentItem);
+
   const dispatch = useDispatch();
 
   const [labels, setLabels] = useState('');
+  // console.log(labels)
   useEffect(() => {
     if (currentItem) {
       const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');
@@ -130,7 +134,7 @@ function FixHeaderPanel({ config }) {
       </Col>
       <Col className="gutter-row" span={3}>
         {(permissions?.[entity + '_create'] || isSAAS == true) ?
-          <Button onClick={addNewItem} block={true} icon={<PlusOutlined/>}></Button>
+          <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
           : ""}
       </Col>
     </Row>

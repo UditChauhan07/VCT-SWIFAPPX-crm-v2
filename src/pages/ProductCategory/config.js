@@ -14,7 +14,7 @@ export const fields = {
     options: [...color],
     required: true,
   },
-  enabled: {
+  status: {
     type: 'boolean',
     label: 'Status',
   },

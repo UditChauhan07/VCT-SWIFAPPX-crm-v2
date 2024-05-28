@@ -114,6 +114,7 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const onSubmit = (fieldsValue) => {
+    console.log(fieldsValue)
     const storedId = localStorage.getItem('SubscriptionId');
     const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
     console.log({ fieldsValue });

@@ -2,9 +2,11 @@ import { Tag, Switch } from 'antd';
 import { tagColor } from '@/utils/statusTagColor';
 import ServiceListDataTableModule from '@/modules/ServiceListModule/ServiceListDataTableModule';
 import useLanguage from '@/locale/useLanguage';
+import { useEffect, useState } from 'react';
 
 
 export default function Customer() {
+  
   const translate = useLanguage();
   const entity = 'servicelist';
   const searchConfig = {
@@ -12,6 +14,8 @@ export default function Customer() {
     searchFields: 'name',
   };
   const deleteModalLabels = ['name'];
+
+
   
   const dataTableColumns = [
     {
@@ -35,6 +39,7 @@ export default function Customer() {
       dataIndex: ['description'],
       
     },
+    
     {
       title: translate('Status'),
       dataIndex: 'enabled',
