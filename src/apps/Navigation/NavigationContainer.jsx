@@ -73,7 +73,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     },
     {
       key: 'services',
-      icon: <BarsOutlined />,
+      icon: <BarsOutlined  />,
       label: translate('services'),
       children: [
         {

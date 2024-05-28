@@ -90,7 +90,7 @@ const Loogout = async () =>{
       type: 'divider',
     },
     {
-      icon: <SettingOutlined />,
+      icon: <SettingOutlined  style={{ width: "23px" }}/>,
       key: 'settingProfile',
       label: (
         <Link to={'/profile'}>
@@ -134,7 +134,7 @@ const Loogout = async () =>{
         }}
         trigger={['click']}
         placement="bottomRight"
-        stye={{ width: '280px', float: 'right' }}
+        stye={{ width: '280px', float: 'right'  }}
       >
         {/* <Badge dot> */}
         <Avatar

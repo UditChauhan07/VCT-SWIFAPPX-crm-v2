@@ -10,7 +10,7 @@ export const fields = {
     required: true,
   },
   color: {
-    type: 'color',
+    type: 'Color',
     options: [...color],
     required: true,
   },

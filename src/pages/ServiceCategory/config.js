@@ -6,7 +6,7 @@ export const fields = {
   },
   description: {
     type: 'textarea',
-    disableForForm: false,
+   disableForTable: true,
   },
   subscription_type: {
     type: 'checkoxesCustom',
@@ -17,7 +17,7 @@ export const fields = {
   },
   enabled: {
     type: 'boolean',
-    disableForForm: false,
+    // disableForForm: false,
     label: 'status',
   },
 };
