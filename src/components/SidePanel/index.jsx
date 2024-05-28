@@ -9,7 +9,6 @@ const { useBreakpoint } = Grid;
 const { Sider } = Layout;
 
 export default function SidePanel({ config, topContent, bottomContent, fixHeaderPanel }) {
-  console.log(fixHeaderPanel)
 
   const screens = useBreakpoint();
 
@@ -53,7 +52,7 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
   };
 
   const collapsePanelBox = () => {
-    collapsedBox.close();
+    collapsedBox.collapse();
   };
 
   return (

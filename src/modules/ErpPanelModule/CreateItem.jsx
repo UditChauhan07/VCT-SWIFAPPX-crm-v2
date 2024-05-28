@@ -338,9 +338,11 @@ export default function CreateItem({ config, CreateForm }) {
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
+
        
      
         const isCustom = fieldsValue.serviceName === 'custom'; 
+
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -364,6 +366,9 @@ export default function CreateItem({ config, CreateForm }) {
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
+
+          serviceCost,
+
           additionalCost,
           grandTotal,
 
@@ -374,7 +379,7 @@ export default function CreateItem({ config, CreateForm }) {
           InitialRemarks: fieldsValue.InitialRemarks,
         };
 
-        console.log( fieldData );
+        console.log(fieldData);
         fieldsValue = fieldData;
       }
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
