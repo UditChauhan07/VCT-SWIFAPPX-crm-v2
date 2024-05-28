@@ -73,7 +73,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     },
     {
       key: 'services',
-      icon: <BarsOutlined />,
+      icon: <BarsOutlined  />,
       label: translate('services'),
       children: [
         {
@@ -280,8 +280,11 @@ function Sidebar({ collapsible, isMobile = false }) {
         theme={'light'}
         selectedKeys={[currentPath]}
         style={{
-          background: 'none',
-          border: 'none',
+          background: "none",
+          border: "none",
+           maxWidth: "200px",
+          minWidth: "203px",
+          width: "200px"
         }}
       />
     </Sider>
