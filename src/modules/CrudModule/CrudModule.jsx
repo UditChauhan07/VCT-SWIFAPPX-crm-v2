@@ -8,9 +8,7 @@ import DeleteModal from '@/components/DeleteModal';
 import ReadItem from '@/components/ReadItem';
 import SearchItem from '@/components/SearchItem';
 import DataTable from '@/components/DataTable/DataTable';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { selectCurrentItem } from '@/redux/crud/selectors';
 import useLanguage from '@/locale/useLanguage';
 import { crud } from '@/redux/crud/actions';
@@ -27,21 +25,22 @@ var isSAAS
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
   const entity = config.entity
-  // console.log({ entity });
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
+  console.log(crudContextAction)
   const { deleteModalLabels } = config;
   const { modal, editBox } = crudContextAction;
-
   const { isReadBoxOpen, isEditBoxOpen } = state;
+  // console.log(isReadBoxOpen)
   const { result: currentItem } = useSelector(selectCurrentItem);
+
   const dispatch = useDispatch();
 
   const [labels, setLabels] = useState('');
+  // console.log(labels)
   useEffect(() => {
     if (currentItem) {
       const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');
-
       setLabels(currentlabels);
     }
   }, [currentItem]);
@@ -116,12 +115,9 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
 
 function FixHeaderPanel({ config }) {
   const entity = config.entity
-
   role = user?.role_id
   permissions = role?.permissions
   isSAAS = role?.is_saas
-  // console.log({ adminLevel, permissions });
-
   const { crudContextAction } = useCrudContext();
   const { collapsedBox } = crudContextAction;
 
@@ -163,9 +159,7 @@ function CrudModule({ config, createForm, updateForm, withUpload = false }) {
       }
     >
       <DataTable config={config} />
-
       <DeleteModal config={config} />
-     
     </CrudLayout>
   );
 }

@@ -157,6 +157,16 @@ export default function DataTable({ config, extra = [] }) {
     console.log(record);
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));
     modal.open();
+    useEffect(() => {
+      if (isSuccess) {
+        modal.close();
+        dispatch(crud.list({ entity }));
+        // dispatch(crud.resetAction({actionType:"delete"})); // check here maybe it wrong
+      }
+   
+    }, [isSuccess]);
+    // dispatch(crud.resetAction({ actionType: 'delete' }));
+    // dispatch(crud.list({ entity }));
   }
 
   function handleAddresses(record) {
@@ -229,7 +239,7 @@ export default function DataTable({ config, extra = [] }) {
   ];
 
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
-
+        
   const { pagination, items: dataSource } = listResult;
 
   const dispatch = useDispatch();

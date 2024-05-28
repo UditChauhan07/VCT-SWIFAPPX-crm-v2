@@ -49,9 +49,9 @@ export const readColumns = {
     type: 'textarea',
     disableForForm: false,
   },
-  enabled: {
-    type: 'boolean',
-    disableForForm: false,
-    label: 'status',
-  },
+  // enabled: {
+  //   type: 'boolean',
+  //   disableForForm: false,
+  //   label: 'status',
+  // },
 };

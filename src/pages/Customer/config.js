@@ -108,9 +108,9 @@ export const readColumns = {
     hasRoles: true,
     disableForTable: true,
   },
-  enabled: {
-    type: 'boolean',
-    required: true,
-    disableForTable: true,
-  },
+  // enabled: {
+  //   type: 'boolean',
+  //   required: true,
+  //   disableForTable: true,
+  // },
 };

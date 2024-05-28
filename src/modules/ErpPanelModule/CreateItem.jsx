@@ -114,6 +114,7 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const onSubmit = (fieldsValue) => {
+    console.log(fieldsValue)
     const storedId = localStorage.getItem('SubscriptionId');
     const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
     console.log({ fieldsValue });
@@ -337,9 +338,11 @@ export default function CreateItem({ config, CreateForm }) {
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
+
        
      
         const isCustom = fieldsValue.serviceName === 'custom'; 
+
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -363,6 +366,9 @@ export default function CreateItem({ config, CreateForm }) {
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
+
+          serviceCost,
+
           additionalCost,
           grandTotal,
 
