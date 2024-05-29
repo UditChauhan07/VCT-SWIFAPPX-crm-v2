@@ -12,7 +12,7 @@ export default function Company() {
     searchFields: 'name',
   };
   const deleteModalLabels = ['name'];
-
+   
   const Labels = {
     PANEL_TITLE: translate('company'),
     DATATABLE_TITLE: translate('company_list'),
@@ -29,6 +29,7 @@ export default function Company() {
     searchConfig,
     deleteModalLabels,
   };
+
   return (
     <CrudModule
       createForm={<DynamicForm fields={fields} />}

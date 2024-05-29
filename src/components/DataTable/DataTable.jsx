@@ -16,7 +16,7 @@ import { selectListItems } from '@/redux/crud/selectors';
 import useLanguage from '@/locale/useLanguage';
 import { dataForTable } from '@/utils/dataStructure';
 import { useMoney, useDate } from '@/settings';
-
+import { selectDeletedItem } from '@/redux/crud/selectors';
 import { generate as uniqueId } from 'shortid';
 import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
@@ -59,9 +59,6 @@ function AddNewItem({ config }) {
 
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
- 
-
-
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
   const translate = useLanguage();
@@ -160,16 +157,15 @@ export default function DataTable({ config, extra = [] }) {
     console.log(record);
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));
     modal.open();
-    useEffect(() => {
-      if (isSuccess) {
-        modal.close();
-        dispatch(crud.list({ entity }));
-        // dispatch(crud.resetAction({actionType:"delete"})); // check here maybe it wrong
-      }
+    // useEffect(() => {
+    //   if (isSuccess) {
+    //     modal.close();
+    //     dispatch(crud.list({ entity }));
+    //     dispatch(crud.resetAction({actionType:"delete"})); // check here maybe it wrong
+    //   }
    
-    }, [isSuccess]);
-    // dispatch(crud.resetAction({ actionType: 'delete' }));
-    // dispatch(crud.list({ entity }));
+    // }, [isSuccess]);
+   
   }
 
   function handleAddresses(record) {
@@ -242,9 +238,10 @@ export default function DataTable({ config, extra = [] }) {
   ];
 
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
+  
         
   const { pagination, items: dataSource } = listResult;
-
+  console.log(dataSource)
   const dispatch = useDispatch();
 
   const handelDataTableLoad = useCallback((pagination) => {

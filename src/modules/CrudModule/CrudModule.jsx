@@ -1,7 +1,6 @@
 import { useLayoutEffect, useEffect, useState } from 'react';
 import { Row, Col, Button } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-
 import CreateForm from '@/components/CreateForm';
 import UpdateForm from '@/components/UpdateForm';
 import DeleteModal from '@/components/DeleteModal';
@@ -24,6 +23,7 @@ var permissions
 var isSAAS
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
+ 
   const entity = config.entity
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
@@ -31,13 +31,10 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const { deleteModalLabels } = config;
   const { modal, editBox } = crudContextAction;
   const { isReadBoxOpen, isEditBoxOpen } = state;
-  // console.log(isReadBoxOpen)
   const { result: currentItem } = useSelector(selectCurrentItem);
-
   const dispatch = useDispatch();
-
   const [labels, setLabels] = useState('');
-  // console.log(labels)
+
   useEffect(() => {
     if (currentItem) {
       const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');

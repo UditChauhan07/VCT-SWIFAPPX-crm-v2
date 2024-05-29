@@ -73,7 +73,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     },
     {
       key: 'services',
-      icon: <BarsOutlined  />,
+      icon: <BarsOutlined />,
       label: translate('services'),
       children: [
         {
@@ -285,8 +285,8 @@ function Sidebar({ collapsible, isMobile = false }) {
           border: "none",
      
       maxWidth: "200px",
-      minWidth: "204px",
-      width: "200px"
+      // minWidth: "204px",
+      width: "188px"
         }}
       />
     </Sider>

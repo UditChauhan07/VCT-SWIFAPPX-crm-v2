@@ -25,20 +25,16 @@ import { useCrudContext } from '@/context/crud';
 import { useParams } from 'react-router-dom';
 
 
-
 export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
-      // console.log(fields)
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
   const [checkedOption, setcheckedOption] = useState('');
-
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, readBox } = crudContextAction;
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
         const response = await request.getRoles();
@@ -49,13 +45,11 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, []);
 
   if (fields.subscription_type) {
     useEffect(() => {
-      // Fetch data from API
       const fetchData = async () => {
         try {
           const response = await request.getCategorySubscription();
@@ -111,7 +105,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
           } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
-            return <FormElement key={key} field={field}  entity={entity}/>;
+            return <FormElement key={key} field={field} entity={entity} />;
           }
         }
       })}
@@ -126,7 +120,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   const { dateFormat } = useDate();
 
   const { label, options } = field;
-  // let { id } = useParams();
+ 
 
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
@@ -445,6 +439,44 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
 
 
 
+
+    // <Form.Item
+    //   label={translate(field.label)}
+    //   name={field.name}
+    //   rules={[
+    //     {
+    //       required: field.required || false,
+    //       type: filedType[field.type] ?? 'any',
+    //       validator: field.type === 'phone' ? (rule, value) => {
+    //         if (!value) {
+    //           return Promise.resolve();
+    //         }
+    //         const pattern = /^[6-9]\d{9}$/;
+    //         if (!pattern.test(value)) {
+    //           return Promise.reject('Please enter a valid 10-digit mobile number.');
+    //         }
+    //         return Promise.resolve();
+    //       } : field.name === 'package_divider' ? (rule, value) => {
+    //         if (isNaN(value)) { 
+    //           return Promise.reject('Only numeric value is accepted.');
+    //         }
+    //         return Promise.resolve();
+    //       } : undefined,
+    //     },
+
+    //     ...(field.name === 'name' || field.name === 'firstname' ? (
+    //       entity === 'people' || 'subscriptiontype' ? [
+
+    //         { min: 3, message: 'Name must be at least 3 characters.' },
+    //         { max: 30, message: 'Name must be in 30 characters.' },
+    //       ] : []
+    //     ) : []),
+    //   ]}
+    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
+    // > 
+    // {renderComponent}
+    // </Form.Item>
+
     <Form.Item
       label={translate(field.label)}
       name={field.name}
@@ -452,43 +484,43 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
-          validator: field.type === 'phone' ? (rule, value) => {
+          validator: (rule, value) => {
             if (!value) {
               return Promise.resolve();
             }
-            const pattern = /^[6-9]\d{9}$/;
-            if (!pattern.test(value)) {
-              return Promise.reject('Please enter a valid 10-digit mobile number.');
-            }
-            return Promise.resolve();
-          } : field.name === 'package_divider' ? (rule, value) => {
-            if (isNaN(value)) { // Check if value is not a number
-              return Promise.reject('Only numeric value is accepted.');
-            }
-            return Promise.resolve();
-          } : undefined,
-        },
-        // ...(field.name === 'name' || 'firstname'   ? [  
-        //     // { required: true, message: 'Name is required' },
-        //     { min: 3, message: 'Name must be at least 3 characters.' },
-        //     { max: 30, message: 'Name must be in 30 characters.' },
-        //   ]
-        //   : []),
 
+            if (field.type === 'phone') {
+              const pattern = /^[6-9]\d{9}$/;
+              if (!pattern.test(value)) {
+
+                return Promise.reject('Please enter a valid 10-digit mobile number.');
+              }
+            } 
+            else if (field.name === 'package_divider') {
+              if (isNaN(value)) {
+                return Promise.reject('Only numeric value is accepted.');
+              }
+            } else if (field.name === 'website') {
+              const urlPattern = /^(https?:\/\/)?([\w\d\-]+\.){1,2}[a-zA-Z]{2,6}(\/[\w\d\-\.]*)*\/?$/;
+              if (!urlPattern.test(value)) {
+                return Promise.reject('Please enter a valid URL.');
+              }
+            }
+
+            return Promise.resolve();
+          }
+        },
         ...(field.name === 'name' || field.name === 'firstname' ? (
-          entity === 'people' || 'subscriptiontype' ? [
-            // { required: true, message: 'Name is required' },
+          (entity === 'people' || 'subscriptiontype' || 'publicholiday') ? [
             { min: 3, message: 'Name must be at least 3 characters.' },
             { max: 30, message: 'Name must be in 30 characters.' },
           ] : []
         ) : []),
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-    > 
-    {renderComponent}
+    >
+      {renderComponent}
     </Form.Item>
-
-
 
   );
 }

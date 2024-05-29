@@ -45,7 +45,7 @@ export default function CreateItem({ config, CreateForm }) {
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
 
-  console.log({ isLoading, isSuccess, result });
+
 
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
