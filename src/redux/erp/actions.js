@@ -2,6 +2,7 @@ import * as actionTypes from './types';
 import { request } from '@/request';
 
 export const erp = {
+
   resetState: () => (dispatch) => {
     dispatch({
       type: actionTypes.RESET_STATE,
@@ -74,7 +75,7 @@ export const erp = {
         keyState: 'create',
         payload: null,
       });
-       
+
       let data = await request.create({ entity, jsonData });
       if (data.success === true) {
         dispatch({
@@ -161,7 +162,7 @@ export const erp = {
         payload: null,
       });
 
-      console.log({jsonData});
+      console.log({ jsonData });
 
       let data = await request.update({ entity, id, jsonData });
 

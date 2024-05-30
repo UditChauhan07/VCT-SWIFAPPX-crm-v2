@@ -14,10 +14,10 @@ export default function People() {
   const deleteModalLabels = ['firstname', 'lastname'];
 
   const Labels = {
-    PANEL_TITLE: translate('person'),
+    PANEL_TITLE: translate('people'),
     DATATABLE_TITLE: translate('people_list'),
-    ADD_NEW_ENTITY: translate('add_new_person'),
-    ENTITY_NAME: translate('person'),
+    ADD_NEW_ENTITY: translate('add_new_people'),
+    ENTITY_NAME: translate('people'),
   };
   const configPage = {
     entity,
@@ -31,7 +31,7 @@ export default function People() {
   };
   return (
     <CrudModule
-      createForm={<DynamicForm fields={fields} />}
+      createForm={<DynamicForm fields={fields} entity={entity} />}
       updateForm={<DynamicForm fields={fields} />}
       config={config}
     />
