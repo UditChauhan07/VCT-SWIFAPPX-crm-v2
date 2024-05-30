@@ -15,6 +15,7 @@ export default function ReadItem({ config }) {
   console.log({ config })
   const { dateFormat } = useDate();
   let { readColumns, fields } = config;
+
   const translate = useLanguage();
   const { result: currentResult } = useSelector(selectCurrentItem);
   const { state } = useCrudContext();
@@ -38,6 +39,7 @@ export default function ReadItem({ config }) {
   const show = isReadBoxOpen ? { display: 'block', opacity: 1 } : { display: 'none', opacity: 0 };
 
   const itemsList = listState.map((item) => {
+    console.log({ listState })
     return (
       <Row key={item.propsKey} gutter={12}>
         <Col className="gutter-row" span={12}>
