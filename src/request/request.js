@@ -20,6 +20,7 @@ const request = {
       }
 
       const response = await axios.post(url, jsonData);
+      // console.log({res:response})
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -91,6 +92,7 @@ const request = {
   delete: async ({ entity, id }) => {
     try {
       const response = await axios.delete(entity + '/delete/' + id);
+       console.log({delete:response})
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -420,7 +422,7 @@ const request = {
     }
   },
   getServiceListShow: async ({ id }) => {
-    console.log(id)
+    console.log(id);
     try {
       const response = await axios.get(`/servicelist/service/${id}`);
       return response.data;
@@ -457,6 +459,14 @@ const request = {
   getTax: async () => {
     try {
       const response = await axios.get('/taxes/show');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  Loogout: async () => {
+    try {
+      const response = await axios.post('/logout');
       return response.data;
     } catch (error) {
       return errorHandler(error);

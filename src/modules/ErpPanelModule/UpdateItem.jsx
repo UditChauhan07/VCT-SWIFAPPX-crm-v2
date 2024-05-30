@@ -68,7 +68,7 @@ export default function UpdateItem({ config, UpdateForm }) {
         if (item) {
           if (item.quantity && item.price) {
             let total = calculate.multiply(item['quantity'], item['price']);
-            //sub total
+           
             subTotal = calculate.add(subTotal, total);
           }
         }

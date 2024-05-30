@@ -266,13 +266,13 @@ function Sidebar({ collapsible, isMobile = false }) {
       <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
         <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
 
-        {showLogoApp && (
+        {/* {showLogoApp && (
           <img
             src={logoIcon}
             alt="Logo"
             style={{ marginTop: '3px', marginLeft: '10px', height: '38px' }}
           />
-        )}
+        )} */}
       </div>
       <Menu
         items={items}
@@ -280,8 +280,13 @@ function Sidebar({ collapsible, isMobile = false }) {
         theme={'light'}
         selectedKeys={[currentPath]}
         style={{
-          background: 'none',
-          border: 'none',
+          
+          background: "none",
+          border: "none",
+     
+      maxWidth: "200px",
+      // minWidth: "204px",
+      width: "188px"
         }}
       />
     </Sider>

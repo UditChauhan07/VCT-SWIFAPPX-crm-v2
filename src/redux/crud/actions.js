@@ -235,7 +235,7 @@ export const crud = {
         dispatch({
           type: actionTypes.REQUEST_FAILED,
           keyState: 'delete',
-          payload: null,
+          payload: null, 
         });
       }
     },

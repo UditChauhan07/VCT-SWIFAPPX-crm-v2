@@ -9,6 +9,7 @@ export default function Customer() {
   const searchConfig = {
     displayLabels: ['name'],
     searchFields: 'name',
+
   };
   const deleteModalLabels = ['name'];
 
