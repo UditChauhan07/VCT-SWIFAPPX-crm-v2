@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Avatar, Dropdown, Layout } from 'antd';
 
 // import Notifications from '@/components/Notification';
 
 import { SettingOutlined, LogoutOutlined } from '@ant-design/icons';
 
-import { checkImage } from '@/request';
+import { checkImage, request } from '@/request';
    
 import { selectCurrentAdmin } from '@/redux/auth/selectors';
 
@@ -23,6 +23,7 @@ import UpgradeButton from './UpgradeButton';
 export default function HeaderContent() {
   const currentAdmin = useSelector(selectCurrentAdmin);
   const { Header } = Layout;
+  const navigate = useNavigate();
 
   const translate = useLanguage();
 
@@ -42,7 +43,7 @@ export default function HeaderContent() {
   }, []);
 
   const ProfileDropdown = () => {
-    const navigate = useNavigate();
+  
     return (
       <div className="profileDropdown" onClick={() => navigate('/profile')}>
         <Avatar
@@ -67,6 +68,19 @@ export default function HeaderContent() {
     return <span style={{}}>{text}</span>;
   };
 
+  const settings = {
+    method: 'POST',
+  
+  };
+
+const Loogout = async () =>{
+
+  const res = await fetch(`http://localhost:8001/api/logout`, settings )
+   console.log(res)
+  localStorage.clear();
+  navigate('/logout')
+}
+
   const items = [
     {
       label: <ProfileDropdown className="headerDropDownMenu" />,
@@ -76,7 +90,7 @@ export default function HeaderContent() {
       type: 'divider',
     },
     {
-      icon: <SettingOutlined />,
+      icon: <SettingOutlined  style={{ width: "23px" }}/>,
       key: 'settingProfile',
       label: (
         <Link to={'/profile'}>
@@ -97,7 +111,9 @@ export default function HeaderContent() {
     {
       icon: <LogoutOutlined />,
       key: 'logout',
-      label: <Link to={'/logout'}>{translate('logout')}</Link>,
+      // label: <Link to={'/logout'}>{translate('logout')}</Link>,
+      label:  translate('logout') ,
+      onClick: () => Loogout() 
     },
   ];
   return (
@@ -109,6 +125,7 @@ export default function HeaderContent() {
         flexDirection: ' row-reverse',
         justifyContent: ' flex-start',
         gap: ' 15px',
+      //  width:"100%",
       }}
     >
       <Dropdown
@@ -117,7 +134,7 @@ export default function HeaderContent() {
         }}
         trigger={['click']}
         placement="bottomRight"
-        stye={{ width: '280px', float: 'right' }}
+        stye={{ width: '280px', float: 'right'  }}
       >
         {/* <Badge dot> */}
         <Avatar

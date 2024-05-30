@@ -7,8 +7,8 @@ import calculate from '@/utils/calculate';
 import { useForm } from 'antd/lib/form/Form';
 import { Checkbox } from 'antd/lib';
 
-export default function ItemRow({ field, remove, current = null, response, isFirstRow  }) {
-   
+export default function ItemRow({ field, remove, current = null, response, isFirstRow }) {
+
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
   const [name, setName] = useState('');
@@ -37,20 +37,9 @@ export default function ItemRow({ field, remove, current = null, response, isFir
     }
   }, [current, form]);
 
-
-  // useEffect(() => {
-  //   if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
-  //     const firstItem = current.items[0];
-  //     form.setFieldsValue({ [field.name]: firstItem });
-  //     setName(firstItem.itemName || '');
-  //     setPrice(firstItem.price || 0);
-  //     setQuantity(firstItem.quantity || 0);
-  //   }
-  // }, [current, form]);
-
   useEffect(() => {
     if (current) {
-       
+
       const { items, invoice } = current;
 
       if (invoice) {
@@ -62,7 +51,6 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         }
       } else {
         const item = items[field.fieldKey];
-         
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
@@ -77,40 +65,17 @@ export default function ItemRow({ field, remove, current = null, response, isFir
   }, [price, quantity]);
 
 
-
   return (
-
     <>
-
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-        {/* <Col className="gutter-row" >
-          <Checkbox></Checkbox>
-        </Col> */}
-
-
-
         <Col className="gutter-row" span={4}>
           <Form.Item
-            name={[field.name, 'item']}
-          
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: 'Missing itemName name',
-            //   },
-            //   {
-            //     pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-            //     message: 'Item Name must contain alphanumeric or special characters',
-            //   },
-            // ]}
-          >
+            name={[field.name, 'item']}>
             <Input onChange={updateName} placeholder="Item Name" />
-         
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
           <Form.Item name={[field.name, 'price']} >
-
             <InputNumber
               className="moneyInput"
               onChange={updatePrice}
@@ -123,12 +88,12 @@ export default function ItemRow({ field, remove, current = null, response, isFir
         </Col>
         <Col className="gutter-row" span={3}>
           <Form.Item name={[field.name, 'quantity']}>
-            <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt}  />
+            <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
           </Form.Item>
         </Col>
 
         <Col className="gutter-row" span={4}>
-          <Form.Item 
+          <Form.Item
             name={[field.name, 'total']}
             initialValue={totalState}
             shouldUpdate={(prevValues, currentValues) =>
@@ -140,7 +105,6 @@ export default function ItemRow({ field, remove, current = null, response, isFir
                 readOnly
                 className="moneyInput"
                 value={totalState}
-                // initialValue={totalState}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
@@ -156,11 +120,6 @@ export default function ItemRow({ field, remove, current = null, response, isFir
             <Input placeholder=" Remarks " />
           </Form.Item>
         </Col>
-        {/* {field  &&
-          <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
-            <DeleteOutlined onClick={() => remove(field.name)} />
-          </div>
-        } */}
 
         {
           !isFirstRow && (

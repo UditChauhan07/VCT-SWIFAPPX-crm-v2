@@ -25,20 +25,16 @@ import { useCrudContext } from '@/context/crud';
 import { useParams } from 'react-router-dom';
 
 
-
-export default function DynamicForm({ fields, isUpdateForm = false }) {
+export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
-
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
   const [checkedOption, setcheckedOption] = useState('');
-
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, readBox } = crudContextAction;
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
         const response = await request.getRoles();
@@ -49,13 +45,11 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, []);
 
   if (fields.subscription_type) {
     useEffect(() => {
-      // Fetch data from API
       const fetchData = async () => {
         try {
           const response = await request.getCategorySubscription();
@@ -84,11 +78,6 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
     }, []);
   }
 
-  // if (fields.client) {
-  //   let { id } = useParams();
-  //   // console.log(typeof id);
-
-  // }
 
   return (
     <>
@@ -116,7 +105,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
           } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
-            return <FormElement key={key} field={field} />;
+            return <FormElement key={key} field={field} entity={entity} />;
           }
         }
       })}
@@ -124,13 +113,14 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   );
 }
 
-function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
+function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }) {
+  console.log(field)
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
 
   const { label, options } = field;
-  // let { id } = useParams();
+ 
 
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
@@ -147,7 +137,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
     number: <InputNumber style={{ width: '100%' }} />,
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
     password: <Input.Password autoComplete="new-password" />,
-    boolean: <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
+    boolean: <Switch defaultValue={true} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
     // getclientId : <Input defaultValue={id} />,   
     date: (
       <DatePicker
@@ -182,7 +172,7 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
         {field.options?.map((option) => {
           return (
             <Select.Option key={`${uniqueId()}`} value={option.value}>
-              <Tag bordered={false} color={option.color}>
+              <Tag bordered={false} Color={option.color}>
                 {translate(option.label)}
               </Tag>
             </Select.Option>
@@ -412,7 +402,81 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
+  // console.log(renderComponent)
+
   return (
+    // <Form.Item
+    //   label={translate(field.label)}
+    //   name={field.name}
+    //   rules={[
+    //     {
+    //       required: field.required || false,
+    //       type: filedType[field.type] ?? 'any',
+    //       validator:
+    //         field.type === 'phone'
+    //           ? (rule, value, callback) => {
+    //             if (!value) {
+    //               callback(); // Allow empty values if not required
+    //               return;
+    //             }
+    //             const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
+    //             if (!pattern.test(value)) {
+    //               callback('Please enter a valid 10-digit mobile number ');
+    //             } else {
+    //               callback(); // Success
+    //             }
+    //           }
+    //           : undefined,
+
+
+    //     },
+    //   ]}
+    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
+    // >
+    //   {renderComponent}
+    // </Form.Item>
+
+
+
+
+
+    // <Form.Item
+    //   label={translate(field.label)}
+    //   name={field.name}
+    //   rules={[
+    //     {
+    //       required: field.required || false,
+    //       type: filedType[field.type] ?? 'any',
+    //       validator: field.type === 'phone' ? (rule, value) => {
+    //         if (!value) {
+    //           return Promise.resolve();
+    //         }
+    //         const pattern = /^[6-9]\d{9}$/;
+    //         if (!pattern.test(value)) {
+    //           return Promise.reject('Please enter a valid 10-digit mobile number.');
+    //         }
+    //         return Promise.resolve();
+    //       } : field.name === 'package_divider' ? (rule, value) => {
+    //         if (isNaN(value)) { 
+    //           return Promise.reject('Only numeric value is accepted.');
+    //         }
+    //         return Promise.resolve();
+    //       } : undefined,
+    //     },
+
+    //     ...(field.name === 'name' || field.name === 'firstname' ? (
+    //       entity === 'people' || 'subscriptiontype' ? [
+
+    //         { min: 3, message: 'Name must be at least 3 characters.' },
+    //         { max: 30, message: 'Name must be in 30 characters.' },
+    //       ] : []
+    //     ) : []),
+    //   ]}
+    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
+    // > 
+    // {renderComponent}
+    // </Form.Item>
+
     <Form.Item
       label={translate(field.label)}
       name={field.name}
@@ -420,26 +484,43 @@ function FormElement({ field, setFeedback, roles = [], checkboxes = [] }) {
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
-          validator:
-            field.type === 'phone'
-              ? (rule, value, callback) => {
-                if (!value) {
-                  callback(); // Allow empty values if not required
-                  return;
-                }
-                const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
-                if (!pattern.test(value)) {
-                  callback('Please enter a valid 10-digit mobile number ');
-                } else {
-                  callback(); // Success
-                }
+          validator: (rule, value) => {
+            if (!value) {
+              return Promise.resolve();
+            }
+
+            if (field.type === 'phone') {
+              const pattern = /^[6-9]\d{9}$/;
+              if (!pattern.test(value)) {
+
+                return Promise.reject('Please enter a valid 10-digit mobile number.');
               }
-              : undefined,
+            } 
+            else if (field.name === 'package_divider') {
+              if (isNaN(value)) {
+                return Promise.reject('Only numeric value is accepted.');
+              }
+            } else if (field.name === 'website') {
+              const urlPattern = /^(https?:\/\/)?([\w\d\-]+\.){1,2}[a-zA-Z]{2,6}(\/[\w\d\-\.]*)*\/?$/;
+              if (!urlPattern.test(value)) {
+                return Promise.reject('Please enter a valid URL.');
+              }
+            }
+
+            return Promise.resolve();
+          }
         },
+        ...(field.name === 'name' || field.name === 'firstname' ? (
+          (entity === 'people' || 'subscriptiontype' || 'publicholiday') ? [
+            { min: 3, message: 'Name must be at least 3 characters.' },
+            { max: 30, message: 'Name must be in 30 characters.' },
+          ] : []
+        ) : []),
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
     >
       {renderComponent}
     </Form.Item>
+
   );
 }
