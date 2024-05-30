@@ -215,10 +215,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       ],
     },
   ];
-
-
-
-  useEffect(() => {
+ useEffect(() => {
     if (location)
       if (currentPath !== location.pathname) {
         if (location.pathname === '/') {

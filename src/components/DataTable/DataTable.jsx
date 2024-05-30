@@ -60,9 +60,7 @@ function AddNewItem({ config }) {
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
  
-
-
-  const { crudContextAction } = useCrudContext();
+const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
   const translate = useLanguage();
   const { moneyFormatter } = useMoney();
@@ -199,7 +197,7 @@ export default function DataTable({ config, extra = [] }) {
     {
       title: '',
       key: 'action',
-      fixed: 'right',
+      // fixed: 'right',
       render: (_, record) => (
         <Dropdown
           menu={{

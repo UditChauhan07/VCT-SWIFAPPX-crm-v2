@@ -28,7 +28,7 @@ import { useParams } from 'react-router-dom';
 
 export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
-      console.log(fields)
+  console.log(fields)
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
@@ -111,7 +111,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
           } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
-            return <FormElement key={key} field={field}  entity={entity}/>;
+            return <FormElement key={key} field={field} entity={entity} />;
           }
         }
       })}
@@ -178,7 +178,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         {field.options?.map((option) => {
           return (
             <Select.Option key={`${uniqueId()}`} value={option.value}>
-              <Tag bordered={false} Color={option.color}>
+              <Tag bordered={false} color={option.color}>
                 {translate(option.label)}
               </Tag>
             </Select.Option>
@@ -442,10 +442,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     //   {renderComponent}
     // </Form.Item>
 
-
-
-
-    <Form.Item
+ <Form.Item
       label={translate(field.label)}
       name={field.name}
       rules={[
@@ -484,8 +481,8 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         ) : []),
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-    > 
-    {renderComponent}
+    >
+      {renderComponent}
     </Form.Item>
 
 
