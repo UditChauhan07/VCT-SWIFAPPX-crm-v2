@@ -521,8 +521,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
     >
       {renderComponent}
-    >
-      {renderComponent}
     </Form.Item>
 
   );
