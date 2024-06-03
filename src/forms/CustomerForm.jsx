@@ -12,6 +12,13 @@ export default function CustomerForm({ isUpdateForm = false }) {
 
     return Promise.resolve();
   };
+  const validatePhoneNumber = (_, value) => {
+    const phoneNumberPattern = /^\d+$/;
+    if (!phoneNumberPattern.test(value)) {
+      return Promise.reject('Please enter a valid phone number');
+    }
+    return Promise.resolve();
+  };
 
   return (
     <>
@@ -74,13 +81,13 @@ export default function CustomerForm({ isUpdateForm = false }) {
         rules={[
           {
             required: true,
+            message: 'Phone number is required',
           },
           {
             validator: validateEmptyString,
           },
           {
-            pattern: validatePhoneNumber,
-            message: 'Please enter a valid phone number',
+            validator: validatePhoneNumber,
           },
         ]}
       >

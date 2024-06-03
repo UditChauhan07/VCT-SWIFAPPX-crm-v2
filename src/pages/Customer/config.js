@@ -21,6 +21,7 @@ export const fields = {
     dataIndex: ['company', 'name'],
     disableForTable: true,
     feedback: 'Company',
+    required: true,
   },
   people: {
     type: 'search',
@@ -31,6 +32,7 @@ export const fields = {
     dataIndex: ['people', 'firstname'],
     disableForTable: true,
     feedback: 'People',
+    required: true,
   },
   name: {
     type: 'string',
@@ -66,8 +68,9 @@ export const fields = {
   },
   enabled: {
     type: 'boolean',
-    required: true,
+    // required: true,
     disableForTable: true,
+    label: 'Status',
   },
 };
 
@@ -108,9 +111,9 @@ export const readColumns = {
     hasRoles: true,
     disableForTable: true,
   },
-  // enabled: {
-  //   type: 'boolean',
-  //   required: true,
-  //   disableForTable: true,
-  // },
+  enabled: {
+    type: 'boolean',
+    required: true,
+    disableForTable: true,
+  },
 };

@@ -215,9 +215,6 @@ function Sidebar({ collapsible, isMobile = false }) {
       ],
     },
   ];
-
-
-
   useEffect(() => {
     if (location)
       if (currentPath !== location.pathname) {
@@ -280,13 +277,13 @@ function Sidebar({ collapsible, isMobile = false }) {
         theme={'light'}
         selectedKeys={[currentPath]}
         style={{
-          
+
           background: "none",
           border: "none",
-     
-      maxWidth: "200px",
-      // minWidth: "204px",
-      width: "188px"
+
+          maxWidth: "200px",
+          // minWidth: "204px",
+          width: "188px"
         }}
       />
     </Sider>
