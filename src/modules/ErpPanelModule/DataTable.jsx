@@ -66,6 +66,10 @@ function AddNewItem({ config }) {
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
+
+  // console.log(dataTableColumns)
+
+
   const descriptionField = dataTableColumns.find(item => item.title === 'Description');
   let descriptionValue = '';
   if (descriptionField && Array.isArray(descriptionField.dataIndex)) {
@@ -146,12 +150,12 @@ export default function DataTable({ config, extra = [] }) {
     navigate(`/invoice/pay/${record._id}`);
   };
 
-  if (entity === 'servicelist'){
+  if (entity === 'servicelist') {
     dataTableColumns = [
       ...updatedDataTableColumns,
     ];
   }
-  
+
 
   dataTableColumns = [
     ...dataTableColumns,
@@ -185,7 +189,7 @@ export default function DataTable({ config, extra = [] }) {
                 default:
                   break;
               }
-              
+
             },
 
           }
@@ -197,7 +201,7 @@ export default function DataTable({ config, extra = [] }) {
             onClick={(e) => e.preventDefault()}
           />
         </Dropdown>
-      
+
       }
     },
   ];

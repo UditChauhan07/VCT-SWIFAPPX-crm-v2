@@ -3,7 +3,7 @@ import UpdateRoleModule from '@/modules/RoleModule/UpdateRoleModule';
 
 export default function RoleUpdate() {
   const translate = useLanguage();
-
+ 
   const entity = 'roles';
   const Labels = {
     PANEL_TITLE: translate('roles'),
@@ -11,7 +11,7 @@ export default function RoleUpdate() {
     ADD_NEW_ENTITY: translate('add_new_role'),
     ENTITY_NAME: translate('roles'),
   };
-
+   console.log("dddddddddddd")
   const configPage = {
     entity,
     ...Labels,

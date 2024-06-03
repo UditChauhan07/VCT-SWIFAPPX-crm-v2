@@ -501,17 +501,25 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
               if (isNaN(value)) {
                 return Promise.reject('Only numeric value is accepted.');
               }
+              if (value.length > 10) {
+                return Promise.reject('Package divider can have a maximum of 10  values.');
+              }
             } else if (field.name === 'website') {
               const urlPattern = /^(https?:\/\/)?([\w\d\-]+\.){1,2}[a-zA-Z]{2,6}(\/[\w\d\-\.]*)*\/?$/;
               if (!urlPattern.test(value)) {
                 return Promise.reject('Please enter a valid URL.');
+              }
+            } else if (field.name === 'email') {
+              const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailPattern.test(value)) {
+                return Promise.reject('Please enter a valid email address.');
               }
             }
 
             return Promise.resolve();
           }
         },
-        ...(field.name === 'name' || field.name === 'firstname' ? (
+        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'lastname' ? (
           (entity === 'people' || 'subscriptiontype' || 'publicholiday') ? [
             { min: 3, message: 'Name must be at least 3 characters.' },
             { max: 30, message: 'Name must be in 30 characters.' },
