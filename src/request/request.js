@@ -92,7 +92,7 @@ const request = {
   delete: async ({ entity, id }) => {
     try {
       const response = await axios.delete(entity + '/delete/' + id);
-       console.log({delete:response})
+     
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,

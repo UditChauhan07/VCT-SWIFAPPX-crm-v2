@@ -56,6 +56,7 @@ export default function DeleteModal({ config }) {
     panel.close();
     navMenu.collapse();
     dispatch(crud.list({ entity }));
+    console.log(dispatch(crud.list({ entity })))
   };
 
 
