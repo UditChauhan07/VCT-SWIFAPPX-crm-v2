@@ -106,6 +106,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
             return <FormElement key={key} field={field} entity={entity} />;
+            return <FormElement key={key} field={field} entity={entity} />;
           }
         }
       })}
@@ -172,7 +173,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         {field.options?.map((option) => {
           return (
             <Select.Option key={`${uniqueId()}`} value={option.value}>
-              <Tag bordered={false} Color={option.color}>
+              <Tag bordered={false} color={option.color}>
                 {translate(option.label)}
               </Tag>
             </Select.Option>
