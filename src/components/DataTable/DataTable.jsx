@@ -154,9 +154,11 @@ export default function DataTable({ config, extra = [] }) {
   }
 
   function handleDelete(record) {
-    console.log(record);
+    // console.log(record);
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));
     modal.open();
+    dispatch(crud.list({ entity }));
+
     // useEffect(() => {
     //   if (isSuccess) {
     //     modal.close();
@@ -241,7 +243,7 @@ export default function DataTable({ config, extra = [] }) {
   
         
   const { pagination, items: dataSource } = listResult;
-  console.log(dataSource)
+
   const dispatch = useDispatch();
 
   const handelDataTableLoad = useCallback((pagination) => {

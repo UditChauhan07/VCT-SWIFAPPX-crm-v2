@@ -49,7 +49,8 @@ export default function ReadItem({ config }) {
           <p> : </p>
         </Col>
         <Col className="gutter-row" span={10}>
-          <p>{translate(item.value)}</p>
+          {/* <p>{translate(item.value)}</p> */}
+          <p>{item.value}</p>
         </Col>
       </Row>
     );
