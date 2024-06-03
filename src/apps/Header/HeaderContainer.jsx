@@ -74,10 +74,9 @@ export default function HeaderContent() {
   };
 
 const Loogout = async () =>{
-
-  const res = await fetch(`http://localhost:8001/api/logout`, settings )
-   console.log(res)
-  localStorage.clear();
+  // const res = await fetch(`http://localhost:8001/api/logout`, settings )
+  //  console.log(res)
+  // localStorage.clear();
   navigate('/logout')
 }
 
