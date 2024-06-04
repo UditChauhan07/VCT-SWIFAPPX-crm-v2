@@ -252,6 +252,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
                     </Checkbox>
                   </Form.Item>
                 </div>
+                
                 <div className={styles.w_100px}>
                   <Form.Item name={['permissions', `${entity}_edit`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
                     <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_edit`], e.target.checked)}>

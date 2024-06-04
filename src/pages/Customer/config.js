@@ -97,20 +97,20 @@ export const readColumns = {
   },
   country: {
     type: 'country',
-    disableForForm: true,
+    disableForForm: false,
     displayLabels: ['country'],
     dataIndex: ['country'],
   },
   phone: {
     type: 'phone',
-    disableForForm: true,
+    disableForForm: false,
   },
-  role: {
-    type: 'selectRoles',
-    required: true,
-    hasRoles: true,
-    disableForTable: true,
-  },
+  // role: {
+  //   type: 'selectRoles',
+  //   required: true,
+  //   hasRoles: true,
+  //   disableForTable: false,
+  // },
   enabled: {
     type: 'boolean',
     required: true,

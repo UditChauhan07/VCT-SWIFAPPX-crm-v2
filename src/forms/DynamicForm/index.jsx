@@ -442,7 +442,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     //   {renderComponent}
     // </Form.Item>
 
- <Form.Item
+    <Form.Item
       label={translate(field.label)}
       name={field.name}
       rules={[
@@ -450,17 +450,47 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
           validator: field.type === 'phone' ? (rule, value) => {
-            if (!value) {
-              return Promise.resolve();
-            }
-            const pattern = /^[6-9]\d{9}$/;
-            if (!pattern.test(value)) {
+            const phoneRegex = /^\d{10}$/; // Regular expression to match exactly 10 digits
+            if (!phoneRegex.test(value)) {
               return Promise.reject('Please enter a valid 10-digit mobile number.');
             }
             return Promise.resolve();
           } : field.name === 'package_divider' ? (rule, value) => {
             if (isNaN(value)) { // Check if value is not a number
               return Promise.reject('Only numeric value is accepted.');
+            }
+            return Promise.resolve();
+          } : field.name === 'price' ? (rule, value) => {
+            if (isNaN(value)) { // Check if value is not a number
+              return Promise.reject('Only numeric value is accepted.');
+            }
+                if (value.length > 5) {
+                  return Promise.reject('Package divider can have a maximum of 10  values.');
+                }
+            return Promise.resolve();
+          } : field.name === 'type' ? (rule, value) => {
+            if (field.name === 'type' && (!value || value === '')) {
+              return Promise.reject('Please select type.');
+            }
+            return Promise.resolve();
+          } : field.name === 'company' ? (rule, value) => {
+            if (field.name === 'company' && (!value || value === '')) {
+              return Promise.reject('Please select company.');
+            }
+
+          } : field.name === 'role' ? (rule, value) => {
+            if (field.name === 'role' && (!value || value === '')) {
+              return Promise.reject('Please select role.');
+            }
+            return Promise.resolve();
+          } : field.name === 'productCategory' ? (rule, value) => {
+            if (field.name === 'productCategory' && (!value || value === '')) {
+              return Promise.reject('Please select productCategory.');
+            }
+            return Promise.resolve();
+          } : field.name === 'color' ? (rule, value) => {
+            if (field.name === 'color' && (!value || value === '')) {
+              return Promise.reject('Please select color.');
             }
             return Promise.resolve();
           } : undefined,
@@ -472,19 +502,21 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         //   ]
         //   : []),
 
-        ...(field.name === 'name' || field.name === 'firstname' ? (
-          entity === 'people' || 'subscriptiontype' ? [
+        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' ? (
+          entity === 'people' || 'subscriptiontype' || "clientaddress"  ? [
             // { required: true, message: 'Name is required' },
             { min: 3, message: 'Name must be at least 3 characters.' },
             { max: 30, message: 'Name must be in 30 characters.' },
           ] : []
         ) : []),
+      
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
     >
       {renderComponent}
     </Form.Item>
 
+    
 
 
   );
