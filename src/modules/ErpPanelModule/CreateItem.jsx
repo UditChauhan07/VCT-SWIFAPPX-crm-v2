@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { Button, Tag, Form, Divider } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -36,6 +36,7 @@ export default function CreateItem({ config, CreateForm }) {
   const translate = useLanguage();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   useEffect(() => {
     dispatch(settingsAction.list({ entity: 'setting' }));
@@ -114,10 +115,10 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const onSubmit = (fieldsValue) => {
-    console.log(fieldsValue)
+    console.log({fieldsValue})
     const storedId = localStorage.getItem('SubscriptionId');
     const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
-    console.log({ fieldsValue });
+
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -381,6 +382,19 @@ export default function CreateItem({ config, CreateForm }) {
     };
   }
 
+  const onFinishFailed = ({ errorFields }) => {
+    if (errorFields && errorFields.length > 0) {
+      // Find the first invalid field
+      const firstErrorField = errorFields[0];
+      // Get the DOM element of the first invalid field
+      const fieldNode = document.querySelector(`[name="${firstErrorField.name[0]}"]`);
+      if (fieldNode) {
+        fieldNode.scrollIntoView({ behavior: "smooth", block: "center" });
+        fieldNode.focus(); // Optionally focus on the field
+      }
+    }
+  };
+
   return (
     <>
       <PageHeader
@@ -405,7 +419,7 @@ export default function CreateItem({ config, CreateForm }) {
       ></PageHeader>
       <Divider dashed />
       <Loading isLoading={isLoading}>
-        <Form form={form} layout="vertical" onFinish={onSubmit} onValuesChange={handelValuesChange}>
+        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed} ref={formRef}  onValuesChange={handelValuesChange}>
           <CreateForm subTotal={subTotal} offerTotal={offerSubTotal} />
         </Form>
       </Loading>
