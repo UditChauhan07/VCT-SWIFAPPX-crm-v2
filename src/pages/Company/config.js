@@ -17,11 +17,11 @@ export const fields = {
   },
   phone: {
     type: 'phone',
-    required: true,
+    // required: true,
   },
   email: {
     type: 'email',
-    required: true,
+    // required: true, 
   },
   website: {
     type: 'url',

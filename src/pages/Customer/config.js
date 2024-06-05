@@ -93,7 +93,7 @@ export const readColumns = {
     type: 'email',
     required: true,
     displayLabels: ['email'],
-    dataIndex: ['userAdmin', 'email'],
+    dataIndex: [ 'email'],
   },
   country: {
     type: 'country',

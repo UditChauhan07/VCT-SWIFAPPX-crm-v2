@@ -61,12 +61,12 @@ export const fields = {
      disableForTable: false,
      required: true,
    },
-  //  enabled: {
-  //    type: 'boolean',
-  //    disableForTable: false,
-  //    // disableForForm: false,
-  //    label: 'Status',
-  //  },
+   enabled: {
+     type: 'boolean',
+     disableForTable: false,
+     // disableForForm: false,
+     label: 'Status',
+   },
  };
 
 

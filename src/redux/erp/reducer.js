@@ -1,6 +1,7 @@
 import * as actionTypes from './types';
 
 const INITIAL_STATE = {
+ 
   current: {
     result: null,
   },
@@ -115,6 +116,13 @@ const erpReducer = (state = INITIAL_STATE, action) => {
         },
       };
     case actionTypes.RESET_ACTION:
+      return {
+        ...state,
+        [keyState]: {
+          ...INITIAL_STATE[keyState],
+        },
+      };
+    case actionTypes.REMOVE_ITEM:
       return {
         ...state,
         [keyState]: {

@@ -1,7 +1,6 @@
 import { useLayoutEffect, useEffect, useState } from 'react';
 import { Row, Col, Button } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-
 import CreateForm from '@/components/CreateForm';
 import UpdateForm from '@/components/UpdateForm';
 import DeleteModal from '@/components/DeleteModal';
@@ -24,6 +23,7 @@ var permissions
 var isSAAS
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
+
   const entity = config.entity
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
@@ -31,13 +31,10 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const { deleteModalLabels } = config;
   const { modal, editBox } = crudContextAction;
   const { isReadBoxOpen, isEditBoxOpen } = state;
-  // console.log(isReadBoxOpen)
   const { result: currentItem } = useSelector(selectCurrentItem);
-
   const dispatch = useDispatch();
-
   const [labels, setLabels] = useState('');
-  // console.log(labels)
+
   useEffect(() => {
     if (currentItem) {
       const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');
@@ -49,7 +46,9 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     dispatch(crud.currentAction({ actionType: 'delete', data: currentItem }));
     modal.open();
   };
+
   const editItem = () => {
+    console.log(editItem)
     dispatch(crud.currentAction({ actionType: 'update', data: currentItem }));
     editBox.open();
   };
@@ -62,7 +61,6 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     setAuthUser(user)
     setAdmin(user?.role_id)
   }, [])
-
   role = user?.role_id
   adminLevel = role?.admin_level
   permissions = role?.permissions
@@ -87,7 +85,6 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           </Button>
             : ""
           }
-
           {(permissions?.[entity + '_edit'] || isSAAS == true) ?
             <Button
               onClick={editItem}

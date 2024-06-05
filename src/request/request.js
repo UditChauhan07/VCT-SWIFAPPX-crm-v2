@@ -20,6 +20,7 @@ const request = {
       }
 
       const response = await axios.post(url, jsonData);
+      // console.log({res:response})
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -91,6 +92,7 @@ const request = {
   delete: async ({ entity, id }) => {
     try {
       const response = await axios.delete(entity + '/delete/' + id);
+     
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,

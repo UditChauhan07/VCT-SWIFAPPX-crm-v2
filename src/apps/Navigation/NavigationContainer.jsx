@@ -73,7 +73,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     },
     {
       key: 'services',
-      icon: <BarsOutlined  />,
+      icon: <BarsOutlined />,
       label: translate('services'),
       children: [
         {
@@ -215,7 +215,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       ],
     },
   ];
- useEffect(() => {
+  useEffect(() => {
     if (location)
       if (currentPath !== location.pathname) {
         if (location.pathname === '/') {
@@ -277,13 +277,13 @@ function Sidebar({ collapsible, isMobile = false }) {
         theme={'light'}
         selectedKeys={[currentPath]}
         style={{
-          
+
           background: "none",
           border: "none",
-     
-      maxWidth: "200px",
-      minWidth: "204px",
-      width: "200px"
+
+          maxWidth: "200px",
+          // minWidth: "204px",
+          width: "188px"
         }}
       />
     </Sider>

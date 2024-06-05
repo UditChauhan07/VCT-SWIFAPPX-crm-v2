@@ -25,20 +25,16 @@ import { useCrudContext } from '@/context/crud';
 import { useParams } from 'react-router-dom';
 
 
-
 export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
-  console.log(fields)
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
   const [checkboxes, setCheckBoxes] = useState([]);
   const [checkedOption, setcheckedOption] = useState('');
-
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, readBox } = crudContextAction;
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
         const response = await request.getRoles();
@@ -49,13 +45,11 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, []);
 
   if (fields.subscription_type) {
     useEffect(() => {
-      // Fetch data from API
       const fetchData = async () => {
         try {
           const response = await request.getCategorySubscription();
@@ -112,6 +106,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
             return <FormElement key={key} field={field} entity={entity} />;
+            return <FormElement key={key} field={field} entity={entity} />;
           }
         }
       })}
@@ -126,7 +121,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   const { dateFormat } = useDate();
 
   const { label, options } = field;
-  // let { id } = useParams();
+
 
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
@@ -464,9 +459,9 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
             if (isNaN(value)) { // Check if value is not a number
               return Promise.reject('Only numeric value is accepted.');
             }
-                if (value.length > 5) {
-                  return Promise.reject('Package divider can have a maximum of 10  values.');
-                }
+            if (value.length > 5) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
             return Promise.resolve();
           } : field.name === 'type' ? (rule, value) => {
             if (field.name === 'type' && (!value || value === '')) {
@@ -502,21 +497,21 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         //   ]
         //   : []),
 
-        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' ? (
-          entity === 'people' || 'subscriptiontype' || "clientaddress"  ? [
+        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' || field.name === 'contactPerson' ? (
+          entity === 'people' || 'subscriptiontype' || "clientaddress" ? [
             // { required: true, message: 'Name is required' },
             { min: 3, message: 'Name must be at least 3 characters.' },
             { max: 30, message: 'Name must be in 30 characters.' },
           ] : []
         ) : []),
-      
+
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
     >
       {renderComponent}
     </Form.Item>
 
-    
+
 
 
   );
