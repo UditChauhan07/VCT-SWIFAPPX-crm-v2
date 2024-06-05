@@ -488,6 +488,26 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
               return Promise.reject('Please select color.');
             }
             return Promise.resolve();
+          } : field.name === 'block' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : field.name === 'state' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : field.name === 'country' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : field.name === 'zipCode' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
           } : undefined,
         },
         // ...(field.name === 'name' || 'firstname'   ? [  
@@ -497,7 +517,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         //   ]
         //   : []),
 
-        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' || field.name === 'contactPerson' ? (
+        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' || field.name === 'contactPerson' || field.name === "street" || field.name === "unit" ? (
           entity === 'people' || 'subscriptiontype' || "clientaddress" ? [
             // { required: true, message: 'Name is required' },
             { min: 3, message: 'Name must be at least 3 characters.' },

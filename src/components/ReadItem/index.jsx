@@ -39,6 +39,7 @@ export default function ReadItem({ config }) {
   const show = isReadBoxOpen ? { display: 'block', opacity: 1 } : { display: 'none', opacity: 0 };
 
   const itemsList = listState.map((item) => {
+    console.log(item)
     console.log({ listState })
     return (
       <Row key={item.propsKey} gutter={12}>
