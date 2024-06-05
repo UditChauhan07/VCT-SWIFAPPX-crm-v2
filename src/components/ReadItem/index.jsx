@@ -21,6 +21,7 @@ export default function ReadItem({ config }) {
   const { state } = useCrudContext();
   const { isReadBoxOpen } = state;
   const [listState, setListState] = useState([]);
+ 
   const readFields = !readColumns ? fields : readColumns
   if (fields) readColumns = [...dataForRead({ fields: readFields, translate: translate })];
   useEffect(() => {
@@ -38,8 +39,12 @@ export default function ReadItem({ config }) {
 
   const show = isReadBoxOpen ? { display: 'block', opacity: 1 } : { display: 'none', opacity: 0 };
 
+
+
+
   const itemsList = listState.map((item) => {
-    console.log({ listState })
+    // console.log(item)
+    // console.log({ listState })
     return (
       <Row key={item.propsKey} gutter={12}>
         <Col className="gutter-row" span={12}>
@@ -50,13 +55,14 @@ export default function ReadItem({ config }) {
         </Col>
         <Col className="gutter-row" span={10}>
           {/* <p>{translate(item.value)}</p> */}
-          <p>{item.value}</p>
+          {/* <p>{item.value}</p> */}
+          <p> {item.value === 'true' ? 'Active' : item.value}</p>
         </Col>
       </Row>
     );
   });
 
-  console.log({ itemsList });
+
 
   return <div style={show}>{itemsList}</div>;
 }
