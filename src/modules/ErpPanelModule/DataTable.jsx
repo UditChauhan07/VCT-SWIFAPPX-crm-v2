@@ -111,13 +111,13 @@ export default function DataTable({ config, extra = [] }) {
 
   )
 
-  if ((permissions?.[entity + '_delete'] || isSAAS === true) && entity !== 'workorder' && entity !== 'contract') {
-    items.push({
-      label: translate('Delete'),
-      key: 'delete',
-      icon: <DeleteOutlined />,
-    })
-  }
+  // if ((permissions?.[entity + '_delete'] || isSAAS === true) && entity !== 'workorder' && entity !== 'contract') {
+  //   items.push({
+  //     label: translate('Delete'),
+  //     key: 'delete',
+  //     icon: <DeleteOutlined />,
+  //   })
+  // }
 
   const navigate = useNavigate();
 
@@ -155,9 +155,8 @@ export default function DataTable({ config, extra = [] }) {
       ...updatedDataTableColumns,
     ];
   }
+ dataTableColumns = [
 
-
-  dataTableColumns = [
     ...dataTableColumns,
     {
       title: '',
