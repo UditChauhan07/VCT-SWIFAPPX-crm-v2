@@ -238,11 +238,11 @@ export default function ServiceListForm() {
               return (
                 <div key={[`${subscription.id}`]}>
                   <Col className="gutter-row" span={24}>
-                    <h3> {data.subscription.name}</h3>
+                    <h3> {data?.subscription.name}</h3>
                     <Form.Item
 
                       name={[`${index}`, 'type']}
-                      initialValue={data.subscription._id} 
+                      initialValue={data?.subscription._id} 
                       hidden
                     >
                       {/* <InputNumber style={{ display: 'none' }} /> */}
@@ -273,7 +273,7 @@ export default function ServiceListForm() {
                             value={option.name}
                             onChange={(event) => handleOptionNameChange(event.target.value, option.position)}
                           >
-                            <Input placeholder={`Enter ${data.subscription.name} Service Name`}
+                            <Input placeholder={`Enter Service Name`}
                             />
                           </Form.Item>
                         </Col>
