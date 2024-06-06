@@ -113,7 +113,6 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
 
-
   const onSubmit = (fieldsValue) => {
     console.log({fieldsValue})
     const storedId = localStorage.getItem('SubscriptionId');
@@ -382,17 +381,15 @@ export default function CreateItem({ config, CreateForm }) {
     };
   }
 
+
   const onFinishFailed = ({ errorFields }) => {
-    if (errorFields && errorFields.length > 0) {
-      // Find the first invalid field
-      const firstErrorField = errorFields[0];
-      // Get the DOM element of the first invalid field
-      const fieldNode = document.querySelector(`[name="${firstErrorField.name[0]}"]`);
-      if (fieldNode) {
-        fieldNode.scrollIntoView({ behavior: "smooth", block: "center" });
-        fieldNode.focus(); // Optionally focus on the field
+      if (errorFields && errorFields.length > 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    }
+      // if (entity === "roles" && errorFields && errorFields.length > 0) {
+      // Scroll to the top of the page
+      //   window.scrollTo({ top: 0, behavior: 'smooth' });
+      // } 
   };
 
   return (
