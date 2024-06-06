@@ -7,12 +7,15 @@ export const fields = {
     type: 'async',
     label: 'product Category',
     displayLabels: ['productCategory', 'name'],
-    dataIndex: ['productCategory', 'name'],
+    dataIndex: [ 'name'],
     entity: 'productcategory',
     required: true,
+    disableForTable: false,
+    disableForForm: false,
   },
   price: {
-    type: 'currency',
+    type: 'string',
+    disableForTable: false,
     required: true,
   },
   enabled: {

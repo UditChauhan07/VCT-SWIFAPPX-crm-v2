@@ -23,7 +23,7 @@ var permissions
 var isSAAS
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
- 
+
   const entity = config.entity
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
@@ -46,7 +46,9 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     dispatch(crud.currentAction({ actionType: 'delete', data: currentItem }));
     modal.open();
   };
+
   const editItem = () => {
+    console.log(editItem)
     dispatch(crud.currentAction({ actionType: 'update', data: currentItem }));
     editBox.open();
   };
@@ -59,7 +61,6 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     setAuthUser(user)
     setAdmin(user?.role_id)
   }, [])
-
   role = user?.role_id
   adminLevel = role?.admin_level
   permissions = role?.permissions
@@ -84,7 +85,6 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           </Button>
             : ""
           }
-
           {(permissions?.[entity + '_edit'] || isSAAS == true) ?
             <Button
               onClick={editItem}

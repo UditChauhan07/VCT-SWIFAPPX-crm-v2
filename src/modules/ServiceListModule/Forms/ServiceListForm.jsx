@@ -168,6 +168,10 @@ export default function ServiceListForm() {
             rules={[
               {
                 required: true,
+                message: "Please enter your name",
+              },
+              {
+                
                 min: 3, message: 'Name must be at least 3 characters.',
                 max: 50, message: 'Name must be in 30 characters.'
               },
@@ -183,6 +187,7 @@ export default function ServiceListForm() {
             rules={[
               {
                 required: true,
+                message: 'Please Select Category.'
               },
             ]}
           >
@@ -254,7 +259,15 @@ export default function ServiceListForm() {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter Name"
+                                message: "Please enter your name",
+                              },
+                              {
+                                min: 3,
+                                message: "Name must be at least 3 characters",
+                              },
+                              {
+                                max: 20,
+                                message: "Name must be within 20 characters",
                               },
                             ]}
                             value={option.name}
@@ -271,7 +284,19 @@ export default function ServiceListForm() {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter Price"
+                                message: "Please enter Price",
+                              },
+                              {
+                                type: 'number',
+                                message: "Please enter a numeric value",
+                              },
+                              {
+                                validator: (_, value) => {
+                                  if (value && value.toString().length > 10) {
+                                    return Promise.reject(new Error("Price must be within 10 digits"));
+                                  }
+                                  return Promise.resolve();
+                                },
                               },
                             ]}
                             value={option.price}
