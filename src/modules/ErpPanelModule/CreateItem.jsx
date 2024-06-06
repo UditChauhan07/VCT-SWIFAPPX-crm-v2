@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { Button, Tag, Form, Divider } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -36,6 +36,7 @@ export default function CreateItem({ config, CreateForm }) {
   const translate = useLanguage();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   useEffect(() => {
     dispatch(settingsAction.list({ entity: 'setting' }));
@@ -112,12 +113,11 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
 
-
   const onSubmit = (fieldsValue) => {
-    console.log(fieldsValue)
+    console.log({fieldsValue})
     const storedId = localStorage.getItem('SubscriptionId');
     const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
-    console.log({ fieldsValue });
+
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -381,6 +381,17 @@ export default function CreateItem({ config, CreateForm }) {
     };
   }
 
+
+  const onFinishFailed = ({ errorFields }) => {
+      if (errorFields && errorFields.length > 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      // if (entity === "roles" && errorFields && errorFields.length > 0) {
+      // Scroll to the top of the page
+      //   window.scrollTo({ top: 0, behavior: 'smooth' });
+      // } 
+  };
+
   return (
     <>
       <PageHeader
@@ -405,7 +416,7 @@ export default function CreateItem({ config, CreateForm }) {
       ></PageHeader>
       <Divider dashed />
       <Loading isLoading={isLoading}>
-        <Form form={form} layout="vertical" onFinish={onSubmit} onValuesChange={handelValuesChange}>
+        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed} ref={formRef}  onValuesChange={handelValuesChange}>
           <CreateForm subTotal={subTotal} offerTotal={offerSubTotal} />
         </Form>
       </Loading>

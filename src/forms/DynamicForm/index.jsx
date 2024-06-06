@@ -121,7 +121,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   const { dateFormat } = useDate();
 
   const { label, options } = field;
- 
 
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
@@ -437,10 +436,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     //   {renderComponent}
     // </Form.Item>
 
-
-
-
-
     // <Form.Item
     //   label={translate(field.label)}
     //   name={field.name}
@@ -478,6 +473,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     // {renderComponent}
     // </Form.Item>
 
+
     <Form.Item
       label={translate(field.label)}
       name={field.name}
@@ -485,46 +481,90 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
-          validator: (rule, value) => {
-            if (!value) {
-              return Promise.resolve();
+          validator: field.type === 'phone' ? (rule, value) => {
+            const phoneRegex = /^\d{10}$/; // Regular expression to match exactly 10 digits
+            if (!phoneRegex.test(value)) {
+              return Promise.reject('Please enter a valid 10-digit mobile number.');
             }
+            return Promise.resolve();
+          } : field.name === 'package_divider' ? (rule, value) => {
+            if (isNaN(value)) { // Check if value is not a number
+              return Promise.reject('Only numeric value is accepted.');
 
-            if (field.type === 'phone') {
-              const pattern = /^[6-9]\d{9}$/;
-              if (!pattern.test(value)) {
-
-                return Promise.reject('Please enter a valid 10-digit mobile number.');
-              }
-            } 
-            else if (field.name === 'package_divider') {
-              if (isNaN(value)) {
-                return Promise.reject('Only numeric value is accepted.');
-              }
-              if (value.length > 10) {
-                return Promise.reject('Package divider can have a maximum of 10  values.');
-              }
-            } else if (field.name === 'website') {
-              const urlPattern = /^(https?:\/\/)?([\w\d\-]+\.){1,2}[a-zA-Z]{2,6}(\/[\w\d\-\.]*)*\/?$/;
-              if (!urlPattern.test(value)) {
-                return Promise.reject('Please enter a valid URL.');
-              }
-            } else if (field.name === 'email') {
-              const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-              if (!emailPattern.test(value)) {
-                return Promise.reject('Please enter a valid email address.');
-              }
             }
 
             return Promise.resolve();
-          }
+          } : field.name === 'price' ? (rule, value) => {
+            if (isNaN(value)) { // Check if value is not a number
+              return Promise.reject('Only numeric value is accepted.');
+            }
+            if (value.length > 5) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : field.name === 'type' ? (rule, value) => {
+            if (field.name === 'type' && (!value || value === '')) {
+              return Promise.reject('Please select type.');
+            }
+            return Promise.resolve();
+          } : field.name === 'company' ? (rule, value) => {
+            if (field.name === 'company' && (!value || value === '')) {
+              return Promise.reject('Please select company.');
+            }
+
+          } : field.name === 'role' ? (rule, value) => {
+            if (field.name === 'role' && (!value || value === '')) {
+              return Promise.reject('Please select role.');
+            }
+            return Promise.resolve();
+          } : field.name === 'productCategory' ? (rule, value) => {
+            if (field.name === 'productCategory' && (!value || value === '')) {
+              return Promise.reject('Please select productCategory.');
+            }
+            return Promise.resolve();
+          } : field.name === 'color' ? (rule, value) => {
+            if (field.name === 'color' && (!value || value === '')) {
+              return Promise.reject('Please select color.');
+            }
+            return Promise.resolve();
+          } : field.name === 'block' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : field.name === 'state' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : field.name === 'country' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : field.name === 'zipCode' ? (rule, value) => {
+            if (value.length > 10) {
+              return Promise.reject('Package divider can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } : undefined,
         },
-        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'lastname' ? (
-          (entity === 'people' || 'subscriptiontype' || 'publicholiday') ? [
+        // ...(field.name === 'name' || 'firstname'   ? [  
+        //     // { required: true, message: 'Name is required' },
+        //     { min: 3, message: 'Name must be at least 3 characters.' },
+        //     { max: 30, message: 'Name must be in 30 characters.' },
+        //   ]
+        //   : []),
+
+        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' || field.name === 'contactPerson' || field.name === "street" || field.name === "unit" ? (
+          entity === 'people' || 'subscriptiontype' || "clientaddress" ? [
+            // { required: true, message: 'Name is required' },
+
             { min: 3, message: 'Name must be at least 3 characters.' },
             { max: 30, message: 'Name must be in 30 characters.' },
           ] : []
         ) : []),
+
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
     >
