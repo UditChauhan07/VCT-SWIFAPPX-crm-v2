@@ -1,7 +1,7 @@
 export const fields = {
   name: {
     type: 'string',
-    // required: true,
+    required: true,
     disableForForm: false,
   },
   description: {
@@ -11,8 +11,8 @@ export const fields = {
   },
   date: {
     type: 'date',
-    // required: true,
-    disableForUpdate: false,
+    required: true,
+    disableForUpdate: false,  
   },
   enabled: {
     type: 'boolean',
