@@ -12,7 +12,7 @@ import { useDate } from '@/settings';
 
 export default function ReadItem({ config }) {
 
-  console.log( config )
+
   const { dateFormat } = useDate();
   let { readColumns, fields } = config;
 
@@ -57,6 +57,7 @@ export default function ReadItem({ config }) {
           {/* <p>{translate(item.value)}</p> */}
           {/* <p>{item.value}</p> */}
           <p> {item.value === 'true' ? 'Active' : item.value}</p>
+
         </Col>
       </Row>
     );

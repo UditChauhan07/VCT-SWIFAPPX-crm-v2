@@ -141,6 +141,7 @@ export default function DataTable({ config, extra = [] }) {
     dispatch(crud.list({ entity }));
   };
 
+
   const handleAddresses = (record) => {
     let id = record._id;
     localStorage.setItem('key', id);
@@ -206,6 +207,7 @@ export default function DataTable({ config, extra = [] }) {
   ];
 
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
+
   const { pagination, items: dataSource } = listResult;
 
   const handleDataTableLoad = useCallback((pagination) => {

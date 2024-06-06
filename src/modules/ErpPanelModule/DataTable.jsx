@@ -156,6 +156,7 @@ export default function DataTable({ config, extra = [] }) {
     ];
   }
  dataTableColumns = [
+
     ...dataTableColumns,
     {
       title: '',

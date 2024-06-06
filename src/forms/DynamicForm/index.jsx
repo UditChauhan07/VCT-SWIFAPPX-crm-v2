@@ -122,7 +122,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
 
   const { label, options } = field;
 
-
   const { TextArea } = Input;
   const [email, setEmail] = useState('test@gmail.com');
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -437,6 +436,44 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     //   {renderComponent}
     // </Form.Item>
 
+    // <Form.Item
+    //   label={translate(field.label)}
+    //   name={field.name}
+    //   rules={[
+    //     {
+    //       required: field.required || false,
+    //       type: filedType[field.type] ?? 'any',
+    //       validator: field.type === 'phone' ? (rule, value) => {
+    //         if (!value) {
+    //           return Promise.resolve();
+    //         }
+    //         const pattern = /^[6-9]\d{9}$/;
+    //         if (!pattern.test(value)) {
+    //           return Promise.reject('Please enter a valid 10-digit mobile number.');
+    //         }
+    //         return Promise.resolve();
+    //       } : field.name === 'package_divider' ? (rule, value) => {
+    //         if (isNaN(value)) { 
+    //           return Promise.reject('Only numeric value is accepted.');
+    //         }
+    //         return Promise.resolve();
+    //       } : undefined,
+    //     },
+
+    //     ...(field.name === 'name' || field.name === 'firstname' ? (
+    //       entity === 'people' || 'subscriptiontype' ? [
+
+    //         { min: 3, message: 'Name must be at least 3 characters.' },
+    //         { max: 30, message: 'Name must be in 30 characters.' },
+    //       ] : []
+    //     ) : []),
+    //   ]}
+    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
+    // > 
+    // {renderComponent}
+    // </Form.Item>
+
+
     <Form.Item
       label={translate(field.label)}
       name={field.name}
@@ -453,7 +490,9 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
           } : field.name === 'package_divider' ? (rule, value) => {
             if (isNaN(value)) { // Check if value is not a number
               return Promise.reject('Only numeric value is accepted.');
+
             }
+
             return Promise.resolve();
           } : field.name === 'price' ? (rule, value) => {
             if (isNaN(value)) { // Check if value is not a number
@@ -520,6 +559,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' || field.name === 'contactPerson' || field.name === "street" || field.name === "unit" ? (
           entity === 'people' || 'subscriptiontype' || "clientaddress" ? [
             // { required: true, message: 'Name is required' },
+
             { min: 3, message: 'Name must be at least 3 characters.' },
             { max: 30, message: 'Name must be in 30 characters.' },
           ] : []
@@ -530,9 +570,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     >
       {renderComponent}
     </Form.Item>
-
-
-
 
   );
 }

@@ -374,7 +374,7 @@ export default function CreateItem({ config, CreateForm }) {
           InitialRemarks: fieldsValue.InitialRemarks,
         };
 
-        console.log( fieldData );
+        console.log(fieldData);
         fieldsValue = fieldData;
       }
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
