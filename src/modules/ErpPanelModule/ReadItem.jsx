@@ -302,10 +302,9 @@ export default function ReadItem({ config, selectedItem }) {
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Bill To')} :<br />
 
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp.client.name}</span><br />
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.client.name}</span><br />
 
                 </p>
-
 
               </Col>
               <Col className="gutter-row" span={12}>
@@ -377,6 +376,7 @@ export default function ReadItem({ config, selectedItem }) {
 
                   </Col>
                 </Row>
+                
                 <Row className="gutter-row" >
                   <Col span={12}>
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Time')} :<br></br>
@@ -384,15 +384,12 @@ export default function ReadItem({ config, selectedItem }) {
                   <Col span={12}>
                     <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${hours}:${minutes} hrs`} <br></br>
                     </p>
-
-
                   </Col>
                 </Row>
 
               </Col>
 
               <Col span={12}>
-
 
                 <Row className="gutter-row" >
                   <Col span={12}>
@@ -401,7 +398,6 @@ export default function ReadItem({ config, selectedItem }) {
                   <Col span={12}>
                     <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${Expectedhours}:${Expectedminutes} hrs`}  <br></br>
                     </p>
-
 
                   </Col>
                 </Row>

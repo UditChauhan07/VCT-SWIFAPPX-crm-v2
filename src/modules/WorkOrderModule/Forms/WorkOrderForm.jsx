@@ -647,7 +647,19 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // console.log('Updated ItemsArray:', itemsArray);
 
 
+  
+
   const ItemHandler = (element) => {
+    // console.log(element)
+    // setSelectedItems((prevSelectedItems) => {
+    //   if (prevSelectedItems.some(selectedItem => selectedItem._id === element._id)) {
+    //     // Remove item if it's already selected
+    //     return prevSelectedItems.filter(selectedItem => selectedItem._id !== element._id);
+    //   } else {
+    //     // Add item to the selected list
+    //     return [...prevSelectedItems, element];
+    //   }
+    // });
 
     setItemsArray(prevItemsArray => {
       const itemIndex = prevItemsArray.findIndex(item => item._id === element._id);
@@ -1363,6 +1375,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               <InputNumber
                                 className="moneyInput"
                                 onChange={updatePrice}
+                              
                                 min={0}
                                 controls={false}
                                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
@@ -1382,7 +1395,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                                 // onChange={updateQt} 
                                 defaultValue={1}
                                 onChange={(value) => updateQuantity(data._id, value)}
-
+                            
                               />
                             </Form.Item>
                           </Col>
@@ -1717,7 +1730,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Row>
 
 
-
       {subscriptionIds.length > 0 && <>
         <Divider dashed />
         <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
@@ -1777,7 +1789,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Form.Item>
           </Col>
         </Row>
-
       </div>
     </>
   );
