@@ -4,7 +4,7 @@ export const fields = {
     required: true,
     disableForForm: false,
   },
-  serviceCategory : {
+  serviceCategory: {
     type: 'async',
     label: 'service Category',
     dataIndex: ['serviceCategory', 'name'],
@@ -13,9 +13,12 @@ export const fields = {
   },
   description: {
     type: 'textarea',
+    disableForTable: true,
+    disableForForm: true,
   },
   enabled: {
     type: 'boolean',
-    label:'status'
+    label: 'Status',
+   
   },
 };

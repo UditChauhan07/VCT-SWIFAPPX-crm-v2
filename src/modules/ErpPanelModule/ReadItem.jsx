@@ -29,6 +29,7 @@ import { current } from '@reduxjs/toolkit';
 // import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
+  console.log(item)
   const { moneyFormatter } = useMoney();
   return (
     <Row gutter={[12, 0]} key={item._id}>
@@ -103,7 +104,28 @@ export default function ReadItem({ config, selectedItem }) {
   const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
   console.log(currentErp)
   const [client, setClient] = useState({});
-  const [Dates, setDates] = useState();
+  const [FiledDates, setFieldDates] = useState();
+
+  // currentErp.fieldUsers.map((item)=> {
+  //   // console.log(item.endTime)
+  //   const date = new Date(item.endTime);
+
+  //   const monthNames = [
+  //     "January", "February", "March", "April", "May", "June",
+  //     "July", "August", "September", "October", "November", "December"
+  //   ];
+
+  //   const day = date.getUTCDate();
+  //   const month = monthNames[date.getUTCMonth()];
+  //   const year = date.getUTCFullYear();
+  //   const hours = date.getUTCHours();
+  //   const minutes = date.getUTCMinutes();
+  //   const seconds = date.getUTCSeconds();
+
+  //   const fielduserDate = `${day} ${month}, ${year} ${hours}:${minutes}:${seconds}`;
+
+
+  // })
 
 
   useEffect(() => {
@@ -158,7 +180,6 @@ export default function ReadItem({ config, selectedItem }) {
   const Expectedminutes = ExpectedTime.getMinutes().toString();
 
   function getStatusText(status) {
-
     switch (status) {
       case 1:
         return { text: 'Pending', color: '#fdf2ff', backgroundColor: 'blue' };
@@ -183,8 +204,9 @@ export default function ReadItem({ config, selectedItem }) {
     }
   }
 
- 
+
   const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp.status);
+
   const Createddate = new Date(currentErp.created);
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -203,7 +225,7 @@ export default function ReadItem({ config, selectedItem }) {
 
   return (
     <>
-    
+
       <PageHeader
         onBack={() => {
           navigate(`/${entity.toLowerCase()}`);
@@ -258,7 +280,6 @@ export default function ReadItem({ config, selectedItem }) {
               dispatch(erp.convert({ entity, id: currentErp._id }));
             }}
             icon={<RetweetOutlined />}
-          // style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
           >
             {translate('Convert to Invoice')}
           </Button>,
@@ -270,7 +291,7 @@ export default function ReadItem({ config, selectedItem }) {
 
       </PageHeader>
 
-     
+
       <h3 className='' style={{ marginLeft: "5px" }}>Customer Details</h3>
       <Row className="gutter-row">
         <Col span={24}>
@@ -281,10 +302,9 @@ export default function ReadItem({ config, selectedItem }) {
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Bill To')} :<br />
 
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp.client.name}</span><br />
+                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.client.name}</span><br />
 
                 </p>
-
 
               </Col>
               <Col className="gutter-row" span={12}>
@@ -356,6 +376,7 @@ export default function ReadItem({ config, selectedItem }) {
 
                   </Col>
                 </Row>
+                
                 <Row className="gutter-row" >
                   <Col span={12}>
                     <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Time')} :<br></br>
@@ -363,15 +384,12 @@ export default function ReadItem({ config, selectedItem }) {
                   <Col span={12}>
                     <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${hours}:${minutes} hrs`} <br></br>
                     </p>
-
-
                   </Col>
                 </Row>
 
               </Col>
 
               <Col span={12}>
-
 
                 <Row className="gutter-row" >
                   <Col span={12}>
@@ -380,7 +398,6 @@ export default function ReadItem({ config, selectedItem }) {
                   <Col span={12}>
                     <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${Expectedhours}:${Expectedminutes} hrs`}  <br></br>
                     </p>
-
 
                   </Col>
                 </Row>
@@ -404,28 +421,7 @@ export default function ReadItem({ config, selectedItem }) {
                   </Col>
                 </Row>
 
-                {/* <Row className="gutter-row">
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Work Leader')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Test Leader')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
-                {/* <Row className="gutter-row" >
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workers')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{translate('Alfreda Byers,Carly Alvarez')} <br></br>
-                    </p>
-
-
-                  </Col>
-                </Row> */}
+             
               </Col>
             </Row>
           </div>
@@ -483,7 +479,7 @@ export default function ReadItem({ config, selectedItem }) {
 
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {translate('Lawn Care:One Time')} <br></br>
+                  {`${currentErp.serviceList.name} / One Time`} <br></br>
 
                 </p>
 
@@ -498,7 +494,7 @@ export default function ReadItem({ config, selectedItem }) {
                 </p> </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
-                  {translate('300.00 /Workorder')} <br></br>
+                  {currentErp.serviceCost.servicePerWO}<br></br>
                 </p> </Col>
 
               <Col className="gutter-row" span={12}>
@@ -508,20 +504,21 @@ export default function ReadItem({ config, selectedItem }) {
                 </p> </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {translate(`${(+10.00)}`)} <br></br>
+                  {currentErp.adjustment && currentErp.adjustment.value ? currentErp.adjustment.value : ""}
+                   <br></br>
 
                 </p> </Col>
 
 
               <Col className="gutter-row" span={12} >
-                <p style={{ fontSize: "15px" }}>{translate(`Discount1`)} :
+                <p style={{ fontSize: "15px" }}>{translate(`Discount`)} :
                   <br></br>
 
                 </p>
 
               </Col>
               <Col className="gutter-row" span={12} >
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{translate('3.06')}
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.serviceCost.discount}
                   <br></br>
 
                 </p>
@@ -529,28 +526,29 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "15px" }}>
-                  {translate('Package SubTotal')} :<br></br>
+                  {translate('SubTotal')} :<br></br>
 
                 </p>
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {translate('306.90/One Time')} <br></br>
+                  {currentErp.serviceCost.subTotal} <br></br>
 
                 </p>
               </Col>
               <Col className="gutter-row" span={12}>
-                <sp style={{ fontSize: "15px" }}>
-                  {translate('Tax 20')} :<br></br>
+                <p style={{ fontSize: "15px" }}>
+                  {translate('Tax')} :<br></br>
 
-                </sp>
+                </p>
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {translate('61.38')} <br></br>
+                  {currentErp.serviceCost.tax} <br></br>
 
                 </p>
               </Col>
+
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "15px" }}>
                   {translate('Total Package Cost')} :<br></br>
@@ -559,7 +557,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {translate('368.28/One Time')} <br></br>
+                  {currentErp.serviceCost.totalPackageCost} <br></br>
 
                 </p>
               </Col>
@@ -609,101 +607,101 @@ export default function ReadItem({ config, selectedItem }) {
                           <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Status')} <br></br>
                           </p>
                         </Col>
-                        {/* <Col span={2}>
-                          4
-                        </Col> */}
+
                       </Row >
                     </Col>
                   </Row>
                   <hr ></hr>
-                  <Row style={{ padding: "0px 0px 0px 20px" }}>
-                    <Col span={6}>
-                      <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Test Leader')} <br></br>
-                        <span style={{ fontSize: "12px", color: "#7928dd" }}>Leader</span>
-                      </p>
 
-                    </Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>09:00 AM-01:00 PM <br></br>
-                    </p></Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}> <br></br>
-                    </p></Col>
+                  {
+                    currentErp.fieldUsers.map((ele) => {
+                      const date = new Date(ele.endTime);
+
+                      const monthNames = [
+                        "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                      ];
+
+                      const day = date.getUTCDate();
+                      const month = monthNames[date.getUTCMonth()];
+                      const year = date.getUTCFullYear();
+                      const hours = date.getUTCHours();
+                      const minutes = date.getUTCMinutes();
+                      const seconds = date.getUTCSeconds();
+
+                      const fielduserDate = `${day} ${month}, ${year} ${hours}:${minutes}:${seconds}`;
 
 
-                    <Col span={6}>
-                      <Row>
-                        <Col span={4}>
-                          <p style={{
-                            fontSize: "14px", fontWeight: "600", color:
-                              "#fdf2ff", backgroundColor: "#faad09", width: "90px",
-                            textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
-                          }}>
-                            {translate('Scheduled')} <br></br>
-                          </p>
-                        </Col>
-                        {/* <Col span={2}>
+                      function getStatusText(status) {
+                        switch (status) {
+                          case 1:
+                            return { text: 'Pending', color: '#fdf2ff', backgroundColor: 'rgb(167,0,255)' };
+                          case 2:
+                            return { text: 'In Process', color: '#fdf2ff', backgroundColor: 'green' };
+                          case 3:
+                            return { text: 'Completed', color: '#fdf2ff', backgroundColor: 'purple' };
+                          case 4:
+                            return { text: 'Rescheduled', color: '#fdf2ff', backgroundColor: 'orange' };
+                          case 5:
+                            return { text: 'Cancelled', color: '#fdf2ff', backgroundColor: 'red' };
+                          case 6:
+                            return { text: 'Request for Reshedule', color: '#fdf2ff', backgroundColor: 'brown' };
+                          case 7:
+                            return { text: 'Request for Cancel', color: '#fdf2ff', backgroundColor: 'gray' };
+                          case 8:
+                            return { text: 'Terminate', color: '#fdf2ff', backgroundColor: 'black' };
+                          case 9:
+                            return { text: 'Hold', color: '#fdf2ff', backgroundColor: 'yellow' };
+                          default:
+                        }
+                      }
+
+
+                      const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(ele.status);
+
+                      return (
+                        <Row style={{ padding: "0px 0px 0px 20px" }}>
+                          <Col span={6}>
+                            <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate(ele.user.name)} <br></br>
+                              { ele.isLeader && (
+                                <span style={{ fontSize: "12px", color: "#7928dd" }}>Leader</span>
+                              )}
+                            </p>
+
+                          </Col>
+                          <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>{fielduserDate}<br></br>
+                          </p></Col>
+                          <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}> <br></br>
+                          </p></Col>
+
+
+                          <Col span={6}>
+                            <Row>
+                              <Col span={4}>
+                                <p style={{
+                                  fontSize: "14px", fontWeight: "600", color: textColor
+                                    , backgroundColor: bgColor, width: "90px",
+                                  textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
+                                }}>
+                                  {translate(statusText)} <br></br>
+                                </p>
+                              </Col>
+                              {/* <Col span={2}>
                           4
                         </Col> */}
-                      </Row>
-                    </Col>
-                  </Row>
+                            </Row>
+                          </Col>
+                        </Row>
+                      )
+                      
+
+                      
+                    })
+
+                  }
+
                   <hr></hr>
-                  <Row style={{ padding: "0px 0px 0px 20px" }} >
-                    <Col span={6}>
-                      <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Alfreda Byers')} <br></br>
-                      </p>
-                    </Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>09:00 AM-01:00 PM <br></br>
-                    </p></Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}><br></br>
-                    </p></Col>
 
-
-                    <Col span={6}>
-                      <Row>
-                        <Col span={4}>
-                          <p style={{
-                            fontSize: "14px", fontWeight: "600", color:
-                              "#fdf2ff", backgroundColor: "#faad09", width: "90px",
-                            textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
-                          }}>
-                            {translate('Scheduled')} <br></br>
-                          </p>
-                        </Col>
-                        {/* <Col span={2}>
-                          4
-                        </Col> */}
-                      </Row>
-                    </Col>
-                  </Row>
-                  <hr></hr>
-                  <Row style={{ padding: "0px 0px 0px 20px" }}>
-                    <Col span={6}>
-                      <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Carly Alvarez')} <br></br>
-                      </p>
-                    </Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>09:00 AM-01:00 PM<br></br>
-                    </p></Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>05:30 AM<br></br>
-                    </p></Col>
-
-
-                    <Col span={6}>
-                      <Row>
-                        <Col span={4}>
-                          <p style={{
-                            fontSize: "14px", fontWeight: "600", color:
-                              "#fdf2ff", backgroundColor: "#1963b5", width: "90px",
-                            textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
-                          }}>
-                            {translate('In-Progress')} <br></br>
-                          </p>
-                        </Col>
-                        {/* <Col span={2}>
-                          4
-                        </Col> */}
-                      </Row>
-                    </Col>
-                  </Row>
                 </Col>
 
               </Row>
@@ -824,7 +822,9 @@ export default function ReadItem({ config, selectedItem }) {
           </Col>
 
           <Col className="gutter-row" span={12}>
-            <p>{moneyFormatter({ amount: currentErp.subTotal })}</p>
+            <p>{moneyFormatter({
+              amount: currentErp.additionalCost.subTotal
+            })}</p>
           </Col>
           <Col className="gutter-row" span={12}>
             <p>
@@ -832,13 +832,17 @@ export default function ReadItem({ config, selectedItem }) {
             </p>
           </Col>
           <Col className="gutter-row" span={12}>
-            <p>{moneyFormatter({ amount: currentErp.taxTotal })}</p>
+            <p>{moneyFormatter({
+              amount: currentErp.additionalCost.tax
+            })}</p>
           </Col>
           <Col className="gutter-row" span={12}>
             <p>{translate('Total')} :</p>
           </Col>
           <Col className="gutter-row" span={12}>
-            <p>{moneyFormatter({ amount: currentErp.total })}</p>
+            <p>{moneyFormatter({
+              amount: currentErp.additionalCost.totalPackageCost
+            })}</p>
           </Col>
         </Row>
       </div>

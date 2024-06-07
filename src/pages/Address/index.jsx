@@ -15,10 +15,10 @@ export default function Address() {
   const deleteModalLabels = ['name'];
   let { id } = useParams();
   const Labels = {
-    PANEL_TITLE: translate('clientaddress'),
-    DATATABLE_TITLE: translate('client_address_list'),
-    ADD_NEW_ENTITY: translate('add_new_client_address'),
-    ENTITY_NAME: translate('clientaddress'),
+    PANEL_TITLE: translate('customer_Address'),
+    DATATABLE_TITLE: translate('customer_address_list'),
+    ADD_NEW_ENTITY: translate('add_new_customer_address'),
+    ENTITY_NAME: translate('client_customer'),
   };
 
   const configPage = {

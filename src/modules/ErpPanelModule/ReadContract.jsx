@@ -198,7 +198,6 @@ export default function ReadContract({ config, selectedItem }) {
     const Createdhours = Createddate.getHours();
     const Createdminutes = Createddate.getMinutes();
     const Createdseconds = Createddate.getSeconds();
-
     const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`;
 
 
@@ -259,7 +258,7 @@ export default function ReadContract({ config, selectedItem }) {
                             dispatch(erp.convert({ entity, id: currentErp._id }));
                         }}
                         icon={<RetweetOutlined />}
-                    // style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
+                   
                     >
                         {translate('Convert to Invoice')}
                     </Button>,
@@ -331,7 +330,7 @@ export default function ReadContract({ config, selectedItem }) {
                                         </p>
                                     </Col>
                                 </Row>
-                                
+
                                 <Row className="gutter-row">
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Date')} :<br></br>
@@ -371,7 +370,7 @@ export default function ReadContract({ config, selectedItem }) {
                             <Col span={12}>
 
 
-               
+
 
                                 <Row className="gutter-row" >
                                     <Col span={12}>
@@ -471,82 +470,91 @@ export default function ReadContract({ config, selectedItem }) {
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('Lawn Care:One Time')} <br></br>
+                                    {`${currentErp.serviceList.name}`} <br></br>
                                 </p>
-
-
                             </Col>
 
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }} >
                                     {translate('Per Workorder Cost')} :<br></br>
+                                </p>
+                            </Col>
 
-                                </p> </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
-                                    {translate('300.00 /Workorder')} <br></br>
-                                </p> </Col>
+                                    {currentErp.serviceCost.servicePerWO} <br></br>
+                                </p>
+                            </Col>
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('Adjustment')} :<br></br>
 
-                                </p> </Col>
+                                </p>
+                            </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate(`${(+10.00)}`)} <br></br>
+                                    {currentErp.adjustment && currentErp.adjustment.value ? currentErp.adjustment.value : ""} <br></br>
 
-                                </p> </Col>
+                                </p>
+                            </Col>
 
 
                             <Col className="gutter-row" span={12} >
-                                <p style={{ fontSize: "15px" }}>{translate(`Discount1`)} :
+                                <p style={{ fontSize: "15px" }}>{translate(`Discount`)} :
                                     <br></br>
 
                                 </p>
 
                             </Col>
+
                             <Col className="gutter-row" span={12} >
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{translate('3.06')}
+                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.serviceCost.discount}
                                     <br></br>
 
                                 </p>
 
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
-                                    {translate('Package SubTotal')} :<br></br>
+                                    {translate('SubTotal')} :<br></br>
 
                                 </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('306.90/One Time')} <br></br>
+                                    {currentErp.serviceCost.subTotal} <br></br>
 
                                 </p>
                             </Col>
-                            <Col className="gutter-row" span={12}>
-                                <sp style={{ fontSize: "15px" }}>
-                                    {translate('Tax 20')} :<br></br>
 
-                                </sp>
+                            <Col className="gutter-row" span={12}>
+                                <p style={{ fontSize: "15px" }}>
+                                    {translate('Tax')} :<br></br>
+
+                                </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('61.38')} <br></br>
-
+                                    {currentErp.serviceCost.tax} <br></br>
                                 </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "15px" }}>
                                     {translate('Total Package Cost')} :<br></br>
 
                                 </p>
                             </Col>
+
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {translate('368.28/One Time')} <br></br>
+                                    {currentErp.serviceCost.totalPackageCost} <br></br>
 
                                 </p>
                             </Col>
@@ -557,7 +565,7 @@ export default function ReadContract({ config, selectedItem }) {
             </Row>
 
 
-    
+
             <h3 style={{ marginTop: "4%" }}>Other detail</h3>
             <Row className="gutter-row">
                 <Col span={24}>
@@ -573,7 +581,7 @@ export default function ReadContract({ config, selectedItem }) {
                                         </p>
                                     </Col>
                                 </Row>
-                               
+
                                 <Row className="gutter-row">
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Created By')} :<br></br>
@@ -648,26 +656,30 @@ export default function ReadContract({ config, selectedItem }) {
                 }}
             >
                 <Row gutter={[12, -5]}>
+
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Sub Total')} :</p>
                     </Col>
+                    <Col className="gutter-row" span={12}>
+                        <p>{moneyFormatter({ amount: currentErp.additionalCost.subTotal })}</p>
+                    </Col>
 
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.subTotal })}</p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
                         <p>
-                            {translate('Tax Total')} ({currentErp.taxRate} %) :
+                            {translate('Tax Total')} :
                         </p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.taxTotal })}</p>
+                        <p>{moneyFormatter({ amount: currentErp.additionalCost.tax })}</p>
                     </Col>
+
                     <Col className="gutter-row" span={12}>
                         <p>{translate('Total')} :</p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp.total })}</p>
+                        <p>{moneyFormatter({
+                            amount: currentErp.additionalCost.totalPackageCost
+                        })}</p>
                     </Col>
                 </Row>
             </div>

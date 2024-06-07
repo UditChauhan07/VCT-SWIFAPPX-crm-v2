@@ -12,7 +12,7 @@ export default function SideContent() {
     <Content
       style={{
         padding: '150px 30px 30px',
-        width: '100%',
+        width: '102%',
         maxWidth: '400px',
         margin: '0 auto',
       }}
@@ -50,6 +50,7 @@ export default function SideContent() {
           style={{
             display: 'flex',
             justifyContent: 'space-between',
+     
           }}
         >
           {/* <img

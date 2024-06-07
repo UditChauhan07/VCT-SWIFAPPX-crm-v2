@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { Button, Tag, Form, Divider } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -36,6 +36,7 @@ export default function CreateItem({ config, CreateForm }) {
   const translate = useLanguage();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   useEffect(() => {
     dispatch(settingsAction.list({ entity: 'setting' }));
@@ -45,7 +46,7 @@ export default function CreateItem({ config, CreateForm }) {
 
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
 
-  console.log({ isLoading, isSuccess, result });
+
 
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
@@ -56,7 +57,6 @@ export default function CreateItem({ config, CreateForm }) {
     let subOfferTotal = 0;
 
     if (item) {
-      // items.map((item) => {
       if (item) {
         if (item.offerPrice && item.quantity) {
           let offerTotal = calculate.multiply(item['quantity'], item['offerPrice']);
@@ -64,7 +64,6 @@ export default function CreateItem({ config, CreateForm }) {
         }
         if (item.quantity && item.price) {
           let total = calculate.multiply(item['quantity'], item['price']);
-          //sub total
           subTotal = calculate.add(subTotal, total);
         }
       }
@@ -114,11 +113,11 @@ export default function CreateItem({ config, CreateForm }) {
   }, [isSuccess]);
 
 
-
   const onSubmit = (fieldsValue) => {
+    console.log({ fieldsValue })
     const storedId = localStorage.getItem('SubscriptionId');
     const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
-    console.log({ fieldsValue });
+
     if (fieldsValue) {
 
       if (entity === "items") {
@@ -143,13 +142,11 @@ export default function CreateItem({ config, CreateForm }) {
         for (let i = 0; i < 50; i++) {
           lengthOfNameProperty = lengthOfNameProperty + Object.keys(fieldsValue).filter((ele) => ele === `name${i}`).length
         }
-        // for (let i = 0; i < Object.keys(fieldsValue).length - 4; i++) {
 
         for (let i = 0; i < Object.keys(fieldsValue).length - 4 - lengthOfNameProperty; i++) {
           let option = fieldsValue[i];
           console.log("option", option);
           let subscriptions = {
-            // Type: option.type,
             subscription: option?.type,
             data: []
           };
@@ -169,6 +166,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
+        console.log(fieldsValue)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -192,6 +190,7 @@ export default function CreateItem({ config, CreateForm }) {
         fielduser.map((item) => {
           item.endTime = EndTime
         })
+
         let additionalCost = {}
         let serviceCost = {}
         let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
@@ -203,6 +202,7 @@ export default function CreateItem({ config, CreateForm }) {
           additionalCost = JSON.parse(additionalCostStr)
         }
         let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
+        let submodule = localStorage.getItem('WO-RadioId')
 
         let Data = {
           client: fieldsValue.client,
@@ -218,12 +218,14 @@ export default function CreateItem({ config, CreateForm }) {
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
           subscription: WorkOrderstoredId,
+          subModule: submodule,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription
           },
+
 
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
@@ -235,9 +237,6 @@ export default function CreateItem({ config, CreateForm }) {
 
         fieldsValue = Data
       }
-      console.log({ fieldsValue });
-      return;
-
       if (entity === "contract") {
         console.log(fieldsValue)
         const Leader = {
@@ -264,6 +263,17 @@ export default function CreateItem({ config, CreateForm }) {
           item.endTime = EndTime
         })
 
+        let additionalCost = {}
+        let serviceCost = {}
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDBBBB") || "{}"
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELmMM") || "{}"
+        if (serviceCostStr) {
+          serviceCost = JSON.parse(serviceCostStr)
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr)
+        }
+        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgxxpp") || 0
 
         let Data = {
           client: fieldsValue.client,
@@ -291,16 +301,96 @@ export default function CreateItem({ config, CreateForm }) {
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue
-          }
+          },
+          serviceCost,
+          additionalCost,
+          grandTotal
         }
         fieldsValue = Data
-        // console.log(fieldsValue)
       }
+      // ................
+      if (entity === "quote") {
+        console.log(fieldsValue.items)
+        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
+        let additionalCost = {};
+        let serviceCost = {};
+        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}";
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
 
-      // console.log(fieldsValue)
+        try {
+          if (serviceCostStr) {
+            serviceCost = JSON.parse(serviceCostStr);
+          }
+        } catch (error) {
+          console.error('Error parsing serviceCostStr:', error);
+          serviceCost = {};
+        }
+
+        try {
+          if (additionalCostStr) {
+            additionalCost = JSON.parse(additionalCostStr);
+          }
+        } catch (error) {
+          console.error('Error parsing additionalCostStr:', error);
+          additionalCost = {};
+        }
+
+        let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
+        let grandTotal = parseFloat(grandTotalStr) || 0;
+
+
+
+        const isCustom = fieldsValue.serviceName === 'custom';
+        const fieldData = {
+          client: fieldsValue.client,
+          clientAddress: fieldsValue.clientAddress,
+          billingAddress: fieldsValue.billingAddress,
+          sendQuotationEmail: fieldsValue.sendQuotationEmail,
+          startDate: fieldsValue.startDate,
+          expiredDate: fieldsValue.expiredDate,
+          startTime: fieldsValue.startTime,
+          expectedRequiredTime: fieldsValue.expectedRequiredTime,
+          salesPerson: fieldsValue.salesPerson,
+          salesPersonContact: fieldsValue.SalesPersonContact,
+          serviceCategory: fieldsValue.serviceCategory,
+          serviceList: fieldsValue.serviceName,
+          subscriptions: storedSubscriptions,
+          isCustom: isCustom,
+          customService: {
+            name: fieldsValue.ServiceName,
+            price: fieldsValue.ServicePrice,
+            description: fieldsValue.ServiceDescription,
+          },
+          items: fieldsValue.items,
+          customItems: fieldsValue.customItems,
+          remarks: fieldsValue.InitialRemarks,
+          additionalCost,
+          grandTotal,
+
+          adjustment: {
+            type: fieldsValue.AdjustmentType,
+            value: fieldsValue.AdjustmentValue,
+          },
+          InitialRemarks: fieldsValue.InitialRemarks,
+        };
+
+        console.log(fieldData);
+        fieldsValue = fieldData;
+      }
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     };
   }
+
+
+  const onFinishFailed = ({ errorFields }) => {
+    if (errorFields && errorFields.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // if (entity === "roles" && errorFields && errorFields.length > 0) {
+    // Scroll to the top of the page
+    //   window.scrollTo({ top: 0, behavior: 'smooth' });
+    // } 
+  };
 
   return (
     <>
@@ -310,8 +400,6 @@ export default function CreateItem({ config, CreateForm }) {
         }}
         title={translate('New')}
         ghost={false}
-        // tags={entity != 'roles' ? <Tag>{translate('Draft')}</Tag> : ''}
-        // subTitle="This is create page"
         extra={[
           <Button
             key={`${uniqueId()}`}
@@ -328,7 +416,7 @@ export default function CreateItem({ config, CreateForm }) {
       ></PageHeader>
       <Divider dashed />
       <Loading isLoading={isLoading}>
-        <Form form={form} layout="vertical" onFinish={onSubmit} onValuesChange={handelValuesChange}>
+        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed} ref={formRef} onValuesChange={handelValuesChange}>
           <CreateForm subTotal={subTotal} offerTotal={offerSubTotal} />
         </Form>
       </Loading>
