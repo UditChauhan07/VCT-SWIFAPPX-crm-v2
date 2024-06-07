@@ -114,7 +114,7 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const onSubmit = (fieldsValue) => {
-    console.log({fieldsValue})
+    console.log({ fieldsValue })
     const storedId = localStorage.getItem('SubscriptionId');
     const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
 
@@ -142,7 +142,7 @@ export default function CreateItem({ config, CreateForm }) {
         for (let i = 0; i < 50; i++) {
           lengthOfNameProperty = lengthOfNameProperty + Object.keys(fieldsValue).filter((ele) => ele === `name${i}`).length
         }
-       
+
         for (let i = 0; i < Object.keys(fieldsValue).length - 4 - lengthOfNameProperty; i++) {
           let option = fieldsValue[i];
           console.log("option", option);
@@ -166,7 +166,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       }
       if (entity === "workorder") {
-       console.log(fieldsValue)
+        console.log(fieldsValue)
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -274,7 +274,7 @@ export default function CreateItem({ config, CreateForm }) {
           additionalCost = JSON.parse(additionalCostStr)
         }
         let grandTotal = localStorage.getItem("jv1GYkk6plxCpgxxpp") || 0
-    
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -323,7 +323,7 @@ export default function CreateItem({ config, CreateForm }) {
           }
         } catch (error) {
           console.error('Error parsing serviceCostStr:', error);
-          serviceCost = {}; 
+          serviceCost = {};
         }
 
         try {
@@ -332,15 +332,15 @@ export default function CreateItem({ config, CreateForm }) {
           }
         } catch (error) {
           console.error('Error parsing additionalCostStr:', error);
-          additionalCost = {}; 
+          additionalCost = {};
         }
 
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
-       
-     
-        const isCustom = fieldsValue.serviceName === 'custom'; 
+
+
+        const isCustom = fieldsValue.serviceName === 'custom';
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -354,7 +354,7 @@ export default function CreateItem({ config, CreateForm }) {
           salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceName,
-          subscriptions: storedSubscriptions, 
+          subscriptions: storedSubscriptions,
           isCustom: isCustom,
           customService: {
             name: fieldsValue.ServiceName,
@@ -374,7 +374,7 @@ export default function CreateItem({ config, CreateForm }) {
           InitialRemarks: fieldsValue.InitialRemarks,
         };
 
-        console.log( fieldData );
+        console.log(fieldData);
         fieldsValue = fieldData;
       }
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
@@ -383,13 +383,13 @@ export default function CreateItem({ config, CreateForm }) {
 
 
   const onFinishFailed = ({ errorFields }) => {
-      if (errorFields && errorFields.length > 0) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      // if (entity === "roles" && errorFields && errorFields.length > 0) {
-      // Scroll to the top of the page
-      //   window.scrollTo({ top: 0, behavior: 'smooth' });
-      // } 
+    if (errorFields && errorFields.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // if (entity === "roles" && errorFields && errorFields.length > 0) {
+    // Scroll to the top of the page
+    //   window.scrollTo({ top: 0, behavior: 'smooth' });
+    // } 
   };
 
   return (
@@ -416,7 +416,7 @@ export default function CreateItem({ config, CreateForm }) {
       ></PageHeader>
       <Divider dashed />
       <Loading isLoading={isLoading}>
-        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed} ref={formRef}  onValuesChange={handelValuesChange}>
+        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed} ref={formRef} onValuesChange={handelValuesChange}>
           <CreateForm subTotal={subTotal} offerTotal={offerSubTotal} />
         </Form>
       </Loading>
