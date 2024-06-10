@@ -614,7 +614,7 @@ export default function ReadItem({ config, selectedItem }) {
                   <hr ></hr>
 
                   {
-                    currentErp.fieldUsers.map((ele) => {
+                    currentErp.fieldUsers?.map((ele) => {
                       const date = new Date(ele.endTime);
 
                       const monthNames = [
@@ -804,7 +804,7 @@ export default function ReadItem({ config, selectedItem }) {
         <Divider />
       </Row>
       {
-        itemslist.map((item) => (
+        itemslist?.map((item) => (
           <Item key={item._id} item={item}></Item>
         ))
       }

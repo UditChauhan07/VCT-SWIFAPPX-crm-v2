@@ -159,7 +159,7 @@ export default function AdminForm({ isUpdateForm = false }) {
           ]}
         >
           <Select>
-            {roleList.map((role, rKey) => (
+            {roleList?.map((role, rKey) => (
               < Select.Option key={rKey} value={role._id} > {translate(role.name)}</Select.Option>
             ))}
           </Select>
@@ -191,7 +191,7 @@ export default function AdminForm({ isUpdateForm = false }) {
         ]}
       >
         <Select>
-          {CompanyList.map((company, cKey) => (
+          {CompanyList?.map((company, cKey) => (
             <Select.Option key={cKey} value={company._id}>{translate(company.name)}</Select.Option>
           ))}
         </Select>
@@ -207,7 +207,7 @@ export default function AdminForm({ isUpdateForm = false }) {
         ]}
       >
         <Select>
-          {PeopleList.map((people, pKey) => (
+          {PeopleList?.map((people, pKey) => (
             <Select.Option key={pKey} value={people._id}>{translate(people.firstname)}</Select.Option>
           ))}
         </Select>

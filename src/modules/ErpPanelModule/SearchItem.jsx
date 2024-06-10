@@ -68,8 +68,8 @@ export default function Search({ config }) {
   useEffect(() => {
     let optionResults = [];
 
-    result.map((item) => {
-      const labels = displayLabels.map((x) => item[x]).join(' ');
+    result?.map((item) => {
+      const labels = displayLabels?.map((x) => item[x]).join(' ');
       optionResults.push({ label: labels, value: item[outputValue] });
     });
 

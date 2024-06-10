@@ -424,9 +424,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
-    ShowServiceId.forEach((ele) => {
+    ShowServiceId?.forEach((ele) => {
       console.log(ele)
-      ele.data.forEach((item) => {
+      ele.data?.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
         }
@@ -445,7 +445,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       },
     ];
 
-    subscriptionNames.forEach((name) => {
+    subscriptionNames?.forEach((name) => {
       columns.push({
         title: <span>{name}</span>,
         dataIndex: name,
@@ -670,7 +670,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       let newServiceCost = { ...initialServiceCost };
 
       ShowServiceId?.forEach(subscriptionObj => {
-        subscriptionObj.data.forEach(dataObj => {
+        subscriptionObj.data?.forEach(dataObj => {
           if (subscriptionIds.includes(dataObj._id)) {
             const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
             const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
@@ -738,10 +738,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const CalculatorFilled = () => {
     return (
+
       ShowServiceList.map((element, _id) => (
         element.subscriptions.map((subscriptions, __id) => (
           subscriptions.data.map((subscription, ___id) => {
             console.log({ subscriptions });
+
             let package_divider = parseFloat(subscriptions.subscription.package_divider);
             subscritionAmount = parseFloat(subscription.price / package_divider)
             let subTotal = parseFloat(subscription.price / package_divider);
@@ -790,9 +792,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const CalculatorFilledItem = () => {
     return (
-      ShowServiceList.map((element, _id) => (
-        element.subscriptions.map((subscriptions, __id) => (
-          subscriptions.data.map((subscription, ___id) => {
+      ShowServiceList?.map((element, _id) => (
+        element.subscriptions?.map((subscriptions, __id) => (
+          subscriptions.data?.map((subscription, ___id) => {
             let package_divider = parseFloat(subscriptions.subscription.package_divider);
             subscritionAmount = parseFloat(subscription.price / package_divider)
             let subTotal = parseFloat(subscription.price / package_divider);
@@ -822,8 +824,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                   <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
+
                       {Subitems.map((item, index) => {
                         itemMPrice += parseFloat(item.price) * package_divider * item.qty;
+
 
                         itemPrice += (parseFloat(item.price) * package_divider * item.qty);
                         subITotal = itemPrice
@@ -918,7 +922,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const initialQuantities = {};
     const initialTotals = {};
     productList?.map((ele) =>
-      ele.products.forEach((product, index) => {
+      ele.products?.forEach((product, index) => {
         initialPrices[product._id] = product.price;
         initialQuantities[product._id] = 1;
         initialTotals[product._id] = product.price;
@@ -933,7 +937,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const updateQuantity = (productId, value) => {
     ///123
     if (Subitems.length) {
-      Subitems.map((item) => {
+      Subitems?.map((item) => {
         if (item._id == productId) {
           item.qty = parseInt(value)
           return item;
@@ -1017,7 +1021,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {customerAddress.map((option, index) => (
+              {customerAddress?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
@@ -1285,8 +1289,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       >
                         {(fields, { add, remove }) => (
                           <>
+
                             {fields.map((field, index) => (
                               <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current} onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler }}></ItemRow>
+
                             ))}
                             <Form.Item>
                               <Button
@@ -1520,7 +1526,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
-                            name={['items', index, 'item']}
+                            name={['items', data._id, index, 'item']}
                             initialValue={data._id}
                             rules={[
                               {
@@ -1537,7 +1543,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={4}>
-                          <Form.Item name={['items', index, 'price']} initialValue={prices[data._id]}>
+                          <Form.Item name={['items', data._id, index, 'price']} initialValue={prices[data._id]}>
                             <InputNumber
                               className="moneyInput"
                               onChange={updatePrice}
@@ -1551,7 +1557,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={3}>
-                          <Form.Item name={['items', index, 'quantity']} initialValue={1}>
+                          <Form.Item name={['items', data._id, index, 'quantity']} initialValue={1}>
                             <InputNumber
                               style={{ width: '100%' }}
                               min={0}
@@ -1560,7 +1566,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={4}>
-                          <Form.Item name={['items', index, 'total']} initialValue={totals[data._id]}>
+                          <Form.Item name={['items', data._id,index, 'total']} initialValue={totals[data._id]}>
                             <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
                           </Form.Item>
                         </Col>
@@ -1571,6 +1577,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                       </Row>
                     ))}
+
+              
                   </div>
                 </Collapse.Panel>
               ))}
@@ -1606,7 +1614,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             </Radio.Group> */}
 
             <Radio.Group style={{ display: "flex", gap: "20px" }} >
-              {optionsss.map((option, index) => (
+              {optionsss?.map((option, index) => (
                 <Radio key={index} value={option} onClick={() => IsActive(index + 2)}>
                   {option}
                 </Radio>

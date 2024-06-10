@@ -18,7 +18,7 @@ export default function SampleForm({ fields, isUpdateForm = false }) {
     console.log(feedback);
     return (
         <>
-            {Object.keys(fields).map((key) => {
+            {Object.keys(fields)?.map((key) => {
                 let field = fields[key];
 
                 if ((isUpdateForm && !field.disableForUpdate) || !field.disableForForm) {
@@ -193,7 +193,7 @@ function FormElement({ field, setFeedback }) {
                     width: '100%',
                 }}
             >
-                {countryList.map((language) => (
+                {countryList?.map((language) => (
                     <Select.Option
                         key={language.value}
                         value={language.value}

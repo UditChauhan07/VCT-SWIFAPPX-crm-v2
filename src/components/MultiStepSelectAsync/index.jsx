@@ -74,7 +74,7 @@ const MultiStepSelectAsync = ({
           }
         }}
       >
-        {firstSelectOptions.map((option) => (
+        {firstSelectOptions?.map((option) => (
           <Option key={option[firstSelectIdKey]} value={option[firstSelectValueKey]}>
             {option[firstSelectLabelKey]}
           </Option>
@@ -97,7 +97,7 @@ const MultiStepSelectAsync = ({
             }
           }}
         >
-          {secondSelectOptions.map((option) => (
+          {secondSelectOptions?.map((option) => (
             <Option key={option[secondSelectIdKey]} value={option[secondSelectValueKey]}>
               {option[secondSelectLabelKey]}
             </Option>

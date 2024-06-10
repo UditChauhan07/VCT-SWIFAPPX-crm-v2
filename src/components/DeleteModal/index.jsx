@@ -39,7 +39,7 @@ export default function DeleteModal({ config }) {
       // dispatch(erp.resetAction({actionType:"delete"})); // check here maybe it wrong
     }
     if (current) {
-      let labels = deleteModalLabels.map((x) => valueByString(current, x)).join(' ');
+      let labels = deleteModalLabels?.map((x) => valueByString(current, x)).join(' ');
  
       setDisplayItem(labels);
     }
