@@ -379,8 +379,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
-    ShowServiceId.forEach((ele) => {
-      ele.data.forEach((item) => {
+    ShowServiceId?.forEach((ele) => {
+      ele.data?.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
         }
@@ -400,7 +400,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       },
     ];
 
-    subscriptionNames.forEach((name) => {
+    subscriptionNames?.forEach((name) => {
       columns.push({
         title: <span>{name}</span>,
         dataIndex: name,
@@ -458,7 +458,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const { value } = e.target;
     setSubId(prevState => {
       const updatedState = { ...prevState };
-      Object.keys(updatedState).forEach(key => {
+      Object.keys(updatedState)?.forEach(key => {
         if (key !== id) {
           updatedState[key] = undefined;
         }
@@ -512,9 +512,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const CalculatorFilled = () => {
     return (
-      ShowServiceList.map((element, _id) => (
-        element.subscriptions.map((subscriptions, __id) => (
-          subscriptions.data.map((subscription, ___id) => {
+      ShowServiceList?.map((element, _id) => (
+        element.subscriptions?.map((subscriptions, __id) => (
+          subscriptions.data?.map((subscription, ___id) => {
             let package_divider = parseInt(subscriptions.subscription.package_divider);
             subscritionAmount = parseInt(subscription.price / package_divider)
             let subTotal = parseInt(subscription.price / package_divider);
@@ -570,7 +570,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
         <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
           <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
-            {Subitems.map((item, index) => {
+            {Subitems?.map((item, index) => {
               itemPrice += parseFloat(item.total);
               console.log({ aa: item.total });
               if (discountValue) {
@@ -711,12 +711,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
-    ShowServiceId.forEach((ele, index) => {
+    ShowServiceId?.forEach((ele, index) => {
       const rowData = {
         Subscription: ele.subscription.name,
       };
 
-      subscriptionNames.forEach((name) => {
+      subscriptionNames?.forEach((name) => {
         const matchingItem = ele.data.find(item => item.name === name);
 
         rowData[name] = matchingItem ? (
@@ -772,7 +772,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const initialQuantities = {};
     const initialTotals = {};
     productList?.map((ele) =>
-      ele.products.forEach((product, index) => {
+      ele.products?.forEach((product, index) => {
         initialPrices[product._id] = product.price;
         initialQuantities[product._id] = 1;
         initialTotals[product._id] = product.price;
@@ -927,7 +927,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {customerAddress.map((option, index) => (
+              {customerAddress?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
@@ -950,7 +950,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {customerAddress.map((option, index) => (
+              {customerAddress?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
@@ -1646,7 +1646,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           >
 
             <Radio.Group style={{ display: "flex", gap: "20px" }} >
-              {optionsss.map((option, index) => (
+              {optionsss?.map((option, index) => (
                 <Radio key={index} value={option} onClick={() => IsActive(index + 2)}>
                   {option}
                 </Radio>

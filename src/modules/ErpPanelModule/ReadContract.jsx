@@ -643,7 +643,7 @@ export default function ReadContract({ config, selectedItem }) {
                 <Divider />
             </Row>
             {
-                itemslist.map((item) => (
+                itemslist?.map((item) => (
                     <Item key={item._id} item={item}></Item>
                 ))
             }

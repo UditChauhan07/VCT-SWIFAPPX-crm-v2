@@ -610,7 +610,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 <Divider />
             </Row>
             {
-                itemslist.map((item) => (
+                itemslist?.map((item) => (
                     <Item key={item._id} item={item}></Item>
                 ))
             }

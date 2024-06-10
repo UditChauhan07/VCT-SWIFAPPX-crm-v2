@@ -196,7 +196,7 @@ const CompanyContactInfo = () => {
                                 width: '100%',
                             }}
                         >
-                            {countryList.map((language) => (
+                            {countryList?.map((language) => (
                                 <Select.Option
                                     key={language.value}
                                     value={language.value}

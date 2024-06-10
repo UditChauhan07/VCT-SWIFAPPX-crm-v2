@@ -13,7 +13,7 @@ export default function EmailForm({ current = null }) {
 
   const displayLabels = (labels = []) => (
     <>
-      {labels.map((label, index) => (
+      {labels?.map((label, index) => (
         <Tag key={`${index}-${index}`} onClick={() => setBody(body)} color="blue">
           {label}
         </Tag>

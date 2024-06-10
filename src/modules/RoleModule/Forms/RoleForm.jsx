@@ -221,7 +221,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
         </Col >
       </Row >
 
-      {entities.map((entity, key) => (
+      {entities?.map((entity, key) => (
         < Row align="middle" className={styles.middle_row} >
           <Col className="gutter-row" span={6}>
             {translate(entity[0].toUpperCase() +

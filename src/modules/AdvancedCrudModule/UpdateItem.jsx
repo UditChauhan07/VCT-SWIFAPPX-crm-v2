@@ -66,7 +66,7 @@ export default function UpdateItem({ config, UpdateForm }) {
     let subTotal = 0;
 
     if (items) {
-      items.map((item) => {
+      items?.map((item) => {
         if (item) {
           if (item.quantity && item.price) {
             let total = calculate.multiply(item['quantity'], item['price']);
@@ -90,7 +90,7 @@ export default function UpdateItem({ config, UpdateForm }) {
       }
       if (fieldsValue.items) {
         let newList = [...fieldsValue.items];
-        newList.map((item) => {
+        newList?.map((item) => {
           item.total = item.quantity * item.price;
         });
         dataToUpdate.items = newList;

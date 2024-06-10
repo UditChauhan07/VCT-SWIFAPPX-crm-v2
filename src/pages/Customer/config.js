@@ -17,7 +17,7 @@ export const fields = {
     label: 'company',
     entity: 'company',
     displayLabels: ['name'],
-    searchFields: 'name',
+    searchFields:[ 'name'],
     dataIndex: ['company', 'name'],
     disableForTable: true,
     feedback: 'Company',

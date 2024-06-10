@@ -122,7 +122,7 @@ export default function CreateItem({ config, CreateForm }) {
 
       if (entity === "items") {
         let newList = [...fieldsValue.items];
-        newList.map((item) => {
+        newList?.map((item) => {
           item.total = calculate.multiply(item.quantity, item.price);
         });
         fieldsValue = {
@@ -187,7 +187,7 @@ export default function CreateItem({ config, CreateForm }) {
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
         const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
-        fielduser.map((item) => {
+        fielduser?.map((item) => {
           item.endTime = EndTime
         })
 
@@ -259,7 +259,7 @@ export default function CreateItem({ config, CreateForm }) {
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
         const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
-        fielduser.map((item) => {
+        fielduser?.map((item) => {
           item.endTime = EndTime
         })
 

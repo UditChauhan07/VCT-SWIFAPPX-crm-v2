@@ -15,7 +15,7 @@ const getLabel = (lang, key) => {
 
       const remove_underscore_fromKey = lowerCaseKey.replace(/_/g, ' ').split(' ');
 
-      const conversionOfAllFirstCharacterofEachWord = remove_underscore_fromKey.map(
+      const conversionOfAllFirstCharacterofEachWord = remove_underscore_fromKey?.map(
         (word) => word[0].toUpperCase() + word.substring(1)
       );
 
