@@ -338,7 +338,13 @@ export default function CreateItem({ config, CreateForm }) {
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
+        let MyItems = {};
 
+        let Items = localStorage.getItem('myItems');
+
+        if (Items) {
+          MyItems = JSON.parse(Items);
+        }
 
         const isCustom = fieldsValue.serviceName === 'custom';
         const fieldData = {
@@ -361,7 +367,8 @@ export default function CreateItem({ config, CreateForm }) {
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription,
           },
-          items: fieldsValue.items,
+          items: MyItems,
+          // items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
           additionalCost,
