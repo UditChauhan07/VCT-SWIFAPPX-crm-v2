@@ -572,6 +572,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     calculateCosts();
   }, [subscriptionIds, discountValue, ShowServiceId, tax]);
 
+
   const DiscountValueHandler = (value) => {
     setdiscount(value ?? 0);
   };
@@ -601,9 +602,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return tableData;
   };
 
-  // const DiscountValueHandler = (value) => {
-  //   setdiscount(value); // Correctly set the discount value
-  // };
+
 
   const CalculatorFilled = () => {
     return (

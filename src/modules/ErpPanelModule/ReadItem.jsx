@@ -35,7 +35,7 @@ const Item = ({ item }) => {
     <Row gutter={[12, 0]} key={item._id}>
       <Col className="gutter-row" span={11}>
         <p style={{ marginBottom: 5 }}>
-          <strong>{item.item.name}</strong>
+          {/* <strong>{item.item.name}</strong> */}
         </p>
         <p>{item.description}</p>
       </Col>
@@ -54,7 +54,7 @@ const Item = ({ item }) => {
             textAlign: 'right',
           }}
         >
-          {item.quantity}
+          {item.qty}
         </p>
       </Col>
       <Col className="gutter-row" span={5}>
@@ -518,7 +518,8 @@ export default function ReadItem({ config, selectedItem }) {
 
               </Col>
               <Col className="gutter-row" span={12} >
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.serviceCost.discount}
+                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                {currentErp.serviceCost.discount}
                   <br></br>
 
                 </p>
@@ -532,7 +533,8 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {currentErp.serviceCost.subTotal} <br></br>
+                  {currentErp.serviceCost.subTotal}
+                   <br></br>
 
                 </p>
               </Col>
@@ -544,7 +546,8 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {currentErp.serviceCost.tax} <br></br>
+                  {currentErp.serviceCost.tax}
+                   <br></br>
 
                 </p>
               </Col>
@@ -557,7 +560,8 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {currentErp.serviceCost.totalPackageCost} <br></br>
+                  {currentErp.serviceCost.totalPackageCost} 
+                  <br></br>
 
                 </p>
               </Col>
@@ -841,7 +845,7 @@ export default function ReadItem({ config, selectedItem }) {
           </Col>
           <Col className="gutter-row" span={12}>
             <p>{moneyFormatter({
-              amount: currentErp.additionalCost.totalPackageCost
+              amount: currentErp.grandTotal
             })}</p>
           </Col>
         </Row>

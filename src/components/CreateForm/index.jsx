@@ -10,7 +10,8 @@ import useLanguage from '@/locale/useLanguage';
 import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
-export default function CreateForm({ config, formElements, withUpload = false  }) {
+export default function CreateForm({ config, formElements, withUpload = false, sidePanelVisible  }) {
+  console.log(formElements)
   let { entity,  } = config;
   const dispatch = useDispatch();
   const { isLoading, isSuccess } = useSelector(selectCreatedItem);
@@ -20,7 +21,7 @@ export default function CreateForm({ config, formElements, withUpload = false  }
   const [form] = Form.useForm();
   const translate = useLanguage();
   const onSubmit = (fieldsValue) => {
-      console.log(fieldsValue)
+  
     // Manually trim values before submission
 
     if (fieldsValue.file && withUpload) {
@@ -54,6 +55,16 @@ export default function CreateForm({ config, formElements, withUpload = false  }
       dispatch(crud.list({ entity }));
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (!sidePanelVisible) {
+      form.resetFields();
+    }
+  }, [sidePanelVisible]);
+
+
+
+
 
   return (
     <Loading isLoading={isLoading}>

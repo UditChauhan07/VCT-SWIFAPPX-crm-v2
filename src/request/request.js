@@ -47,9 +47,11 @@ const request = {
     }
   },
   read: async ({ entity, id }) => {
+    console.log(id)
     try {
       // console.log('data entities --- ', {entity, id});
       const response = await axios.get(entity + '/read/' + id);
+      console.log(response)
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: true,
