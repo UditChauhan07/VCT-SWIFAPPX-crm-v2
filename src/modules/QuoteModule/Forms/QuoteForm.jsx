@@ -424,9 +424,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
-    ShowServiceId.forEach((ele) => {
+    ShowServiceId?.forEach((ele) => {
       console.log(ele)
-      ele.data.forEach((item) => {
+      ele.data?.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
         }
@@ -445,7 +445,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       },
     ];
 
-    subscriptionNames.forEach((name) => {
+    subscriptionNames?.forEach((name) => {
       columns.push({
         title: <span>{name}</span>,
         dataIndex: name,
@@ -458,19 +458,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [isSubscriptionID, seTisSubscriptionID] = useState(null);
 
-const [adjustmentvalue, setadjustment] = useState(null);
+  const [adjustmentvalue, setadjustment] = useState(null);
   // const [discountValue, setdiscount] = useState(null);
   // console.log(discountValue)
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
-  
+
   const [quantityvalue, setQuantiyvalue] = useState();
- ;
+  ;
   useEffect(() => { }, [subscriptionCount, subItemCount])
   let subscriptionSubTotal = 0;
   let subscritionAmount = 0;
 
-  console.log(Subitems, "Subitems")
   const ItemHandler = (element) => {
     setCheckedId(element.price);
 
@@ -494,8 +493,95 @@ const [adjustmentvalue, setadjustment] = useState(null);
     setItems(temp);
     setSubItemCount(temp.length);
   };
-  
-  
+  console.log({ Subitems });
+
+  const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+
+    if (remove && _id) {
+      const selectedIndex = tempId.indexOf(_id);
+      if (selectedIndex) {
+        tempId.splice(selectedIndex, 1);
+        const itemIndex = temp.findIndex(item => item._id === _id);
+        if (itemIndex !== -1) {
+          temp.splice(itemIndex, 1);
+        }
+      }
+    } else {
+      const selectedIndex = tempId.indexOf(_id);
+      if (selectedIndex !== -1) {
+        temp.map((item) => {
+          if (item._id === _id) {
+            item.name = name
+          }
+        })
+      } else {
+        let element = {
+          _id, price, name,
+          total: price * (qty),
+          qty
+        }
+        console.warn({ element });
+        tempId.push(_id);
+        temp.push(element);
+      }
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  }
+  const CustomItemQTYHandler = (_id, qty, price = 0) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.qty = qty;
+          item.total = item.price * (qty)
+        }
+      })
+    } else {
+      let element = {
+        _id, price, name: null,
+        total: price * (qty),
+        qty
+      }
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  }
+  const CustomItemPriceHandler = (_id, price = 0) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.price = price
+          item.total = item.price * (item.qty)
+        }
+      })
+    } else {
+      let element = {
+        _id, price, name: null,
+        total: price * (1),
+        qty: 1
+      }
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  }
+
+
 
   const initialServiceCost = {
     servicePerWO: null,
@@ -509,13 +595,13 @@ const [adjustmentvalue, setadjustment] = useState(null);
     tax: null,
     totalPackageCost: null
   }
- 
-    const [subscriptionIds, setSubscriptionIds] = useState([]);
-  
+
+  const [subscriptionIds, setSubscriptionIds] = useState([]);
+
   const [discountValue, setdiscount] = useState(0);
   // const [subItemCount, setSubItemCount] = useState(0); 
-    const [serviceCost, setServiceCost] = useState(initialServiceCost);
-    const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
+  const [serviceCost, setServiceCost] = useState(initialServiceCost);
+  const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
   const handleCheckboxClick = (id) => {
     let temp = [...subscriptionIds];
@@ -527,6 +613,54 @@ const [adjustmentvalue, setadjustment] = useState(null);
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
   };
+  const handleCustomServiceInput = (name) => {
+    let temp = isCustom ? [] : ShowServiceList;
+    if (temp.length > 0) {
+      setSubscriptionCount(0);
+      temp.map((element, _id) => {
+        element.subscriptions.map((subscriptions, __id) => {
+          subscriptions.data.map((subscription, ___id) => {
+            console.log({ subscription });
+            subscription.name = name
+          })
+        })
+      })
+    } else {
+      setSubscriptionCount(0);
+      setShowServiceList([{
+        subscriptions: [{
+          subscription: {
+            name: "One Time",
+            package_divider: 1
+          },
+          data: [{
+            _id: "CS-1",
+            name: name ?? "Custom Service",
+            price: 0
+          }]
+        }]
+      }])
+    }
+    setSubscriptionIds(["CS-1"]);
+    setSubscriptionCount(1);
+  }
+  const handleCustomServicePriceInput = (price) => {
+    let temp = [];
+    setSubscriptionCount(0);
+
+    ShowServiceList.map((element, _id) => {
+      element.subscriptions.map((subscriptions, __id) => {
+        subscriptions.data.map((subscription, ___id) => {
+          console.log({ subscription });
+          subscription.price = price
+        })
+      })
+      temp.push(element)
+    })
+    console.log({ ShowServiceList });
+    setSubscriptionCount(1);
+    setShowServiceList(temp)
+  }
 
 
   useEffect(() => {
@@ -534,9 +668,8 @@ const [adjustmentvalue, setadjustment] = useState(null);
       const discountValueParsed = parseFloat(discountValue) || 0;
       let subscriptionsArray = [];
       let newServiceCost = { ...initialServiceCost };
-
-      ShowServiceId?.forEach(subscriptionObj => {
-        subscriptionObj.data.forEach(dataObj => {
+    ShowServiceId?.forEach(subscriptionObj => {
+        subscriptionObj.data?.forEach(dataObj => {
           if (subscriptionIds.includes(dataObj._id)) {
             const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
             const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
@@ -570,7 +703,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
   }, [subscriptionIds, discountValue, ShowServiceId, tax]);
 
   const DiscountValueHandler = (value) => {
-    setdiscount(value);
+    setdiscount(value ?? 0);
   };
 
   const generateTableData = () => {
@@ -583,8 +716,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
 
       subscriptionNames?.forEach(name => {
         const matchingItem = ele.data.find(item => item.name === name);
-
-        rowData[name] = matchingItem ? (
+          rowData[name] = matchingItem ? (
           <Checkbox.Group key={matchingItem._id} onChange={() => handleCheckboxClick(matchingItem._id)}>
             <Checkbox value={matchingItem._id}>
               {`${matchingItem.price}.00 /${ele.subscription.name}`}
@@ -604,26 +736,29 @@ const [adjustmentvalue, setadjustment] = useState(null);
 
   const CalculatorFilled = () => {
     return (
+
       ShowServiceList.map((element, _id) => (
         element.subscriptions.map((subscriptions, __id) => (
           subscriptions.data.map((subscription, ___id) => {
-            let package_divider = parseInt(subscriptions.subscription.package_divider);
-            subscritionAmount = parseInt(subscription.price / package_divider)
-            let subTotal = parseInt(subscription.price / package_divider);
+            console.log({ subscriptions });
+
+            let package_divider = parseFloat(subscriptions.subscription.package_divider);
+            subscritionAmount = parseFloat(subscription.price / package_divider)
+            let subTotal = parseFloat(subscription.price / package_divider);
             if (active == 2) {
-              subTotal += parseInt(adjustmentvalue);
+              subTotal += parseFloat(adjustmentvalue);
             }
             if (active == 3) {
-              subTotal -= parseInt(adjustmentvalue);
+              subTotal -= parseFloat(adjustmentvalue);
             }
             let discount = 0;
             if (discountValue) {
-              discount = (subTotal * (parseInt(discountValue) / 100))
-              subTotal -= (subTotal * (parseInt(discountValue) / 100))
+              discount = (subTotal * (parseFloat(discountValue) / 100))
+              subTotal -= (subTotal * (parseFloat(discountValue) / 100))
             }
             let taxValue = 0;
             if (tax.taxValue) {
-              taxValue = (subTotal * (parseInt(tax.taxValue) / 100))
+              taxValue = (subTotal * (parseFloat(tax.taxValue) / 100))
             }
             if (subscriptionIds.includes(subscription._id)) {
               subscriptionSubTotal = subTotal + taxValue;
@@ -633,7 +768,7 @@ const [adjustmentvalue, setadjustment] = useState(null);
               // serviceCost.tax = parseFloat(taxValue).toFixed(2);
               // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
               // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
-              // localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
+              localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
               return (
                 <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                   <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
@@ -654,65 +789,109 @@ const [adjustmentvalue, setadjustment] = useState(null);
   }
 
   const CalculatorFilledItem = () => {
-    let itemPrice = 0;
-    let discount = 0;
-    let taxValue = 0;
-
     return (
-      <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-        <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
-          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
-            {Subitems.map((item, index) => {
-              itemPrice += parseFloat(item.total);
-              if (discountValue) {
-                itemPrice -= (itemPrice * (parseInt(discountValue) / 100))
-                discount = (parseFloat(item.total) * parseInt(discountValue) / 100)
-              }
-              if (tax.taxValue) {
-                taxValue = (parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100))
-              }
-
-              localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + itemPrice + taxValue).toFixed(2));
-              additionalCost.subTotal = parseFloat(itemPrice).toFixed(2);
-              additionalCost.tax = parseFloat(taxValue).toFixed(2)
-              additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue).toFixed(2);
-              localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
-              return (
-                <>
-                  item:{item.name}
-                  {index != Subitems.length && <br />}
-                </>
-              )
-            })
+      ShowServiceList?.map((element, _id) => (
+        element.subscriptions?.map((subscriptions, __id) => (
+          subscriptions.data?.map((subscription, ___id) => {
+            let package_divider = parseFloat(subscriptions.subscription.package_divider);
+            subscritionAmount = parseFloat(subscription.price / package_divider)
+            let subTotal = parseFloat(subscription.price / package_divider);
+            if (active == 2) {
+              subTotal += parseFloat(adjustmentvalue);
             }
-          </li>
-          <li
-            style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}
-          >{itemPrice.toFixed(2)}</li>
-          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{discount.toFixed(2)}</li>
-          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{itemPrice.toFixed(2)}</li>
-          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(taxValue || 0).toFixed(2)}</li>
-          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(itemPrice + taxValue).toFixed(2)}</li>
-          <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(parseFloat(subscriptionSubTotal + itemPrice + taxValue)).toFixed(2)}</li>
-        </ul></td>
+            if (active == 3) {
+              subTotal -= parseFloat(adjustmentvalue);
+            }
+            let discount1 = 0;
+            if (discountValue) {
+              discount1 = (subTotal * (parseFloat(discountValue) / 100))
+              subTotal -= (subTotal * (parseFloat(discountValue) / 100))
+            }
+            let taxValue = 0;
+            if (tax.taxValue) {
+              taxValue = (subTotal * (parseFloat(tax.taxValue) / 100))
+            }
+            if (subscriptionIds.includes(subscription._id)) {
+              subscriptionSubTotal = subTotal + taxValue;
+              let itemPrice = 0;
+              let itemMPrice = 0;
+              let discount = 0;
+              let taxValue1 = 0;
+              let subITotal = 0;
+              return (
+                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+                  <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
+
+                      {Subitems.map((item, index) => {
+                        itemMPrice += parseFloat(item.price) * package_divider * item.qty;
+
+
+                        itemPrice += (parseFloat(item.price) * package_divider * item.qty);
+                        subITotal = itemPrice
+                        if (discountValue) {
+                          discount = (parseFloat(itemMPrice) * parseInt(discountValue) / 100)
+                          subITotal = subITotal - discount
+                        } else {
+                        }
+                        if (tax.taxValue) {
+                          taxValue1 = (parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100))
+                        }
+
+                        localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + subITotal + taxValue1).toFixed(2));
+                        additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
+                        additionalCost.tax = parseFloat(taxValue).toFixed(2)
+                        additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
+                        localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
+                        return (
+                          <>
+                            item:{item.name} (x{item.qty ?? 0})
+                            {index != Subitems.length && <br />}
+                          </>
+                        )
+                      })
+                      }
+                    </li>
+                    <li
+                      style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}
+                    >{itemMPrice.toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{discount.toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{subITotal.toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(taxValue || 0).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(subITotal + taxValue).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(parseFloat(subscriptionSubTotal + subITotal + taxValue)).toFixed(2)}</li>
+                  </ul></td>
+              )
+            }
+          }
+          )
+        ))
+      ))
     )
   }
 
   const AdjustmentValueHandler = (event) => {
-    setadjustment(event.target.value)
+    setadjustment(event.target.value || 0)
     let subTotal = document.getElementById("subTotal")
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
     console.log({ subTotal });
   }
-  
-const handleSelectChange = (value) => {
+  const [isCustom, setIsCustom] = useState(false)
+  const handleSelectChange = (value) => {
     // setadjustment(null);
     // setdiscount(null);
+    setSubscriptionIds([]);
+    setSubscriptionCount(0);
+    setSubItemId([])
+    setItems([])
     if (value === 'custom') {
       // Handle custom option selection
       IsActiveness(2);
       IsActiveSelect(1);
+      setIsCustom(true)
     } else {
+      setIsCustom(false)
+      // setShowServiceList([])
       const option = ShowServiceList?.find((option) => option._id === value);
       if (option) {
         // Show all subscriptions corresponding to the selected option
@@ -725,11 +904,11 @@ const handleSelectChange = (value) => {
       }
 
       // Clear previous subscription selection when switching options
-      setSubscriptionIds([]);
-      setSubscriptionCount(0);
       // setadjustment(null);
       // setdiscount(null);
     }
+    console.log({ ShowServiceList });
+
   };
 
   const [prices, setPrices] = useState({});
@@ -743,7 +922,7 @@ const handleSelectChange = (value) => {
     const initialQuantities = {};
     const initialTotals = {};
     productList?.map((ele) =>
-      ele.products.forEach((product, index) => {
+      ele.products?.forEach((product, index) => {
         initialPrices[product._id] = product.price;
         initialQuantities[product._id] = 1;
         initialTotals[product._id] = product.price;
@@ -756,6 +935,30 @@ const handleSelectChange = (value) => {
   }, [productList]);
 
   const updateQuantity = (productId, value) => {
+    ///123
+    if (Subitems.length) {
+      Subitems?.map((item) => {
+        if (item._id == productId) {
+          item.qty = parseInt(value)
+          return item;
+        }
+      })
+
+      const MyiTems = Subitems.map((items) => (
+        {
+          item: items._id,
+          qty: items.qty,
+          price: items.price,
+          total: items.total,
+          remarks: items.remarks
+        }
+      ))
+      // console.log(MyiTems)
+      localStorage.setItem('myItems', JSON.stringify(MyiTems));
+      // console.log({ Subitems, productId });
+    }
+    
+    
     setQuantiyvalue(value)
     const updatedQuantities = { ...quantities, [productId]: value };
     setQuantities(updatedQuantities);
@@ -764,10 +967,7 @@ const handleSelectChange = (value) => {
     updatedTotals[productId] = prices[productId] * value;
     setTotals(updatedTotals);
   };
-
-
-  
-  const optionsss = ['Addition', 'Substraction'];
+ const optionsss = ['Addition', 'Substraction'];
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
@@ -832,7 +1032,7 @@ const handleSelectChange = (value) => {
                 width: '100%',
               }}
             >
-              {customerAddress.map((option, index) => (
+              {customerAddress?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
               ))}
             </Select>
@@ -844,12 +1044,12 @@ const handleSelectChange = (value) => {
           <Form.Item
             name="sendQuotationEmail"
             label={translate('Send Quotation Email')}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: 'Please select a Send Quotation Email:',
-            //   },
-            // ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: 'Please select a Send Quotation Email:',
+          //   },
+          // ]}
           >
             <Radio.Group style={{ display: "flex", gap: "20px" }}>
               <Radio value="1" selected>Yes</Radio>
@@ -1041,7 +1241,7 @@ const handleSelectChange = (value) => {
                     required: true,
                   },
                 ]}>
-                  <Input />
+                  <Input onKeyUp={(e) => { handleCustomServiceInput(e.target.value) }} />
                 </Form.Item>
               </Col>
               <Col className="gutter-row" span={12}>
@@ -1050,7 +1250,7 @@ const handleSelectChange = (value) => {
                     required: true,
                   },
                 ]}>
-                  <Input />
+                  <Input onKeyUp={(e) => { handleCustomServicePriceInput(e.target.value) }} />
                 </Form.Item>
               </Col>
 
@@ -1066,60 +1266,59 @@ const handleSelectChange = (value) => {
 
 
             <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "2%" }}>
+              <Collapse.Panel header={"Custom Item"} key={'custom item'}>
+                <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
+
+                  <Col className="gutter-row" span={4}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
+                  </Col>
+                  <Col className="gutter-row" span={4}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Price')}</p>
+                  </Col>
+                  <Col className="gutter-row" span={3}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
+                  </Col>
+                  <Col className="gutter-row" span={4}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
+                  </Col>
+                </Row>
+                <Form.List name="customItems"
+                  initialValue={[{
+                    itemName: '',
+                    price: "",
+                    quantity: "",
+                    total: "",
+                    remarks: '',
+                  }]}
+                >
+                  {(fields, { add, remove }) => (
+                    <>
+
+                      {fields.map((field, index) => (
+                        <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current} 
+                        onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler }}></ItemRow>
+
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                          ref={addField}
+                        >
+                          {translate('Add field')}
+                        </Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
+              </Collapse.Panel>
               {productList?.map((mainData, i) => (
-                <>
-
-                  {i == productList.length - 2 &&
-                    <Collapse.Panel header={"Custom Item"} key={'custom item'}>
-                      <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
-
-                        <Col className="gutter-row" span={4}>
-                          <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
-                        </Col>
-                        <Col className="gutter-row" span={4}>
-                          <p style={{ marginLeft: '6px' }}>{translate('Price')}</p>
-                        </Col>
-                        <Col className="gutter-row" span={3}>
-                          <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
-                        </Col>
-                        <Col className="gutter-row" span={4}>
-                          <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
-                        </Col>
-                        <Col className="gutter-row" span={6}>
-                          <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
-                        </Col>
-                      </Row>
-                      <Form.List name="customItems"
-                        initialValue={[{
-                          itemName: '',
-                          price: "",
-                          quantity: "",
-                          total: "",
-                          remarks: '',
-                        }]}
-                      >
-                        {(fields, { add, remove }) => (
-                          <>
-                            {fields.map((field, index) => (
-                              <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current}></ItemRow>
-                            ))}
-                            <Form.Item>
-                              <Button
-                                type="dashed"
-                                onClick={() => add()}
-                                block
-                                icon={<PlusOutlined />}
-                                ref={addField}
-                              >
-                                {translate('Add field')}
-                              </Button>
-                            </Form.Item>
-                          </>
-                        )}
-                      </Form.List>
-                    </Collapse.Panel>
-                  }
-                  <Collapse.Panel header={mainData.name} key={mainData._id}>
+               <Collapse.Panel header={mainData.name} key={mainData._id}>
                     <div key={`${i}`}>
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
                         <Col className="gutter-row" span={4}>
@@ -1141,40 +1340,31 @@ const handleSelectChange = (value) => {
                       {/* <Form.List name="items" >
                         <> */}
                       {mainData.products?.map((data, index) => (
-
                         <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
                           <Col className="gutter-row mt-2">
-                            <Checkbox onChange={() => setCheckedId(data.price)} />
+                            <Checkbox onChange={() => { ItemHandler(data); }} />
                           </Col>
                           <Col className="gutter-row" span={4}>
                             <Form.Item
-                              name={['items', index, '_id']}
+                              name={['items',  index, 'item']}
+                              initialValue={data._id}
                               rules={[
                                 {
-                                  required: true,
-                                  message: 'Missing item name',
-                                  // Add a validator to allow the default value to pass
                                   validator: (_, value) => {
-                                    if (value || data.name) { // Allow the default value to pass
+                                    if (value || data.name) {
                                       return Promise.resolve();
                                     }
                                     return Promise.reject(new Error('Item name is required'));
                                   },
                                 },
-                                {
-                                  pattern: /^(?!\s*$)[\s\S]+$/,
-                                  message: 'Item Name must contain alphanumeric or special characters',
-                                },
                               ]}
                             >
-                              <Input placeholder="Item Name" defaultValue={data.name} readOnly />
+                              <span>{data.name}</span>
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={4}>
-                            <Form.Item
-                              name={['items', index, 'productprice']}
-                              rules={[]}
-                            >
+                            name={['items', index, 'price']}
+                            <Form.Item initialValue={prices[data._id]}>
                               <InputNumber
                                 className="moneyInput"
                                 onChange={updatePrice}
@@ -1182,50 +1372,41 @@ const handleSelectChange = (value) => {
                                 controls={false}
                                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
                                 addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                                defaultValue={data.price} // Use defaultValue for default value
+                                value={prices[data._id]}
+                                readOnly
                               />
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={3}>
-                            <Form.Item name={[`${i}`, `${index}`, 'quantity']}
-
-                              rules={[]}
-
-                            >
-                              <InputNumber style={{ width: '100%' }} min={0} defaultValue={1} onChange={updateQt} />
-                            </Form.Item>
-                          </Col>
-
-                          <Col className="gutter-row" span={4}>
-                            <Form.Item name={[`${i}`, `${index}`, 'total']} >
+                            name={[`items`, `${index}`, 'quantity']}
+                            <Form.Item initialValue={1}>
                               <InputNumber
-                                // readOnly
-                                className="moneyInput"
-                                value={totalState}
+                                style={{ width: '100%' }}
                                 min={0}
-                                controls={false}
-                                addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                                addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-                                formatter={(value) => money.amountFormatter({ amount: value })}
-
+                                onChange={(value) => updateQuantity(data._id, value)}
                               />
                             </Form.Item>
                           </Col>
-
+                          <Col className="gutter-row" span={4}>
+                            <Form.Item 
+                              name={[`items`, `${index}`, 'total']}
+                            initialValue={totals[data._id]}>
+                              <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
+                            </Form.Item>
+                          </Col>
                           <Col className="gutter-row" span={7}>
-                            <Form.Item name={[`${i}`, `${index}`, 'remarks']} >
-                              <Input placeholder=" Remarks for Quotation" defaultValue={data.description} />
+                            <Form.Item name={[`items`, `${index}`, 'remarks']}>
+                              <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
                             </Form.Item>
                           </Col>
                         </Row>
-
                       ))}
                       {/* </>
                       </Form.List> */}
 
                     </div >
                   </Collapse.Panel>
-                </>
+              
               ))}
             </Collapse>
           </>
@@ -1290,6 +1471,7 @@ const handleSelectChange = (value) => {
                           field={field}
                           current={current}
                           isFirstRow={index === 0}
+                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler }}
                         />
                       ))}
                       <Form.Item>
@@ -1351,7 +1533,9 @@ const handleSelectChange = (value) => {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={4}>
-                          <Form.Item name={['items', index, 'price']} initialValue={prices[data._id]}>
+                          <Form.Item 
+                          // name={['items', index, 'price']} 
+                          initialValue={prices[data._id]}>
                             <InputNumber
                               className="moneyInput"
                               onChange={updatePrice}
@@ -1365,9 +1549,12 @@ const handleSelectChange = (value) => {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={3}>
-                          <Form.Item name={['items', index, 'quantity']} initialValue={1}>
+                          <Form.Item 
+                          // name={[`items`, `${index}`, 'quantity']} 
+                          initialValue={1}>
                             <InputNumber
                               style={{ width: '100%' }}
+                              defaultValue={1}
                               min={0}
                               onChange={(value) => updateQuantity(data._id, value)}
                             />
@@ -1379,12 +1566,16 @@ const handleSelectChange = (value) => {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={7}>
-                          <Form.Item name={['items', index, 'remarks']}>
+                          <Form.Item 
+                          name={['items', index, 'remarks']}
+                          >
                             <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
                           </Form.Item>
                         </Col>
                       </Row>
                     ))}
+
+              
                   </div>
                 </Collapse.Panel>
               ))}
@@ -1407,20 +1598,16 @@ const handleSelectChange = (value) => {
           <Form.Item
             name="Adjustment"
             label={translate('Adjustment')}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: 'Please select a Adjustment Type:',
-            //   },
-            // ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: 'Please select a Adjustment Type:',
+          //   },
+          // ]}
           >
-            {/* <Radio.Group style={{ display: "flex", gap: "20px" }} >
-              <Radio value="Addition" onClick={() => IsActive(2)} >Addition</Radio>
-              <Radio value="Subtraction" onClick={() => IsActive(3)}>Subtraction</Radio>
-            </Radio.Group> */}
 
             <Radio.Group style={{ display: "flex", gap: "20px" }} >
-              {optionsss.map((option, index) => (
+              {optionsss?.map((option, index) => (
                 <Radio key={index} value={option} onClick={() => IsActive(index + 2)}>
                   {option}
                 </Radio>
@@ -1430,40 +1617,23 @@ const handleSelectChange = (value) => {
 
           {
             active == 3 && (
-              <Form.Item name="AdjustmentType"
-              //  rules={[
-              //   {
-              //     required: true,
-              //   },
-              // ]}
-              >
-                <Input />
+              <Form.Item name="AdjustmentValue" rules={[
+                {
+                  // required: true,
+                },
+              ]} >
+                <Input onChange={AdjustmentValueHandler} />
               </Form.Item>
             )
           }
 
           {
-            active == 3 && (
-              <Form.Item name="AdjustmentValue" 
-              // rules={[
-              //   {
-              //     required: true,
-              //   },
-              // ]} 
-              >
-                <Input onChange={AdjustmentValueHandler} />
-              </Form.Item>
-            )
-          }
-          {
             active == 2 && (
-              <Form.Item name="AdjustmentValue" 
-              // rules={[
-              //   {
-              //     required: true,
-              //   },
-              // ]}
-              >
+              <Form.Item name="AdjustmentValue" rules={[
+                {
+                  // required: true,
+                },
+              ]}>
                 <Input onChange={AdjustmentValueHandler} />
               </Form.Item>
             )
@@ -1471,9 +1641,8 @@ const handleSelectChange = (value) => {
 
         </Col>
 
-
         <Col className="gutter-row" span={12}>
-          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks" 
+          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks"
           // rules={[
           //   {
           //     required: true,
@@ -1494,11 +1663,11 @@ const handleSelectChange = (value) => {
           <Form.Item
             name="discount"
             label={translate('Discount')}
-            // rules={[
-            //   {
-            //     required: true,
-            //   },
-            // ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]}
           >
             <InputNumber
               style={{ width: '100%' }}
@@ -1556,9 +1725,9 @@ const handleSelectChange = (value) => {
             </tr>
             {Subitems.length > 0 &&
               <>
-                <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginBottom: "" }} >
+                <tr>
                   {translate('Additional Service Items')}
-                </Col>
+                </tr>
                 {/* <tr>Additional Service Items</tr> */}
                 <tr>
                   <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>

@@ -28,7 +28,9 @@ export const crud = {
     },
   currentAction:
     ({ actionType, data }) =>
+      
     async (dispatch) => {
+      // console.log(data)
       dispatch({
         type: actionTypes.CURRENT_ACTION,
         keyState: actionType,
