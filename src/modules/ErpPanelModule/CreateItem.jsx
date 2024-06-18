@@ -43,10 +43,7 @@ export default function CreateItem({ config, CreateForm }) {
   }, []);
   let { entity } = config;
 
-
   const { isLoading, isSuccess, result } = useSelector(selectCreatedItem);
-
-
 
   const [form] = Form.useForm();
   const [subTotal, setSubTotal] = useState(0);
@@ -103,24 +100,26 @@ export default function CreateItem({ config, CreateForm }) {
       setOfferSubTotal(0);
       if (entity == 'roles' || entity == 'quote') {
         navigate(`/${entity}`);
-      }
-      else {
+      } else {
         navigate(`/${entity.toLowerCase()}/read/${result._id}`);
-
       }
     }
-    return () => { };
+    return () => {};
   }, [isSuccess]);
 
-
   const onSubmit = (fieldsValue) => {
-    console.log({fieldsValue})
+    console.log({ fieldsValue });
     const storedId = localStorage.getItem('SubscriptionId');
-    const WorkOrderstoredId = localStorage.getItem('WorkOrderSubId');
+    // const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+    // const data = JSON.parse(WorkOrderstoredId);
+    // const subscriptions = data.map((item) => item.subscription);
+    // const subModules = data.map((item) => item.subModule);
+    //  const serviceCost = data.map((item) => item.serviceCost)
+    // const subscriptionString = subscriptions[0];
+    // const subModuleString = subModules[0];
 
     if (fieldsValue) {
-
-      if (entity === "items") {
+      if (entity === 'items') {
         let newList = [...fieldsValue.items];
         newList.map((item) => {
           item.total = calculate.multiply(item.quantity, item.price);
@@ -130,8 +129,7 @@ export default function CreateItem({ config, CreateForm }) {
           items: newList,
         };
       }
-      if (entity === "servicelist") {
-
+      if (entity === 'servicelist') {
         let requestBody = {
           name: fieldsValue.name,
           serviceCategory: fieldsValue.serviceCategory,
@@ -140,75 +138,111 @@ export default function CreateItem({ config, CreateForm }) {
         };
         let lengthOfNameProperty = 0;
         for (let i = 0; i < 50; i++) {
-          lengthOfNameProperty = lengthOfNameProperty + Object.keys(fieldsValue).filter((ele) => ele === `name${i}`).length
+          lengthOfNameProperty =
+            lengthOfNameProperty +
+            Object.keys(fieldsValue).filter((ele) => ele === `name${i}`).length;
         }
-       
+
         for (let i = 0; i < Object.keys(fieldsValue).length - 4 - lengthOfNameProperty; i++) {
           let option = fieldsValue[i];
-          console.log("option", option);
+          console.log('option', option);
           let subscriptions = {
             subscription: option?.type,
-            data: []
+            data: [],
           };
           for (let j = 0; j < Object.keys(option).length - 1; j++) {
-            console.log("jiji", j);
+            console.log('jiji', j);
             let price = option[`price${j}`];
-            let name = fieldsValue[Object.keys(fieldsValue).filter((ele) => ele === `name${j}`)?.[0]];
+            let name =
+              fieldsValue[Object.keys(fieldsValue).filter((ele) => ele === `name${j}`)?.[0]];
             subscriptions.data.push({
               name: name,
-              price: price?.toString()
+              price: price?.toString(),
             });
           }
-          requestBody.subscriptions.push(subscriptions)
+          requestBody.subscriptions.push(subscriptions);
         }
-        console.log(requestBody)
+
         fieldsValue = requestBody;
-
       }
-      if (entity === "workorder") {
-
+      if (entity === 'workorder') {
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
           endTime: fieldsValue.endTime,
-          isLeader: true
-        }
+          isLeader: true,
+        };
         const Worker = [
           {
             user: fieldsValue.SelectWorkers,
             startTime: fieldsValue.startTime,
             endTime: fieldsValue.endTime,
-          }
-        ]
-        const fielduser = [
-          Leader,
-          ...Worker
+          },
         ];
+        const fielduser = [Leader, ...Worker];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
         const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
         fielduser.map((item) => {
-          item.endTime = EndTime
-        })
+          item.endTime = EndTime;
+        });
 
-        let additionalCost = {}
-        let serviceCost = {}
-        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}"
-        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}"
-        if (serviceCostStr) {
-          serviceCost = JSON.parse(serviceCostStr)
-        }
+        let additionalCost = {};
+        // let serviceCost = {};
+        // let serviceCostStr = localStorage.getItem('ZeFnMqDC7ktkKDB') || '{}';
+        let additionalCostStr = localStorage.getItem('BQaBocV8yvv9ELm') || '{}';
+        // if (serviceCostStr) {
+        //   serviceCost = JSON.parse(serviceCostStr);
+        // }
         if (additionalCostStr) {
-          additionalCost = JSON.parse(additionalCostStr)
+          additionalCost = JSON.parse(additionalCostStr);
         }
-        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
-        let submodule = localStorage.getItem('WO-RadioId')
+        let grandTotal = localStorage.getItem('jv1GYkk6plxCpgx') || 0;
+        let submodule = localStorage.getItem('WorkOrderSubId');
+
+        let MyItems = {};
+       
+
+        let Items = localStorage.getItem('myItems');
+
+        if (Items) {
+          MyItems = JSON.parse(Items);
+        }
+             
+        const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+        const data = JSON.parse(WorkOrderstoredId);
+
+        const firstItem = data[0];
+
+        const serviceCost = firstItem.serviceCost;
+        const subscription = firstItem.subscription;
+        const subModule = firstItem.subModule;
+
+        const finalData = {
+          serviceCost: serviceCost,
+          subscription: subscription,
+          subModule: subModule,
+        };
+        const Tax = localStorage.getItem('TaxPercentage');
+    
+        const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
+    
+        const CustomItemData = Customitem.map(item => ({
+          item: item.name,
+          quantity: item.qty,
+          price: item.price,
+          total: item.total,
+          remarks: "" 
+      }));
+
+      console.log(CustomItemData);
+
 
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
-          sendworkorderEmail: fieldsValue.sendworkorderEmail,
+          sendworkorderEmail: fieldsValue.sendQuotationEmail,
           salesPerson: fieldsValue.salesPerson,
           salesPersonContact: fieldsValue.salesPersonContact,
           startDate: fieldsValue.startDate,
@@ -217,71 +251,76 @@ export default function CreateItem({ config, CreateForm }) {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          subscription: WorkOrderstoredId,
-          subModule: submodule,
+          discount: fieldsValue.discount,
+          taxPercentage: Tax,
+          adjustment: {
+            type: fieldsValue.Adjustment,
+            value: fieldsValue.AdjustmentValue,
+          },
+          subscription: finalData.subscription,           
+          subModule: finalData.subModule,
           fieldUsers: fielduser,
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
-            description: fieldsValue.ServiceDescription
+            description: fieldsValue.ServiceDescription,
           },
-
-
-          items: fieldsValue.items,
-          customItems: fieldsValue.customItems,
+          items: MyItems,
+          // items: fieldsValue.items,
+          customItems: CustomItemData,
           remarks: fieldsValue.InitialRemarks,
-          serviceCost,
+          serviceCost: finalData.serviceCost,
           additionalCost,
-          grandTotal
-        }
+          grandTotal,
+        };
+        console.log(Data);
 
-        fieldsValue = Data
+        fieldsValue = Data;
       }
-      if (entity === "contract") {
-        console.log(fieldsValue)
+      if (entity === 'contract') {
+        console.log(fieldsValue);
+
+        console.log(fieldsValue.SalesPersonContact);
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
           endTime: fieldsValue.endTime,
-          isLeader: true
-        }
+          isLeader: true,
+        };
         const Worker = [
           {
             user: fieldsValue.SelectWorkers,
             startTime: fieldsValue.startTime,
             endTime: fieldsValue.endTime,
-          }
-        ]
-        const fielduser = [
-          Leader,
-          ...Worker
+          },
         ];
+        const fielduser = [Leader, ...Worker];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
         const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
         fielduser.map((item) => {
-          item.endTime = EndTime
-        })
+          item.endTime = EndTime;
+        });
 
-        let additionalCost = {}
-        let serviceCost = {}
-        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDBBBB") || "{}"
-        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELmMM") || "{}"
+        let additionalCost = {};
+        let serviceCost = {};
+        let serviceCostStr = localStorage.getItem('ZeFnMqDC7ktkKDBBBB') || '{}';
+        let additionalCostStr = localStorage.getItem('BQaBocV8yvv9ELmMM') || '{}';
         if (serviceCostStr) {
-          serviceCost = JSON.parse(serviceCostStr)
+          serviceCost = JSON.parse(serviceCostStr);
         }
         if (additionalCostStr) {
-          additionalCost = JSON.parse(additionalCostStr)
+          additionalCost = JSON.parse(additionalCostStr);
         }
-        let grandTotal = localStorage.getItem("jv1GYkk6plxCpgxxpp") || 0
-    
+        let grandTotal = localStorage.getItem('jv1GYkk6plxCpgxxpp') || 0;
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
           sendworkorderEmail: fieldsValue.sendworkorderEmail,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.salesPersonContact,
+          salesPersonContact: fieldsValue.SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,
@@ -293,29 +332,29 @@ export default function CreateItem({ config, CreateForm }) {
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
-            description: fieldsValue.ServiceDescription
+            description: fieldsValue.ServiceDescription,
           },
           items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
           adjustment: {
             type: fieldsValue.Adjustment,
-            value: fieldsValue.AdjustmentValue
+            value: fieldsValue.AdjustmentValue,
           },
           serviceCost,
           additionalCost,
-          grandTotal
-        }
-        fieldsValue = Data
+          grandTotal,
+        };
+        fieldsValue = Data;
       }
       // ................
-      if (entity === "quote") {
-        console.log(fieldsValue.items)
+      if (entity === 'quote') {
+        console.log(fieldsValue.items);
         const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
         let additionalCost = {};
         let serviceCost = {};
-        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}";
-        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
+        let serviceCostStr = localStorage.getItem('ZeFnMqDC7ktkKDB') || '{}';
+        let additionalCostStr = localStorage.getItem('BQaBocV8yvv9ELm') || '{}';
 
         try {
           if (serviceCostStr) {
@@ -323,7 +362,7 @@ export default function CreateItem({ config, CreateForm }) {
           }
         } catch (error) {
           console.error('Error parsing serviceCostStr:', error);
-          serviceCost = {}; 
+          serviceCost = {};
         }
 
         try {
@@ -332,15 +371,13 @@ export default function CreateItem({ config, CreateForm }) {
           }
         } catch (error) {
           console.error('Error parsing additionalCostStr:', error);
-          additionalCost = {}; 
+          additionalCost = {};
         }
 
-        let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
+        let grandTotalStr = localStorage.getItem('jv1GYkk6plxCpgx') || '0';
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
-       
-     
-        const isCustom = fieldsValue.serviceName === 'custom'; 
+        const isCustom = fieldsValue.serviceName === 'custom';
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -354,7 +391,7 @@ export default function CreateItem({ config, CreateForm }) {
           salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceName,
-          subscriptions: storedSubscriptions, 
+          subscriptions: storedSubscriptions,
           isCustom: isCustom,
           customService: {
             name: fieldsValue.ServiceName,
@@ -378,18 +415,17 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = fieldData;
       }
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
-    };
-  }
-
+    }
+  };
 
   const onFinishFailed = ({ errorFields }) => {
-      if (errorFields && errorFields.length > 0) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      // if (entity === "roles" && errorFields && errorFields.length > 0) {
-      // Scroll to the top of the page
-      //   window.scrollTo({ top: 0, behavior: 'smooth' });
-      // } 
+    if (errorFields && errorFields.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // if (entity === "roles" && errorFields && errorFields.length > 0) {
+    // Scroll to the top of the page
+    //   window.scrollTo({ top: 0, behavior: 'smooth' });
+    // }
   };
 
   return (
@@ -416,7 +452,14 @@ export default function CreateItem({ config, CreateForm }) {
       ></PageHeader>
       <Divider dashed />
       <Loading isLoading={isLoading}>
-        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed} ref={formRef}  onValuesChange={handelValuesChange}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onSubmit}
+          onFinishFailed={onFinishFailed}
+          ref={formRef}
+          onValuesChange={handelValuesChange}
+        >
           <CreateForm subTotal={subTotal} offerTotal={offerSubTotal} />
         </Form>
       </Loading>

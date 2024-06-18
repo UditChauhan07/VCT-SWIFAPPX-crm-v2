@@ -4,12 +4,13 @@ import { useAppContext } from '@/context/appContext';
 import { Grid, Layout, Drawer } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import CollapseBox from '../CollapseBox';
-
+import { Form } from 'antd';
 const { useBreakpoint } = Grid;
 const { Sider } = Layout;
 
 export default function SidePanel({ config, topContent, bottomContent, fixHeaderPanel }) {
-  console.log(fixHeaderPanel)
+
+  const [form] = Form.useForm();
 
   const screens = useBreakpoint();
 
@@ -49,6 +50,7 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
   }, [isPanelClose]);
 
   const collapsePanel = () => {
+    form.resetFields();
     panel.collapse();
   };
 
@@ -100,3 +102,4 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
     // </Sider>
   );
 }
+

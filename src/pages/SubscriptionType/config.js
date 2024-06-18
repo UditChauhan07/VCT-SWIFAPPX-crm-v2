@@ -2,12 +2,13 @@ export const fields = {
   name: {
     type: 'string',
     required: true,
-
+  
     disableForForm: false,
   },
   description: {
     type: 'textarea',
     disableForTable: true,
+  
   },
   package_type: {
     required: true,
