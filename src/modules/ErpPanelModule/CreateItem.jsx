@@ -201,6 +201,7 @@ export default function CreateItem({ config, CreateForm }) {
         let submodule = localStorage.getItem('WorkOrderSubId');
 
         let MyItems = {};
+       
 
         let Items = localStorage.getItem('myItems');
 
@@ -223,6 +224,19 @@ export default function CreateItem({ config, CreateForm }) {
           subModule: subModule,
         };
         const Tax = localStorage.getItem('TaxPercentage');
+    
+        const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
+    
+        const CustomItemData = Customitem.map(item => ({
+          item: item.name,
+          quantity: item.qty,
+          price: item.price,
+          total: item.total,
+          remarks: "" 
+      }));
+
+      console.log(CustomItemData);
+
 
         let Data = {
           client: fieldsValue.client,
@@ -253,7 +267,7 @@ export default function CreateItem({ config, CreateForm }) {
           },
           items: MyItems,
           // items: fieldsValue.items,
-          customItems: fieldsValue.customItems,
+          customItems: CustomItemData,
           remarks: fieldsValue.InitialRemarks,
           serviceCost: finalData.serviceCost,
           additionalCost,
