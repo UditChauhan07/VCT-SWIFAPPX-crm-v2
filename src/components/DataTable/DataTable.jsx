@@ -136,9 +136,11 @@ export default function DataTable({ config, extra = [] }) {
   };
 
   const handleDelete = (record) => {
+    console.log(record)
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));
     modal.open();
-    dispatch(crud.list({ entity }));
+    // dispatch(crud.list({ entity }));
+    console.log("ddddddddddddddddddddddddd")
   };
 
 

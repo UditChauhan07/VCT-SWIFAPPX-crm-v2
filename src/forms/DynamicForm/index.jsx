@@ -115,11 +115,11 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
 }
 
 function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }) {
-  console.log(field)
+  const placeholderText = field.name === 'package_divider' ? 'Please enter package divider' : 'Please enter Name';
+
   const translate = useLanguage();
   const money = useMoney();
   const { dateFormat } = useDate();
-
   const { label, options } = field;
 
   const { TextArea } = Input;
@@ -130,9 +130,9 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   };
 
   const compunedComponent = {
-    string: <Input autoComplete="off" />,
+    string: <Input autoComplete="off" placeholder={placeholderText} />,
     url: <Input addonBefore="http://" autoComplete="off" placeholder="www.website.com" />,
-    textarea: <TextArea rows={4} />,
+    textarea: <TextArea rows={4} placeholder='Please enter description' />,
     email: <Input autoComplete="off" placeholder="email@gmail.com" value={email} />,
     number: <InputNumber style={{ width: '100%' }} />,
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
@@ -168,6 +168,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         style={{
           width: '100%',
         }}
+         placeholder="Please select Type"
       >
         {field.options?.map((option) => {
           return (
@@ -402,7 +403,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-  // console.log(renderComponent)
+
 
   return (
     // <Form.Item
@@ -487,19 +488,25 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
               return Promise.reject('Please enter a valid 10-digit mobile number.');
             }
             return Promise.resolve();
-          } : field.name === 'package_divider' ? (rule, value) => {
-            if (isNaN(value)) { // Check if value is not a number
+          } : 
+          
+          field.name === 'package_divider' ? (rule, value) => {
+            if (!value || value === '') { 
+              return Promise.reject('Please enter package divider.');
+            }
+            if (isNaN(value)) { 
               return Promise.reject('Only numeric value is accepted.');
 
             }
 
             return Promise.resolve();
-          } : field.name === 'price' ? (rule, value) => {
+          } 
+          : field.name === 'price' ? (rule, value) => {
             if (isNaN(value)) { // Check if value is not a number
               return Promise.reject('Only numeric value is accepted.');
             }
             if (value.length > 5) {
-              return Promise.reject('Package divider can have a maximum of 10  values.');
+              return Promise.reject('Price can have a maximum of 10  values.');
             }
             return Promise.resolve();
           } : field.name === 'type' ? (rule, value) => {
@@ -529,26 +536,32 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
             return Promise.resolve();
           } : field.name === 'block' ? (rule, value) => {
             if (value.length > 10) {
-              return Promise.reject('Package divider can have a maximum of 10  values.');
+              return Promise.reject('Block can have a maximum of 10 values.');
             }
             return Promise.resolve();
           } : field.name === 'state' ? (rule, value) => {
             if (value.length > 10) {
-              return Promise.reject('Package divider can have a maximum of 10  values.');
+              return Promise.reject('State can have a maximum of 10 values.');
             }
             return Promise.resolve();
           } : field.name === 'country' ? (rule, value) => {
             if (value.length > 10) {
-              return Promise.reject('Package divider can have a maximum of 10  values.');
+              return Promise.reject('Country can have a maximum of 10  values.');
             }
             return Promise.resolve();
           } : field.name === 'zipCode' ? (rule, value) => {
             if (value.length > 10) {
-              return Promise.reject('Package divider can have a maximum of 10  values.');
+              return Promise.reject('ZipCode can have a maximum of 10  values.');
+            }
+            return Promise.resolve();
+          } :  field.name === 'package_type' ? (rule, value) => {
+            if (!value || value === '') {
+              return Promise.reject('Please select package type.');
             }
             return Promise.resolve();
           } : undefined,
         },
+
         // ...(field.name === 'name' || 'firstname'   ? [  
         //     // { required: true, message: 'Name is required' },
         //     { min: 3, message: 'Name must be at least 3 characters.' },
@@ -564,7 +577,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
             { max: 30, message: 'Name must be in 30 characters.' },
           ] : []
         ) : []),
-
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
     >

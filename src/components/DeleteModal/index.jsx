@@ -43,7 +43,7 @@ export default function DeleteModal({ config }) {
  
       setDisplayItem(labels);
     }
-  }, [isSuccess, current]);
+  }, [isSuccess, current]); 
 
 
   
@@ -56,11 +56,9 @@ export default function DeleteModal({ config }) {
     panel.close();
     navMenu.collapse();
     dispatch(crud.list({ entity }));
-    console.log(dispatch(crud.list({ entity })))
+   
   };
 
-
-  
   const handleCancel = () => {
     if (!isLoading) modal.close();
   };
@@ -79,3 +77,4 @@ export default function DeleteModal({ config }) {
     </Modal>
   );
 }
+
