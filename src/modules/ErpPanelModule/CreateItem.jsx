@@ -117,23 +117,6 @@ export default function CreateItem({ config, CreateForm }) {
     //  const serviceCost = data.map((item) => item.serviceCost)
     // const subscriptionString = subscriptions[0];
     // const subModuleString = subModules[0];
-  
-const WorkOrderstoredId = localStorage.getItem('Subscriptions');
-const data = JSON.parse(WorkOrderstoredId);
-
-const firstItem = data[0];
-
-const serviceCost = firstItem.serviceCost;
-const subscription = firstItem.subscription;
-const subModule = firstItem.subModule;
-
-const finalData = {
-  serviceCost: serviceCost,
-  subscription: subscription,
-  subModule: subModule
-};
-
- 
 
     if (fieldsValue) {
       if (entity === 'items') {
@@ -179,7 +162,7 @@ const finalData = {
           }
           requestBody.subscriptions.push(subscriptions);
         }
-       
+
         fieldsValue = requestBody;
       }
       if (entity === 'workorder') {
@@ -224,7 +207,22 @@ const finalData = {
         if (Items) {
           MyItems = JSON.parse(Items);
         }
-       
+             
+        const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+        const data = JSON.parse(WorkOrderstoredId);
+
+        const firstItem = data[0];
+
+        const serviceCost = firstItem.serviceCost;
+        const subscription = firstItem.subscription;
+        const subModule = firstItem.subModule;
+
+        const finalData = {
+          serviceCost: serviceCost,
+          subscription: subscription,
+          subModule: subModule,
+        };
+        const Tax = localStorage.getItem('TaxPercentage');
 
         let Data = {
           client: fieldsValue.client,
@@ -239,12 +237,13 @@ const finalData = {
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           serviceCategory: fieldsValue.serviceCategory,
           serviceList: fieldsValue.serviceList,
-          discount:fieldsValue.discount,
+          discount: fieldsValue.discount,
+          taxPercentage: Tax,
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
           },
-          subscription: finalData.subscription,
+          subscription: finalData.subscription,           
           subModule: finalData.subModule,
           fieldUsers: fielduser,
           customService: {
@@ -252,12 +251,11 @@ const finalData = {
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription,
           },
-
           items: MyItems,
           // items: fieldsValue.items,
           customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
-          serviceCost:finalData.serviceCost,
+          serviceCost: finalData.serviceCost,
           additionalCost,
           grandTotal,
         };
@@ -267,7 +265,7 @@ const finalData = {
       }
       if (entity === 'contract') {
         console.log(fieldsValue);
-        
+
         console.log(fieldsValue.SalesPersonContact);
         const Leader = {
           user: fieldsValue.LeadWorker,

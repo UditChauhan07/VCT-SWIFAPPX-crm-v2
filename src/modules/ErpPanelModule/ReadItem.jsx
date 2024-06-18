@@ -26,16 +26,20 @@ import { useNavigate } from 'react-router-dom';
 import { displayName } from 'react-quill';
 import color from '@/utils/color';
 import { current } from '@reduxjs/toolkit';
+import Element from 'antd/es/skeleton/Element';
 // import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
+
   console.log(item)
+
+  
   const { moneyFormatter } = useMoney();
   return (
     <Row gutter={[12, 0]} key={item._id}>
       <Col className="gutter-row" span={11}>
         <p style={{ marginBottom: 5 }}>
-          {/* <strong>{item.item.name}</strong> */}
+          <strong>{item.item.name}</strong>
         </p>
         <p>{item.description}</p>
       </Col>
@@ -101,10 +105,19 @@ export default function ReadItem({ config, selectedItem }) {
   };
 
   const [itemslist, setItemsList] = useState([]);
+//   if (Array.isArray(itemslist)) {
+   
+//     itemslist.map((ele) => {
+//         console.log(ele);
+//     });
+// } 
+
   const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
-  console.log(currentErp)
+  console.log(currentErp);
   const [client, setClient] = useState({});
   const [FiledDates, setFieldDates] = useState();
+
+
 
   // currentErp.fieldUsers.map((item)=> {
   //   // console.log(item.endTime)
@@ -124,9 +137,7 @@ export default function ReadItem({ config, selectedItem }) {
 
   //   const fielduserDate = `${day} ${month}, ${year} ${hours}:${minutes}:${seconds}`;
 
-
   // })
-
 
   useEffect(() => {
     if (currentResult) {
@@ -152,8 +163,6 @@ export default function ReadItem({ config, selectedItem }) {
     }
   }, [currentErp]);
 
-
-
   const date = new Date(currentErp.startDate);
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'long' });
@@ -164,10 +173,17 @@ export default function ReadItem({ config, selectedItem }) {
     daySuffix = 'th';
   } else {
     switch (day % 10) {
-      case 1: daySuffix = 'st'; break;
-      case 2: daySuffix = 'nd'; break;
-      case 3: daySuffix = 'rd'; break;
-      default: daySuffix = 'th';
+      case 1:
+        daySuffix = 'st';
+        break;
+      case 2:
+        daySuffix = 'nd';
+        break;
+      case 3:
+        daySuffix = 'rd';
+        break;
+      default:
+        daySuffix = 'th';
     }
   }
 
@@ -204,13 +220,26 @@ export default function ReadItem({ config, selectedItem }) {
     }
   }
 
-
-  const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp.status);
+  const {
+    text: statusText,
+    color: textColor,
+    backgroundColor: bgColor,
+  } = getStatusText(currentErp.status);
 
   const Createddate = new Date(currentErp.created);
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const Createdday = Createddate.getDate();
@@ -223,9 +252,11 @@ export default function ReadItem({ config, selectedItem }) {
   const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`;
 
 
+  
+  
+
   return (
     <>
-
       <PageHeader
         onBack={() => {
           navigate(`/${entity.toLowerCase()}`);
@@ -287,174 +318,282 @@ export default function ReadItem({ config, selectedItem }) {
         style={{
           padding: '20px 0px',
         }}
-      >
+      ></PageHeader>
 
-      </PageHeader>
-
-
-      <h3 className='' style={{ marginLeft: "5px" }}>Customer Details</h3>
+      <h2 className="" style={{ marginLeft: '5px' }}>
+        Customer Details
+      </h2>
       <Row className="gutter-row">
         <Col span={24}>
-
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "250px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
-
-            <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
+          <div
+            className=""
+            style={{
+              width: '100%',
+              border: '1px solid rgb(240,240,240)',
+              height: '250px',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 0px 1px rgb(240,240,240)',
+            }}
+          >
+            <Row gutter={[12 - 12]} style={{ padding: '0px 0px 0px 20px' }}>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Bill To')} :<br />
-
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.client.name}</span><br />
-
+                <p style={{ fontSize: '16px', fontWeight: '600' }}>
+                  {translate('Bill To')} :<br />
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    {currentErp.client.name}
+                  </span>
+                  <br />
                 </p>
-
               </Col>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Client Address')} :<br></br>
-
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.clientAddress.contactNumber}</span><br />
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.clientAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br />
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.clientAddress.zipCode}</span><br />
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.clientAddress.country}</span><br />
+                <p style={{ fontSize: '16px', fontWeight: '600' }}>
+                  {translate('Client Address')} :<br></br>
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Mob: {currentErp.clientAddress.contactNumber}
+                  </span>
+                  <br />
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Address: {currentErp.clientAddress.block}, {currentErp.billingAddress.street},
+                    {currentErp.billingAddress.state}
+                  </span>
+                  <br />
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Zipcode: {currentErp.clientAddress.zipCode}
+                  </span>
+                  <br />
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Country: {currentErp.clientAddress.country}
+                  </span>
+                  <br />
                 </p>
-
               </Col>
-              <Col className="gutter-row" span={12} style={{ marginTop: "-6%" }}>
-                <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Billing Address')} :<br></br>
-
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mob: {currentErp.billingAddress.contactNumber}</span><br />
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Address: {currentErp.billingAddress.block}, {currentErp.billingAddress.street},{currentErp.billingAddress.state}</span><br />
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Zipcode: {currentErp.billingAddress.zipCode}</span><br />
-                  <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Country: {currentErp.billingAddress.country}</span><br />
+              <Col className="gutter-row" span={12} style={{ marginTop: '-6%' }}>
+                <p style={{ fontSize: '16px', fontWeight: '600' }}>
+                  {translate('Billing Address')} :<br></br>
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Mob: {currentErp.billingAddress.contactNumber}
+                  </span>
+                  <br />
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Address: {currentErp.billingAddress.block}, {currentErp.billingAddress.street},
+                    {currentErp.billingAddress.state}
+                  </span>
+                  <br />
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Zipcode: {currentErp.billingAddress.zipCode}
+                  </span>
+                  <br />
+                  <span style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                    Country: {currentErp.billingAddress.country}
+                  </span>
+                  <br />
                 </p>
-
               </Col>
             </Row>
           </div>
+        </Col>
+      </Row>
 
-        </Col >
-
-
-      </Row >
-
-      <h3 style={{ marginTop: "4%" }}>Basic WorkOrder Details</h3>
+      <h2 style={{ marginTop: '4%' }}>Basic WorkOrder Details</h2>
       <Row className="gutter-row">
         <Col span={24}>
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "260px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
-            <Row className="gutter-row" style={{ padding: "0px 0px 0px 20px" }}>
+          <div
+            className=""
+            style={{
+              width: '100%',
+              border: '1px solid rgb(240,240,240)',
+              height: '260px',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 0px 1px rgb(240,240,240)',
+            }}
+          >
+            <Row className="gutter-row" style={{ padding: '0px 0px 0px 20px' }}>
               <Col span={12}>
-                <Row className="gutter-row" >
+                <Row className="gutter-row">
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder No')} .:<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.workOrderNumber}<br></br>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Workorder No')} .:<br></br>
                     </p>
                   </Col>
-                </Row>
-                <Row className="gutter-row" >
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Workorder Status')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{
-                      fontSize: "14px", fontWeight: "600", color:
-                        textColor, backgroundColor: bgColor, width: "90px",
-                      textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
-                    }}>
-                      {statusText} <br></br>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {currentErp.workOrderNumber}
+                      <br></br>
                     </p>
-
                   </Col>
                 </Row>
                 <Row className="gutter-row">
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Date')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${day}${daySuffix} ${month} ${year}`}<br></br>
-                    </p>
-
-
-                  </Col>
-                </Row>
-                
-                <Row className="gutter-row" >
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Time')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${hours}:${minutes} hrs`} <br></br>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Workorder Status')} :<br></br>
                     </p>
                   </Col>
+                  <Col span={12}>
+                    <p
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: textColor,
+                        backgroundColor: bgColor,
+                        width: '90px',
+                        textAlign: 'center',
+                        padding: '4px 4px 4px 4px',
+                        borderRadius: '14px',
+                      }}
+                    >
+                      {statusText} <br></br>
+                    </p>
+                  </Col>
+                </Row>
+                <Row className="gutter-row">
+                  <Col span={12}>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Start Date')} :<br></br>
+                    </p>
+                  </Col>
+                  <Col span={12}>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {`${day}${daySuffix} ${month} ${year}`}
+                      <br></br>
+                    </p>
+                  </Col>
                 </Row>
 
+                <Row className="gutter-row">
+                  <Col span={12}>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Start Time')} :<br></br>
+                    </p>
+                  </Col>
+                  <Col span={12}>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {`${hours}:${minutes} hrs`} <br></br>
+                    </p>
+                  </Col>
+                </Row>
               </Col>
 
               <Col span={12}>
-
-                <Row className="gutter-row" >
+                <Row className="gutter-row">
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Expected Time Required')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${Expectedhours}:${Expectedminutes} hrs`}  <br></br>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Expected Time Required')} :<br></br>
                     </p>
-
                   </Col>
-                </Row>
-
-                <Row className="gutter-row" >
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Sales Person')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPerson.name} <br></br>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {`${Expectedhours}:${Expectedminutes} hrs`} <br></br>
                     </p>
                   </Col>
                 </Row>
-                <Row className="gutter-row" >
-                  <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600", marginTop: "19px" }}>{translate('Sales Person Contact')} :<br></br>
-                    </p> </Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.salesPersonContact} <br></br></p>
 
+                <Row className="gutter-row">
+                  <Col span={12}>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Sales Person')} :<br></br>
+                    </p>
+                  </Col>
+                  <Col span={12}>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {currentErp.salesPerson.name} <br></br>
+                    </p>
                   </Col>
                 </Row>
-
-             
+                <Row className="gutter-row">
+                  <Col span={12}>
+                    <p style={{ fontSize: '15px', fontWeight: '600', marginTop: '19px' }}>
+                      {translate('Sales Person Contact')} :<br></br>
+                    </p>{' '}
+                  </Col>
+                  <Col span={12}>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {currentErp.salesPersonContact} <br></br>
+                    </p>
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </div>
-
-
         </Col>
-
       </Row>
 
-
-      <h3 className='' style={{ marginLeft: "5px", marginTop: "4%" }}>Workorder Details</h3>
+      <h2 className="" style={{ marginLeft: '5px', marginTop: '4%' }}>
+        Workorder Details
+      </h2>
       <Row className="gutter-row">
         <Col span={24}>
-
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "110px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
-            <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
+          <div
+            className=""
+            style={{
+              width: '100%',
+              border: '1px solid rgb(240,240,240)',
+              height: '110px',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 0px 1px rgb(240,240,240)',
+            }}
+          >
+            <Row gutter={[12 - 12]} style={{ padding: '0px 0px 0px 20px' }}>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Service Type')} :<br></br>
+                <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                  {translate('Service Type')} :<br></br>
                 </p>
               </Col>
 
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                  {currentErp.serviceList.name}<br></br>
+                <p style={{ fontSize: '13px', color: '#a3a3a3' }}>
+                  {currentErp.serviceList.name}
+                  <br></br>
                 </p>
               </Col>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
+                <p style={{ fontSize: '15px' }}>
                   {translate('Service Description')} :<br></br>
                 </p>
               </Col>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
+                <p style={{ fontSize: '13px', color: '#a3a3a3' }}>
                   {/* {currentErp.customService.description}<br></br> */}
                 </p>
               </Col>
@@ -463,305 +602,204 @@ export default function ReadItem({ config, selectedItem }) {
         </Col>
       </Row>
 
-
       {/* ................. */}
-      <h3 style={{ marginTop: "4%" }}>WorkOrder Billing Detail</h3>
-      <Row className="gutter-row" style={{ marginTop: "20px" }}>
+      <h2 style={{ marginTop: '4%' }}>WorkOrder Billing Detail</h2>
+      <Row className="gutter-row" style={{ marginTop: '20px' }}>
         <Col span={24}>
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
-
-            <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
+          <div
+            className=""
+            style={{
+              width: '100%',
+              border: '1px solid rgb(240,240,240)',
+              height: '360px',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 0px 1px rgb(240,240,240)',
+            }}
+          >
+            <Row gutter={[12 - 12]} style={{ padding: '0px 0px 0px 20px' }}>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder For')} :<br></br>
+                <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                  {translate('Workorder For')} :<br></br>
                 </p>
-
               </Col>
 
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
                   {`${currentErp.serviceList.name} / One Time`} <br></br>
-
                 </p>
-
-
               </Col>
 
-
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }} >
+                <p style={{ fontSize: '15px' }}>
                   {translate('Per Workorder Cost')} :<br></br>
-
-                </p> </Col>
+                </p>{' '}
+              </Col>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
-                  {currentErp.serviceCost.servicePerWO}<br></br>
-                </p> </Col>
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                  {currentErp.serviceCost.servicePerWO}
+                  <br></br>
+                </p>{' '}
+              </Col>
 
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
+                <p style={{ fontSize: '15px' }}>
                   {translate('Adjustment')} :<br></br>
-
-                </p> </Col>
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {currentErp.adjustment && currentErp.adjustment.value ? currentErp.adjustment.value : ""}
-                   <br></br>
-
-                </p> </Col>
-
-
-              <Col className="gutter-row" span={12} >
-                <p style={{ fontSize: "15px" }}>{translate(`Discount`)} :
-                  <br></br>
-
-                </p>
-
-              </Col>
-              <Col className="gutter-row" span={12} >
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                {currentErp.serviceCost.discount}
-                  <br></br>
-
-                </p>
-
+                </p>{' '}
               </Col>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                  {currentErp.adjustment && currentErp.adjustment.value
+                    ? currentErp.adjustment.value
+                    : ''}
+                  <br></br>
+                </p>{' '}
+              </Col>
+
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: '15px' }}>
+                  {translate(`Discount`)} :<br></br>
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                  {currentErp.serviceCost.discount}
+                  <br></br>
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: '15px' }}>
                   {translate('SubTotal')} :<br></br>
-
                 </p>
               </Col>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
                   {currentErp.serviceCost.subTotal}
-                   <br></br>
-
-                </p>
-              </Col>
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
-                  {translate('Tax')} :<br></br>
-
-                </p>
-              </Col>
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {currentErp.serviceCost.tax}
-                   <br></br>
-
-                </p>
-              </Col>
-
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "15px" }}>
-                  {translate('Total Package Cost')} :<br></br>
-
-                </p>
-              </Col>
-              <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                  {currentErp.serviceCost.totalPackageCost} 
                   <br></br>
-
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: '15px' }}>
+                  {translate('Tax')} :<br></br>
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                  {currentErp.serviceCost.tax}
+                  <br></br>
                 </p>
               </Col>
 
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: '15px' }}>
+                  {translate('Total Package Cost')} :<br></br>
+                </p>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                  {currentErp.serviceCost.totalPackageCost}
+                  <br></br>
+                </p>
+              </Col>
             </Row>
           </div>
         </Col>
       </Row>
 
+     
 
-      <h3 style={{ marginTop: "4%" }}>Basic Attendence Details</h3>
+      <h2 style={{ marginTop: '4%' }}>Other detail</h2>
       <Row className="gutter-row">
         <Col span={24}>
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "400px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
-            <Row className="gutter-row" style={{ padding: "0px 0px 0px 20px", marginTop: "20px" }}>
-              <Col span={[8]}>
-                <Col className="gutter-row" span={12}>
-                  <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Attendance Type')}:<br></br>
-                  </p></Col>
-              </Col>
-              <Col span={[12]}>
-                <Col className="gutter-row" span={12}>
-                  <p style={{ fontSize: "15px", fontWeight: "600", marginLeft: "-33%" }}>{translate('Independent Attendance')} <br></br>
-                  </p></Col>
-
-
-              </Col>
-            </Row>
-            <div className='' style={{ width: "98%", border: "1px solid rgb(240,240,240)", height: "300px", borderRadius: "0px", boxShadow: "0px 0px 0px 1px #0e0e0e", marginLeft: "1%" }}>
-              <Row className="gutter-row" style={{ padding: "0px 0px 0px 0px", marginTop: "10px" }}>
-
-                <Col span={24} >
-                  <Row style={{ padding: "0px 0px 0px 20px" }}>
-                    <Col span={6}>
-                      <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Worker')} <br></br>
-                      </p>
-                    </Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Expected Time')} <br></br>
-                    </p></Col>
-                    <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Actual Time')} <br></br>
-                    </p></Col>
-
-
-                    <Col span={6}>
-                      <Row style={{ padding: "0px 0px 0px 20px" }}>
-                        <Col span={4}>
-                          <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Status')} <br></br>
-                          </p>
-                        </Col>
-
-                      </Row >
-                    </Col>
-                  </Row>
-                  <hr ></hr>
-
-                  {
-                    currentErp.fieldUsers.map((ele) => {
-                      const date = new Date(ele.endTime);
-
-                      const monthNames = [
-                        "January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"
-                      ];
-
-                      const day = date.getUTCDate();
-                      const month = monthNames[date.getUTCMonth()];
-                      const year = date.getUTCFullYear();
-                      const hours = date.getUTCHours();
-                      const minutes = date.getUTCMinutes();
-                      const seconds = date.getUTCSeconds();
-
-                      const fielduserDate = `${day} ${month}, ${year} ${hours}:${minutes}:${seconds}`;
-
-
-                      function getStatusText(status) {
-                        switch (status) {
-                          case 1:
-                            return { text: 'Pending', color: '#fdf2ff', backgroundColor: 'rgb(167,0,255)' };
-                          case 2:
-                            return { text: 'In Process', color: '#fdf2ff', backgroundColor: 'green' };
-                          case 3:
-                            return { text: 'Completed', color: '#fdf2ff', backgroundColor: 'purple' };
-                          case 4:
-                            return { text: 'Rescheduled', color: '#fdf2ff', backgroundColor: 'orange' };
-                          case 5:
-                            return { text: 'Cancelled', color: '#fdf2ff', backgroundColor: 'red' };
-                          case 6:
-                            return { text: 'Request for Reshedule', color: '#fdf2ff', backgroundColor: 'brown' };
-                          case 7:
-                            return { text: 'Request for Cancel', color: '#fdf2ff', backgroundColor: 'gray' };
-                          case 8:
-                            return { text: 'Terminate', color: '#fdf2ff', backgroundColor: 'black' };
-                          case 9:
-                            return { text: 'Hold', color: '#fdf2ff', backgroundColor: 'yellow' };
-                          default:
-                        }
-                      }
-
-
-                      const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(ele.status);
-
-                      return (
-                        <Row style={{ padding: "0px 0px 0px 20px" }}>
-                          <Col span={6}>
-                            <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate(ele.user.name)} <br></br>
-                              { ele.isLeader && (
-                                <span style={{ fontSize: "12px", color: "#7928dd" }}>Leader</span>
-                              )}
-                            </p>
-
-                          </Col>
-                          <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}>{fielduserDate}<br></br>
-                          </p></Col>
-                          <Col span={6}> <p style={{ fontSize: "15px", fontWeight: "600", }}> <br></br>
-                          </p></Col>
-
-
-                          <Col span={6}>
-                            <Row>
-                              <Col span={4}>
-                                <p style={{
-                                  fontSize: "14px", fontWeight: "600", color: textColor
-                                    , backgroundColor: bgColor, width: "90px",
-                                  textAlign: "center", padding: "4px 4px 4px 4px", borderRadius: "14px"
-                                }}>
-                                  {translate(statusText)} <br></br>
-                                </p>
-                              </Col>
-                              {/* <Col span={2}>
-                          4
-                        </Col> */}
-                            </Row>
-                          </Col>
-                        </Row>
-                      )
-                      
-
-                      
-                    })
-
-                  }
-
-                  <hr></hr>
-
-                </Col>
-
-              </Row>
-            </div>
-
-          </div>
-        </Col>
-
-      </Row>
-
-
-      <h3 style={{ marginTop: "4%" }}>Other detail</h3>
-      <Row className="gutter-row">
-        <Col span={24}>
-          <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "290px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
-            <Row className="gutter-row" style={{ padding: "0px 0px 0px 20px" }}>
+          <div
+            className=""
+            style={{
+              width: '100%',
+              border: '1px solid rgb(240,240,240)',
+              height: '290px',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 0px 1px rgb(240,240,240)',
+            }}
+          >
+            <Row className="gutter-row" style={{ padding: '0px 0px 0px 20px' }}>
               <Col span={20}>
-                <Row className="gutter-row" >
+                <Row className="gutter-row">
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Initial Remarks')} .:<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.remarks} <br></br>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Initial Remarks')} .:<br></br>
                     </p>
                   </Col>
-                </Row>
-                <Row className="gutter-row" >
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600", }}>{translate('Picture Uploaded')} :<br></br>
-                    </p></Col>
-                  <Col span={12}>
-                    <p style={{
-                      fontSize: "14px", fontWeight: "600", color:
-                        "#fdf2ff", backgroundColor: "#808080", width: "100px",
-                      textAlign: "center", padding: "40px 10px 40px 10px", borderRadius: "14px"
-                    }}>
-                      +Add Image <br></br>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {currentErp.remarks} <br></br>
                     </p>
-
                   </Col>
                 </Row>
                 <Row className="gutter-row">
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Created By')} :<br></br>
-                    </p></Col>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Picture Uploaded')} :<br></br>
+                    </p>
+                  </Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp.createdBy.name} <br></br>
+                    <p
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#fdf2ff',
+                        backgroundColor: '#808080',
+                        width: '100px',
+                        textAlign: 'center',
+                        padding: '40px 10px 40px 10px',
+                        borderRadius: '14px',
+                      }}
+                    >
+                      +Add Image <br></br>
                     </p>
                   </Col>
                 </Row>
-                <Row className="gutter-row" >
+                <Row className="gutter-row">
                   <Col span={12}>
-                    <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Created At')} :<br></br>
-                    </p></Col>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Created By')} :<br></br>
+                    </p>
+                  </Col>
                   <Col span={12}>
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{CreatedformattedDate}<br></br>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {currentErp.createdBy.name} <br></br>
+                    </p>
+                  </Col>
+                </Row>
+                <Row className="gutter-row">
+                  <Col span={12}>
+                    <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                      {translate('Created At')} :<br></br>
+                    </p>
+                  </Col>
+                  <Col span={12}>
+                    <p
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        color: '#a3a3a3',
+                        marginTop: '19px',
+                      }}
+                    >
+                      {CreatedformattedDate}
+                      <br></br>
                     </p>
                   </Col>
                 </Row>
@@ -771,10 +809,12 @@ export default function ReadItem({ config, selectedItem }) {
         </Col>
       </Row>
 
-
-      <Row gutter={[12, 0]} style={{ marginTop: "40px" }}>
+      <h2 style={{ marginTop: '4%' }}>Additional Cost</h2>
+      <Divider  /> 
+      <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+        
         <Col className="gutter-row" span={11}>
-          <p>
+          <p style={{fontSize:"15px"}}>
             <strong>{translate('Product')}</strong>
           </p>
         </Col>
@@ -782,6 +822,7 @@ export default function ReadItem({ config, selectedItem }) {
           <p
             style={{
               textAlign: 'right',
+              fontSize:"15px"
             }}
           >
             <strong>{translate('Price')}</strong>
@@ -791,6 +832,7 @@ export default function ReadItem({ config, selectedItem }) {
           <p
             style={{
               textAlign: 'right',
+              fontSize:"15px"
             }}
           >
             <strong>{translate('Quantity')}</strong>
@@ -800,18 +842,19 @@ export default function ReadItem({ config, selectedItem }) {
           <p
             style={{
               textAlign: 'right',
+              fontSize:"15px"
             }}
           >
             <strong>{translate('Total')}</strong>
           </p>
         </Col>
-        <Divider />
+        <Divider  style={{marginTop:"1%"}}/>
       </Row>
-      {
-        itemslist.map((item) => (
-          <Item key={item._id} item={item}></Item>
-        ))
-      }
+
+      {itemslist.map((item) => (
+        
+        <Item key={item._id} item={item}></Item>
+      ))}
       <div
         style={{
           width: '300px',
@@ -822,37 +865,264 @@ export default function ReadItem({ config, selectedItem }) {
       >
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={12}>
-            <p>{translate('Sub Total')} :</p>
+            <p style={{fontSize:"15px"}}>{translate('Sub Total')} :</p>
           </Col>
 
           <Col className="gutter-row" span={12}>
-            <p>{moneyFormatter({
-              amount: currentErp.additionalCost.subTotal
-            })}</p>
-          </Col>
-          <Col className="gutter-row" span={12}>
-            <p>
-              {translate('Tax Total')} ({currentErp.taxRate} %) :
+            <p style={{fontSize:"15px"}}>
+              {moneyFormatter({
+                amount: currentErp.additionalCost.subTotal,
+              })}
             </p>
           </Col>
           <Col className="gutter-row" span={12}>
-            <p>{moneyFormatter({
-              amount: currentErp.additionalCost.tax
-            })}</p>
+            <p style={{fontSize:"15px"}}>
+              {translate('Tax Total')} ({currentErp.taxPercentage}%) :
+            </p>
           </Col>
           <Col className="gutter-row" span={12}>
-            <p>{translate('Total')} :</p>
+            <p style={{fontSize:"15px"}}>
+              {moneyFormatter({
+                amount: currentErp.additionalCost.tax,
+              })}
+            </p>
           </Col>
           <Col className="gutter-row" span={12}>
-            <p>{moneyFormatter({
-              amount: currentErp.grandTotal
-            })}</p>
+            <p style={{fontSize:"15px"}}>{translate('Total')} :</p>
+          </Col>
+          <Col className="gutter-row" span={12}>
+            <p style={{fontSize:"15px"}}>
+              {moneyFormatter({
+                amount: currentErp.additionalCost.totalPackageCost,
+              })}
+            </p>
           </Col>
         </Row>
       </div>
+    
+      <Row style={{marginTop:"10%"}}>
+        <Col className="gutter-row" span={4}>
+          <h3>{translate('Grand Total')} :</h3>
+        </Col>
+        <Col className="gutter-row" style={{ marginLeft: '-1%' }}>
+          <h3 >
+            {moneyFormatter({
+              amount: currentErp.grandTotal
+            })}
+          </h3>
+        </Col>
+      </Row>
+      <Divider  /> 
+
+      <h2 style={{ marginTop: '4%' }}>Basic Attendence Details</h2>
+      <Row className="gutter-row">
+        <Col span={24}>
+          <div
+            className=""
+            style={{
+              width: '100%',
+              border: '1px solid rgb(240,240,240)',
+              height: '400px',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 0px 1px rgb(240,240,240)',
+            }}
+          >
+            <Row className="gutter-row" style={{ padding: '0px 0px 0px 20px', marginTop: '20px' }}>
+              <Col span={[8]}>
+                <Col className="gutter-row" span={12}>
+                  <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                    {translate('Attendance Type')}:<br></br>
+                  </p>
+                </Col>
+              </Col>
+              <Col span={[12]}>
+                <Col className="gutter-row" span={12}>
+                  <p style={{ fontSize: '15px', fontWeight: '600', marginLeft: '-33%' }}>
+                    {translate('Independent Attendance')} <br></br>
+                  </p>
+                </Col>
+              </Col>
+            </Row>
+            <div
+              className=""
+              style={{
+                width: '98%',
+                border: '1px solid rgb(240,240,240)',
+                height: '300px',
+                borderRadius: '0px',
+                boxShadow: '0px 0px 0px 1px #0e0e0e',
+                marginLeft: '1%',
+              }}
+            >
+              <Row className="gutter-row" style={{ padding: '0px 0px 0px 0px', marginTop: '10px' }}>
+                <Col span={24}>
+                  <Row style={{ padding: '0px 0px 0px 20px' }}>
+                    <Col span={6}>
+                      <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                        {translate('Worker')} <br></br>
+                      </p>
+                    </Col>
+                    <Col span={6}>
+                      {' '}
+                      <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                        {translate('Expected Time')} <br></br>
+                      </p>
+                    </Col>
+                    <Col span={6}>
+                      {' '}
+                      <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                        {translate('Actual Time')} <br></br>
+                      </p>
+                    </Col>
+
+                    <Col span={6}>
+                      <Row style={{ padding: '0px 0px 0px 20px' }}>
+                        <Col span={4}>
+                          <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                            {translate('Status')} <br></br>
+                          </p>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                  <hr></hr>
+
+                  {currentErp.fieldUsers.map((ele) => {
+                    const date = new Date(ele.endTime);
+
+                    const monthNames = [
+                      'January',
+                      'February',
+                      'March',
+                      'April',
+                      'May',
+                      'June',
+                      'July',
+                      'August',
+                      'September',
+                      'October',
+                      'November',
+                      'December',
+                    ];
+
+                    const day = date.getUTCDate();
+                    const month = monthNames[date.getUTCMonth()];
+                    const year = date.getUTCFullYear();
+                    const hours = date.getUTCHours();
+                    const minutes = date.getUTCMinutes();
+                    const seconds = date.getUTCSeconds();
+
+                    const fielduserDate = `${day} ${month}, ${year} ${hours}:${minutes}:${seconds}`;
+
+                    function getStatusText(status) {
+                      switch (status) {
+                        case 1:
+                          return {
+                            text: 'Pending',
+                            color: '#fdf2ff',
+                            backgroundColor: 'rgb(167,0,255)',
+                          };
+                        case 2:
+                          return { text: 'In Process', color: '#fdf2ff', backgroundColor: 'green' };
+                        case 3:
+                          return { text: 'Completed', color: '#fdf2ff', backgroundColor: 'purple' };
+                        case 4:
+                          return {
+                            text: 'Rescheduled',
+                            color: '#fdf2ff',
+                            backgroundColor: 'orange',
+                          };
+                        case 5:
+                          return { text: 'Cancelled', color: '#fdf2ff', backgroundColor: 'red' };
+                        case 6:
+                          return {
+                            text: 'Request for Reshedule',
+                            color: '#fdf2ff',
+                            backgroundColor: 'brown',
+                          };
+                        case 7:
+                          return {
+                            text: 'Request for Cancel',
+                            color: '#fdf2ff',
+                            backgroundColor: 'gray',
+                          };
+                        case 8:
+                          return { text: 'Terminate', color: '#fdf2ff', backgroundColor: 'black' };
+                        case 9:
+                          return { text: 'Hold', color: '#fdf2ff', backgroundColor: 'yellow' };
+                        default:
+                      }
+                    }
+
+                    const {
+                      text: statusText,
+                      color: textColor,
+                      backgroundColor: bgColor,
+                    } = getStatusText(ele.status);
+
+                    return (
+                      <Row style={{ padding: '0px 0px 0px 20px' }}>
+                        <Col span={6}>
+                          <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                            {translate(ele.user.name)} <br></br>
+                            {ele.isLeader && (
+                              <span style={{ fontSize: '12px', color: '#7928dd' }}>Leader</span>
+                            )}
+                          </p>
+                        </Col>
+                        <Col span={6}>
+                          {' '}
+                          <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                            {fielduserDate}
+                            <br></br>
+                          </p>
+                        </Col>
+                        <Col span={6}>
+                          {' '}
+                          <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                            {' '}
+                            <br></br>
+                          </p>
+                        </Col>
+
+                        <Col span={6}>
+                          <Row>
+                            <Col span={4}>
+                              <p
+                                style={{
+                                  fontSize: '14px',
+                                  fontWeight: '600',
+                                  color: textColor,
+                                  backgroundColor: bgColor,
+                                  width: '90px',
+                                  textAlign: 'center',
+                                  padding: '4px 4px 4px 4px',
+                                  borderRadius: '14px',
+                                }}
+                              >
+                                {translate(statusText)} <br></br>
+                              </p>
+                            </Col>
+                            {/* <Col span={2}>
+                          4
+                        </Col> */}
+                          </Row>
+                        </Col>
+                      </Row>
+                    );
+                  })}
+
+                  <hr></hr>
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </Col>
+      </Row>
+
+
+
+
     </>
   );
 }
-
-
-

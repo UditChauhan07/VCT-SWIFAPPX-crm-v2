@@ -1924,26 +1924,7 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // NEW WORK ORDER CODE
-
 
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
@@ -2104,6 +2085,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const [productList, setProductList] = useState([]);
   const [tax, setTax] = useState({});
+  
+  localStorage.setItem("TaxPercentage",tax?.taxValue );
+  
   useEffect(() => {
     getProductHandler();
     // getClientHandler()
@@ -2383,7 +2367,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
-      console.log(ele);
+      // console.log(ele);
       ele.data.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
@@ -2428,6 +2412,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   let subscritionAmount = 0;
 
   const ItemHandler = (element) => {
+    // console.log(element)
     setCheckedId(element.price);
     const tempId = [...subItemIds];
     const temp = [...Subitems];
@@ -2450,9 +2435,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemCount(temp.length);
   };
 
-  const CustomItemNameHandler = (value, id) => {
-    console.log({ value, id });
-  };
+  // const CustomItemNameHandler = (value, id) => {
+  //   console.log({ value, id });
+  // };
 
   const initialServiceCost = {
     servicePerWO: null,
@@ -2705,6 +2690,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             let discount = 0;
             let taxValue1 = 0;
             let subITotal = 0;
+           
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                 <ul
@@ -2720,18 +2706,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   >
                     {Subitems.map((item, index) => {
                       itemMPrice += parseFloat(item.total) * package_divider * item.qty;
-
                       itemPrice += parseFloat(item.total) * package_divider * item.qty;
                       subITotal = itemPrice;
                       if (discountValue) {
                         discount = (parseFloat(itemMPrice) * parseInt(discountValue)) / 100;
                         subITotal = subITotal - discount;
-                      } else {
+                      } 
+                      else {
                       }
                       if (tax.taxValue) {
                         taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
                       }
-
                       localStorage.setItem(
                         'jv1GYkk6plxCpgx',
                         parseFloat(subscriptionSubTotal + subITotal + taxValue1).toFixed(2)
@@ -2757,6 +2742,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       color: 'rgb(49,91,140)',
                     }}
                   >
+                    
+                    {/* { console.log(itemMPrice)} */}
                     {itemMPrice.toFixed(2)}
                   </li>
                   <li
@@ -2822,41 +2809,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setadjustment(event.target.value || 0);
     let subTotal = document.getElementById('subTotal');
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value));
-    console.log({ subTotal });
+    // console.log({ subTotal });
   };
 
-  // const handleSelectChange = (value) => {
-  //   // setadjustment(null);
-  //   // setdiscount(null);
-  //   setSubscriptionIds([]);
-  // setSubscriptionCount(0);
-  // setSubItemId([])
-  //   setItems([])
-  //   if (value === 'custom') {
-  //     // Handle custom option selection
-  //     IsActiveness(2);
-  //     IsActiveSelect(1);
-  //   } else {
-  //     const option = ShowServiceList?.find((option) => option._id === value);
-  //     if (option) {
-  //       // Show all subscriptions corresponding to the selected option
-  //       setShowServiceId(option.subscriptions);
-  //       IsActiveSelect(2);
-  //       IsActiveness(1);
-  //     } else {
-  //       IsActiveness(0);
-  //       IsActiveSelect(0);
-  //     }
-
-  //     // Clear previous subscription selection when switching options
-  //     setSubscriptionIds([]);
-  //     setSubscriptionCount(0);
-  //     // setadjustment(null);
-  //     // setdiscount(null);
-  //   }
-  // };
-
-  const handleSelectChange = async (value) => {
+  const handleSelectChange = (value) => {
     // setadjustment(null);
     // setdiscount(null);
     setSubscriptionIds([]);
@@ -2867,23 +2823,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // Handle custom option selection
       IsActiveness(2);
       IsActiveSelect(1);
-      setIsCustom(true);
     } else {
-      setIsCustom(false);
-      // setShowServiceList([])
-      try {
-        const response = await request.getServiceListShows({ id: selectedValue });
-        console.log(response);
-        if (response.success) {
-          setShowServiceList(response.result);
-          setProductList(ShowServiceList);
-        } else {
-          setShowServiceList(null);
-        }
-      } catch (error) {
-        setShowServiceList(null);
-        console.error('Error fetching data:', error);
-      }
       const option = ShowServiceList?.find((option) => option._id === value);
       if (option) {
         // Show all subscriptions corresponding to the selected option
@@ -2894,11 +2834,58 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         IsActiveness(0);
         IsActiveSelect(0);
       }
+
       // Clear previous subscription selection when switching options
+      setSubscriptionIds([]);
+      setSubscriptionCount(0);
       // setadjustment(null);
       // setdiscount(null);
     }
   };
+
+  // const handleSelectChange = async (value) => {
+  //   // setadjustment(null);
+  //   // setdiscount(null);
+  //   setSubscriptionIds([]);
+  //   setSubscriptionCount(0);
+  //   setSubItemId([]);
+  //   setItems([]);
+  //   if (value === 'custom') {
+  //     // Handle custom option selection
+  //     IsActiveness(2);
+  //     IsActiveSelect(1);
+  //     setIsCustom(true);
+  //   } else {
+  //     setIsCustom(false);
+  //     // setShowServiceList([])
+  //     try {
+  //       const response = await request.getServiceListShows({ id: selectedValue });
+  //       console.log(response);
+  //       if (response.success) {
+  //         setShowServiceList(response.result);
+  //         setProductList(ShowServiceList);
+  //       } else {
+  //         setShowServiceList(null);
+  //       }
+  //     } catch (error) {
+  //       setShowServiceList(null);
+  //       console.error('Error fetching data:', error);
+  //     }
+  //     const option = ShowServiceList?.find((option) => option._id === value);
+  //     if (option) {
+  //       // Show all subscriptions corresponding to the selected option
+  //       setShowServiceId(option.subscriptions);
+  //       IsActiveSelect(2);
+  //       IsActiveness(1);
+  //     } else {
+  //       IsActiveness(0);
+  //       IsActiveSelect(0);
+  //     }
+  //     // Clear previous subscription selection when switching options
+  //     // setadjustment(null);
+  //     // setdiscount(null);
+  //   }
+  // };
 
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
@@ -2929,7 +2916,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           return item;
         }
       });
-      localStorage.setItem('myItems', JSON.stringify(Subitems));
+     
+      const MyiTems = Subitems.map((items)=> (
+        {
+          item: items._id,
+          qty: items.qty,
+          price: items.price,
+          total: items.total,
+          remarks: items.remarks
+        }
+      ))
+      // console.log(MyiTems)
+      localStorage.setItem('myItems', JSON.stringify(MyiTems));
       // console.log({ Subitems, productId });
     }
     setQuantiyvalue(value);
@@ -3060,6 +3058,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <Divider dashed />
 
       {/* BASIC WORKORDER DETAILS */}
+
       <Col
         className="gutter-row"
         span={12}
@@ -3233,7 +3232,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-              onChange={getCategorySubscriptionHandler}
+              onChange={getCategorySubscriptionHandler} 
             >
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
@@ -3607,7 +3606,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         current={current}
                         isFirstRow={index === 0}
                         onChange={{
-                          CustomItemNameHandler,
+                          // CustomItemNameHandler,
                           // CustomItemPriceHandler,
                           // CustomItemQTYHandler,
                         }}
@@ -3662,9 +3661,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={4}>
-                        <Form.Item 
-                        // name={['items', index, 'price']} 
-                        initialValue={prices[data._id]}>
+                        <Form.Item
+                          // name={['items', index, 'price']}
+                          initialValue={prices[data._id]}
+                        >
                           <InputNumber
                             className="moneyInput"
                             onChange={updatePrice}
@@ -3686,9 +3686,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={3}>
-                        <Form.Item 
-                        // name={['items', index, 'quantity']}
-                         initialValue={1}>
+                        <Form.Item
+                          // name={['items', index, 'quantity']}
+                          initialValue={1}
+                        >
                           <InputNumber
                             style={{ width: '100%' }}
                             min={0}
@@ -3704,7 +3705,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={7}>
-                        <Form.Item name={['items', index, 'remarks']}>
+                        <Form.Item
+                        //  name={['items', index, 'remarks']}
+                        >
                           <Input
                             placeholder=" Remarks for Workorder"
                             defaultValue={data.description}
