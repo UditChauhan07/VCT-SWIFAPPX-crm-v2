@@ -566,8 +566,11 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
 
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: '13px', color: '#a3a3a3' }}>
-                  {currentErp.serviceList.name}
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                  {/* {currentErp.serviceList.name} */}
+                  {currentErp.serviceList && currentErp.serviceList.name
+                    ? currentErp.serviceList.name
+                    : currentErp.customService.name}
                   <br></br>
                 </p>
               </Col>
@@ -577,8 +580,14 @@ export default function ReadItem({ config, selectedItem }) {
                 </p>
               </Col>
               <Col className="gutter-row" span={12}>
-                <p style={{ fontSize: '13px', color: '#a3a3a3' }}>
-                  {/* {currentErp.customService.description}<br></br> */}
+                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                  {/* {currentErp.customService.description} */}
+                  {/* {currentErp.customService?.description ? (
+                    <span>{currentErp.customService.description}</span>
+                  ) : (
+                    ""
+                  )} */}
+                  <br></br>
                 </p>
               </Col>
             </Row>
@@ -609,7 +618,11 @@ export default function ReadItem({ config, selectedItem }) {
 
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {`${currentErp.serviceList.name} / One Time`} <br></br>
+                  {/* {`${currentErp.serviceList.name} / One Time`} */}
+                  {currentErp.serviceList && currentErp.serviceList.name
+                    ? `${currentErp.serviceList.name} / One Time`
+                    : `${currentErp.customService.name} / One Time`   }
+                  <br></br>
                 </p>
               </Col>
 
@@ -881,38 +894,66 @@ export default function ReadItem({ config, selectedItem }) {
           width: '300px',
           float: 'right',
           textAlign: 'right',
-          fontWeight: '700',
+          // fontWeight: '700',
         }}
       >
         <Row gutter={[12, -5]}>
-          <Col className="gutter-row" span={12}>
-            <p style={{ fontSize: '15px' }}>{translate('Sub Total')} :</p>
+          <Col className="gutter-row" span={17}>
+            <p style={{ fontSize: '17px' }}>{translate('Item Total')} :</p>
           </Col>
 
-          <Col className="gutter-row" span={12}>
-            <p style={{ fontSize: '15px' }}>
+          <Col className="gutter-row" span={7}>
+            <p style={{ fontSize: '16px' }}>
+              {moneyFormatter({
+                amount: currentErp.additionalCost.itemTotal,
+              })}
+            </p>
+          </Col>
+
+          <Col className="gutter-row" span={17}>
+            <p style={{ fontSize: '17px' }}>
+              {translate('Discount')} ({currentErp.discount}%) :
+            </p>
+          </Col>
+
+          <Col className="gutter-row" span={7}>
+            <p style={{ fontSize: '16px' }}>
+              {moneyFormatter({
+                amount: currentErp.additionalCost.discount,
+              })}
+            </p>
+          </Col>
+
+          <Col className="gutter-row" span={17}>
+            <p style={{ fontSize: '17px' }}>{translate('sub total')} :</p>
+          </Col>
+
+          <Col className="gutter-row" span={7}>
+            <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.subTotal,
               })}
             </p>
           </Col>
-          <Col className="gutter-row" span={12}>
-            <p style={{ fontSize: '15px' }}>
-              {translate('Tax Total')} ({currentErp.taxPercentage}%) :
+
+          <Col className="gutter-row" span={17}>
+            <p style={{ fontSize: '17px' }}>
+              {translate('Tax')} ({currentErp.taxPercentage}%) :
             </p>
           </Col>
-          <Col className="gutter-row" span={12}>
-            <p style={{ fontSize: '15px' }}>
+          <Col className="gutter-row" span={7}>
+            <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.tax,
               })}
             </p>
           </Col>
-          <Col className="gutter-row" span={12}>
-            <p style={{ fontSize: '15px' }}>{translate('Total')} :</p>
+
+          <Col className="gutter-row" span={17}>
+            <p style={{ fontSize: '17px' }}>{translate('Total Item Cost')} :</p>
           </Col>
-          <Col className="gutter-row" span={12}>
-            <p style={{ fontSize: '15px' }}>
+          <Col className="gutter-row" span={7}>
+            <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.totalPackageCost,
               })}
@@ -921,12 +962,12 @@ export default function ReadItem({ config, selectedItem }) {
         </Row>
       </div>
 
-      <Row style={{ marginTop: '10%' }}>
+      <Row style={{ marginTop: '23%' }}>
         <Col className="gutter-row" span={4}>
-          <h3>{translate('Grand Total')} :</h3>
+          <h3 style={{ fontSize: '18px' }}>{translate('Grand Total')} :</h3>
         </Col>
-        <Col className="gutter-row" style={{ marginLeft: '-1%' }}>
-          <h3>
+        <Col className="gutter-row" style={{ marginLeft: '1%' }}>
+          <h3 style={{ fontSize: '18px' }}>
             {moneyFormatter({
               amount: currentErp.grandTotal,
             })}
@@ -970,6 +1011,8 @@ export default function ReadItem({ config, selectedItem }) {
                 width: '98%',
                 border: '1px solid rgb(240,240,240)',
                 height: '300px',
+                overflowY: 'scroll',
+
                 borderRadius: '0px',
                 boxShadow: '0px 0px 0px 1px #0e0e0e',
                 marginLeft: '1%',
@@ -1132,8 +1175,6 @@ export default function ReadItem({ config, selectedItem }) {
                       </Row>
                     );
                   })}
-
-                  <hr></hr>
                 </Col>
               </Row>
             </div>
