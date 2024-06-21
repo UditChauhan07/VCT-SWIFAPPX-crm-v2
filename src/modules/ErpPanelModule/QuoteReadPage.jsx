@@ -34,7 +34,7 @@ const Item = ({ item }) => {
         <Row gutter={[12, 0]} key={item._id}>
             <Col className="gutter-row" span={11}>
                 <p style={{ marginBottom: 5 }}>
-                    {/* <strong>{item.item.name}</strong> */}
+                    <strong>{item?.item?.name}</strong>
                 </p>
                 <p>{item.description}</p>
             </Col>
@@ -108,10 +108,11 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
     useEffect(() => {
         if (currentResult) {
-            const { items, invoice, ...others } = currentResult;
+            const { items, invoice, customItems, ...others } = currentResult;
 
             if (items) {
                 setItemsList(items);
+
                 setCurrentErp(currentResult);
             } else if (invoice.items) {
                 setItemsList(invoice.items);
@@ -123,6 +124,8 @@ export default function QuoteReadPage({ config, selectedItem }) {
             setCurrentErp(resetErp);
         };
     }, [currentResult]);
+
+
 
     useEffect(() => {
         if (currentErp?.client) {
@@ -185,16 +188,11 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
 
     const { text: statusText, color: textColor, backgroundColor: bgColor } = getStatusText(currentErp?.status);
-
-
     const Createddate = new Date(currentErp?.created);
-
-
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
-
     const Createdday = Createddate.getDate();
     const Createdmonth = monthNames[Createddate.getMonth()];
     const Createdyear = Createddate.getFullYear();
@@ -203,8 +201,6 @@ export default function QuoteReadPage({ config, selectedItem }) {
     const Createdseconds = Createddate.getSeconds();
 
     const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`;
-
-
     return (
         <>
             <PageHeader
@@ -402,7 +398,12 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {currentErp?.serviceList.name}<br></br>
+                                    {/* {currentErp?.serviceList.name} */}
+                                    {currentErp.serviceList && currentErp.serviceList.name
+                                        ? currentErp.serviceList.name
+                                        : currentErp.customService.name}
+                                    <br></br>
+                                    <br></br>
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
@@ -436,7 +437,10 @@ export default function QuoteReadPage({ config, selectedItem }) {
 
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {`${currentErp?.serviceList.name} / One Time`} <br></br>
+                                    {/* {`${currentErp?.serviceList.name} / One Time`} <br></br> */}
+                                    {currentErp.serviceList && currentErp.serviceList.name
+                                        ? `${currentErp.serviceList.name} / One Time`
+                                        : `${currentErp.customService.name} / One Time`}<br></br>
                                 </p>
                             </Col>
 
@@ -458,7 +462,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                 </p> </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {/* {currentErp.adjustment.value} <br></br> */}
+                                    {currentErp.adjustment && currentErp.adjustment.value ? currentErp.adjustment.value : ""}
                                 </p> </Col>
 
 
@@ -574,9 +578,12 @@ export default function QuoteReadPage({ config, selectedItem }) {
             </Row>
 
 
-            <Row gutter={[12, 0]} style={{ marginTop: "40px" }}>
+            <h2 style={{ marginTop: '4%' }}>Additional Cost</h2>
+            <Divider />
+            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+
                 <Col className="gutter-row" span={11}>
-                    <p>
+                    <p style={{ fontSize: "15px" }}>
                         <strong>{translate('Product')}</strong>
                     </p>
                 </Col>
@@ -584,6 +591,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     <p
                         style={{
                             textAlign: 'right',
+                            fontSize: "15px"
                         }}
                     >
                         <strong>{translate('Price')}</strong>
@@ -593,6 +601,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     <p
                         style={{
                             textAlign: 'right',
+                            fontSize: "15px"
                         }}
                     >
                         <strong>{translate('Quantity')}</strong>
@@ -602,18 +611,59 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     <p
                         style={{
                             textAlign: 'right',
+                            fontSize: "15px"
                         }}
                     >
                         <strong>{translate('Total')}</strong>
                     </p>
                 </Col>
-                <Divider />
+                <Divider style={{ marginTop: "1%" }} />
             </Row>
-            {
-                itemslist?.map((item) => (
-                    <Item key={item._id} item={item}></Item>
-                ))
-            }
+
+            {itemslist.map((item) => (
+
+                <Item key={item._id} item={item}></Item>
+            ))}
+            {currentErp.customItems.map((item) => (
+        <Row gutter={[12, 0]} key={item._id}>
+          <Col className="gutter-row" span={11}>
+            <p style={{ marginBottom: 5 }}>
+              <strong>{item.item}</strong>
+            </p>
+            <p>{item.description}</p>
+          </Col>
+          <Col className="gutter-row" span={4}>
+            <p
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              {moneyFormatter({ amount: item.price })}
+            </p>
+          </Col>
+          <Col className="gutter-row" span={4}>
+            <p
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              {item.quantity}
+            </p>
+          </Col>
+          <Col className="gutter-row" span={5}>
+            <p
+              style={{
+                textAlign: 'right',
+                fontWeight: '700',
+              }}
+            >
+              {moneyFormatter({ amount: item.total })}
+            </p>
+          </Col>
+          <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
+        </Row>
+      ))}
+
             <div
                 style={{
                     width: '300px',
@@ -622,30 +672,83 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     fontWeight: '700',
                 }}
             >
+                
                 <Row gutter={[12, -5]}>
                     <Col className="gutter-row" span={12}>
-                        <p>{translate('Sub Total')} :</p>
+                        <p style={{ fontSize: '16px' }}>{translate('Item Total')} :</p>
                     </Col>
 
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.subTotal })}</p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p>
-                            {translate('Tax Total')} ({currentErp?.taxRate} %) :
+                        <p style={{ fontSize: '16px' }}>
+                            {moneyFormatter({
+                                amount: currentErp.additionalCost.itemTotal,
+                            })}
                         </p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.tax })}</p>
+                        <p style={{ fontSize: "15px" }}>
+                            {translate('Discount')}  :
+                        </p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{translate('Total')} :</p>
+                        <p style={{ fontSize: "15px" }}>
+                            {moneyFormatter({
+                                amount: currentErp.additionalCost.discount,
+                            })}
+                        </p>
                     </Col>
                     <Col className="gutter-row" span={12}>
-                        <p>{moneyFormatter({ amount: currentErp?.additionalCost.totalPackageCost })}</p>
+                        <p style={{ fontSize: "15px" }}>{translate('Sub Total')} :</p>
+                    </Col>
+
+                    <Col className="gutter-row" span={12}>
+                        <p style={{ fontSize: "15px" }}>
+                            {moneyFormatter({
+                                amount: currentErp.additionalCost.subTotal,
+                            })}
+                        </p>
+                    </Col>
+                    <Col className="gutter-row" span={12}>
+                        <p style={{ fontSize: "15px" }}>
+                            {translate('Tax Total')} ({currentErp.taxPercentage}%) :
+                        </p>
+                    </Col>
+                    <Col className="gutter-row" span={12}>
+                        <p style={{ fontSize: "15px" }}>
+                            {moneyFormatter({
+                                amount: currentErp.additionalCost.tax,
+                            })}
+                        </p>
+                    </Col>
+                   
+                    <Col className="gutter-row" span={12}>
+                        <p style={{ fontSize: "15px" }}>{translate('Total Items Cost')} :</p>
+                    </Col>
+                    <Col className="gutter-row" span={12}>
+                        <p style={{ fontSize: "15px" }}>
+                            {moneyFormatter({
+                                amount: currentErp.additionalCost.totalPackageCost,
+                            })}
+                        </p>
                     </Col>
                 </Row>
             </div>
+
+            <Row style={{ marginTop: "10%" }}>
+                <Col className="gutter-row" span={4}>
+                    <h3>{translate('Grand Total')} :</h3>
+                </Col>
+                <Col className="gutter-row" style={{ marginLeft: '-1%' }}>
+                    <h3 >
+                        {moneyFormatter({
+                            amount: currentErp.grandTotal
+                        })}
+                    </h3>
+                </Col>
+            </Row>
+            <Divider />
+
+
         </>
     );
 }

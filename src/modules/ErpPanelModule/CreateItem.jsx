@@ -346,7 +346,32 @@ export default function CreateItem({ config, CreateForm }) {
           MyItems = JSON.parse(Items);
         }
 
+        const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+
+        const subsdata = JSON.parse(WorkOrderstoredId);
+
+
+        const subFinalData = subsdata[0];
+
+        const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
+        console.log({ Customitem })
+
+        const CustomItemData = Customitem.map(item => ({
+
+          item: item.name,
+          quantity: item.qty,
+          price: item.price,
+          total: item.total,
+          remarks: ""
+        }));
+
+        console.log(CustomItemData);
+        const  Tax = localStorage.getItem('TaxPercentage');
+        
+        const discount = localStorage.getItem('discountValue');
+
         const isCustom = fieldsValue.serviceName === 'custom';
+        
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -362,6 +387,8 @@ export default function CreateItem({ config, CreateForm }) {
           serviceList: fieldsValue.serviceName,
           subscriptions: storedSubscriptions,
           isCustom: isCustom,
+          taxPercentage: Tax,
+          // discount: discount,
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
@@ -369,13 +396,15 @@ export default function CreateItem({ config, CreateForm }) {
           },
           items: MyItems,
           // items: fieldsValue.items,
-          customItems: fieldsValue.customItems,
+          customItems: CustomItemData,
+          // customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
           additionalCost,
           grandTotal,
-
+          ...(fieldsValue.serviceList !== 'custom' ? { serviceList: fieldsValue.serviceList } : {}),
+          ...(subFinalData.subModule ? { subModule: subFinalData.subModule } : {}),
           adjustment: {
-            type: fieldsValue.AdjustmentType,
+            type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
           },
           InitialRemarks: fieldsValue.InitialRemarks,

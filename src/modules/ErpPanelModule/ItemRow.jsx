@@ -12,7 +12,9 @@ export default function ItemRow({ key, field, remove, current = null, response, 
 
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
+
   const [name, setName] = useState('');
+
   const [quantity, setQuantity] = useState(0);
 
   const money = useMoney();
@@ -28,9 +30,7 @@ export default function ItemRow({ key, field, remove, current = null, response, 
     setName(value);
   };
   const [form] = useForm();
-
-
-  useEffect(() => {
+useEffect(() => {
     if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
       const firstItem = current.items[0];
       form.setFieldsValue({ [field.name]: firstItem });
