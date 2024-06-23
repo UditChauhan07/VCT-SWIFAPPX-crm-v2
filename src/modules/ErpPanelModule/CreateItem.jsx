@@ -310,30 +310,27 @@ export default function CreateItem({ config, CreateForm }) {
       }
       // ................
       if (entity === "quote") {
-        console.log(fieldsValue.items)
         const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
+        const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+        console.log(storedSubscriptions)
+
+        const subsdata = JSON.parse(WorkOrderstoredId);
+
+
+        const subFinalData = subsdata[0];
+
         let additionalCost = {};
-        let serviceCost = {};
-        let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}";
+        let NewserviceCost = {};
+        let serviceCostStr = localStorage.getItem('ServiceCostitem') || '{}';
+        // let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}";
         let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
-
-        try {
-          if (serviceCostStr) {
-            serviceCost = JSON.parse(serviceCostStr);
-          }
-        } catch (error) {
-          console.error('Error parsing serviceCostStr:', error);
-          serviceCost = {};
+        if (serviceCostStr) {
+          NewserviceCost = JSON.parse(serviceCostStr);
         }
-
-        try {
-          if (additionalCostStr) {
-            additionalCost = JSON.parse(additionalCostStr);
-          }
-        } catch (error) {
-          console.error('Error parsing additionalCostStr:', error);
-          additionalCost = {};
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr);
         }
+        
 
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
@@ -346,12 +343,7 @@ export default function CreateItem({ config, CreateForm }) {
           MyItems = JSON.parse(Items);
         }
 
-        const WorkOrderstoredId = localStorage.getItem('Subscriptions');
-
-        const subsdata = JSON.parse(WorkOrderstoredId);
-
-
-        const subFinalData = subsdata[0];
+        
 
         const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
         console.log({ Customitem })
@@ -370,8 +362,12 @@ export default function CreateItem({ config, CreateForm }) {
         
         const discount = localStorage.getItem('discountValue');
 
-        const isCustom = fieldsValue.serviceName === 'custom';
-        
+        // const isCustom = fieldsValue.serviceName === 'custom';
+
+        const isCustommString = localStorage.getItem('IssCustomm');
+        const isCustomm = JSON.parse(isCustommString);
+
+
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -384,9 +380,9 @@ export default function CreateItem({ config, CreateForm }) {
           salesPerson: fieldsValue.salesPerson,
           salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
-          serviceList: fieldsValue.serviceName,
-          subscriptions: storedSubscriptions,
-          isCustom: isCustom,
+          // serviceList: fieldsValue.serviceList,
+          subscriptions: [...storedSubscriptions],
+          isCustom: isCustomm,
           taxPercentage: Tax,
           // discount: discount,
           customService: {
@@ -399,10 +395,11 @@ export default function CreateItem({ config, CreateForm }) {
           customItems: CustomItemData,
           // customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
+          serviceCost: NewserviceCost,
           additionalCost,
           grandTotal,
-          ...(fieldsValue.serviceList !== 'custom' ? { serviceList: fieldsValue.serviceList } : {}),
-          ...(subFinalData.subModule ? { subModule: subFinalData.subModule } : {}),
+          ...(!isCustomm ? { serviceList: fieldsValue.serviceList } : {}),
+          ...(!isCustomm ? { subModule: subFinalData.subModule } : {}),
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
