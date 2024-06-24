@@ -587,6 +587,11 @@ export default function ReadItem({ config, selectedItem }) {
                   ) : (
                     ""
                   )} */}
+                  {currentErp?.customService?.description?.trim() ? (
+                    <span>{currentErp.customService.description}</span>
+                  ) : (
+                    <span>--</span>
+                  )}
                   <br></br>
                 </p>
               </Col>
@@ -595,7 +600,7 @@ export default function ReadItem({ config, selectedItem }) {
         </Col>
       </Row>
 
-      {/* ................. */}
+      {/* ........WORKORDER BILLING DETAILS......... */}
       <h2 style={{ marginTop: '4%' }}>WorkOrder Billing Detail</h2>
       <Row className="gutter-row" style={{ marginTop: '20px' }}>
         <Col span={24}>
@@ -621,7 +626,7 @@ export default function ReadItem({ config, selectedItem }) {
                   {/* {`${currentErp.serviceList.name} / One Time`} */}
                   {currentErp.serviceList && currentErp.serviceList.name
                     ? `${currentErp.serviceList.name} / One Time`
-                    : `${currentErp.customService.name} / One Time`   }
+                    : `${currentErp.customService.name} / One Time`}
                   <br></br>
                 </p>
               </Col>
@@ -962,7 +967,7 @@ export default function ReadItem({ config, selectedItem }) {
         </Row>
       </div>
 
-      <Row style={{ marginTop: '23%' }}>
+      {/* <Row style={{ marginTop: '23%' }}>
         <Col className="gutter-row" span={4}>
           <h3 style={{ fontSize: '18px' }}>{translate('Grand Total')} :</h3>
         </Col>
@@ -973,10 +978,89 @@ export default function ReadItem({ config, selectedItem }) {
             })}
           </h3>
         </Col>
-      </Row>
+      </Row> */}
       <Divider />
 
-      <h2 style={{ marginTop: '4%' }}>Basic Attendence Details</h2>
+
+
+      <h2 style={{ marginTop: '5%' }}>Total Workorder Cost</h2>
+      <Divider />
+
+      <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+        <Col className="gutter-row" span={11}>
+          <p style={{ fontSize: '18px' }}>
+            <strong>{translate('Additonal Cost')}</strong>
+          </p>
+        </Col>
+      
+        <Col className="gutter-row" span={12}>
+          <p
+            style={{
+              textAlign: 'right',
+              fontSize: '18px',
+            }}
+          >
+        {moneyFormatter({
+                amount: currentErp.additionalCost.totalPackageCost,
+              })}
+          </p>
+        </Col>
+        <Divider dashed style={{ marginTop: '0%' }} />
+      </Row>
+
+      <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+        <Col className="gutter-row" span={11}>
+          <p style={{ fontSize: '18px' }}>
+            <strong>{translate('Service Cost')}</strong>
+          </p>
+        </Col>
+      
+        <Col className="gutter-row" span={12}>
+          <p
+            style={{
+              textAlign: 'right',
+              fontSize: '18px',
+            }}
+          >
+             {moneyFormatter({
+                amount:currentErp.serviceCost.totalPackageCost,
+              })}
+     
+          </p>
+        </Col>
+        {/* <Divider  dashed  /> */}
+      </Row>
+
+
+      <Row gutter={[12, 0]} style={{ marginTop: '13px', backgroundColor:"rgb(141,40,221)", height:"68px", color:"white" }}>
+        <Col className="gutter-row" span={11}>
+          <p style={{ fontSize: '21px' }}>
+            <strong>{translate('Grand Total')}</strong>
+          </p>
+        </Col>
+      
+        <Col className="gutter-row" span={12}>
+          <p
+            style={{
+              textAlign: 'right',
+              fontSize: '21px',
+            }}
+          >
+            {moneyFormatter({
+              amount: currentErp.grandTotal,
+            })}
+          </p>
+        </Col>
+        <Divider style={{ marginTop: '0%' }} />
+      </Row>
+
+
+
+
+
+
+
+      <h2 style={{ marginTop: '5%' }}>Basic Attendence Details</h2>
       <Row className="gutter-row">
         <Col span={24}>
           <div

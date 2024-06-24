@@ -302,7 +302,6 @@ export default function ItemRow({ key, field, remove, current = null, response, 
           )
         }
 
-
       </Row>
     </>
   );
