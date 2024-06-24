@@ -440,7 +440,8 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                     {/* {`${currentErp?.serviceList.name} / One Time`} <br></br> */}
                                     {currentErp.serviceList && currentErp.serviceList.name
                                         ? `${currentErp.serviceList.name} / One Time`
-                                        : `${currentErp.customService.name} / One Time`}<br></br>
+                                        : `${currentErp.customService.name} / One Time`}
+                                    <br></br>
                                 </p>
                             </Col>
 
@@ -733,7 +734,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     </Col>
                 </Row>
             </div>
-
+            <Divider />
             <Row style={{ marginTop: "10%" }}>
                 <Col className="gutter-row" span={4}>
                     <h3>{translate('Grand Total')} :</h3>

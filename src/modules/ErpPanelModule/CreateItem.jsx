@@ -321,8 +321,17 @@ export default function CreateItem({ config, CreateForm }) {
 
         let additionalCost = {};
         let NewserviceCost = {};
-        let serviceCostStr = localStorage.getItem('ServiceCostitem') || '{}';
-        // let serviceCostStr = localStorage.getItem("ZeFnMqDC7ktkKDB") || "{}";
+        // console.log(NewserviceCost)
+
+        let serviceCostStrr = localStorage.getItem('ServiceCostitem') || "{}";
+        let serviceCostObj = JSON.parse(serviceCostStrr);
+        console.log(serviceCostStrr)
+
+     
+
+
+        let serviceCostStr = localStorage.getItem("ServiceCostitem") || "{}";
+        // console.log(serviceCostStr)
         let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
         if (serviceCostStr) {
           NewserviceCost = JSON.parse(serviceCostStr);
@@ -330,7 +339,7 @@ export default function CreateItem({ config, CreateForm }) {
         if (additionalCostStr) {
           additionalCost = JSON.parse(additionalCostStr);
         }
-        
+
 
         let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
@@ -343,7 +352,7 @@ export default function CreateItem({ config, CreateForm }) {
           MyItems = JSON.parse(Items);
         }
 
-        
+
 
         const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
         console.log({ Customitem })
@@ -358,8 +367,8 @@ export default function CreateItem({ config, CreateForm }) {
         }));
 
         console.log(CustomItemData);
-        const  Tax = localStorage.getItem('TaxPercentage');
-        
+        const Tax = localStorage.getItem('TaxPercentage');
+
         const discount = localStorage.getItem('discountValue');
 
         // const isCustom = fieldsValue.serviceName === 'custom';
@@ -395,7 +404,7 @@ export default function CreateItem({ config, CreateForm }) {
           customItems: CustomItemData,
           // customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
-          serviceCost: NewserviceCost,
+          serviceCost: serviceCostObj,
           additionalCost,
           grandTotal,
           ...(!isCustomm ? { serviceList: fieldsValue.serviceList } : {}),
