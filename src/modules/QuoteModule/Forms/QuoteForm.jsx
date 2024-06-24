@@ -736,7 +736,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const CalculatorFilled = () => {
     return (
-
       ShowServiceList.map((element, _id) => (
         element.subscriptions.map((subscriptions, __id) => (
           subscriptions.data.map((subscription, ___id) => {
@@ -877,6 +876,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     console.log({ subTotal });
   }
   const [isCustom, setIsCustom] = useState(false)
+
+
   const handleSelectChange = (value) => {
     // setadjustment(null);
     // setdiscount(null);
