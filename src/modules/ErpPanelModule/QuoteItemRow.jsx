@@ -59,7 +59,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
     return (
         <>
             <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange}>
-                {response.subItem.map((mainData, i) => (
+                {response.subItem?.map((mainData, i) => (
                     <Collapse.Panel header={mainData.Servicename} key={mainData.Serviceid}>
                         <div key={`${i}`}>
                             <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
@@ -79,7 +79,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
                                     <p>{translate('Remarks')}</p>
                                 </Col>
                             </Row>
-                            {mainData.subItemlist.map((data, index) => (
+                            {mainData.subItemlist?.map((data, index) => (
 
                                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key={[`${i}`, `${index}`]}>
                                     <Col className="gutter-row" span={4}>

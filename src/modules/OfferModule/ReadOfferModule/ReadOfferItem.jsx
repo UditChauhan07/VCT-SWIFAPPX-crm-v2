@@ -268,7 +268,7 @@ export default function ReadOfferItem({ config, selectedItem }) {
         </Col>
         <Divider />
       </Row>
-      {itemslist.map((item) => (
+      {itemslist?.map((item) => (
         <Item key={item._id} item={item}></Item>
       ))}
       <div

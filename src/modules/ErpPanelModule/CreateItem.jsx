@@ -121,7 +121,7 @@ export default function CreateItem({ config, CreateForm }) {
     if (fieldsValue) {
       if (entity === 'items') {
         let newList = [...fieldsValue.items];
-        newList.map((item) => {
+        newList?.map((item) => {
           item.total = calculate.multiply(item.quantity, item.price);
         });
         fieldsValue = {
@@ -365,6 +365,14 @@ export default function CreateItem({ config, CreateForm }) {
       if (entity === 'quote') {
         console.log(fieldsValue.items);
         const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
+        const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+        console.log(storedSubscriptions)
+
+        const subsdata = JSON.parse(WorkOrderstoredId);
+
+
+        const subFinalData = subsdata[0];
+
         let additionalCost = {};
         let serviceCost = {};
         let serviceCostStr = localStorage.getItem('ZeFnMqDC7ktkKDB') || '{}';
@@ -404,22 +412,28 @@ export default function CreateItem({ config, CreateForm }) {
           salesPerson: fieldsValue.salesPerson,
           salesPersonContact: fieldsValue.SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
-          serviceList: fieldsValue.serviceName,
-          subscriptions: storedSubscriptions,
-          isCustom: isCustom,
+          // serviceList: fieldsValue.serviceList,
+          subscriptions: [...storedSubscriptions],
+          isCustom: isCustomm,
+          taxPercentage: Tax,
+          // discount: discount,
           customService: {
             name: fieldsValue.ServiceName,
             price: fieldsValue.ServicePrice,
             description: fieldsValue.ServiceDescription,
           },
-          items: fieldsValue.items,
-          customItems: fieldsValue.customItems,
+          items: MyItems,
+          // items: fieldsValue.items,
+          customItems: CustomItemData,
+          // customItems: fieldsValue.customItems,
           remarks: fieldsValue.InitialRemarks,
+          serviceCost: serviceCostObj,
           additionalCost,
           grandTotal,
-
+          ...(!isCustomm ? { serviceList: fieldsValue.serviceList } : {}),
+          ...(!isCustomm ? { subModule: subFinalData.subModule } : {}),
           adjustment: {
-            type: fieldsValue.AdjustmentType,
+            type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
           },
           InitialRemarks: fieldsValue.InitialRemarks,

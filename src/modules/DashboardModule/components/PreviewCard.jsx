@@ -97,14 +97,14 @@ export default function PreviewCard({
 }) {
   const statisticsMap = useMemo(() => {
     if (entity === 'invoice') {
-      return defaultInvoiceStatistics.map((defaultStat) => {
+      return defaultInvoiceStatistics?.map((defaultStat) => {
         const matchedStat = Array.isArray(statistics)
           ? statistics.find((stat) => stat.tag === defaultStat.tag)
           : null;
         return matchedStat || defaultStat;
       });
     } else {
-      return defaultStatistics.map((defaultStat) => {
+      return defaultStatistics?.map((defaultStat) => {
         const matchedStat = Array.isArray(statistics)
           ? statistics.find((stat) => stat.tag === defaultStat.tag)
           : null;

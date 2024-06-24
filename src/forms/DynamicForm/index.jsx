@@ -81,7 +81,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
 
   return (
     <>
-      {Object.keys(fields).map((key) => {
+      {Object.keys(fields)?.map((key) => {
         let field = fields[key];
         let i = 1;
         if ((isUpdateForm && !field.disableForUpdate) || !field.disableForForm) {
@@ -219,7 +219,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         }}
       >
         {Array.isArray(roles) &&
-          roles.map((role, index) => (
+          roles?.map((role, index) => (
             <Select.Option key={index} value={role._id}>
               {role.name}
             </Select.Option>
@@ -291,7 +291,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
           width: '100%',
         }}
       >
-        {countryList.map((language) => (
+        {countryList?.map((language) => (
           <Select.Option
             key={language.value}
             value={language.value}
@@ -318,7 +318,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
           width: '100%',
         }}
       >
-        {countryList.map((language) => (
+        {countryList?.map((language) => (
           <Select.Option
             key={language.value}
             value={language.value}
@@ -373,7 +373,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     ),
     checkoxesCustom: (
       <Checkbox.Group onChange={handleCheckboxChange} value={selectedOptions}>
-        {checkboxes.map((item) => (
+        {checkboxes?.map((item) => (
           <Checkbox key={item._id} value={item._id}>
             {item.name}
           </Checkbox>
@@ -474,9 +474,9 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
             }
             return Promise.resolve();
           } : field.name === 'company' ? (rule, value) => {
-            if (field.name === 'company' && (!value || value === '')) {
-              return Promise.reject('Please select company.');
-            }
+            // if (field.name === 'company' && (!value || value === '')) {
+            //   return Promise.reject('Please select company.');
+            // }
 
           } : field.name === 'role' ? (rule, value) => {
             if (field.name === 'role' && (!value || value === '')) {

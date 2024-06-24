@@ -68,7 +68,7 @@ export default function CreateForm({ fields, isUpdateForm = false }) {
       
       {responseData && (
         <div>
-          {responseData.map((item) => (
+          {responseData?.map((item) => (
             <div key={item.subscription._id}>
               <label>{item.subscription.name}</label>
               <input type="text" />

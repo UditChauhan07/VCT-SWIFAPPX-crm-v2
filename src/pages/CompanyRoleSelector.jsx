@@ -253,7 +253,7 @@ const CompanyRoleSelector = () => {
             {/* Render input fields based on API response */}
             {responseData && (
                 <div>
-                    {responseData.map((item) => (
+                    {responseData?.map((item) => (
                         <div key={item.subscription._id}>
                             <label>{item.subscription.name}</label>
                             <input type="text" />

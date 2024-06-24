@@ -4495,7 +4495,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       },
     ];
 
-    subscriptionNames.forEach((name) => {
+    subscriptionNames?.forEach((name) => {
       columns.push({
         title: <span>{name}</span>,
         dataIndex: name,
@@ -5389,6 +5389,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const initialQuantities = {};
     const initialTotals = {};
     productList?.map((ele) =>
+      ele.products?.forEach((product, index) => {
       ele.products?.forEach((product, index) => {
         initialPrices[product._id] = product.price;
         initialQuantities[product._id] = 1;

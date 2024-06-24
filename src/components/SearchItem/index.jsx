@@ -40,7 +40,7 @@ function SearchItemComponent({ config, onRerender }) {
   );
 
   const labels = (optionField) => {
-    return displayLabels.map((x) => optionField[x]).join(' ');
+    return displayLabels?.map((x) => optionField[x]).join(' ');
   };
 
   useEffect(() => {
@@ -105,7 +105,7 @@ function SearchItemComponent({ config, onRerender }) {
       style={{ width: '100%' }}
       onSelect={onSelect}
     >
-      {selectOptions.map((optionField) => (
+      {selectOptions?.map((optionField) => (
         <Select.Option key={optionField[outputValue]} value={optionField[outputValue]}>
           {labels(optionField)}
         </Select.Option>
@@ -121,7 +121,7 @@ export default function SearchItem({ config }) {
     setState([state + 1]);
   };
 
-  return state.map((comp) => (
+  return state?.map((comp) => (
     <SearchItemComponent key={comp} config={config} onRerender={onRerender} />
   ));
 }

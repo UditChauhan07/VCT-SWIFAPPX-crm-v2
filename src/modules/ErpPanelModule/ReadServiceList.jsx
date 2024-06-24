@@ -74,19 +74,19 @@ export default function ReadServiceList({ config, selectedItem }) {
    
     const getSubscriptionNames = () => {
         // console.log('name', currentErp.subscriptions.map(item => item.subscription.name));
-        return currentErp.subscriptions.map(item => item.subscription.name);
+        return currentErp.subscriptions?.map(item => item.subscription.name);
     };
 
     const getPriceValues = () => {
-        console.log('item', currentErp.subscriptions.map(item => Object.values(item.data).map(subitem => subitem.price)));
-        return currentErp.subscriptions.map(item => Object.values(item.data).map(subitem => subitem.price));
+        console.log('item', currentErp.subscriptions?.map(item => Object.values(item.data).map(subitem => subitem.price)));
+        return currentErp.subscriptions?.map(item => Object.values(item.data)?.map(subitem => subitem.price));
     };
 
     const generateColumns = () => {
-        console.log('key pair ', ...currentErp.subscriptions.map((item => Object.values(item.data).map((subitem, key) => ({
+        console.log('key pair ', ...currentErp.subscriptions?.map((item => Object.values(item.data).map((subitem, key) => ({
             title: subitem.name,
             dataIndex: subitem.name,
-        })))), 'old key pair ', ...currentErp.subscriptions.map((item, key) => ({
+        })))), 'old key pair ', ...currentErp.subscriptions?.map((item, key) => ({
             title: item.data[key]?.name,
             dataIndex: item.data[key]?.name,
         })));
@@ -95,7 +95,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                 title: 'Subscription',
                 dataIndex: 'subscription',
             },
-            ...currentErp.subscriptions.map((item, key) => ({
+            ...currentErp.subscriptions?.map((item, key) => ({
                 title: item.data[key]?.name,
                 dataIndex: item.data[key]?.name,
             })),
@@ -113,12 +113,12 @@ export default function ReadServiceList({ config, selectedItem }) {
         const subscriptionNames = getSubscriptionNames();
         const priceValues = getPriceValues();
         console.log( priceValues);
-        const tableData = subscriptionNames.map((subscription, index) => {
+        const tableData = subscriptionNames?.map((subscription, index) => {
      
             const rowData = {
                 subscription: subscription,
             };
-            priceValues[index].forEach((price, idx) => {
+            priceValues[index]?.forEach((price, idx) => {
     
                 rowData[currentErp.subscriptions[index].data[idx].name] = price;
             });
