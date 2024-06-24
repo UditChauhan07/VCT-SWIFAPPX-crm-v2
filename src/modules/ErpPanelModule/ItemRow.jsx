@@ -165,13 +165,13 @@ import { useForm } from 'antd/lib/form/Form';
 import { Checkbox } from 'antd/lib';
 
 export default function ItemRow({ key, field, remove, current = null, response, isFirstRow, onChange = {} }) {
-  const { CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler } = onChange || null
+  const { CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler, CustomItemRemarksHandler } = onChange || null
 
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
  
   const [name, setName] = useState('');
- 
+  const [remarks, setRemarks] = useState('');
   const [quantity, setQuantity] = useState(0);
 
   const money = useMoney();
@@ -186,6 +186,12 @@ export default function ItemRow({ key, field, remove, current = null, response, 
   const updateName = (value) => {
     setName(value);
   };
+
+  const updateRemarks = (value, _id) => {
+    CustomItemRemarksHandler(_id, value ?? '');
+    setRemarks(value);
+  };
+
   const [form] = useForm();
 
  
@@ -198,6 +204,7 @@ export default function ItemRow({ key, field, remove, current = null, response, 
       setName(firstItem.itemName || '');
       setPrice(firstItem.price || 0);
       setQuantity(firstItem.quantity || 0);
+      setRemarks(firstItem.remarks || '');
     }
   }, [current, form]);
 
@@ -212,12 +219,14 @@ export default function ItemRow({ key, field, remove, current = null, response, 
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
+          setRemarks(item.remarks);
         }
       } else {
         const item = items[field.fieldKey];
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
+          setRemarks(item.remarks);
         }
       }
     }
@@ -280,7 +289,8 @@ export default function ItemRow({ key, field, remove, current = null, response, 
 
         <Col className="gutter-row" span={7}>
           <Form.Item name={[field.name, 'remarks']}>
-            <Input placeholder=" Remarks " />
+            <Input placeholder=" Remarks "
+            onChange={(e) => updateRemarks(e.target.value, `CI-${field.key}`)} />
           </Form.Item>
         </Col>
 
@@ -291,7 +301,6 @@ export default function ItemRow({ key, field, remove, current = null, response, 
             </div>
           )
         }
-
 
       </Row>
     </>

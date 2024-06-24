@@ -392,7 +392,7 @@ const request = {
   getLeadWorker: async () => {
     try {
       const response = await axios.get('/worker/listAll');
-      console.log(response);
+   
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -453,6 +453,7 @@ const request = {
   getSubscriptiononetime: async () => {
     try {
       const response = await axios.get(`/subscriptiontype/oneTime`);
+      console.log(response)
       return response.data;
     } catch (error) {
       return errorHandler(error);
