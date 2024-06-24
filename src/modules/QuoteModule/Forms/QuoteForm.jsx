@@ -595,55 +595,69 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemCount(temp.length);
   }
 
-const CustomItemQTYHandler = (_id, qty, price = 0) => {
+  const CustomItemQTYHandler = (_id, qty, price = 0) => {
     const tempId = [...subItemIds];
-    const temp = [...Subitems];
+    let temp = [...Subitems]; // Changed to let for mutability
 
     const selectedIndex = tempId.indexOf(_id);
     if (selectedIndex !== -1) {
-      temp.map((item) => {
+      temp = temp.map((item) => {
         if (item._id === _id) {
           item.qty = qty;
-          item.total = item.price * (qty)
+          item.total = item.price * qty; // Recalculate total based on new quantity
         }
-      })
+        return item;
+      });
     } else {
+      // Default total calculation based on default price and new quantity
       let element = {
-        _id, price, name: null,
-        total: price * (qty),
+        _id,
+        price,
+        name: null,
+        total: price * qty, // Calculate total based on new quantity and default price
         qty
-      }
+      };
       tempId.push(_id);
       temp.push(element);
     }
     setSubItemId(tempId);
     setItems(temp);
     setSubItemCount(temp.length);
-  }
+  };
+
+
   const CustomItemPriceHandler = (_id, price = 0) => {
     const tempId = [...subItemIds];
-    const temp = [...Subitems];
+    let temp = [...Subitems]; // Changed to let for mutability
+
     const selectedIndex = tempId.indexOf(_id);
     if (selectedIndex !== -1) {
-      temp.map((item) => {
+      temp = temp.map((item) => {
         if (item._id === _id) {
-          item.price = price
-          item.total = item.price * (item.qty)
+          item.price = price;
+          item.total = price * item.qty; // Recalculate total based on new price and existing quantity
         }
-      })
+        return item;
+      });
     } else {
+      // Default quantity and total calculation based on default quantity
       let element = {
-        _id, price, name: null,
-        total: price * (1),
-        qty: 1
-      }
+        _id,
+        price,
+        name: null,
+        total: price * 1, // Calculate total based on default quantity (1)
+        qty: 1 // Default quantity
+      };
       tempId.push(_id);
       temp.push(element);
     }
     setSubItemId(tempId);
     setItems(temp);
     setSubItemCount(temp.length);
-  }
+  };
+
+
+
  
 
 const initialServiceCost = {
@@ -788,7 +802,45 @@ const initialServiceCost = {
 
 
  
-  
+  // useEffect(() => {
+  //   const calculateCosts = () => {
+  //     const discountValueParsed = parseFloat(discountValue) || 0;
+  //     let subscriptionsArray = [];
+  //     let newServiceCost = { ...initialServiceCost };
+  //     ShowServiceId?.forEach(subscriptionObj => {
+  //       subscriptionObj.data?.forEach(dataObj => {
+  //         if (subscriptionIds.includes(dataObj._id)) {
+  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
+  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+  //           const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
+
+  //           newServiceCost = {
+  //             servicePerWO,
+  //             discount,
+  //             subTotal,
+  //             tax: taxAmount,
+  //             totalPackageCost,
+  //           };
+
+  //           subscriptionsArray.push({
+  //             subscription: subscriptionObj.subscription._id,
+  //             subModule: dataObj._id,
+  //             serviceCost: newServiceCost,
+  //           });
+  //         }
+  //       });
+  //     });
+
+  //     setServiceCost(newServiceCost);
+  //     localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray));
+  //   };
+
+  //   calculateCosts();
+  // }, [subscriptionIds, discountValue, ShowServiceId, tax]);
+
 
   const DiscountValueHandler = (value) => {
     setdiscount(value ?? 0);
@@ -850,7 +902,26 @@ const initialServiceCost = {
             }
             if (subscriptionIds.includes(subscription._id)) {
               subscriptionSubTotal = subTotal + taxValue;
+              // serviceCost.servicePerWO = parseFloat(subscription.price / package_divider).toFixed(2);
+              // serviceCost.discount = parseFloat(discount || 0).toFixed(2);
+              // serviceCost.subTotal = parseFloat(subTotal).toFixed(2);
+              // serviceCost.tax = parseFloat(taxValue).toFixed(2);
+              // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
+              // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
+
+              // const ServiceCostitem = {
+              //   servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+              //   discount: parseFloat(discount || 0).toFixed(2),
+              //   subTotal: parseFloat(subTotal).toFixed(2),
+              //   tax: parseFloat(taxValue).toFixed(2),
+              //   totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+              // }
+
+              // //  console.log({ServiceCostitem})
+              // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitem))
               
+
+              // localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
 
               const ServiceCostitwm = {
                 servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
@@ -975,7 +1046,7 @@ const initialServiceCost = {
       ))
     )
   }
- 
+  // const CalculatorFilledItem = () => {
   //   // Initialize variables to store totals
   //   let totalItemMPrice = 0;
   //   let totalDiscount = 0;
@@ -1605,12 +1676,15 @@ const initialServiceCost = {
                             </Form.Item>
                           </Col>
                           <Col className="gutter-row" span={3}>
-                            <Form.Item 
-                              // name={[`items`, `${index}`, 'quantity']}
-                            initialValue={1}>
+                            <Form.Item
+                              // name={['items', index, 'quantity']}
+                              initialValue={1}
+                            >
                               <InputNumber
                                 style={{ width: '100%' }}
                                 min={0}
+                                defaultValue={1}
+                                value={data.quantity}
                                 onChange={(value) => updateQuantity(data._id, value)}
                               />
                             </Form.Item>

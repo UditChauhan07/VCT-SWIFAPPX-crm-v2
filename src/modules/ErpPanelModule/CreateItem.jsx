@@ -354,7 +354,7 @@ export default function CreateItem({ config, CreateForm }) {
           quantity: item.qty,
           price: item.price,
           total: item.total,
-          remarks: ""
+          // remarks: item.remarks
         }));
 
         console.log(CustomItemData);
