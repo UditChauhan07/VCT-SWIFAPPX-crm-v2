@@ -106,6 +106,19 @@ export default function QuoteReadPage({ config, selectedItem }) {
     const [Dates, setDates] = useState();
 
 
+    // let Item_Total;
+
+    // if (currentErp.isCustom === true) {
+    //     Item_Total = currentErp.additionalCost.itemTotal
+    // } else {
+    //     Item_Total = currentErp.additionalCost.itemTotal / 4
+    // }
+
+    // console.log(Item_Total )
+
+
+
+
     useEffect(() => {
         if (currentResult) {
             const { items, invoice, customItems, ...others } = currentResult;
@@ -626,44 +639,44 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 <Item key={item._id} item={item}></Item>
             ))}
             {currentErp.customItems.map((item) => (
-        <Row gutter={[12, 0]} key={item._id}>
-          <Col className="gutter-row" span={11}>
-            <p style={{ marginBottom: 5 }}>
-              <strong>{item.item}</strong>
-            </p>
-            <p>{item.description}</p>
-          </Col>
-          <Col className="gutter-row" span={4}>
-            <p
-              style={{
-                textAlign: 'right',
-              }}
-            >
-              {moneyFormatter({ amount: item.price })}
-            </p>
-          </Col>
-          <Col className="gutter-row" span={4}>
-            <p
-              style={{
-                textAlign: 'right',
-              }}
-            >
-              {item.quantity}
-            </p>
-          </Col>
-          <Col className="gutter-row" span={5}>
-            <p
-              style={{
-                textAlign: 'right',
-                fontWeight: '700',
-              }}
-            >
-              {moneyFormatter({ amount: item.total })}
-            </p>
-          </Col>
-          <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
-        </Row>
-      ))}
+                <Row gutter={[12, 0]} key={item._id}>
+                    <Col className="gutter-row" span={11}>
+                        <p style={{ marginBottom: 5 }}>
+                            <strong>{item.item}</strong>
+                        </p>
+                        <p>{item.description}</p>
+                    </Col>
+                    <Col className="gutter-row" span={4}>
+                        <p
+                            style={{
+                                textAlign: 'right',
+                            }}
+                        >
+                            {moneyFormatter({ amount: item.price })}
+                        </p>
+                    </Col>
+                    <Col className="gutter-row" span={4}>
+                        <p
+                            style={{
+                                textAlign: 'right',
+                            }}
+                        >
+                            {item.quantity}
+                        </p>
+                    </Col>
+                    <Col className="gutter-row" span={5}>
+                        <p
+                            style={{
+                                textAlign: 'right',
+                                fontWeight: '700',
+                            }}
+                        >
+                            {moneyFormatter({ amount: item.total })}
+                        </p>
+                    </Col>
+                    <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
+                </Row>
+            ))}
 
             <div
                 style={{
@@ -673,7 +686,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     fontWeight: '700',
                 }}
             >
-                
+
                 <Row gutter={[12, -5]}>
                     <Col className="gutter-row" span={12}>
                         <p style={{ fontSize: '16px' }}>{translate('Item Total')} :</p>
@@ -721,7 +734,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                             })}
                         </p>
                     </Col>
-                   
+
                     <Col className="gutter-row" span={12}>
                         <p style={{ fontSize: "15px" }}>{translate('Total Items Cost')} :</p>
                     </Col>
@@ -735,7 +748,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 </Row>
             </div>
             <Divider />
-            <h2 style={{ marginTop: '5%' }}>Total Quotation Cost</h2>
+            <h2 style={{ marginTop: '5%' }}>Total Workorder Cost</h2>
             <Divider />
 
             <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
