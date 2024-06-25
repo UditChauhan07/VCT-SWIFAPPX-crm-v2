@@ -54,6 +54,9 @@ const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
 const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
 const CustomerAddresses =  lazy(() => import('@/pages/Address'));
+const WorkOrder =  lazy(() => import('@/pages/WorkOrder'));
+const WorkCreate =  lazy(() => import('@/pages/WorkOrder/WorkCreate'));
+
 
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
@@ -307,6 +310,14 @@ export default function AppRouter() {
     {
       path: '/customer/address/:id',
       element: <CustomerAddresses/>,
+    },
+    {
+      path: '/workorder',
+      element: <WorkOrder/>,
+    },
+    {
+      path: '/workorder/create',
+      element: <WorkCreate />,
     },
     {
       path: '*',

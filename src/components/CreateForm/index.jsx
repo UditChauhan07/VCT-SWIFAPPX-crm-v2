@@ -23,6 +23,7 @@ export default function CreateForm({ config, formElements, withUpload = false  }
   const onSubmit = (fieldsValue) => {
       console.log(fieldsValue)
     // Manually trim values before submission
+    console.log('ddd')
 
     if (fieldsValue.file && withUpload) {
       fieldsValue.file = fieldsValue.file[0].originFileObj;
