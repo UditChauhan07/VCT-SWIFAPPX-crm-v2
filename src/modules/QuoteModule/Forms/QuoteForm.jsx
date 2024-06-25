@@ -684,7 +684,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-  // const [subItemCount, setSubItemCount] = useState(0); 
+  // const [subItemCount, setSubItemCount] = useState(0);
 
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
@@ -754,8 +754,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
       let newServiceCost = { ...initialServiceCost };
+      let CustomsubscriptionArray = [];
       ShowServiceId?.forEach(subscriptionObj => {
-        // console.log(subscriptionObj)
+        console.log(subscriptionObj, "subscriptionObj")
         subscriptionObj.data?.forEach(dataObj => {
           if (subscriptionIds.includes(dataObj._id)) {
             const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
@@ -772,7 +773,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               tax: taxAmount,
               totalPackageCost,
             };
-            console.log(newServiceCost, "newServiceCost")
 
             subscriptionsArray.push({
               subscription: subscriptionObj.subscription._id,
@@ -784,20 +784,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         });
       });
 
-      const CustomsubscriptionArray = [
-        {
-          subscription: subscriptionOneTime,
-
-        }
-      ];
-
-
       setServiceCost({ ...initialServiceCost });
       localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
     };
 
     calculateCosts();
-  }, [subscriptionIds, discountValue, ShowServiceId, tax]);
+  }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
 
 
@@ -909,38 +901,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
               // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
 
-              const ServiceCostitem = {
-                servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
-                discount: parseFloat(discount || 0).toFixed(2),
-                subTotal: parseFloat(subTotal).toFixed(2),
-                tax: parseFloat(taxValue).toFixed(2),
-                totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+              let abc = [
+                {
+                  subscription: subscriptionOneTime,
+                  serviceCost: {
+                    servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+                    discount: parseFloat(discount || 0).toFixed(2),
+                    subTotal: parseFloat(subTotal).toFixed(2),
+                    tax: parseFloat(taxValue).toFixed(2),
+                    totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+                  }
+                }
+              ]
+              if (isCustom == true) {
+                localStorage.setItem('Subscriptions', JSON.stringify(abc))
               }
-
-              
-              localStorage.setItem('ServiceCostitem', JSON.stringify(ServiceCostitem))
 
               localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
 
-              // const ServiceCostitwm = {
-              //   servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
-              //   discount: parseFloat(discount || 0).toFixed(2),
-              //   subTotal: parseFloat(subTotal).toFixed(2),
-              //   tax: parseFloat(taxValue).toFixed(2),
-              //   totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-              // };
-              // const subscStore = localStorage.getItem("Subscriptions");
 
-              // if (subscStore) {
-              //   const subscriptionItem = [{
-              //     subscription: subscriptionOneTime,
-              //     serviceCost: ServiceCostitwm,
-              //   }];
-
-              //   localStorage.setItem("Subscriptions", JSON.stringify(subscriptionItem));
-              // } else {
-              //   console.error("Error: Unable to retrieve subscription data.");
-              // }
               // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitwm))
               return (
                 <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
@@ -2002,7 +1981,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         {/* <Col className="gutter-row" span={12}>
           <Form.Item
-            name="PaymentMode" 
+            name="PaymentMode"
             label={translate('Payment Mode')}
           // rules={[
           //   {
