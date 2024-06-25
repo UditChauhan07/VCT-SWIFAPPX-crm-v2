@@ -608,35 +608,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
 
 
-    // const ItemHandler = (element) => {
-    //   console.log(element)
-    //   setCheckedId(element.price);
-    //   let tempId = subItemIds;
-    //   let temp = Subitems;
-    //   element.total = element.price * quantityvalue
-    //   element.qty = 1
-    //   if (temp.length > 0) {
-    //     if (tempId.includes(element._id)) {
-    //       temp.map((item, index) => {
-    //         if (item._id == element._id) {
-    //           temp.splice(index)
-    //         }
-    //       })
-    //     } else {
-    //       temp.push(element)
-    //     }
-    //   } else {
-    //     temp.push(element)
-    //   }
-    //   if (tempId.includes(element._id)) {
-    //     tempId.splice(tempId.indexOf(element._id))
-    //   } else {
-    //     tempId.push(element._id)
-    //   }
-    //   setSubItemId(tempId)
-    //   setItems(temp)
-    //   setSubItemCount(temp.length)
-    // }
+
     const ItemHandler = (element) => {
         setCheckedId(element.price);
 
@@ -761,7 +733,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
 
    
-
     return (
         <>
             <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>

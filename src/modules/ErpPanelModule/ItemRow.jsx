@@ -177,12 +177,8 @@ export default function ItemRow({ key, field, remove, current = null, response, 
   const money = useMoney();
   const updateQt = (value, _id) => {
     CustomItemQTYHandler(_id, value ?? 0)
-  const updateQt = (value, _id) => {
-    CustomItemQTYHandler(_id, value ?? 0)
     setQuantity(value);
   };
-  const updatePrice = (value, _id) => {
-    CustomItemPriceHandler(_id, value ?? 0)
   const updatePrice = (value, _id) => {
     CustomItemPriceHandler(_id, value ?? 0)
     setPrice(value);
@@ -248,14 +244,12 @@ export default function ItemRow({ key, field, remove, current = null, response, 
           <Form.Item
             name={[field.name, 'item']}>
             <Input onChange={updateName} placeholder="Item Name" onKeyUp={(e) => { CustomItemNameHandler(`CI-${field.key}`, e.target.value) }} />
-            <Input onChange={updateName} placeholder="Item Name" onKeyUp={(e) => { CustomItemNameHandler(`CI-${field.key}`, e.target.value) }} />
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
           <Form.Item name={[field.name, 'price']} >
             <InputNumber
               className="moneyInput"
-              onChange={(value) => updatePrice(value, `CI-${field.key}`)}
               onChange={(value) => updatePrice(value, `CI-${field.key}`)}
               min={0}
               controls={false}
@@ -266,7 +260,6 @@ export default function ItemRow({ key, field, remove, current = null, response, 
         </Col>
         <Col className="gutter-row" span={3}>
           <Form.Item name={[field.name, 'quantity']}>
-            <InputNumber style={{ width: '100%' }} min={0} onChange={(value) => updateQt(value, `CI-${field.key}`)} />
             <InputNumber style={{ width: '100%' }} min={0} onChange={(value) => updateQt(value, `CI-${field.key}`)} />
           </Form.Item>
         </Col>
@@ -304,7 +297,6 @@ export default function ItemRow({ key, field, remove, current = null, response, 
         {
           !isFirstRow && (
             <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
-              <DeleteOutlined onClick={() => { remove(field.name); CustomItemNameHandler(`CI-${field.key}`, null, null, null, true) }} />
               <DeleteOutlined onClick={() => { remove(field.name); CustomItemNameHandler(`CI-${field.key}`, null, null, null, true) }} />
             </div>
           )

@@ -749,7 +749,6 @@ export default function QuoteReadPage({ config, selectedItem }) {
             </Row>
             <Divider />
 
-
         </>
     );
 }

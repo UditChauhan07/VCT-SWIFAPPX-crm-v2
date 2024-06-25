@@ -684,7 +684,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-  // const [subItemCount, setSubItemCount] = useState(0); 
+  // const [subItemCount, setSubItemCount] = useState(0);
 
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
@@ -856,7 +856,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       subscriptionNames?.forEach(name => {
         const matchingItem = ele.data.find(item => item.name === name);
-          rowData[name] = matchingItem ? (
+
+        rowData[name] = matchingItem ? (
           <Checkbox.Group key={matchingItem._id} onChange={() => handleCheckboxClick(matchingItem._id)}>
             <Checkbox value={matchingItem._id}>
               {`${matchingItem.price}.00 /${ele.subscription.name}`}
@@ -916,7 +917,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
               }
 
-              
+             
               localStorage.setItem('ServiceCostitem', JSON.stringify(ServiceCostitem))
 
               localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
@@ -1865,7 +1866,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           >
                             <InputNumber
                               style={{ width: '100%' }}
-                              defaultValue={1}
                               min={0}
                               defaultValue={1}
                               value={data.quantity}
@@ -1896,8 +1896,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                       </Row>
                     ))}
-
-              
                   </div>
                 </Collapse.Panel>
               ))}
@@ -1963,6 +1961,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           )}
         </Col>
 
+
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks"
           // rules={[
@@ -2003,7 +2002,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         {/* <Col className="gutter-row" span={12}>
           <Form.Item
-            name="PaymentMode" 
+            name="PaymentMode"
             label={translate('Payment Mode')}
           // rules={[
           //   {

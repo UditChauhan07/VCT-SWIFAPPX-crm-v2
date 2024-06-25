@@ -362,8 +362,7 @@ export default function CreateItem({ config, CreateForm }) {
         fieldsValue = Data;
       }
       // ................
-      if (entity === 'quote') {
-        console.log(fieldsValue.items);
+      if (entity === "quote") {
         const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
         console.log(storedSubscriptions)
@@ -374,32 +373,63 @@ export default function CreateItem({ config, CreateForm }) {
         const subFinalData = subsdata[0];
 
         let additionalCost = {};
-        let serviceCost = {};
-        let serviceCostStr = localStorage.getItem('ZeFnMqDC7ktkKDB') || '{}';
-        let additionalCostStr = localStorage.getItem('BQaBocV8yvv9ELm') || '{}';
+        let NewserviceCost = {};
+        // console.log(NewserviceCost)
 
-        try {
-          if (serviceCostStr) {
-            serviceCost = JSON.parse(serviceCostStr);
-          }
-        } catch (error) {
-          console.error('Error parsing serviceCostStr:', error);
-          serviceCost = {};
+        let serviceCostStrr = localStorage.getItem('ServiceCostitem') || "{}";
+        let serviceCostObj = JSON.parse(serviceCostStrr);
+        console.log(serviceCostStrr)
+
+     
+
+
+        let serviceCostStr = localStorage.getItem("ServiceCostitem") || "{}";
+        // console.log(serviceCostStr)
+        let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
+        if (serviceCostStr) {
+          NewserviceCost = JSON.parse(serviceCostStr);
+        }
+        if (additionalCostStr) {
+          additionalCost = JSON.parse(additionalCostStr);
         }
 
-        try {
-          if (additionalCostStr) {
-            additionalCost = JSON.parse(additionalCostStr);
-          }
-        } catch (error) {
-          console.error('Error parsing additionalCostStr:', error);
-          additionalCost = {};
-        }
 
-        let grandTotalStr = localStorage.getItem('jv1GYkk6plxCpgx') || '0';
+        let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
         let grandTotal = parseFloat(grandTotalStr) || 0;
 
-        const isCustom = fieldsValue.serviceName === 'custom';
+        let MyItems = {};
+
+        let Items = localStorage.getItem('myItems');
+
+        if (Items) {
+          MyItems = JSON.parse(Items);
+        }
+
+
+
+        const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
+        console.log({ Customitem })
+
+        const CustomItemData = Customitem.map(item => ({
+
+          item: item.name,
+          quantity: item.qty,
+          price: item.price,
+          total: item.total,
+          // remarks: item.remarks
+        }));
+
+        console.log(CustomItemData);
+        const Tax = localStorage.getItem('TaxPercentage');
+
+        const discount = localStorage.getItem('discountValue');
+
+        // const isCustom = fieldsValue.serviceName === 'custom';
+
+        const isCustommString = localStorage.getItem('IssCustomm');
+        const isCustom = JSON.parse(isCustommString);
+
+
         const fieldData = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
@@ -414,7 +444,7 @@ export default function CreateItem({ config, CreateForm }) {
           serviceCategory: fieldsValue.serviceCategory,
           // serviceList: fieldsValue.serviceList,
           subscriptions: [...storedSubscriptions],
-          isCustom: isCustomm,
+          isCustom: isCustom,
           taxPercentage: Tax,
           // discount: discount,
           customService: {
@@ -430,8 +460,8 @@ export default function CreateItem({ config, CreateForm }) {
           serviceCost: serviceCostObj,
           additionalCost,
           grandTotal,
-          ...(!isCustomm ? { serviceList: fieldsValue.serviceList } : {}),
-          ...(!isCustomm ? { subModule: subFinalData.subModule } : {}),
+          ...(!isCustom ? { serviceList: fieldsValue.serviceList } : {}),
+          ...(!isCustom ? { subModule: subFinalData.subModule } : {}),
           adjustment: {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
@@ -442,6 +472,8 @@ export default function CreateItem({ config, CreateForm }) {
         console.log(fieldData);
         fieldsValue = fieldData;
       }
+
+
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     }
   };
