@@ -1030,412 +1030,412 @@
 
 //             {/* NEW CODE  */}
 
-//             {
-//                 activeness == 2 && (
-//                     <>
-//                         <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-//                             <Col className="gutter-row" span={12}>
-//                                 <Form.Item label={translate('Service Name')} name="ServiceName" rules={[
-//                                     {
-//                                         required: true,
-//                                     },
-//                                 ]}>
-//                                     <Input />
-//                                 </Form.Item>
-//                             </Col>
-//                             <Col className="gutter-row" span={12}>
-//                                 <Form.Item label={translate('Service Price')} name="ServicePrice" rules={[
-//                                     {
-//                                         required: true,
-//                                     },
-//                                 ]}>
-//                                     <Input />
-//                                 </Form.Item>
-//                             </Col>
+//       {activeness == 2 && (
+//         <>
+//           <Row gutter={[12, 12]} style={{ position: 'relative' }}>
+//             <Col className="gutter-row" span={12}>
+//               <Form.Item
+//                 label={translate('Service Name')}
+//                 name="ServiceName"
+//                 rules={[
+//                   {
+//                     required: true,
+//                   },
+//                 ]}
+//               >
+//                 {/* <Input /> */}
+//                 <Input
+//                   onKeyUp={(e) => {
+//                     handleCustomServiceInput(e.target.value);
+//                   }}
+//                 />
+//               </Form.Item>
+//             </Col>
+//             <Col className="gutter-row" span={12}>
+//               <Form.Item
+//                 label={translate('Service Price')}
+//                 name="ServicePrice"
+//                 rules={[
+//                   {
+//                     required: true,
+//                   },
+//                 ]}
+//               >
+//                 {/* <Input /> */}
+//                 <Input
+//                   onKeyUp={(e) => {
+//                     handleCustomServicePriceInput(e.target.value);
+//                   }}
+//                 />
+//               </Form.Item>
+//             </Col>
 
-//                             <Col className="gutter-row" span={24}>
-//                                 <Form.Item label={translate('Service Description')} name="ServiceDescription" rules={[
+//             <Col className="gutter-row" span={24}>
+//               <Form.Item
+//                 label={translate('Service Description')}
+//                 name="ServiceDescription"
+//                 rules={[]}
+//               >
+//                 <Input.TextArea />
+//               </Form.Item>
+//             </Col>
+//           </Row>
 
-//                                 ]}>
-//                                     <Input.TextArea />
-//                                 </Form.Item>
-//                             </Col>
-//                         </Row>
-
-//                         <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "5%" }}>
-//                             {productList?.map((mainData, i) => (
-//                                 <>
-
-//                                     {i == productList.length - 2 &&
-//                                         <Collapse.Panel header={"Custom Item"} key={'custom item'}>
-//                                             <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
-
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <p style={{ marginLeft: '6px' }}>{translate('Price')}</p>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={3}>
-//                                                     <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={6}>
-//                                                     <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
-//                                                 </Col>
-//                                             </Row>
-//                                             <Form.List name="customItems" initialValue={[{
-//                                                 itemName: '',
-//                                                 price: "",
-//                                                 quantity: "",
-//                                                 total: "",
-//                                                 remarks: '',
-//                                             }]}>
-//                                                 {(fields, { add, remove }) => (
-
-//                                                     <>
-
-//                                                         {fields?.map((field, index) => (
-//                                                             <ItemRow key={field.key} remove={remove} field={field} current={current} isFirstRow={index === 0}></ItemRow>
-//                                                         ))}
-//                                                         <Form.Item>
-//                                                             <Button
-//                                                                 type="dashed"
-//                                                                 onClick={() => add()}
-//                                                                 block
-//                                                                 icon={<PlusOutlined />}
-//                                                                 ref={addField}
-//                                                             >
-//                                                                 {translate('Add field')}
-//                                                             </Button>
-//                                                         </Form.Item>
-//                                                     </>
-//                                                 )}
-//                                             </Form.List>
-//                                         </Collapse.Panel>
-//                                     }
-//                                     <Collapse.Panel header={mainData.name} key={mainData._id}>
-//                                         <div key={`${i}`}>
-//                                             <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <p style={{ marginLeft: "20%" }}>{translate('Sub-Item')}</p>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <p style={{ marginLeft: "20%" }}>{translate('Price')}</p>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={3}>
-//                                                     <p style={{ marginLeft: "20%" }}>{translate('Quantity')}</p>{' '}
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <p style={{ marginLeft: "40%" }}>{translate('Total')}</p>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={6}>
-//                                                     <p style={{ marginLeft: "15%" }}>{translate('Remarks')}</p>
-//                                                 </Col>
-//                                             </Row>
-//                                             {/* <Form.List name="items" >
-//                     <> */}
-//                                             {mainData.products?.map((data, index) => (
-
-//                                                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
-//                                                     <Col className="gutter-row mt-2">
-//                                                         <Checkbox onChange={() => setCheckedId(data.price)} />
-//                                                     </Col>
-//                                                     <Col className="gutter-row" span={4}>
-//                                                         <Form.Item
-//                                                             name={['items', index, 'item']}
-//                                                             initialValue={data._id}
-//                                                             rules={[
-//                                                                 {
-//                                                                     validator: (_, value) => {
-//                                                                         if (value || data.name) { // Allow the default value to pass
-//                                                                             return Promise.resolve();
-//                                                                         }
-//                                                                         return Promise.reject(new Error('Item name is required'));
-//                                                                     },
-//                                                                 },
-//                                                             ]}
-//                                                         >
-//                                                             {/* <Input placeholder="Item Name"   readOnly /> */}
-
-//                                                             <span>{data.name}</span>
-
-//                                                         </Form.Item>
-//                                                     </Col>
-//                                                     <Col className="gutter-row" span={4}>
-//                                                         <Form.Item
-//                                                             name={['items', index, 'price']}
-//                                                             // initialValue={data.price}
-//                                                             initialValue={prices[data._id]}
-
-//                                                         >
-//                                                             {/* <span style={{marginLeft:"-17%"}}>{data.price}</span> */}
-//                                                             <InputNumber
-//                                                                 className="moneyInput"
-//                                                                 onChange={updatePrice}
-//                                                                 min={0}
-//                                                                 controls={false}
-//                                                                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-//                                                                 addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-//                                                                 // defaultValue={data.price}
-//                                                                 value={prices[data._id]}
-//                                                                 readOnly
-
-//                                                             />
-//                                                         </Form.Item>
-//                                                     </Col>
-//                                                     <Col className="gutter-row" span={3}>
-//                                                         <Form.Item name={[`items`, `${index}`, 'quantity']}
-//                                                         // rules={[{ required: true }]}
-//                                                         >
-//                                                             <InputNumber style={{ width: '100%' }} min={0}
-//                                                                 // onChange={updateQt}
-//                                                                 defaultValue={1}
-//                                                                 onChange={(value) => updateQuantity(data._id, value)}
-
-//                                                             />
-//                                                         </Form.Item>
-//                                                     </Col>
-
-//                                                     <Col className="gutter-row" span={4}>
-//                                                         <Form.Item
-//                                                             name={[`items`, `${index}`, 'total']}
-//                                                             initialValue={totals[data._id]}
-//                                                         >
-//                                                             <span style={{ marginLeft: "24%" }}>{totals[data._id]}</span>
-//                                                             {/* <InputNumber
-//                               readOnly
-//                               className="moneyInput"
-//                               // value={totalState}
-//                               defaultValue={totals[data._id]}
-//                               // value={totals[data._id]}
-//                               min={0}
-//                               controls={false}
-//                               addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-//                               addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-//                               formatter={(value) => money.amountFormatter({ amount: value })}
-//                             // initialValue={totalState}
-//                             /> */}
-//                                                         </Form.Item>
-//                                                     </Col>
-
-//                                                     <Col className="gutter-row" span={7}>
-//                                                         <Form.Item name={[`items`, `${index}`, 'remarks']} >
-//                                                             <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
-//                                                         </Form.Item>
-//                                                     </Col>
-//                                                 </Row>
-//                                             ))}
-//                                             {/* </>
-//                   </Form.List> */}
-//                                         </div >
-//                                     </Collapse.Panel>
-//                                 </>
-//                             ))}
-//                         </Collapse>
-//                     </>
-//                 )
-//             }
-
-//             {
-//                 activeSelect == 2 && <>
-//                     <Col className="gutter-row" span={24}>
-//                         <Form.Item label={translate('Service Description')} name="ServiceDescription" rules={[
-//                         ]}>
-//                             <Input.TextArea />
-//                         </Form.Item>
-//                     </Col>
-
-//                     <Col className="gutter-row " span={24} >
-
-//                             {/* <Form.Item
-//                                 name='ContractSubscription'
-//                                 initialValue={isSubscriptionID}
-//                                 hidden={true}
-//                             >
-//                                 <Input type="hidden" />
-//                             </Form.Item> */}
-
-//                         <Row gutter={[12, 12]} >
-//                             <Col span={24}  >
-//                                 <Form.Item>
-//                                     <Table
-//                                         columns={generateColumns()}
-//                                         dataSource={generateTableData()}
-//                                         pagination={false}
-//                                     />
-//                                    </Form.Item>
-//                             </Col>
-//                         </Row>
-//                     </Col>
-//                     <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "5%" }}>
-//                         {productList?.map((mainData, i) => (
-//                             <>
-
-//                                 {i == productList.length - 2 &&
-//                                     <Collapse.Panel header={"Custom Item"} key={'custom item'}>
-//                                         <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
-
-//                                             <Col className="gutter-row" span={4}>
-//                                                 <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
-//                                             </Col>
-//                                             <Col className="gutter-row" span={4}>
-//                                                 <p style={{ marginLeft: '6px' }}>{translate('Price')}</p>
-//                                             </Col>
-//                                             <Col className="gutter-row" span={3}>
-//                                                 <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
-//                                             </Col>
-//                                             <Col className="gutter-row" span={4}>
-//                                                 <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
-//                                             </Col>
-//                                             <Col className="gutter-row" span={6}>
-//                                                 <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
-//                                             </Col>
-//                                         </Row>
-//                                         <Form.List name="customItems" initialValue={[{
-//                                             itemName: '',
-//                                             price: "",
-//                                             quantity: "",
-//                                             total: "",
-//                                             remarks: '',
-//                                         }]}>
-//                                             {(fields, { add, remove }) => (
-
-//                                                 <>
-
-//                                                     {fields?.map((field, index) => (
-//                                                         <ItemRow key={field.key} remove={remove} field={field} current={current} isFirstRow={index === 0}></ItemRow>
-//                                                     ))}
-//                                                     <Form.Item>
-//                                                         <Button
-//                                                             type="dashed"
-//                                                             onClick={() => add()}
-//                                                             block
-//                                                             icon={<PlusOutlined />}
-//                                                             ref={addField}
-//                                                         >
-//                                                             {translate('Add field')}
-//                                                         </Button>
-//                                                     </Form.Item>
-//                                                 </>
-//                                             )}
-//                                         </Form.List>
-//                                     </Collapse.Panel>
+//           <Collapse
+//             accordion
+//             activeKey={accordionActiveKey}
+//             onChange={handleChange}
+//             style={{ marginTop: '5%' }}
+//           >
+//             <Collapse.Panel header="Custom Item" key="custom-item">
+//               <Row gutter={[12, 12]} style={{ position: 'relative' }} key="ci-11">
+//                 <Col className="gutter-row" span={4}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
+//                 </Col>
+//                 <Col className="gutter-row" span={4}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Price')}</p>
+//                 </Col>
+//                 <Col className="gutter-row" span={3}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
+//                 </Col>
+//                 <Col className="gutter-row" span={4}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
+//                 </Col>
+//                 <Col className="gutter-row" span={6}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
+//                 </Col>
+//               </Row>
+//               <Form.List
+//                 name="customItems"
+//                 initialValue={[
+//                   {
+//                     itemName: '',
+//                     price: '',
+//                     quantity: 1, // Ensure initial quantity is set to 1
+//                     total: '',
+//                     remarks: '',
+//                   },
+//                 ]}
+//               >
+//                 {(fields, { add, remove }) => (
+//                   <>
+//                     {fields?.map((field, index) => (
+//                       <ItemRow
+//                         key={field.key}
+//                         remove={remove}
+//                         field={field}
+//                         current={current}
+//                         isFirstRow={index === 0}
+//                         onChange={{
+//                           CustomItemNameHandler,
+//                           CustomItemPriceHandler,
+//                           CustomItemQTYHandler,
+//                           CustomItemRemarksHandler,
+//                         }}
+//                       />
+//                     ))}
+//                     <Form.Item>
+//                       <Button
+//                         type="dashed"
+//                         onClick={() => add()}
+//                         block
+//                         icon={<PlusOutlined />}
+//                         ref={addField}
+//                       >
+//                         {translate('Add field')}
+//                       </Button>
+//                     </Form.Item>
+//                   </>
+//                 )}
+//               </Form.List>
+//             </Collapse.Panel>
+//             {productList?.map((mainData, i) => (
+//               <Collapse.Panel header={mainData.name} key={mainData._id}>
+//                 <div key={`${i}`}>
+//                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
+//                     {/* Column headers */}
+//                   </Row>
+//                   {mainData.products?.map((data, index) => (
+//                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
+//                       <Col className="gutter-row mt-2">
+//                         <Checkbox
+//                           onChange={() => {
+//                             ItemHandler(data);
+//                           }}
+//                         />
+//                       </Col>
+//                       <Col className="gutter-row" span={4}>
+//                         <Form.Item
+//                           name={['items', index, 'item']}
+//                           initialValue={data._id}
+//                           rules={[
+//                             {
+//                               validator: (_, value) => {
+//                                 if (value || data.name) {
+//                                   return Promise.resolve();
 //                                 }
-//                                 <Collapse.Panel header={mainData.name} key={mainData._id}>
-//                                     <div key={`${i}`}>
-//                                         <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-//                                             <Col className="gutter-row" span={4}>
-//                                                 <p style={{ marginLeft: "20%" }}>{translate('Sub-Item')}</p>
-//                                             </Col>
-//                                             <Col className="gutter-row" span={4}>
-//                                                 <p style={{ marginLeft: "20%" }}>{translate('Price')}</p>
-//                                             </Col>
-//                                             <Col className="gutter-row" span={3}>
-//                                                 <p style={{ marginLeft: "20%" }}>{translate('Quantity')}</p>{' '}
-//                                             </Col>
-//                                             <Col className="gutter-row" span={4}>
-//                                                 <p style={{ marginLeft: "40%" }}>{translate('Total')}</p>
-//                                             </Col>
-//                                             <Col className="gutter-row" span={6}>
-//                                                 <p style={{ marginLeft: "15%" }}>{translate('Remarks')}</p>
-//                                             </Col>
-//                                         </Row>
-//                                         {/* <Form.List name="items" >
-//                     <> */}
-//                                         {mainData.products?.map((data, index) => (
+//                                 return Promise.reject(new Error('Item name is required'));
+//                               },
+//                             },
+//                           ]}
+//                         >
+//                           <span>{data.name}</span>
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={4}>
+//                         <Form.Item
+//                           // name={['items', index, 'price']}
+//                           initialValue={prices[data._id]}
+//                         >
+//                           <InputNumber
+//                             className="moneyInput"
+//                             onChange={updatePrice}
+//                             min={0}
+//                             controls={false}
+//                             addonAfter={
+//                               money.currency_position === 'after'
+//                                 ? money.currency_symbol
+//                                 : undefined
+//                             }
+//                             addonBefore={
+//                               money.currency_position === 'before'
+//                                 ? money.currency_symbol
+//                                 : undefined
+//                             }
+//                             value={prices[data._id]}
+//                             readOnly
+//                           />
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={3}>
+//                         <Form.Item
+//                           // name={['items', index, 'quantity']}
+//                           initialValue={1}
+//                         >
+//                           <InputNumber
+//                             style={{ width: '100%' }}
+//                             min={0}
+//                             defaultValue={1}
+//                             value={data.quantity}
+//                             onChange={(value) => updateQuantity(data._id, value)}
+//                           />
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={4}>
+//                         <Form.Item name={['items', index, 'total']} initialValue={totals[data._id]}>
+//                           <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={7}>
+//                         <Form.Item
+//                         //  name={[`items`, `${index}`, 'remarks']}
+//                         >
+//                           <Input
+//                             placeholder=" Remarks for Workorder"
+//                             // defaultValue={data.description}
+//                             // onChange={(e) => {
+//                             //   const remarks = e.target.value;
+//                             //   ItemHandler(data, remarks);
+//                             // }}
+//                             onChange={(e) => handleRemarkChange(data._id, e.target.value)}
+//                           />
+//                         </Form.Item>
+//                       </Col>
+//                     </Row>
+//                   ))}
+//                 </div>
+//               </Collapse.Panel>
+//             ))}
+//           </Collapse>
+//         </>
+//       )}
 
-//                                             <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${index}-${data._id}`}>
-//                                                 <Col className="gutter-row mt-2">
-//                                                     <Checkbox onChange={() => { ItemHandler(data); }} />
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <Form.Item
-//                                                         name={['items', index, 'item']}
-//                                                         initialValue={data._id}
-//                                                         rules={[
-//                                                             {
-//                                                                 validator: (_, value) => {
-//                                                                     if (value || data.name) { // Allow the default value to pass
-//                                                                         return Promise.resolve();
-//                                                                     }
-//                                                                     return Promise.reject(new Error('Item name is required'));
-//                                                                 },
-//                                                             },
-//                                                         ]}
-//                                                     >
-//                                                         {/* <Input placeholder="Item Name"   readOnly /> */}
-
-//                                                         <span>{data.name}</span>
-
-//                                                     </Form.Item>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <Form.Item
-//                                                         name={['items', index, 'price']}
-//                                                         // initialValue={data.price}
-//                                                         initialValue={prices[data._id]}
-
-//                                                     >
-//                                                         {/* <span style={{marginLeft:"-17%"}}>{data.price}</span> */}
-//                                                         <InputNumber
-//                                                             className="moneyInput"
-//                                                             onChange={updatePrice}
-//                                                             min={0}
-//                                                             controls={false}
-//                                                             addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-//                                                             addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
-//                                                             // defaultValue={data.price}
-//                                                             value={prices[data._id]}
-//                                                             readOnly
-
-//                                                         />
-//                                                     </Form.Item>
-//                                                 </Col>
-//                                                 <Col className="gutter-row" span={3}>
-//                                                     <Form.Item name={[`items`, `${index}`, 'quantity']}
-//                                                     // rules={[{ required: true }]}
-//                                                     >
-//                                                         <InputNumber style={{ width: '100%' }} min={0}
-//                                                             // onChange={updateQt}
-//                                                             defaultValue={1}
-//                                                             onChange={(value) => updateQuantity(data._id, value)}
-
-//                                                         />
-//                                                     </Form.Item>
-//                                                 </Col>
-
-//                                                 <Col className="gutter-row" span={4}>
-//                                                     <Form.Item
-//                                                         name={[`items`, `${index}`, 'total']}
-
-//                                                         // initialValue={totals[data._id]}
-//                                                     >
-//                                                         <span
-//                                                         style={{ marginLeft: "24%" }}
-
-//                                                         >{totals[data._id]}</span>
-
-//                                                     </Form.Item>
-//                                                 </Col>
-
-//                                                 <Col className="gutter-row" span={7}>
-//                                                     <Form.Item name={[`items`, `${index}`, 'remarks']} >
-//                                                         <Input placeholder=" Remarks for Workorder" defaultValue={data.description} />
-//                                                     </Form.Item>
-//                                                 </Col>
-//                                             </Row>
-//                                         ))}
-//                                         {/* </>
-//                   </Form.List> */}
-//                                     </div >
-//                                 </Collapse.Panel>
-//                             </>
-//                         ))}
-//                     </Collapse>
-//                 </>}
+//       {activeSelect == 2 && (
+//         <>
+//           <Col className="gutter-row" span={24}>
+//             <Form.Item label={translate('Service Description')} name="ServiceDescription">
+//               <Input.TextArea />
+//             </Form.Item>
+//           </Col>
+//           <Col className="gutter-row" span={24}>
+//             <Row gutter={[12, 12]}>
+//               <Col span={24}>
+//                 <Table
+//                   columns={generateColumns()}
+//                   dataSource={generateTableData()}
+//                   pagination={false}
+//                 />
+//               </Col>
+//             </Row>
+//           </Col>
+//           <Collapse
+//             accordion
+//             activeKey={accordionActiveKey}
+//             onChange={handleChange}
+//             style={{ marginTop: '5%' }}
+//           >
+//             <Collapse.Panel header="Custom Item" key="custom-item">
+//               <Row gutter={[12, 12]} style={{ position: 'relative' }} key="ci-11">
+//                 <Col className="gutter-row" span={4}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
+//                 </Col>
+//                 <Col className="gutter-row" span={4}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Price')}</p>
+//                 </Col>
+//                 <Col className="gutter-row" span={3}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
+//                 </Col>
+//                 <Col className="gutter-row" span={4}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
+//                 </Col>
+//                 <Col className="gutter-row" span={6}>
+//                   <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
+//                 </Col>
+//               </Row>
+//               <Form.List
+//                 name="customItems"
+//                 initialValue={[
+//                   {
+//                     itemName: '',
+//                     price: '',
+//                     quantity: 1, // Ensure initial quantity is set to 1
+//                     total: '',
+//                     remarks: '',
+//                   },
+//                 ]}
+//               >
+//                 {(fields, { add, remove }) => (
+//                   <>
+//                     {fields?.map((field, index) => (
+//                       <ItemRow
+//                         key={field.key}
+//                         remove={remove}
+//                         field={field}
+//                         current={current}
+//                         isFirstRow={index === 0}
+//                         onChange={{
+//                           CustomItemNameHandler,
+//                           CustomItemPriceHandler,
+//                           CustomItemQTYHandler,
+//                           CustomItemRemarksHandler,
+//                         }}
+//                       />
+//                     ))}
+//                     <Form.Item>
+//                       <Button
+//                         type="dashed"
+//                         onClick={() => add()}
+//                         block
+//                         icon={<PlusOutlined />}
+//                         ref={addField}
+//                       >
+//                         {translate('Add field')}
+//                       </Button>
+//                     </Form.Item>
+//                   </>
+//                 )}
+//               </Form.List>
+//             </Collapse.Panel>
+//             {productList?.map((mainData, i) => (
+//               <Collapse.Panel header={mainData.name} key={mainData._id}>
+//                 <div key={`${i}`}>
+//                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
+//                     {/* Column headers */}
+//                   </Row>
+//                   {mainData.products?.map((data, index) => (
+//                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
+//                       <Col className="gutter-row mt-2">
+//                         <Checkbox
+//                           onChange={() => {
+//                             ItemHandler(data);
+//                           }}
+//                         />
+//                       </Col>
+//                       <Col className="gutter-row" span={4}>
+//                         <Form.Item
+//                           name={['items', index, 'item']}
+//                           initialValue={data._id}
+//                           rules={[
+//                             {
+//                               validator: (_, value) => {
+//                                 if (value || data.name) {
+//                                   return Promise.resolve();
+//                                 }
+//                                 return Promise.reject(new Error('Item name is required'));
+//                               },
+//                             },
+//                           ]}
+//                         >
+//                           <span>{data.name}</span>
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={4}>
+//                         <Form.Item
+//                           // name={['items', index, 'price']}
+//                           initialValue={prices[data._id]}
+//                         >
+//                           <InputNumber
+//                             className="moneyInput"
+//                             onChange={updatePrice}
+//                             min={0}
+//                             controls={false}
+//                             addonAfter={
+//                               money.currency_position === 'after'
+//                                 ? money.currency_symbol
+//                                 : undefined
+//                             }
+//                             addonBefore={
+//                               money.currency_position === 'before'
+//                                 ? money.currency_symbol
+//                                 : undefined
+//                             }
+//                             value={prices[data._id]}
+//                             readOnly
+//                           />
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={3}>
+//                         <Form.Item
+//                           // name={['items', index, 'quantity']}
+//                           initialValue={1}
+//                         >
+//                           <InputNumber
+//                             style={{ width: '100%' }}
+//                             min={0}
+//                             defaultValue={1}
+//                             value={data.quantity}
+//                             onChange={(value) => updateQuantity(data._id, value)}
+//                           />
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={4}>
+//                         <Form.Item name={['items', index, 'total']} initialValue={totals[data._id]}>
+//                           <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
+//                         </Form.Item>
+//                       </Col>
+//                       <Col className="gutter-row" span={7}>
+//                         <Form.Item
+//                         //  name={[`items`, `${index}`, 'remarks']}
+//                         >
+//                           <Input
+//                             placeholder=" Remarks for Workorder"
+//                             // defaultValue={data.description}
+//                             // onChange={(e) => {
+//                             //   const remarks = e.target.value;
+//                             //   ItemHandler(data, remarks);
+//                             // }}
+//                             onChange={(e) => handleRemarkChange(data._id, e.target.value)}
+//                           />
+//                         </Form.Item>
+//                       </Col>
+//                     </Row>
+//                   ))}
+//                 </div>
+//               </Collapse.Panel>
+//             ))}
+//           </Collapse>
+//         </>
+//       )}
 
 //             <Divider dashed />
 
@@ -1606,7 +1606,26 @@
 //     );
 // }
 
-// -------------NEW CODE FOR CONTRACT MODULE--------------
+
+
+
+
+
+
+
+// // -------------NEW CODE FOR CONTRACT MODULE--------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
@@ -1656,6 +1675,13 @@ export default function QuotionForm({ subTotal = 0, current = null }) {
 
   return <LoadQuoteForm subTotal={subTotal} current={current} />;
 }
+const initialServiceCost = {
+  servicePerWO: null,
+  discount: null,
+  subTotal: null,
+  tax: null,
+  totalPackageCost: null,
+};
 
 const initialShowServiceId = [
   {
@@ -1697,7 +1723,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [active, IsActive] = useState(1);
   const [activeness, IsActiveness] = useState(1);
   const [activeSelect, IsActiveSelect] = useState(1);
-  console.log(activeSelect);
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
@@ -1759,9 +1784,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // console.log({ serviceOptions });
 
   const [productList, setProductList] = useState([]);
+
   const [tax, setTax] = useState({});
 
   localStorage.setItem('TaxPercentage', tax?.taxValue);
+
   useEffect(() => {
     getProductHandler();
     // getClientHandler()
@@ -1771,7 +1798,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       const productListRes = await request.getProductList();
       if (productListRes.success) {
         const taxHandller = await request.getTax();
-        console.log(taxHandller);
+
         if (taxHandller.success) {
           setTax(taxHandller.result);
         }
@@ -1779,30 +1806,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       } else {
         setProductList([]);
       }
-      console.log({ productList });
     } catch (er) {
       console.error({ er });
     }
   };
 
-  useEffect(() => {
-    const fetchData2 = async () => {
-        try {
-            const response = await request.getLeadWorker();
-            if (response.success) {
-                setWorkLead(response.result)
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-    fetchData2()
-}, []);
-
   const [selectedValue, setSelectedValue] = useState('');
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState(null);
   const [subscriptionOneTime, setSubcriptionOneTime] = useState();
+
   const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [subItemCount, setSubItemCount] = useState(0);
   // const [ShowServiceId, setShowServiceId] = useState();
@@ -1839,7 +1852,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     const fetchData3 = async () => {
       try {
-        const response = await request.getServiceListShows({ id: value });
+        const response = await request.getServiceListShowContract({ id: value });
         console.log(response);
         if (response.success) {
           setShowServiceList(response.result);
@@ -1940,14 +1953,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
-    console.log(currentTotal);
+
     setTotal2(currentTotal);
   }, [price, quantity]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await request.getServiceCategoryOptions();
-        console.log(response);
+
         if (response.success) {
           setserviceCategoryOptions(response.result);
         }
@@ -2051,13 +2064,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     );
   };
 
-  const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
+  const filteredWorkLeads = WorkLead?.filter((item) => item._id !== Workers);
 
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
-    ShowServiceId?.forEach((ele) => {
-      console.log(ele);
-      ele.data?.forEach((item) => {
+    ShowServiceId.forEach((ele) => {
+      // console.log(ele);
+      ele.data.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
         }
@@ -2076,7 +2089,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       },
     ];
 
-    subscriptionNames?.forEach((name) => {
+    subscriptionNames.forEach((name) => {
       columns.push({
         title: <span>{name}</span>,
         dataIndex: name,
@@ -2085,7 +2098,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     return columns;
   };
-
   // const [subscriptionIds, setSubscriptionIds] = useState([]);
   // const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [isSubscriptionID, seTisSubscriptionID] = useState(null);
@@ -2093,27 +2105,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [adjustmentvalue, setadjustment] = useState(null);
   // const [discountValue, setdiscount] = useState(null);
   // console.log(discountValue)
+
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
-
-  const [quantityvalue, setQuantiyvalue] = useState();
-  useEffect(() => {}, [subscriptionCount, subItemCount]);
-  let subscriptionSubTotal = 0;
-  let subscritionAmount = 0;
+  const [NewSubitems, setNewItems] = useState([]);
+  const [NewsubItemIds, NewsetSubItemId] = useState([]);
   const [Newiitems, setNewiitems] = useState([]);
   const [remarks, setRemarks] = useState([]);
+  // console.log(remarks)
 
-  // const MyiTems = Newiitems.map((items) => (
+  //  const MyiTems = Newiitems.map((items)=> (
+
   //   {
   //     item: items._id,
   //     qty: items.qty,
   //     price: items.price,
   //     total: items.total,
-  //     remarks: items.remarks
+  //     remarks: remarks
   //   }
   // ))
-  // console.log(MyiTems)
-  // localStorage.setItem('myItems', JSON.stringify(MyiTems));
   const MyiTems = Newiitems.map((item) => {
     const itemRemark = remarks.find((remark) => remark.id === item._id);
     return {
@@ -2126,6 +2136,19 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   });
 
   localStorage.setItem('myItems', JSON.stringify(MyiTems));
+
+  const [quantityvalue, setQuantiyvalue] = useState();
+  const [remarkvalue, setremarkvalue] = useState();
+
+  useEffect(() => {}, [subscriptionCount, subItemCount]);
+  let subscriptionSubTotal = 0;
+  let subscritionAmount = 0;
+
+  // const handleRemarkChange = (id, value) => {
+  //   console.log(value)
+  //   localStorage.setItem('Reamarksitem', value);
+  // }
+
   const handleRemarkChange = (id, value) => {
     setRemarks((prevRemarks) => {
       // Create a copy of the previous remarks
@@ -2149,12 +2172,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const ItemHandler = (element) => {
     setNewiitems((prevItems) => [...prevItems, element]);
-    setCheckedId(element.price);
 
+    setCheckedId(element.price);
     const tempId = [...subItemIds];
     const temp = [...Subitems];
+
+    const NewtempId = [...NewsubItemIds];
+    const Newtemp = [...NewSubitems];
+
     element.total = element.price * (quantityvalue || 1);
     element.qty = 1;
+
+    // element.remarks = remarkvalue || "";
 
     const selectedIndex = tempId.indexOf(element._id);
     if (selectedIndex !== -1) {
@@ -2166,125 +2195,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     } else {
       tempId.push(element._id);
       temp.push(element);
+      NewtempId.push(element._id);
+      Newtemp.push(element);
     }
     setSubItemId(tempId);
+    NewsetSubItemId(tempId);
     setItems(temp);
-    setSubItemCount(temp.length);
-  };
-  console.log({ Subitems });
-
-  const [customItems, setCustomItems] = useState([]);
-  const [Iscustomm, setIscustomm] = useState(false);
-
-  console.log(customItems);
-
-  localStorage.setItem('CustomItems', JSON.stringify(customItems));
-
-  const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false) => {
-    console.log(_id, name, (price = 0), (qty = 1), (remove = false));
-    const tempId = [...subItemIds];
-    const temp = [...Subitems];
-    let tempcustom = [...customItems]; // Assuming you have a state or variable to hold custom items
-
-    if (remove && _id) {
-      const selectedIndex = tempId.indexOf(_id);
-      if (selectedIndex !== -1) {
-        tempId.splice(selectedIndex, 1);
-        const itemIndex = temp.findIndex((item) => item._id === _id);
-        if (itemIndex !== -1) {
-          temp.splice(itemIndex, 1);
-        }
-        const customItemIndex = tempcustom.findIndex((item) => item._id === _id);
-        if (customItemIndex !== -1) {
-          tempcustom.splice(customItemIndex, 1);
-        }
-      }
-    } else {
-      const selectedIndex = tempId.indexOf(_id);
-      if (selectedIndex !== -1) {
-        temp.map((item) => {
-          if (item._id === _id) {
-            item.name = name;
-          }
-        });
-      } else {
-        let element = {
-          _id,
-          price,
-          name,
-          total: price * qty,
-          qty,
-        };
-
-        console.warn({ element });
-        tempId.push(_id);
-        temp.push(element);
-        tempcustom.push(element);
-      }
-    }
-    setSubItemId(tempId);
-    setItems(temp);
-    setCustomItems(tempcustom);
-    setSubItemCount(temp.length);
-  };
-
-  const CustomItemQTYHandler = (_id, qty, price = 0) => {
-    const tempId = [...subItemIds];
-    let temp = [...Subitems]; // Changed to let for mutability
-
-    const selectedIndex = tempId.indexOf(_id);
-    if (selectedIndex !== -1) {
-      temp = temp.map((item) => {
-        if (item._id === _id) {
-          item.qty = qty;
-          item.total = item.price * qty; // Recalculate total based on new quantity
-        }
-        return item;
-      });
-    } else {
-      // Default total calculation based on default price and new quantity
-      let element = {
-        _id,
-        price,
-        name: null,
-        total: price * qty, // Calculate total based on new quantity and default price
-        qty,
-      };
-      tempId.push(_id);
-      temp.push(element);
-    }
-    setSubItemId(tempId);
-    setItems(temp);
-    setSubItemCount(temp.length);
-  };
-
-  const CustomItemPriceHandler = (_id, price = 0) => {
-    const tempId = [...subItemIds];
-    let temp = [...Subitems]; // Changed to let for mutability
-
-    const selectedIndex = tempId.indexOf(_id);
-    if (selectedIndex !== -1) {
-      temp = temp.map((item) => {
-        if (item._id === _id) {
-          item.price = price;
-          item.total = price * item.qty; // Recalculate total based on new price and existing quantity
-        }
-        return item;
-      });
-    } else {
-      // Default quantity and total calculation based on default quantity
-      let element = {
-        _id,
-        price,
-        name: null,
-        total: price * 1, // Calculate total based on default quantity (1)
-        qty: 1, // Default quantity
-      };
-      tempId.push(_id);
-      temp.push(element);
-    }
-    setSubItemId(tempId);
-    setItems(temp);
+    setNewItems(temp);
     setSubItemCount(temp.length);
   };
 
@@ -2295,22 +2212,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     tax: null,
     totalPackageCost: null,
   };
+
   let additionalCost = {
     subTotal: null,
-    itemTotal: null,
     tax: null,
     totalPackageCost: null,
+    itemTotal: null,
     discount: null,
   };
-  const [serviceCost, setServiceCost] = useState(initialServiceCost);
+
+  // console.log({ additionalCost });
+
   const [subscriptionIds, setSubscriptionIds] = useState([]);
 
   const [discountValue, setdiscount] = useState(0);
+  console.log(discountValue);
 
-  localStorage.setItem('discountValue', discountValue?.taxValue);
-
-  // const [subItemCount, setSubItemCount] = useState(0);
-
+  const [serviceCost, setServiceCost] = useState(initialServiceCost);
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
   const handleCheckboxClick = (id) => {
@@ -2322,119 +2240,21 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
+    localStorage.setItem('WorkOrderSubId', id);
   };
-  const handleCustomServiceInput = (name) => {
-    let temp = isCustom ? [] : ShowServiceList;
-    if (temp.length > 0) {
-      setSubscriptionCount(0);
-      temp.map((element, _id) => {
-        element.subscriptions.map((subscriptions, __id) => {
-          subscriptions.data.map((subscription, ___id) => {
-            console.log({ subscription });
-            subscription.name = name;
-          });
-        });
-      });
-    } else {
-      setSubscriptionCount(0);
-      setShowServiceList([
-        {
-          subscriptions: [
-            {
-              subscription: {
-                name: 'One Time',
-                package_divider: 1,
-              },
-              data: [
-                {
-                  _id: 'CS-1',
-                  name: name ?? 'Custom Service',
-                  price: 0,
-                },
-              ],
-            },
-          ],
-        },
-      ]);
-    }
-    setSubscriptionIds(['CS-1']);
-    setSubscriptionCount(1);
-  };
-  const handleCustomServicePriceInput = (price) => {
-    let temp = [];
-    setSubscriptionCount(0);
-
-    ShowServiceList.map((element, _id) => {
-      element.subscriptions.map((subscriptions, __id) => {
-        subscriptions.data.map((subscription, ___id) => {
-          console.log({ subscription });
-          subscription.price = price;
-        });
-      });
-      temp.push(element);
-    });
-    console.log({ ShowServiceList });
-    setSubscriptionCount(1);
-    setShowServiceList(temp);
-  };
-
-  useEffect(() => {
-    const calculateCosts = () => {
-      const discountValueParsed = parseFloat(discountValue) || 0;
-      let subscriptionsArray = [];
-
-      let newServiceCost = { ...initialServiceCost };
-      let CustomsubscriptionArray = [];
-      ShowServiceId?.forEach((subscriptionObj) => {
-        console.log(subscriptionObj, 'subscriptionObj');
-        subscriptionObj.data?.forEach((dataObj) => {
-          if (subscriptionIds.includes(dataObj._id)) {
-            const servicePerWO = parseFloat(
-              dataObj.price / subscriptionObj.subscription.package_divider
-            ).toFixed(2);
-            const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-            const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-            const taxValueParsed = parseFloat(tax.taxValue) || 0;
-            const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-            const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
-
-            newServiceCost = {
-              servicePerWO,
-              discount,
-              subTotal,
-              tax: taxAmount,
-              totalPackageCost,
-            };
-
-            subscriptionsArray.push({
-              subscription: subscriptionObj.subscription._id,
-              // subModule: dataObj._id,
-              subModule: dataObj._id,
-              serviceCost: newServiceCost,
-            });
-          }
-        });
-      });
-
-      setServiceCost({ ...initialServiceCost });
-      localStorage.setItem(
-        'Subscriptions',
-        JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray)
-      );
-    };
-
-    calculateCosts();
-  }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
   // useEffect(() => {
   //   const calculateCosts = () => {
   //     const discountValueParsed = parseFloat(discountValue) || 0;
   //     let subscriptionsArray = [];
   //     let newServiceCost = { ...initialServiceCost };
-  //     ShowServiceId?.forEach(subscriptionObj => {
-  //       subscriptionObj.data?.forEach(dataObj => {
+
+  //     ShowServiceId?.forEach((subscriptionObj) => {
+  //       subscriptionObj.data.forEach((dataObj) => {
   //         if (subscriptionIds.includes(dataObj._id)) {
-  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+  //           const servicePerWO = parseFloat(
+  //             dataObj.price / subscriptionObj.subscription.package_divider
+  //           ).toFixed(2);
   //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
   //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
   //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
@@ -2465,6 +2285,59 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //   calculateCosts();
   // }, [subscriptionIds, discountValue, ShowServiceId, tax]);
 
+  useEffect(() => {
+    const calculateCosts = () => {
+      const discountValueParsed = parseFloat(discountValue) || 0;
+      let subscriptionsArray = [];
+
+      let newServiceCost = { ...initialServiceCost };
+      ShowServiceId?.forEach((subscriptionObj) => {
+        // console.log(subscriptionObj)
+        subscriptionObj.data?.forEach((dataObj) => {
+          if (subscriptionIds.includes(dataObj._id)) {
+            const servicePerWO = parseFloat(
+              dataObj.price / subscriptionObj.subscription.package_divider
+            ).toFixed(2);
+            const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+            const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+            const taxValueParsed = parseFloat(tax.taxValue) || 0;
+            const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+            const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
+
+            newServiceCost = {
+              servicePerWO,
+              discount,
+              subTotal,
+              tax: taxAmount,
+              totalPackageCost,
+            };
+
+            subscriptionsArray.push({
+              subscription: subscriptionObj.subscription._id,
+              // subModule: dataObj._id,
+              subModule: dataObj._id,
+              // serviceCost: newServiceCost,
+            });
+          }
+        });
+      });
+
+      const CustomsubscriptionArray = [
+        {
+          subscription: subscriptionOneTime,
+        },
+      ];
+
+      setServiceCost(newServiceCost);
+      localStorage.setItem(
+        'Subscriptions',
+        JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray)
+      );
+    };
+
+    calculateCosts();
+  }, [subscriptionIds, discountValue, ShowServiceId, tax]);
+
   const DiscountValueHandler = (value) => {
     setdiscount(value ?? 0);
   };
@@ -2480,15 +2353,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       subscriptionNames?.forEach((name) => {
         const matchingItem = ele.data.find((item) => item.name === name);
 
+        // rowData[name] = matchingItem ? (
+        //   <Checkbox.Group
+        //     key={matchingItem._id}
+        //     onChange={() => handleCheckboxClick(matchingItem._id)}
+        //   >
+        //     <Checkbox value={matchingItem._id}>
+        //       {`${matchingItem.price}.00 /${ele.subscription.name}`}
+        //     </Checkbox>
+        //   </Checkbox.Group>
+        // ) : null;
+
         rowData[name] = matchingItem ? (
-          <Checkbox.Group
+          <Radio.Group
             key={matchingItem._id}
+           
+            // value={matchingItem._id === isMainid ? isMainid : undefined}
             onChange={() => handleCheckboxClick(matchingItem._id)}
           >
-            <Checkbox value={matchingItem._id}>
-              {`${matchingItem.price}.00 /${ele.subscription.name}`}
-            </Checkbox>
-          </Checkbox.Group>
+            <Radio value={matchingItem._id}>{`${matchingItem.price}.00 /One Time`}</Radio>
+          </Radio.Group>
         ) : null;
       });
 
@@ -2496,10 +2380,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     });
     return tableData;
   };
-
-  // const DiscountValueHandler = (value) => {
-  //   setdiscount(value); // Correctly set the discount value
-  // };
 
   const CalculatorFilled = () => {
     return ShowServiceList.map((element, _id) =>
@@ -2534,25 +2414,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
             // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
 
-            let abc = [
-              {
-                subscription: subscriptionOneTime,
-                serviceCost: {
-                  servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
-                  discount: parseFloat(discount || 0).toFixed(2),
-                  subTotal: parseFloat(subTotal).toFixed(2),
-                  tax: parseFloat(taxValue).toFixed(2),
-                  totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-                },
-              },
-            ];
-            if (isCustom == true) {
-              localStorage.setItem('Subscriptions', JSON.stringify(abc));
-            }
+            const ServiceCostitem = {
+              servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+              discount: parseFloat(discount || 0).toFixed(2),
+              subTotal: parseFloat(subTotal).toFixed(2),
+              tax: parseFloat(taxValue).toFixed(2),
+              totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+            };
+
+            //  console.log({ServiceCostitem})
+            localStorage.setItem('ServiceCostitem', JSON.stringify(ServiceCostitem));
 
             localStorage.setItem('ZeFnMqDC7ktkKDB', JSON.stringify(serviceCost));
-
-            // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitwm))
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                 <ul
@@ -2779,127 +2652,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       )
     );
   };
-  // const CalculatorFilledItem = () => {
-  //   // Initialize variables to store totals
-  //   let totalItemMPrice = 0;
-  //   let totalDiscount = 0;
-  //   let totalSubITotal = 0;
-  //   let totalTaxValue1 = 0;
-
-  //   return (
-  //     <>
-  //       {ShowServiceList?.map((element, _id) => (
-  //         element.subscriptions?.map((subscriptions, __id) => (
-  //           subscriptions.data?.map((subscription, ___id) => {
-  //             let package_divider = parseFloat(subscriptions.subscription.package_divider);
-  //             let subscritionAmount = parseFloat(subscription.price / package_divider);
-  //             let subTotal = parseFloat(subscription.price / package_divider);
-
-  //             // Apply adjustments based on 'active' state
-  //             if (active === 2) {
-  //               subTotal += parseFloat(adjustmentvalue);
-  //             }
-  //             if (active === 3) {
-  //               subTotal -= parseFloat(adjustmentvalue);
-  //             }
-
-  //             let discount1 = 0;
-  //             if (discountValue) {
-  //               discount1 = (subTotal * (parseFloat(discountValue) / 100));
-  //               subTotal -= (subTotal * (parseFloat(discountValue) / 100));
-  //             }
-
-  //             let taxValue = 0;
-  //             if (tax.taxValue) {
-  //               taxValue = (subTotal * (parseFloat(tax.taxValue) / 100));
-  //             }
-
-  //             // Calculate subscription sub total when its ID is included
-  //             if (subscriptionIds.includes(subscription._id)) {
-  //               let subscriptionSubTotal = subTotal + taxValue;
-  //               let itemPrice = 0;
-  //               let itemMPrice = 0;
-  //               let discount = 0;
-  //               let taxValue1 = 0;
-  //               let subITotal = 0;
-
-  //               // Render subitems list and calculate totals
-  //               return (
-  //                 <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-  //                   <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
-  //                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)" }}>
-  //                       {Subitems.map((item, index) => {
-  //                         itemMPrice += parseFloat(item.price) * package_divider * item.qty;
-  //                         itemPrice += (parseFloat(item.price) * package_divider * item.qty);
-  //                         subITotal = itemPrice;
-
-  //                         // Apply discount if exists
-  //                         if (discountValue) {
-  //                           discount = (parseFloat(itemMPrice) * parseInt(discountValue) / 100);
-  //                           subITotal -= discount;
-  //                         }
-
-  //                         // Calculate tax if exists
-  //                         if (tax.taxValue) {
-  //                           taxValue1 = (parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100));
-  //                         }
-
-  //                         // Update total variables
-  //                         totalItemMPrice += itemMPrice;
-  //                         totalDiscount += discount;
-  //                         totalSubITotal += subITotal;
-  //                         totalTaxValue1 += taxValue1;
-
-  //                         localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + subITotal + taxValue1).toFixed(2));
-  //                         additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
-  //                         additionalCost.tax = parseFloat(taxValue).toFixed(2);
-  //                         additionalCost.discount = parseFloat(discountValue).toFixed(2);
-  //                         additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
-  //                         localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
-
-  //                         return (
-  //                           <>
-  //                             item:{item.name} (x{item.qty ?? 0})
-  //                             {index !== Subitems.length && <br />}
-  //                           </>
-  //                         );
-  //                       })}
-  //                     </li>
-  //                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{itemMPrice.toFixed(2)}</li>
-  //                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{discount.toFixed(2)}</li>
-  //                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{subITotal.toFixed(2)}</li>
-  //                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(taxValue || 0).toFixed(2)}</li>
-  //                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(subITotal + taxValue).toFixed(2)}</li>
-  //                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(parseFloat(subscriptionSubTotal + subITotal + taxValue)).toFixed(2)}</li>
-  //                   </ul>
-  //                 </td>
-  //               );
-  //             }
-  //           })
-  //         ))
-  //       ))}
-
-  //       {/* Total row for subitems */}
-  //       <tr>
-  //         <td>Total:</td>
-  //         <td>{totalItemMPrice.toFixed(2)}</td>
-  //         <td>{totalDiscount.toFixed(2)}</td>
-  //         <td>{totalSubITotal.toFixed(2)}</td>
-  //         <td>{totalTaxValue1.toFixed(2)}</td>
-  //         <td>{(totalSubITotal + totalTaxValue1).toFixed(2)}</td>
-  //         <td>{(parseFloat(subscriptionSubTotal + totalSubITotal + totalTaxValue1)).toFixed(2)}</td>
-  //       </tr>
-  //     </>
-  //   );
-  // };
 
   const AdjustmentValueHandler = (event) => {
     setadjustment(event.target.value || 0);
     let subTotal = document.getElementById('subTotal');
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value));
-    console.log({ subTotal });
+    // console.log({ subTotal });
   };
-  // const [customItems, setCustomItems] = useState([]);
+
   const [isCustom, setIsCustom] = useState(false);
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
@@ -2933,14 +2693,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // setadjustment(null);
       // setdiscount(null);
     }
-    console.log({ ShowServiceList });
+    // console.log({ ShowServiceList });
   };
 
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
-
   const [totals, setTotals] = useState({});
-  // console.log(totals)
 
   useEffect(() => {
     const initialPrices = {};
@@ -2960,16 +2718,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [productList]);
 
   const updateQuantity = (productId, value) => {
-    ///123
     if (Subitems.length) {
-      Subitems?.map((item) => {
+      Subitems.map((item) => {
         if (item._id == productId) {
           item.qty = parseInt(value);
           return item;
         }
       });
 
-      // const MyiTems = Subitems.map((items) => (
+      // const MyiTems = Subitems.map((items)=> (
       //   {
       //     item: items._id,
       //     qty: items.qty,
@@ -2978,12 +2735,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       //     remarks: items.remarks
       //   }
       // ))
-
-      // console.log(MyiTems)
       // localStorage.setItem('myItems', JSON.stringify(MyiTems));
-      // console.log({ Subitems, productId });
     }
-
     setQuantiyvalue(value);
     const updatedQuantities = { ...quantities, [productId]: value };
     setQuantities(updatedQuantities);
@@ -2992,9 +2745,224 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     updatedTotals[productId] = prices[productId] * value;
     setTotals(updatedTotals);
   };
+
   const optionsss = ['Addition', 'Substraction'];
+
+  useEffect(() => {
+    const fetchData2 = async () => {
+      try {
+        const response = await request.getLeadWorker();
+        if (response.success) {
+          setWorkLead(response.result);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData2();
+  }, []);
+
+  const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers);
+
+  // CUSTOM ITEM
+
+  // localStorage.setItem('CustomItems', JSON.stringify(CustomItems));
+  const [customItems, setCustomItems] = useState([]);
+  const [Iscustomm, setIscustomm] = useState(false);
+  console.log(Iscustomm);
+
+  localStorage.setItem('CustomItems', JSON.stringify(customItems));
+
+  // }
+  const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false, remarks = '') => {
+    console.log(_id, name, (price = 0), (qty = 1), (remove = false), remarks);
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+    let tempcustom = [...customItems]; // Assuming you have a state or variable to hold custom items
+
+    if (remove && _id) {
+      const selectedIndex = tempId.indexOf(_id);
+      if (selectedIndex !== -1) {
+        tempId.splice(selectedIndex, 1);
+        const itemIndex = temp.findIndex((item) => item._id === _id);
+        if (itemIndex !== -1) {
+          temp.splice(itemIndex, 1);
+        }
+        const customItemIndex = tempcustom.findIndex((item) => item._id === _id);
+        if (customItemIndex !== -1) {
+          tempcustom.splice(customItemIndex, 1);
+        }
+      }
+    } else {
+      const selectedIndex = tempId.indexOf(_id);
+      if (selectedIndex !== -1) {
+        temp.map((item) => {
+          if (item._id === _id) {
+            item.name = name;
+            item.remarks = remarks;
+          }
+        });
+      } else {
+        let element = {
+          _id,
+          price,
+          name,
+          total: price * qty,
+          qty,
+          remarks,
+        };
+
+        console.warn({ element });
+        tempId.push(_id);
+        temp.push(element);
+        tempcustom.push(element);
+      }
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setCustomItems(tempcustom);
+    setSubItemCount(temp.length);
+  };
+
+  const CustomItemQTYHandler = (_id, qty, price = 0) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.qty = qty;
+          item.total = item.price * qty;
+        }
+      });
+    } else {
+      let element = {
+        _id,
+        price,
+        name: null,
+        total: price * qty,
+        qty,
+      };
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+  const CustomItemPriceHandler = (_id, price = 0) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.price = price;
+          item.total = item.price * item.qty;
+        }
+      });
+    } else {
+      let element = {
+        _id,
+        price,
+        name: null,
+        total: price * 1,
+        qty: 1,
+      };
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+
+  const CustomItemRemarksHandler = (_id, remarks) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.remarks = remarks;
+        }
+      });
+    } else {
+      let element = {
+        _id,
+        price: 0,
+        name: null,
+        total: 0,
+        qty: 1,
+        remarks,
+      };
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+
+  const handleCustomServiceInput = (name) => {
+    let temp = isCustom ? [] : ShowServiceList;
+    if (temp.length > 0) {
+      setSubscriptionCount(0);
+      temp.map((element, _id) => {
+        element.subscriptions.map((subscriptions, __id) => {
+          subscriptions.data.map((subscription, ___id) => {
+            console.log({ subscription });
+            subscription.name = name;
+          });
+        });
+      });
+    } else {
+      setSubscriptionCount(0);
+      setShowServiceList([
+        {
+          subscriptions: [
+            {
+              subscription: {
+                name: 'One Time',
+                package_divider: 1,
+              },
+              data: [
+                {
+                  _id: 'CS-1',
+                  name: name ?? 'Custom Service',
+                  price: 0,
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    }
+    setSubscriptionIds(['CS-1']);
+    setSubscriptionCount(1);
+  };
+
+  const handleCustomServicePriceInput = (price) => {
+    let temp = [];
+    setSubscriptionCount(0);
+
+    ShowServiceList.map((element, _id) => {
+      element.subscriptions.map((subscriptions, __id) => {
+        subscriptions.data.map((subscription, ___id) => {
+          subscription.price = price;
+        });
+      });
+      temp.push(element);
+    });
+    setSubscriptionCount(1);
+    setShowServiceList(temp);
+  };
+
   return (
     <>
+      {/* CUSTOMER DETAIL SECTION */}
       <Col
         className="gutter-row"
         span={12}
@@ -3061,7 +3029,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
             >
-              {customerAddress?.map((option, index) => (
+              {customerAddress.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
                   {option.label}
                 </Select.Option>
@@ -3073,7 +3041,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="sendQuotationEmail"
-            label={translate('Send Quotation Email')}
+            label={translate('Send WorkOrder Email')}
             // rules={[
             //   {
             //     required: true,
@@ -3092,12 +3060,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Row>
       <Divider dashed />
 
+      {/* BASIC WORKORDER DETAILS */}
+
       <Col
         className="gutter-row"
         span={12}
         style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}
       >
-        {translate('Basic Quotation Details')}
+        {translate('Basic Contract Details')}
       </Col>
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: '30px' }}>
         <Col className="gutter-row" span={6}>
@@ -3117,7 +3087,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
         <Col className="gutter-row" span={6}>
           <Form.Item
-            name="expiredDate"
+            name="endDate"
             label={translate('Expire Date')}
             rules={[
               {
@@ -3172,7 +3142,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
-              // onChange={(event) => setcustomSelect(event) }
               onChange={(event) => setSelectedSalesPerson(event)}
             >
               {SalesPerson?.map((option, index) => (
@@ -3246,12 +3215,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
       </Row>
       <Divider dashed />
+
+      {/* WORKORDER SERVICES */}
+
       <Col
         className="gutter-row"
         span={12}
         style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}
       >
-        {translate('Quotation Services')}
+        {translate('Contract Services')}
       </Col>
 
       {/* ---------------NEW SERVICE CATEGORY------------ */}
@@ -3283,6 +3255,39 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               },
             ]}
           >
+            {/* <Select
+              style={{
+                width: '100%',
+              }}
+              onSelect={(value) => {
+                if (value === 'custom') {
+                  // subscriptiononetime
+                  IsActiveness(2);
+                  IsActiveSelect(1);
+                  setSubscriptionIds([]);
+                } else {
+                  setSubscriptionIds([]);
+                  const selectedOption = ShowServiceList.find((option) => option._id === value);
+                  if (selectedOption) {
+                    setShowServiceId(selectedOption.subscriptions);
+                    IsActiveSelect(2);
+                    IsActiveness(1);
+                  } else {
+                    IsActiveness(0);
+                    IsActiveSelect(0);
+                  }
+                }
+              }}
+            >
+              <Select.Option key="custom" value="custom">
+                Custom Service (One Time)
+              </Select.Option>
+              {ShowServiceList?.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}>
+                  {option.name}
+                </Select.Option>
+              ))}
+            </Select> */}
             <Select
               style={{
                 width: '100%',
@@ -3291,8 +3296,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               onChange={handleSelectChange}
               subscriptionOneTime
             >
-              <Select.Option value="Select">Select</Select.Option>
-
               <Select.Option value="custom" onClick={() => setIscustomm(true)}>
                 Custom Service (One Time)
               </Select.Option>
@@ -3307,6 +3310,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
       </Row>
+
+      {/* NEW CODE */}
+
       {activeness == 2 && (
         <>
           <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -3320,6 +3326,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   },
                 ]}
               >
+                {/* <Input /> */}
                 <Input
                   onKeyUp={(e) => {
                     handleCustomServiceInput(e.target.value);
@@ -3337,6 +3344,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   },
                 ]}
               >
+                {/* <Input /> */}
                 <Input
                   onKeyUp={(e) => {
                     handleCustomServicePriceInput(e.target.value);
@@ -3360,10 +3368,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             accordion
             activeKey={accordionActiveKey}
             onChange={handleChange}
-            style={{ marginTop: '2%' }}
+            style={{ marginTop: '5%' }}
           >
-            <Collapse.Panel header={'Custom Item'} key={'custom item'}>
-              <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
+            <Collapse.Panel header="Custom Item" key="custom-item">
+              <Row gutter={[12, 12]} style={{ position: 'relative' }} key="ci-11">
                 <Col className="gutter-row" span={4}>
                   <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
                 </Col>
@@ -3386,7 +3394,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   {
                     itemName: '',
                     price: '',
-                    quantity: 1,
+                    quantity: 1, // Ensure initial quantity is set to 1
                     total: '',
                     remarks: '',
                   },
@@ -3394,19 +3402,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               >
                 {(fields, { add, remove }) => (
                   <>
-                    {fields.map((field, index) => (
+                    {fields?.map((field, index) => (
                       <ItemRow
                         key={field.key}
                         remove={remove}
                         field={field}
-                        isFirstRow={index === 0}
                         current={current}
+                        isFirstRow={index === 0}
                         onChange={{
                           CustomItemNameHandler,
                           CustomItemPriceHandler,
                           CustomItemQTYHandler,
+                          CustomItemRemarksHandler,
                         }}
-                      ></ItemRow>
+                      />
                     ))}
                     <Form.Item>
                       <Button
@@ -3427,30 +3436,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               <Collapse.Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                    <Col className="gutter-row" span={4}>
-                      <p>{translate('Sub-Item')}</p>
-                    </Col>
-                    <Col className="gutter-row" span={4}>
-                      <p>{translate('Price')}</p>
-                    </Col>
-                    <Col className="gutter-row" span={3}>
-                      <p>{translate('Quantity')}</p>{' '}
-                    </Col>
-                    <Col className="gutter-row" span={4}>
-                      <p>{translate('Total')}</p>
-                    </Col>
-                    <Col className="gutter-row" span={6}>
-                      <p>{translate('Remarks')}</p>
-                    </Col>
+                    {/* Column headers */}
                   </Row>
-                  {/* <Form.List name="items" >
-                        <> */}
                   {mainData.products?.map((data, index) => (
-                    <Row
-                      gutter={[12, 12]}
-                      style={{ position: 'relative' }}
-                      key={`${index}-${data._id}`}
-                    >
+                    <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
                       <Col className="gutter-row mt-2">
                         <Checkbox
                           onChange={() => {
@@ -3477,7 +3466,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={4}>
-                        <Form.Item name={['items', index, 'price']} initialValue={prices[data._id]}>
+                        <Form.Item
+                          // name={['items', index, 'price']}
+                          initialValue={prices[data._id]}
+                        >
                           <InputNumber
                             className="moneyInput"
                             onChange={updatePrice}
@@ -3513,10 +3505,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={4}>
-                        <Form.Item
-                          name={[`items`, `${index}`, 'total']}
-                          initialValue={totals[data._id]}
-                        >
+                        <Form.Item name={['items', index, 'total']} initialValue={totals[data._id]}>
                           <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
                         </Form.Item>
                       </Col>
@@ -3537,14 +3526,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       </Col>
                     </Row>
                   ))}
-                  {/* </>
-                      </Form.List> */}
                 </div>
               </Collapse.Panel>
             ))}
           </Collapse>
         </>
       )}
+
       {activeSelect == 2 && (
         <>
           <Col className="gutter-row" span={24}>
@@ -3612,6 +3600,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           CustomItemNameHandler,
                           CustomItemPriceHandler,
                           CustomItemQTYHandler,
+                          CustomItemRemarksHandler,
                         }}
                       />
                     ))}
@@ -3733,12 +3722,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       <Divider dashed />
 
+      {/* WORKORDER BILLING DETAILS */}
+
       <Col
         className="gutter-row"
         span={12}
         style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}
       >
-        {translate('Quotation Billing Details')}
+        {translate('Contract Billing Details')}
       </Col>
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: '30px' }}>
@@ -3790,15 +3781,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </Col>
 
         <Col className="gutter-row" span={12}>
-          <Form.Item
-            label={translate('Initial Remarks')}
-            name="InitialRemarks"
-            // rules={[
-            //   {
-            //     required: true,
-            //   },
-            // ]}
-          >
+          <Form.Item label={translate('Initial Remarks')} name="InitialRemarks">
             <Input />
           </Form.Item>
         </Col>
@@ -3815,37 +3798,32 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             //   },
             // ]}
           >
-            <InputNumber
-              style={{ width: '100%' }}
-              min={0}
-              max={100}
-              value={discountValue}
-              onChange={DiscountValueHandler}
-            />
+            <InputNumber style={{ width: '100%' }} onChange={DiscountValueHandler} />
           </Form.Item>
         </Col>
 
-        {/* <Col className="gutter-row" span={12}>
+        <Col className="gutter-row" span={12}>
           <Form.Item
             name="PaymentMode"
+            f
             label={translate('Payment Mode')}
-          // rules={[
-          //   {
-          //     required: true,
-          //   },
-          // ]}
+            // rules={[
+            //   {
+            //     required: true,
+            //   },
+            // ]}
           >
             <Select
               style={{
                 width: '100%',
               }}
             >
-              {SalesPerson?.map((option, index) => (
+              {/* {SalesPerson?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-              ))}
+              ))} */}
             </Select>
           </Form.Item>
-        </Col> */}
+        </Col>
       </Row>
 
       {subscriptionIds.length > 0 && (
@@ -3856,7 +3834,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             span={12}
             style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}
           >
-            {translate('Selected Quotation Billing Details')}
+            {translate('Selected Contract Billing Details')}
           </Col>
           <table style={{ width: '100%', height: '220px', marginTop: '3%' }}>
             <tbody>
@@ -3899,7 +3877,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 </th>
                 {CalculatorFilled()}
               </tr>
-
               {Subitems.length > 0 && (
                 <>
                   <tr>{translate('Additional Service Items')}</tr>

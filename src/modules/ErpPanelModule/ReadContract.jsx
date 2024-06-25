@@ -54,7 +54,7 @@ const Item = ({ item }) => {
                         textAlign: 'right',
                     }}
                 >
-                    {item.quantity}
+                    {item.qty}
                 </p>
             </Col>
             <Col className="gutter-row" span={5}>
@@ -281,7 +281,7 @@ export default function ReadContract({ config, selectedItem }) {
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "16px", fontWeight: "600" }}>{translate('Bill To')} :<br />
 
-                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>Mr/Mrs. {currentErp.client.name}</span><br />
+                                    <span style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp.client.name}</span><br />
 
                                 </p>
 
@@ -446,7 +446,7 @@ export default function ReadContract({ config, selectedItem }) {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {currentErp.customService.description}<br></br>
+                                    {/* {currentErp.customService.description}<br></br> */}
                                 </p>
                             </Col>
                         </Row>

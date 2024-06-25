@@ -806,8 +806,6 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 <Divider style={{ marginTop: '0%' }} />
             </Row>
 
-
-
         </>
     );
 }

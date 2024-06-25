@@ -443,7 +443,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
-          validator: field.type === 'phone' ? (rule, value) => {
+          validator: field.type === 'phone'  && entity !== 'people' ? (rule, value) => {
             const phoneRegex = /^\d{10}$/; // Regular expression to match exactly 10 digits
             if (!phoneRegex.test(value)) {
               return Promise.reject('Please enter a valid 10-digit mobile number.');
@@ -503,7 +503,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
               return Promise.reject('State can have a maximum of 10 values.');
             }
             return Promise.resolve();
-          } : field.name === 'country' ? (rule, value) => {
+          } : field.name === 'country'  && entity !== 'people' ? (rule, value) => {
             if (value.length > 10) {
               return Promise.reject('Country can have a maximum of 10  values.');
             }
