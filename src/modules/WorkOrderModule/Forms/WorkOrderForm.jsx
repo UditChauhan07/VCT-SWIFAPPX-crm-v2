@@ -4053,7 +4053,7 @@ import {
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { DatePicker, TimePicker } from 'antd';
-
+import { Spin } from 'antd';
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 
 import QuoteItemRow from '@/modules/ErpPanelModule/QuoteItemRow';
@@ -4129,6 +4129,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [active, IsActive] = useState(1);
   const [activeness, IsActiveness] = useState(1);
   const [activeSelect, IsActiveSelect] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
@@ -4257,9 +4258,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
     const fetchData3 = async () => {
+      setLoading(true);
+
       try {
         const response = await request.getServiceListShow({ id: value });
-        console.log(response);
+
         if (response.success) {
           setShowServiceList(response.result);
           setProductList(ShowServiceList);
@@ -4269,6 +4272,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       } catch (error) {
         setShowServiceList(null);
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData2();
@@ -4276,7 +4281,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const handleFirstDropdownChange = async (event) => {
-    console.log('event', event);
+    setLoading(true);
     try {
       const response = await request.getSearchClientAddress(event);
       console.log('response', response);
@@ -4287,6 +4292,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -4364,6 +4371,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [price, quantity]);
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions();
 
@@ -4372,6 +4380,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -4380,6 +4390,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // --------- WORK ORDER MODULE -----------
   useEffect(() => {
     const fetchData1 = async () => {
+      setLoading(true);
       try {
         const response = await request.getSalesPerson();
         if (response.success) {
@@ -4387,6 +4398,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData1();
@@ -5434,13 +5447,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   useEffect(() => {
     const fetchData2 = async () => {
+      setLoading(true);
       try {
         const response = await request.getLeadWorker();
         if (response.success) {
+          console.log(response.result);
           setWorkLead(response.result);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData2();
@@ -5701,6 +5718,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select customer.',
               },
             ]}
           >
@@ -5720,6 +5738,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select customer Address.',
               },
             ]}
           >
@@ -5727,12 +5746,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
+              // loading={loading}
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {customerAddress?.map((option, index) => (
+              {/* {customerAddress?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
                   {option.label}
                 </Select.Option>
-              ))}
+              ))} */}
+
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                customerAddress?.map((option) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.label}
+                  </Select.Option>
+                ))
+              )}
             </Select>
           </Form.Item>
         </Col>
@@ -5744,6 +5777,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Billing Address.',
               },
             ]}
           >
@@ -5751,12 +5785,19 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {customerAddress.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>
-                  {option.label}
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
                 </Select.Option>
-              ))}
+              ) : (
+                customerAddress?.map((option) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.label}
+                  </Select.Option>
+                ))
+              )}
             </Select>
           </Form.Item>
         </Col>
@@ -5830,10 +5871,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Start Time.',
               },
             ]}
           >
-            <TimePicker style={{ width: '100%' }} format="HH:mm" />
+            <TimePicker style={{ width: '100%' }} format="HH:mm A" />
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={6}>
@@ -5843,10 +5885,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Expected Time Required.',
               },
             ]}
           >
-            <TimePicker style={{ width: '100%' }} format="HH:mm" />
+            <TimePicker style={{ width: '100%' }} format="HH:mm A" />
           </Form.Item>
         </Col>
       </Row>
@@ -5858,6 +5901,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Sales Person.',
               },
             ]}
           >
@@ -5866,12 +5910,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               onChange={(event) => setSelectedSalesPerson(event)}
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {SalesPerson?.map((option, index) => (
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                SalesPerson?.map((option, index) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.name}
+                  </Select.Option>
+                ))
+              )}
+              {/* {SalesPerson?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
                   {option.name}
                 </Select.Option>
-              ))}
+              ))} */}
             </Select>
           </Form.Item>
         </Col>
@@ -5894,6 +5950,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Lead Worker.',
               },
             ]}
           >
@@ -5902,12 +5959,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               onChange={(event) => setWorkers(event)}
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                WorkLead?.map((option, index) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.name}
+                  </Select.Option>
+                ))
+              )}
+
+              {/* 
               {WorkLead?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
                   {option.name}
                 </Select.Option>
-              ))}
+              ))} */}
             </Select>
           </Form.Item>
         </Col>
@@ -5919,6 +5990,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Workers.',
               },
             ]}
           >
@@ -5959,12 +6031,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               onChange={getCategorySubscriptionHandler}
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                serviceCategoryOptions?.map((option, index) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.name}
+                  </Select.Option>
+                ))
+              )}
+
+              {/* 
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
                   {option.name}
                 </Select.Option>
-              ))}
+              ))} */}
             </Select>
           </Form.Item>
         </Col>
@@ -5975,42 +6061,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Service Name.',
               },
             ]}
           >
-            {/* <Select
-              style={{
-                width: '100%',
-              }}
-              onSelect={(value) => {
-                if (value === 'custom') {
-                  // subscriptiononetime
-                  IsActiveness(2);
-                  IsActiveSelect(1);
-                  setSubscriptionIds([]);
-                } else {
-                  setSubscriptionIds([]);
-                  const selectedOption = ShowServiceList.find((option) => option._id === value);
-                  if (selectedOption) {
-                    setShowServiceId(selectedOption.subscriptions);
-                    IsActiveSelect(2);
-                    IsActiveness(1);
-                  } else {
-                    IsActiveness(0);
-                    IsActiveSelect(0);
-                  }
-                }
-              }}
-            >
-              <Select.Option key="custom" value="custom">
-                Custom Service (One Time)
-              </Select.Option>
-              {ShowServiceList?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>
-                  {option.name}
-                </Select.Option>
-              ))}
-            </Select> */}
             <Select
               style={{
                 width: '100%',
@@ -6018,8 +6072,27 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               value={selectedOption}
               onChange={handleSelectChange}
               subscriptionOneTime
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              <Select.Option value="custom" onClick={() => setIscustomm(true)}>
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                <>
+                  <Select.Option value="custom" onClick={() => setIsCustom(true)}>
+                    Custom Service (One Time)
+                  </Select.Option>
+                  {isFirstServiceCategorySelect &&
+                    ShowServiceList?.map((option) => (
+                      <Select.Option key={option._id} value={option._id}>
+                        {option.name}
+                      </Select.Option>
+                    ))}
+                </>
+              )}
+
+              {/* <Select.Option value="custom" onClick={() => setIscustomm(true)}>
                 Custom Service (One Time)
               </Select.Option>
 
@@ -6028,7 +6101,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   <Select.Option key={option._id} value={option._id}>
                     {option.name}
                   </Select.Option>
-                ))}
+                ))} */}
             </Select>
           </Form.Item>
         </Col>
@@ -6457,16 +6530,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: '30px' }}>
         <Col className="gutter-row" span={12}>
-          <Form.Item
-            name="Adjustment"
-            label={translate('Adjustment')}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: 'Please select a Adjustment Type:',
-            //   },
-            // ]}
-          >
+          <Form.Item name="Adjustment" label={translate('Adjustment')}>
             <Radio.Group style={{ display: 'flex', gap: '20px' }}>
               {optionsss.map((option, index) => (
                 <Radio key={index} value={option} onClick={() => IsActive(index + 2)}>
@@ -6481,7 +6545,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               name="AdjustmentValue"
               rules={[
                 {
-                  // required: true,
+                  validator: (rule, value) => {
+                    if (isNaN(value)) {
+                      return Promise.reject('Only numeric value is accepted.');
+                    }
+                    return Promise.resolve();
+                  },
                 },
               ]}
             >
@@ -6494,12 +6563,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               name="AdjustmentValue"
               rules={[
                 {
-                  // required: true,
+                  validator: (rule, value) => {
+                    if (isNaN(value)) {
+                      return Promise.reject('Only numeric value is accepted.');
+                    }
+                    return Promise.resolve();
+                  },
                 },
               ]}
             >
               <Input onChange={AdjustmentValueHandler} />
-            </ Form.Item >
+            </Form.Item>
           )}
         </Col>
 
@@ -6517,11 +6591,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             label={translate('Discount')}
             // rules={[
             //   {
-            //     required: true,
+            //     validator: (rule, value) => {
+            //       if (isNaN(value)) {
+            //         return Promise.reject('Only numeric value is accepted.');
+            //       }
+            //       return Promise.resolve();
+            //     },
             //   },
             // ]}
           >
-            <InputNumber style={{ width: '100%' }} onChange={DiscountValueHandler} />
+            <InputNumber
+              style={{ width: '100%' }}
+              defaultValue={0.0}
+              onChange={DiscountValueHandler}
+            />
           </Form.Item>
         </Col>
 

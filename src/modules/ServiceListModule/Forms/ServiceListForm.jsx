@@ -100,7 +100,7 @@ export default function ServiceListForm() {
   const [subscriptions, setSubscriptions] = useState([])
   useEffect(() => {
     if (responseData) {
-      setSubscriptions(responseData.map(data => ({
+      setSubscriptions(responseData?.map(data => ({
         id: data.subscription._id,
         options: [{
           position: 0,
@@ -147,7 +147,7 @@ export default function ServiceListForm() {
   const handleOptionPriceChange = (price, position, subscriptionId) => {
     setSubscriptions((subscriptions) => {
       const updatedSubscriptions = [...subscriptions]
-      updatedSubscriptions.forEach(subscription => {
+      updatedSubscriptions?.forEach(subscription => {
         if (subscription.id === subscriptionId) {
           const option = subscription.options.find(option => option.position === position)
           subscription.options.splice(position, 1, { ...option, price: price })
@@ -233,7 +233,7 @@ export default function ServiceListForm() {
         responseData && <>
           <Divider dashed />
           {
-            subscriptions.map((subscription, index) => {
+            subscriptions?.map((subscription, index) => {
               const data = responseData.find(data => data.subscription._id === subscription.id)
               return (
                 <div key={[`${subscription.id}`]}>
@@ -249,7 +249,7 @@ export default function ServiceListForm() {
                     </Form.Item>
                   </Col>
 
-                  {subscription.options.map((option, i) => (
+                  {subscription.options?.map((option, i) => (
                     <div key={[`${subscription.id}-${option.position}-${i}`]}>
 
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>

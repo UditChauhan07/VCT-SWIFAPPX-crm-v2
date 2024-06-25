@@ -56,7 +56,7 @@ const [, cancel] = useDebounce(
   let { onFetch, result, isSuccess, isLoading } = useOnFetch();
 
   const labels = (optionField) => {
-    return displayLabels.map((x) => optionField[x]).join(' ');
+    return displayLabels?.map((x) => optionField[x]).join(' ');
   };
 
   useEffect(() => {
@@ -132,7 +132,7 @@ const [, cancel] = useDebounce(
         setSearching(false);
       }}
     >
-      {selectOptions.map((optionField) => (
+      {selectOptions?.map((optionField) => (
         
         <Select.Option
         

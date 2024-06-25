@@ -8,7 +8,7 @@ import color from '@/utils/color';
 export const dataForRead = ({ fields, translate }) => {
   let columns = [];
 
-  Object.keys(fields).forEach((key) => {
+  Object.keys(fields)?.forEach((key) => {
     let field = fields[key];
     columns.push({
       title: field.label ? field.label : key,
@@ -23,7 +23,7 @@ export const dataForRead = ({ fields, translate }) => {
 export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) {
   let columns = [];
 
-  Object.keys(fields).forEach((key) => {
+  Object.keys(fields)?.forEach((key) => {
     let field = fields[key];
     const keyIndex = field.dataIndex ? field.dataIndex : [key];
 
@@ -201,7 +201,7 @@ export function dataForTable({ fields, translate, moneyFormatter, dateFormat }) 
         title: field.label ? translate(field.label) : translate(key),
         dataIndex: keyIndex,
         render: (_, record) => {
-          return record[key].map((x) => (
+          return record[key]?.map((x) => (
             <Tag bordered={false} key={`${uniqueId()}`} color={field.colors[x]}>
               {x}
             </Tag>

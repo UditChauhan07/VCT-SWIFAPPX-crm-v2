@@ -48,7 +48,7 @@ const SelectLanguage = () => {
           dispatch(translateAction.translate(value));
         }}
       >
-        {languages.map((language) => (
+        {languages?.map((language) => (
           <Select.Option
             key={language.value}
             value={language.value}

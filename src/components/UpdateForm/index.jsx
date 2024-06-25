@@ -38,7 +38,7 @@ export default function UpdateForm({ config, formElements, withUpload = false })
       fieldsValue.file = fieldsValue.file[0].originFileObj;
     }
     if (fieldsValue.subscription_type) {
-      fieldsValue.subscription_type = fieldsValue.subscription_type.map(subscriptionId => ({
+      fieldsValue.subscription_type = fieldsValue.subscription_type?.map(subscriptionId => ({
         subscription: subscriptionId
       }));
     }

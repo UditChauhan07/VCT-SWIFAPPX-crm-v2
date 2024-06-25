@@ -26,7 +26,7 @@ export default function ReadItem({ config }) {
   if (fields) readColumns = [...dataForRead({ fields: readFields, translate: translate })];
   useEffect(() => {
     const list = [];
-    readColumns.map((props) => {
+    readColumns?.map((props) => {
       const propsKey = props.dataIndex;
       const propsTitle = props.title;
       const isDate = props.isDate || false;
@@ -42,7 +42,7 @@ export default function ReadItem({ config }) {
 
 
 
-  const itemsList = listState.map((item) => {
+  const itemsList = listState?.map((item) => {
     // console.log(item)
     // console.log({ listState })
     return (

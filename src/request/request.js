@@ -383,6 +383,7 @@ const request = {
   getSalesPerson: async () => {
     try {
       const response = await axios.get('/admin/listAll');
+      console.log(response.data)
       return response.data;
     } catch (error) {
       return errorHandler(error);

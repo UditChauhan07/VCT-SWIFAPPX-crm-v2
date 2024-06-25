@@ -184,7 +184,7 @@ function LoadOfferForm({ subTotal = 0, current = null }) {
       <Form.List name="items">
         {(fields, { add, remove }) => (
           <>
-            {fields.map((field) => (
+            {fields?.map((field) => (
               <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
             ))}
             <Form.Item>
