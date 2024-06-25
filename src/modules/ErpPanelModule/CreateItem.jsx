@@ -310,7 +310,8 @@ export default function CreateItem({ config, CreateForm }) {
       }
       // ................
       if (entity === "quote") {
-        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
+        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || [];
+         // Retrieve array of subscription objects
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
         console.log(storedSubscriptions)
 
@@ -327,10 +328,7 @@ export default function CreateItem({ config, CreateForm }) {
         let serviceCostObj = JSON.parse(serviceCostStrr);
         console.log(serviceCostStrr)
 
-
-
-
-        let serviceCostStr = localStorage.getItem("ServiceCostitem") || "{}";
+ let serviceCostStr = localStorage.getItem("ServiceCostitem") || "{}";
         // console.log(serviceCostStr)
         let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
         if (serviceCostStr) {

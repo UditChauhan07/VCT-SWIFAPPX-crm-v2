@@ -81,6 +81,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
     const { send, isLoading: mailInProgress } = useMail({ entity });
 
     const { result: currentResult } = useSelector(selectCurrentItem);
+    console.log({ currentResult })
 
     const resetErp = {
         status: '',
@@ -441,16 +442,16 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
 
-                        <Row gutter={[12 - 12]} style={{ padding: "0px 0px 0px 20px" }}>
+                        <Row gutter={[12 - 12]} style={{ padding: '0px 0px 0px 20px' }}>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Workorder For')} :<br></br>
+                                <p style={{ fontSize: '15px', fontWeight: '600' }}>
+                                    {translate('Workorder For')} :<br></br>
                                 </p>
-
                             </Col>
 
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {/* {`${currentErp?.serviceList.name} / One Time`} <br></br> */}
+                                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                                    {/* {`${currentErp.serviceList.name} / One Time`} */}
                                     {currentErp.serviceList && currentErp.serviceList.name
                                         ? `${currentErp.serviceList.name} / One Time`
                                         : `${currentErp.customService.name} / One Time`}
@@ -458,79 +459,77 @@ export default function QuoteReadPage({ config, selectedItem }) {
                                 </p>
                             </Col>
 
-
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px" }} >
+                                <p style={{ fontSize: '15px' }}>
                                     {translate('Per Workorder Cost')} :<br></br>
-                                </p>
+                                </p>{' '}
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }} >
-                                    {currentErp?.serviceCost?.servicePerWO}<br></br>
-                                </p> </Col>
+                                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                                    {currentErp.serviceCost.servicePerWO}
+                                    <br></br>
+                                </p>{' '}
+                            </Col>
 
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px" }}>
+                                <p style={{ fontSize: '15px' }}>
                                     {translate('Adjustment')} :<br></br>
-
-                                </p> </Col>
-                            <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp.adjustment && currentErp.adjustment.value ? currentErp.adjustment.value : ""}
-                                </p> </Col>
-
-
-                            <Col className="gutter-row" span={12} >
-                                <p style={{ fontSize: "15px" }}>{translate(`Discount`)} :
-                                    <br></br>
-                                </p>
-
-                            </Col>
-                            <Col className="gutter-row" span={12} >
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>{currentErp?.serviceCost?.discount}
-                                    <br></br>
-
-                                </p>
-
+                                </p>{' '}
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px" }}>
+                                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                                    {currentErp.adjustment && currentErp.adjustment.value
+                                        ? currentErp.adjustment.value
+                                        : ''}
+                                    <br></br>
+                                </p>{' '}
+                            </Col>
+
+                            <Col className="gutter-row" span={12}>
+                                <p style={{ fontSize: '15px' }}>
+                                    {translate(`Discount`)} :<br></br>
+                                </p>
+                            </Col>
+                            <Col className="gutter-row" span={12}>
+                                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                                    {currentErp.serviceCost.discount}
+                                    <br></br>
+                                </p>
+                            </Col>
+                            <Col className="gutter-row" span={12}>
+                                <p style={{ fontSize: '15px' }}>
                                     {translate('SubTotal')} :<br></br>
-
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp?.serviceCost?.subTotal} <br></br>
-
+                                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                                    {currentErp.serviceCost.subTotal}
+                                    <br></br>
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <sp style={{ fontSize: "15px" }}>
+                                <p style={{ fontSize: '15px' }}>
                                     {translate('Tax')} :<br></br>
-
-                                </sp>
+                                </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp?.serviceCost?.tax} <br></br>
-
+                                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                                    {currentErp.serviceCost.tax}
+                                    <br></br>
                                 </p>
                             </Col>
 
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "15px" }}>
+                                <p style={{ fontSize: '15px' }}>
                                     {translate('Total Package Cost')} :<br></br>
-
                                 </p>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <p style={{ fontSize: "14px", color: "#a3a3a3" }}>
-                                    {currentErp?.serviceCost?.totalPackageCost} <br></br>
-
+                                <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
+                                    {currentErp.serviceCost.totalPackageCost}
+                                    <br></br>
                                 </p>
                             </Col>
-
                         </Row>
                     </div>
                 </Col>

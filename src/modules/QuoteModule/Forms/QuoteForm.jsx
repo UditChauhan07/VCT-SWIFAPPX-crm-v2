@@ -471,17 +471,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [Newiitems, setNewiitems] = useState([]);
   const [remarks, setRemarks] = useState([]);
 
-  // const MyiTems = Newiitems.map((items) => (
-  //   {
-  //     item: items._id,
-  //     qty: items.qty,
-  //     price: items.price,
-  //     total: items.total,
-  //     remarks: items.remarks
-  //   }
-  // ))
-  // console.log(MyiTems)
-  // localStorage.setItem('myItems', JSON.stringify(MyiTems));
+  
   const MyiTems = Newiitems.map(item => {
     const itemRemark = remarks.find(remark => remark.id === item._id);
     return {
@@ -747,49 +737,48 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setShowServiceList(temp)
   }
 
-  useEffect(() => {
-    const calculateCosts = () => {
-      const discountValueParsed = parseFloat(discountValue) || 0;
-      let subscriptionsArray = []
+  // useEffect(() => {
+  //   const calculateCosts = () => {
+  //     const discountValueParsed = parseFloat(discountValue) || 0;
+  //     let subscriptionsArray = []
+  //     console.log(subscriptionsArray)
 
+  //     let newServiceCost = { ...initialServiceCost };
+  //     let CustomsubscriptionArray = [];
+  //     ShowServiceId?.forEach(subscriptionObj => {
+  //       console.log(subscriptionObj, "subscriptionObj")
+  //       subscriptionObj.data?.forEach(dataObj => {
+  //         if (subscriptionIds.includes(dataObj._id)) {
+  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
+  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+  //           const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
 
-      let newServiceCost = { ...initialServiceCost };
-      let CustomsubscriptionArray = [];
-      ShowServiceId?.forEach(subscriptionObj => {
-        console.log(subscriptionObj, "subscriptionObj")
-        subscriptionObj.data?.forEach(dataObj => {
-          if (subscriptionIds.includes(dataObj._id)) {
-            const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-            const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-            const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-            const taxValueParsed = parseFloat(tax.taxValue) || 0;
-            const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-            const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
+  //           newServiceCost = {
+  //             servicePerWO,
+  //             discount,
+  //             subTotal,
+  //             tax: taxAmount,
+  //             totalPackageCost,
+  //           };
 
-            newServiceCost = {
-              servicePerWO,
-              discount,
-              subTotal,
-              tax: taxAmount,
-              totalPackageCost,
-            };
+  //           subscriptionsArray.push({
+  //             subscription: subscriptionObj.subscription._id,
+  //            subModule: dataObj._id,
+  //             serviceCost: newServiceCost,
+  //           });
+  //         }
+  //       });
+  //     });
 
-            subscriptionsArray.push({
-              subscription: subscriptionObj.subscription._id,
-              // subModule: dataObj._id,
-              subModule: dataObj._id,
-              serviceCost: newServiceCost,
-            });
-          }
-        });
-      });
+  //     setServiceCost({ ...initialServiceCost });
+  //     localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
+  //   };
 
-      setServiceCost({ ...initialServiceCost });
-      localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
-    };
-
-    calculateCosts();
-  }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
+  //   calculateCosts();
+  // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
 
 
@@ -833,6 +822,70 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //   calculateCosts();
   // }, [subscriptionIds, discountValue, ShowServiceId, tax]);
 
+  useEffect(() => {
+    const calculateCosts = () => {
+      const discountValueParsed = parseFloat(discountValue) || 0;
+      let subscriptionsArray = [];
+
+      ShowServiceId?.forEach(subscriptionObj => {
+        subscriptionObj.data?.forEach(dataObj => {
+          if (subscriptionIds.includes(dataObj._id)) {
+            // const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+            // const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+            // const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+            // const taxValueParsed = parseFloat(tax.taxValue) || 0;
+            // const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+            // const totalPackageCost = parseFloat(subTotal) + parseFloat(taxAmount);
+           
+            let servicePerWO = parseFloat(subscriptionObj.subscription.package_divider);
+            // subscritionAmount = parseFloat(dataObj.price / servicePerWO)
+            let subTotal = parseFloat(dataObj.price / servicePerWO);
+            if (active == 2) {
+              subTotal += parseFloat(adjustmentvalue).toFixed(2);;
+            }
+            if (active == 3) {
+              subTotal -= parseFloat(adjustmentvalue).toFixed(2);
+            }
+            let discount = 0;
+            if (discountValue) {
+              discount = (subTotal * (parseFloat(discountValue) / 100)).toFixed(2);
+              subTotal -= (subTotal * (parseFloat(discountValue) / 100)).toFixed(2);
+            }
+            let taxValue = 0;
+            if (tax.taxValue) {
+              taxValue = (subTotal * (parseFloat(tax.taxValue) / 100)).toFixed(2);
+            }
+
+            let totalPackageCost = parseFloat(subTotal + taxValue);
+
+            const ServiceCost = {
+              servicePerWO,
+              discount,
+              subTotal,
+              tax: taxValue,
+              totalPackageCost: totalPackageCost.toFixed(2),
+            };
+
+            console.log(ServiceCost,"ServiceCost")
+
+            subscriptionsArray.push({
+              subscription: subscriptionObj.subscription._id,
+              subModule: dataObj._id,
+              serviceCost: ServiceCost,
+            });
+          }
+        });
+      });
+
+      // If subscriptionsArray is empty, use CustomsubscriptionArray
+      const finalSubscriptions = subscriptionsArray.length > 0 ? subscriptionsArray : [];
+
+      setServiceCost({ ...initialServiceCost });
+      localStorage.setItem('Subscriptions', JSON.stringify(finalSubscriptions));
+    };
+
+    calculateCosts();
+  }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
   const DiscountValueHandler = (value) => {
     setdiscount(value ?? 0);
@@ -863,9 +916,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return tableData;
   };
 
-  // const DiscountValueHandler = (value) => {
-  //   setdiscount(value); // Correctly set the discount value
-  // };
+
 
   const CalculatorFilled = () => {
     return (
