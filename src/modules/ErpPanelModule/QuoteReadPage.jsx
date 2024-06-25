@@ -106,15 +106,15 @@ export default function QuoteReadPage({ config, selectedItem }) {
     const [Dates, setDates] = useState();
 
 
-    let Item_Total;
+    // let Item_Total;
 
-    if (currentErp.isCustom === true) {
-        Item_Total = currentErp.additionalCost.itemTotal
-    } else {
-        Item_Total = currentErp.additionalCost.itemTotal / 4
-    }
+    // if (currentErp.isCustom === true) {
+    //     Item_Total = currentErp.additionalCost.itemTotal
+    // } else {
+    //     Item_Total = currentErp.additionalCost.itemTotal / 4
+    // }
 
-    console.log(Item_Total )
+    // console.log(Item_Total )
 
 
 
@@ -695,7 +695,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     <Col className="gutter-row" span={12}>
                         <p style={{ fontSize: '16px' }}>
                             {moneyFormatter({
-                                amount: Item_Total,
+                                amount: currentErp.additionalCost.itemTotal,
                             })}
                         </p>
                     </Col>

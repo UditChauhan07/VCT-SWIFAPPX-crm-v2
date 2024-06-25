@@ -995,7 +995,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         additionalCost.tax = parseFloat(taxValue).toFixed(2);
                         // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
                         additionalCost.totalPackageCost = parseFloat(subITotal + taxValue).toFixed(2);
-                        additionalCost.itemTotal = parseFloat(itemMPrice).toFixed(2)
+                        additionalCost.itemTotal = parseFloat(itemMPrice / package_divider).toFixed(2)
                         additionalCost.discount = parseFloat(discount).toFixed(2)
                         localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
                         return (
