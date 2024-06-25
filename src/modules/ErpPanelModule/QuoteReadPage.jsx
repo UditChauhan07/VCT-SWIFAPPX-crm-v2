@@ -735,19 +735,78 @@ export default function QuoteReadPage({ config, selectedItem }) {
                 </Row>
             </div>
             <Divider />
-            <Row style={{ marginTop: "10%" }}>
-                <Col className="gutter-row" span={4}>
-                    <h3>{translate('Grand Total')} :</h3>
-                </Col>
-                <Col className="gutter-row" style={{ marginLeft: '-1%' }}>
-                    <h3 >
-                        {moneyFormatter({
-                            amount: currentErp.grandTotal
-                        })}
-                    </h3>
-                </Col>
-            </Row>
+            <h2 style={{ marginTop: '5%' }}>Total Quotation Cost</h2>
             <Divider />
+
+            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+                <Col className="gutter-row" span={11}>
+                    <p style={{ fontSize: '18px' }}>
+                        <strong>{translate('Additonal Cost')}</strong>
+                    </p>
+                </Col>
+
+                <Col className="gutter-row" span={12}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '18px',
+                        }}
+                    >
+                        {moneyFormatter({
+                            amount: currentErp.additionalCost.totalPackageCost,
+                        })}
+                    </p>
+                </Col>
+                <Divider dashed style={{ marginTop: '0%' }} />
+            </Row>
+
+            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+                <Col className="gutter-row" span={11}>
+                    <p style={{ fontSize: '18px' }}>
+                        <strong>{translate('Service Cost')}</strong>
+                    </p>
+                </Col>
+
+                <Col className="gutter-row" span={12}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '18px',
+                        }}
+                    >
+                        {moneyFormatter({
+                            amount: currentErp.serviceCost.totalPackageCost,
+                        })}
+
+                    </p>
+                </Col>
+                {/* <Divider  dashed  /> */}
+            </Row>
+
+
+            <Row gutter={[12, 0]} style={{ marginTop: '13px', backgroundColor: "rgb(141,40,221)", height: "68px", color: "white" }}>
+                <Col className="gutter-row" span={11}>
+                    <p style={{ fontSize: '21px' }}>
+                        <strong>{translate('Grand Total')}</strong>
+                    </p>
+                </Col>
+
+                <Col className="gutter-row" span={12}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '21px',
+                        }}
+                    >
+                        {moneyFormatter({
+                            amount: currentErp.grandTotal,
+                        })}
+                    </p>
+                </Col>
+                <Divider style={{ marginTop: '0%' }} />
+            </Row>
+
+
 
         </>
     );
