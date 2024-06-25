@@ -380,7 +380,7 @@ export default function CreateItem({ config, CreateForm }) {
         let serviceCostObj = JSON.parse(serviceCostStrr);
         console.log(serviceCostStrr)
 
-     
+
 
 
         let serviceCostStr = localStorage.getItem("ServiceCostitem") || "{}";
