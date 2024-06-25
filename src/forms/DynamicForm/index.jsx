@@ -402,39 +402,11 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
+  console.log(renderComponent)
 
 
   return (
-    // <Form.Item
-    //   label={translate(field.label)}
-    //   name={field.name}
-    //   rules={[
-    //     {
-    //       required: field.required || false,
-    //       type: filedType[field.type] ?? 'any',
-    //       validator:
-    //         field.type === 'phone'
-    //           ? (rule, value, callback) => {
-    //             if (!value) {
-    //               callback(); // Allow empty values if not required
-    //               return;
-    //             }
-    //             const pattern = /^[6-9]\d{9}$/; // mobile no.s should start with 6,7,8 or 9 digit and total 10 digits should be there
-    //             if (!pattern.test(value)) {
-    //               callback('Please enter a valid 10-digit mobile number ');
-    //             } else {
-    //               callback(); // Success
-    //             }
-    //           }
-    //           : undefined,
-
-
-    //     },
-    //   ]}
-    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-    // >
-    //   {renderComponent}
-    // </Form.Item>
+ 
 
     <Form.Item
       label={translate(field.label)}
