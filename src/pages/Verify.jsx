@@ -25,7 +25,7 @@ function Survey({ current }) {
   const onFinish = (values) => {
     let surveyData = {};
     let result = [];
-    Object.entries(values).forEach(([key, value]) => {
+    Object.entries(values)?.forEach(([key, value]) => {
       result.push({ question: key, answer: value });
     });
     surveyData.result = result;

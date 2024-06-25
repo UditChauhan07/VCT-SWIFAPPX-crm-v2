@@ -30,7 +30,7 @@ const SelectAsync = ({
   }, [isSuccess]);
 
   const labels = (optionField) => {
-    return displayLabels.map((x) => optionField[x]).join(' ');
+    return displayLabels?.map((x) => optionField[x]).join(' ');
   };
   useEffect(() => {
     if (value) {
@@ -58,7 +58,7 @@ const SelectAsync = ({
       const label = `+ ${redirectLabel}`;
       list.push({ value, label });
     }
-    selectOptions.map((optionField) => {
+    selectOptions?.map((optionField) => {
       const value = optionField[outputValue] ?? optionField;
       const label = labels(optionField);
       const currentColor = optionField[outputValue]?.color ?? optionField?.color;

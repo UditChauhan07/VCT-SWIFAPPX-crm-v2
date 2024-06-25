@@ -4,7 +4,7 @@ import { request } from '@/request';
 const dispatchSettingsData = (datas) => {
   const settingsCategory = {};
 
-  datas.map((data) => {
+  datas?.map((data) => {
     settingsCategory[data.settingCategory] = {
       ...settingsCategory[data.settingCategory],
       [data.settingKey]: data.settingValue,

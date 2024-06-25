@@ -71,7 +71,7 @@ function LoadCompanyForm() {
       }
       if (fieldsValue.items) {
         let newList = [...fieldsValue.items];
-        newList.map((item) => {
+        newLis?.map((item) => {
           item.total = item.quantity * item.price;
         });
         dataToUpdate.items = newList;

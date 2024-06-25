@@ -22,7 +22,7 @@ export default function GeneralSettingForm() {
             (optionA?.label ?? '').toLowerCase().startsWith((optionB?.label ?? '').toLowerCase())
           }
         >
-          {languages.map((language) => (
+          {languages?.map((language) => (
             <Select.Option
               key={language.value}
               value={language.value}

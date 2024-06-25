@@ -13,7 +13,7 @@ export function SelectType() {
     <Form.List name="settingValue" initialValue={[{ Label: '', Value: '' }]}>
       {(fields, { add, remove }) => (
         <>
-          {fields.map((field) => (
+          {fields?.map((field) => (
             <Space key={field.key} align="center">
               <Form.Item
                 {...field}

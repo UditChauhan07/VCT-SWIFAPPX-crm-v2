@@ -50,7 +50,7 @@ const RightMenu = ({ children, pageTitle }) => {
 };
 
 export default function TabsContent({ content, defaultActiveKey, pageTitle }) {
-  const items = content.map((item, index) => {
+  const items = content?.map((item, index) => {
     return {
       key: item.key ? item.key : index + '_' + item.label.replace(/ /g, '_'),
       label: (
