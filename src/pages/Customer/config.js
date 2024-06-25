@@ -17,7 +17,7 @@ export const fields = {
     label: 'company',
     entity: 'company',
     displayLabels: ['name'],
-    searchFields: 'name',
+    searchFields:[ 'name'],
     dataIndex: ['company', 'name'],
     disableForTable: true,
     feedback: 'Company',
@@ -26,7 +26,7 @@ export const fields = {
   people: {
     type: 'search',
     label: 'people',
-    entity: 'people',
+    entity: 'people', 
     displayLabels: ['firstname', 'lastname'],
     searchFields: 'firstname,lastname',
     dataIndex: ['people', 'firstname'],
@@ -40,10 +40,11 @@ export const fields = {
   },
   email: {
     type: 'email',
-    required: true,
+    // required: true,
     displayLabels: ['email'],
     dataIndex: ['userAdmin', 'email'],
     hasFeedback: true,
+    //  disableForForm: true,
   },
   password: {
     type: 'password',

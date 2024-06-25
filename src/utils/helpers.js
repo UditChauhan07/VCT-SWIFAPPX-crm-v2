@@ -45,7 +45,7 @@ export function valueByString(obj, string, devider) {
   }
   return string
     .split(devider)
-    .map(function (key) {
+    ?.map(function (key) {
       return get(obj, key);
     })
     .join(' ');

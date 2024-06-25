@@ -28,7 +28,7 @@ export default function Delete({ config }) {
       dispatch(adavancedCrud.list({ entity, options }));
     }
     if (current) {
-      let labels = deleteModalLabels.map((x) => valueByString(current, x)).join(' ');
+      let labels = deleteModalLabels?.map((x) => valueByString(current, x)).join(' ');
 
       setDisplayItem(labels);
     }

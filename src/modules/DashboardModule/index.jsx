@@ -95,7 +95,7 @@ export default function DashboardModule() {
     },
   ];
 
-  const cards = entityData.map((data, index) => {
+  const cards = entityData?.map((data, index) => {
     const { result, entity, isLoading } = data;
 
     if (entity === 'offer') return null;
@@ -114,7 +114,7 @@ export default function DashboardModule() {
     );
   });
 
-  const statisticCards = entityData.map((data, index) => {
+  const statisticCards = entityData?.map((data, index) => {
     const { result, entity, isLoading, title } = data;
 
     if (entity === 'payment') return null;
