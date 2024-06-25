@@ -17,20 +17,22 @@ export const fields = {
     label: 'company',
     entity: 'company',
     displayLabels: ['name'],
-    searchFields: 'name',
+    searchFields:[ 'name'],
     dataIndex: ['company', 'name'],
     disableForTable: true,
     feedback: 'Company',
+    required: true,
   },
   people: {
     type: 'search',
     label: 'people',
-    entity: 'people',
+    entity: 'people', 
     displayLabels: ['firstname', 'lastname'],
     searchFields: 'firstname,lastname',
     dataIndex: ['people', 'firstname'],
     disableForTable: true,
     feedback: 'People',
+    required: true,
   },
   name: {
     type: 'string',
@@ -38,25 +40,32 @@ export const fields = {
   },
   email: {
     type: 'email',
-    required: true,
+    // required: true,
     displayLabels: ['email'],
     dataIndex: ['userAdmin', 'email'],
+    hasFeedback: true,
+    //  disableForForm: true,
   },
   password: {
     type: 'password',
     required: true,
     renderAsTag: true,
     disableForTable: true,
+    hasFeedback: true,
   },
   country: {
     type: 'country',
     disableForForm: true,
     displayLabels: ['country'],
     dataIndex: ['country'],
+    // hasFeedback: true,
+    disableForTable: true,
   },
   phone: {
     type: 'phone',
     disableForForm: true,
+    // hasFeedback: true,
+    disableForTable: true,
   },
   role: {
     type: 'selectRoles',
@@ -66,8 +75,9 @@ export const fields = {
   },
   enabled: {
     type: 'boolean',
-    required: true,
+    // required: true,
     disableForTable: true,
+    label: 'Status',
   },
 };
 
@@ -91,26 +101,33 @@ export const readColumns = {
     required: true,
     displayLabels: ['email'],
     dataIndex: ['userAdmin', 'email'],
-  },
-  country: {
-    type: 'country',
-    disableForForm: true,
-    displayLabels: ['country'],
-    dataIndex: ['country'],
-  },
-  phone: {
-    type: 'phone',
-    disableForForm: true,
-  },
-  role: {
-    type: 'selectRoles',
-    required: true,
-    hasRoles: true,
     disableForTable: true,
+   
   },
+  // country: {
+  //   type: 'country',
+  //   disableForForm: false,
+  //   displayLabels: ['country'],
+  //   disableForTable: false,
+  //   dataIndex: ['country'],
+    
+  // },
+  // phone: {
+  //   type: 'phone',
+  //   disableForForm: false,
+  //   disableForTable: false,
+  
+  // },
+  // role: {
+  //   type: 'selectRoles',
+  //   required: true,
+  //   hasRoles: true,
+  //   // disableForTable: false,
+  // },
   enabled: {
     type: 'boolean',
     required: true,
     disableForTable: true,
+    label: 'Status',
   },
 };

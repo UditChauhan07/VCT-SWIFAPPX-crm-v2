@@ -42,7 +42,7 @@ const colors = [
 const statusTagColorList = (tags = []) => {
   const list = [];
 
-  tags.map((x) => {
+  tags?.map((x) => {
     const element = colors.find((obj) => obj?.value?.toLowerCase() === x?.toLowerCase());
     if (element) list.push(element);
     else list.push({ value: x, label: x });

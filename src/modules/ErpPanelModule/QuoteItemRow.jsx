@@ -6,7 +6,7 @@ import { useMoney, useDate } from '@/settings';
 import calculate from '@/utils/calculate';
 import { useForm } from 'antd/lib/form/Form';
 import useLanguage from '@/locale/useLanguage';
-import styles from '../QuoteModule/Forms/styles.module.css'; // Import the CSS module
+import styles from '../QuoteModule/Forms/styles.module.css'; 
 
 export default function ItemRow({ field, remove, current = null, response }) {
     const translate = useLanguage();
@@ -29,23 +29,15 @@ export default function ItemRow({ field, remove, current = null, response }) {
 
     useEffect(() => {
         if (current) {
-            // When it accesses the /payment/ endpoint,
-            // it receives an invoice.item instead of just item
-            // and breaks the code, but now we can check if items exists,
-            // and if it doesn't we can access invoice.items.
-
             const { items, invoice } = current;
-
             if (invoice) {
                 const item = invoice[field.fieldKey];
-
                 if (item) {
                     setQuantity(item.quantity);
                     setPrice(item.price);
                 }
             } else {
                 const item = items[field.fieldKey];
-
                 if (item) {
                     setQuantity(item.quantity);
                     setPrice(item.price);
@@ -56,7 +48,6 @@ export default function ItemRow({ field, remove, current = null, response }) {
 
     useEffect(() => {
         const currentTotal = calculate.multiply(price, quantity);
-
         setTotal(currentTotal);
     }, [price, quantity]);
     const [accordionActiveKey, setAccordionActiveKey] = useState([]);
@@ -68,7 +59,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
     return (
         <>
             <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange}>
-                {response.subItem.map((mainData, i) => (
+                {response.subItem?.map((mainData, i) => (
                     <Collapse.Panel header={mainData.Servicename} key={mainData.Serviceid}>
                         <div key={`${i}`}>
                             <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
@@ -88,7 +79,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
                                     <p>{translate('Remarks')}</p>
                                 </Col>
                             </Row>
-                            {mainData.subItemlist.map((data, index) => (
+                            {mainData.subItemlist?.map((data, index) => (
 
                                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key={[`${i}`, `${index}`]}>
                                     <Col className="gutter-row" span={4}>
@@ -100,7 +91,7 @@ export default function ItemRow({ field, remove, current = null, response }) {
                                                     message: 'Missing itemName name',
                                                 },
                                                 {
-                                                    pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
+                                                    pattern: /^(?!\s*$)[\s\S]+$/, 
                                                     message: 'Item Name must contain alphanumeric or special characters',
                                                 },
                                             ]}

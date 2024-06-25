@@ -221,7 +221,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
         </Col >
       </Row >
 
-      {entities.map((entity, key) => (
+      {entities?.map((entity, key) => (
         < Row align="middle" className={styles.middle_row} >
           <Col className="gutter-row" span={6}>
             {translate(entity[0].toUpperCase() +
@@ -252,6 +252,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
                     </Checkbox>
                   </Form.Item>
                 </div>
+                
                 <div className={styles.w_100px}>
                   <Form.Item name={['permissions', `${entity}_edit`]} valuePropName="checked" style={{ marginBottom: 0 }} initialValue={false}>
                     <Checkbox onChange={(e) => form.setFieldValue(['permissions', `${entity}_edit`], e.target.checked)}>

@@ -6,6 +6,7 @@ import {
   FilePdfOutlined,
   RedoOutlined,
   PlusOutlined,
+  PayCircleOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons';
 import { Dropdown, Table, Button } from 'antd';
@@ -44,7 +45,7 @@ function AddNewItem({ config }) {
 
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
-  console.log(config)
+  // console.log(config)
 
   const handleClick = () => {
     navigate(`/${entity.toLowerCase()}/create`);
@@ -60,26 +61,32 @@ function AddNewItem({ config }) {
       </Button>
     ) : null
   );
-
 }
 
 export default function DataTable({ config, extra = [] }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false } = config;
-  // console.log(entity)
 
+  // console.log(dataTableColumns)
+
+
+  const descriptionField = dataTableColumns.find(item => item.title === 'Description');
+  let descriptionValue = '';
+  if (descriptionField && Array.isArray(descriptionField.dataIndex)) {
+    descriptionValue = descriptionField.dataIndex[0];
+  }
+  const updatedDataTableColumns = dataTableColumns.filter(item => item.title !== 'Description');
+
+  const [columns, setColumns] = useState(dataTableColumns);
   const { DATATABLE_TITLE } = config;
-
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
-
   const { pagination, items: dataSource } = listResult;
-
   const { erpContextAction } = useErpContext();
   const { modal } = erpContextAction;
   role = user?.role_id
   isSAAS = role?.is_saas
   permissions = role?.permissions
-  // console.log({ isSAAS });
+
   let items = []
 
   if ((permissions?.[entity + '_read'] || isSAAS == true) && entity != 'roles') {
@@ -90,7 +97,7 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  if (permissions?.[entity + '_edit'] == true || isSAAS == true) {
+  if ((permissions?.[entity + '_edit'] === true || isSAAS === true) && entity !== 'workorder' && entity !== 'contract') {
     items.push({
       label: translate('Edit'),
       key: 'edit',
@@ -98,19 +105,19 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
+
+
   items.push(...extra,
-    {
-      type: 'divider',
-    },
+
   )
 
-  if (permissions?.[entity + '_delete'] || isSAAS == true) {
-    items.push({
-      label: translate('Delete'),
-      key: 'delete',
-      icon: <DeleteOutlined />,
-    })
-  }
+  // if ((permissions?.[entity + '_delete'] || isSAAS === true) && entity !== 'workorder' && entity !== 'contract') {
+  //   items.push({
+  //     label: translate('Delete'),
+  //     key: 'delete',
+  //     icon: <DeleteOutlined />,
+  //   })
+  // }
 
   const navigate = useNavigate();
 
@@ -131,34 +138,30 @@ export default function DataTable({ config, extra = [] }) {
     dispatch(erp.currentAction({ actionType: 'delete', data: record }));
     modal.open();
   };
+  const handlePriceModel = (record) => {
+    const data = { ...record };
+    console.log("data", data);
+    dispatch(erp.currentAction({ actionType: 'update', data }));
+    navigate(`/${entity}/update/pricing/${record._id}`);
+  };
 
   const handleRecordPayment = (record) => {
     dispatch(erp.currentItem({ data: record }));
     navigate(`/invoice/pay/${record._id}`);
   };
 
-  // const handleClientAddress = (record) => {
-  //   console.log(record)
-  //   dispatch(erp.currentItem({ data: record }));
-  //   navigate(`/customer/address/${record}`);
-  // };
-
-
-
-  dataTableColumns = [
+  if (entity === 'servicelist') {
+    dataTableColumns = [
+      ...updatedDataTableColumns,
+    ];
+  }
+ dataTableColumns = [
     ...dataTableColumns,
     {
       title: '',
       key: 'action',
-      fixed: 'right',
+      // fixed: 'right',
       render: (_, record) => {
-        // if (entity == "roles") {
-        //   return (<Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)
-        //   }>
-        //     {translate('Edit')}
-        //   </Button >)
-        // }
-        // else {
         return <Dropdown
           menu={{
             items,
@@ -176,15 +179,15 @@ export default function DataTable({ config, extra = [] }) {
                 case 'delete':
                   handleDelete(record);
                   break;
+                case 'price_model':
+                  handlePriceModel(record);
+                  break;
                 case 'recordPayment':
                   handleRecordPayment(record);
-                // case 'clientaddress':
-                //   handleClientAddress(record);
-                // break;
                 default:
                   break;
               }
-              // else if (key === '2')handleCloseTask
+
             },
 
           }
@@ -196,13 +199,13 @@ export default function DataTable({ config, extra = [] }) {
             onClick={(e) => e.preventDefault()}
           />
         </Dropdown>
-        // }
+
       }
     },
   ];
 
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const handelDataTableLoad = (pagination) => {
     const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
     dispatch(erp.list({ entity, options }));

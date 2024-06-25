@@ -27,7 +27,7 @@ const Notifications = () => {
       </div>
       <div className="line"></div>
       <div className="notif-list">
-        {notifications.map((notification) => (
+        {notifications?.map((notification) => (
           <div href="/" key={notification.id} className="notification">
             <Button type="text" className="notif-btn">
               <span>{notification.text}</span>

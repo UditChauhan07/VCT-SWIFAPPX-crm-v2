@@ -40,7 +40,7 @@ function SearchItemComponent({ config, onRerender }) {
   );
 
   const labels = (optionField) => {
-    return displayLabels.map((x) => optionField[x]).join(' ');
+    return displayLabels?.map((x) => optionField[x]).join(' ');
   };
 
   useEffect(() => {
@@ -95,7 +95,8 @@ function SearchItemComponent({ config, onRerender }) {
       loading={isLoading}
       showSearch
       allowClear
-      placeholder={<SearchOutlined style={{ float: 'right', padding: '8px 0' }} />}
+      // placeholder={<SearchOutlined style={{ float: 'right', padding: '8px 0' }} />}
+      placeholder="Search"
       defaultActiveFirstOption={false}
       filterOption={false}
       notFoundContent={searching ? '... Searching' : <Empty />}
@@ -104,7 +105,7 @@ function SearchItemComponent({ config, onRerender }) {
       style={{ width: '100%' }}
       onSelect={onSelect}
     >
-      {selectOptions.map((optionField) => (
+      {selectOptions?.map((optionField) => (
         <Select.Option key={optionField[outputValue]} value={optionField[outputValue]}>
           {labels(optionField)}
         </Select.Option>
@@ -113,14 +114,14 @@ function SearchItemComponent({ config, onRerender }) {
   );
 }
 
-export default function SearchItem({ config}) {
+export default function SearchItem({ config }) {
   const [state, setState] = useState([0]);
 
   const onRerender = () => {
     setState([state + 1]);
   };
 
-  return state.map((comp) => (
+  return state?.map((comp) => (
     <SearchItemComponent key={comp} config={config} onRerender={onRerender} />
   ));
 }

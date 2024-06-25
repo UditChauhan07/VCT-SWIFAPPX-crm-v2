@@ -17,7 +17,7 @@ import {
   ContainerOutlined,
   FileSyncOutlined,
   DashboardOutlined,
-  LineChartOutlined, 
+  LineChartOutlined,
   TagOutlined,
   TagsOutlined,
   UserOutlined,
@@ -32,6 +32,7 @@ import {
   BarsOutlined,
   ReconciliationOutlined,
   TeamOutlined,
+  ControlOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -60,11 +61,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <DashboardOutlined />,
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
-    {
-      key: 'pricingmodel',
-      icon: <InsertRowAboveOutlined />,
-      label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
-    },
+    // {
+    //   key: 'pricingmodel',
+    //   icon: <InsertRowAboveOutlined />,
+    //   label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
+    // },
     {
       key: 'subscriptiontype',
       icon: <ProfileOutlined />,
@@ -115,6 +116,24 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <ShopOutlined />,
       label: <Link to={'/company'}>{translate('companies')}</Link>,
     },
+
+    {
+      key: 'quote',
+      icon: <FileSyncOutlined />,
+      label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
+    },
+    {
+      key: 'contract',
+      icon: <ControlOutlined />,
+      label: <Link to={'/contract'}>{translate('Contracts')}</Link>,
+    },
+    {
+      key: 'workorder',
+      icon: <LineChartOutlined />,
+      label: <Link to={'/workorder'}>{translate('Work Order')}</Link>,
+    },
+
+
     {
       key: 'lead',
       icon: <FilterOutlined />,
@@ -125,42 +144,27 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <FileOutlined />,
       label: <Link to={'/offer'}>{translate('offers')}</Link>,
     },
-    {
-      key: 'invoice',
-      icon: <ContainerOutlined />,
-      label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
-    },
     // {
-    //   key: 'quote',
-    //   icon: <FileSyncOutlined />,
-    //   label: <Link to={'/quote'}>{translate('proforma invoices')}</Link>,
+    //   key: 'invoice',
+    //   icon: <ContainerOutlined />,
+    //   label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
     // },
 
-    {
-      key: 'quote',
-      icon: <FileSyncOutlined />,
-      label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
-    },
-    {
-      key: 'workorder',
-      icon: <LineChartOutlined />,
-      label: <Link to={'/workorder'}>{translate('Work Order')}</Link>,
-    },
-    {
-      key: 'payment',
-      icon: <CreditCardOutlined />,
-      label: <Link to={'/payment'}>{translate('payments')}</Link>,
-    },
-    {
-      key: 'expenses',
-      icon: <WalletOutlined />,
-      label: <Link to={'/expenses'}>{translate('expenses')}</Link>,
-    },
-    {
-      key: 'expensesCategory',
-      icon: <ReconciliationOutlined />,
-      label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
-    },
+    // {
+    //   key: 'payment',
+    //   icon: <CreditCardOutlined />,
+    //   label: <Link to={'/payment'}>{translate('payments')}</Link>,
+    // },
+    // {
+    //   key: 'expenses',
+    //   icon: <WalletOutlined />,
+    //   label: <Link to={'/expenses'}>{translate('expenses')}</Link>,
+    // },
+    // {
+    //   key: 'expensesCategory',
+    //   icon: <ReconciliationOutlined />,
+    //   label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
+    // },
     // {
     //   key: 'employee',
     //   icon: <UserOutlined />,
@@ -188,10 +192,10 @@ function Sidebar({ collapsible, isMobile = false }) {
           key: 'publicholiday',
           label: <Link to={'/publicholiday'}>{translate('public_holiday')}</Link>,
         },
-        {
-          key: 'currency',
-          label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
-        },
+        // {
+        //   key: 'currency',
+        //   label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
+        // },
         // {
         //   key: 'emailTemplates',
         //   label: <Link to={'/email'}>{translate('email_templates')}</Link>,
@@ -211,9 +215,6 @@ function Sidebar({ collapsible, isMobile = false }) {
       ],
     },
   ];
-
-
-
   useEffect(() => {
     if (location)
       if (currentPath !== location.pathname) {
@@ -262,13 +263,13 @@ function Sidebar({ collapsible, isMobile = false }) {
       <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
         <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
 
-        {showLogoApp && (
+        {/* {showLogoApp && (
           <img
             src={logoIcon}
             alt="Logo"
             style={{ marginTop: '3px', marginLeft: '10px', height: '38px' }}
           />
-        )}
+        )} */}
       </div>
       <Menu
         items={items}
@@ -276,8 +277,13 @@ function Sidebar({ collapsible, isMobile = false }) {
         theme={'light'}
         selectedKeys={[currentPath]}
         style={{
-          background: 'none',
-          border: 'none',
+
+          background: "none",
+          border: "none",
+
+          maxWidth: "200px",
+          // minWidth: "204px",
+          width: "188px"
         }}
       />
     </Sider>

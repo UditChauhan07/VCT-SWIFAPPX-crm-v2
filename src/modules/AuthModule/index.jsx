@@ -20,6 +20,8 @@ const AuthModule = ({ authContent, AUTH_TITLE }) => {
       <Content
         style={{
           padding: '10px 20px',
+   
+
         }}
       >
         <SelectLanguage />
@@ -29,6 +31,7 @@ const AuthModule = ({ authContent, AUTH_TITLE }) => {
           padding: '80px 30px 30px',
           maxWidth: '440px',
           margin: '0 auto',
+        
         }}
       >
         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 0 }} span={0}>

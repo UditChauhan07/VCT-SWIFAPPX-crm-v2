@@ -22,9 +22,7 @@ import SelectAsync from '@/components/SelectAsync';
 export default function InvoiceForm({ subTotal = 0, current = null }) {
   const { last_invoice_number } = useSelector(selectFinanceSettings);
 
-  // if (!last_invoice_number) {
-  //   return <></>;
-  // }
+
 
   return <LoadInvoiceForm subTotal={subTotal} current={current} />;
 }
@@ -184,7 +182,7 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
       <Form.List name="items">
         {(fields, { add, remove }) => (
           <>
-            {fields.map((field) => (
+            {fields?.map((field) => (
               <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
             ))}
             <Form.Item>

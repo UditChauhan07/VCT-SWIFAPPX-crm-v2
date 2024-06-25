@@ -65,7 +65,7 @@ export default function ErpCrmApp() {
           </Content>
         </Layout>
       ) : (
-        <Layout style={{ marginLeft: isNavMenuClose ? 100 : 220 }}>
+        <Layout style={{ marginLeft: isNavMenuClose ? 230 : 220 }}>
           <HeaderContent />
           <Content
             style={{

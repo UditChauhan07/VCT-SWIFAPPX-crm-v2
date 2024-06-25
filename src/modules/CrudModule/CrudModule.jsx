@@ -1,21 +1,19 @@
 import { useLayoutEffect, useEffect, useState } from 'react';
 import { Row, Col, Button } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-
 import CreateForm from '@/components/CreateForm';
 import UpdateForm from '@/components/UpdateForm';
 import DeleteModal from '@/components/DeleteModal';
 import ReadItem from '@/components/ReadItem';
 import SearchItem from '@/components/SearchItem';
 import DataTable from '@/components/DataTable/DataTable';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { selectCurrentItem } from '@/redux/crud/selectors';
 import useLanguage from '@/locale/useLanguage';
 import { crud } from '@/redux/crud/actions';
 import { useCrudContext } from '@/context/crud';
 import { CrudLayout } from '@/layout';
+import {  Modal } from 'antd';
 
 let data = JSON.parse(localStorage.getItem('auth'))
 let user = data.current
@@ -26,22 +24,22 @@ var permissions
 var isSAAS
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
+
   const entity = config.entity
-  // console.log({ entity });
   const translate = useLanguage();
   const { crudContextAction, state } = useCrudContext();
+
   const { deleteModalLabels } = config;
   const { modal, editBox } = crudContextAction;
-
   const { isReadBoxOpen, isEditBoxOpen } = state;
   const { result: currentItem } = useSelector(selectCurrentItem);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const [labels, setLabels] = useState('');
+
   useEffect(() => {
     if (currentItem) {
       const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');
-
       setLabels(currentlabels);
     }
   }, [currentItem]);
@@ -49,8 +47,14 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const removeItem = () => {
     dispatch(crud.currentAction({ actionType: 'delete', data: currentItem }));
     modal.open();
+    // dispatch(crud.list({ entity }));
+
   };
+
+
+
   const editItem = () => {
+   
     dispatch(crud.currentAction({ actionType: 'update', data: currentItem }));
     editBox.open();
   };
@@ -63,7 +67,6 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     setAuthUser(user)
     setAdmin(user?.role_id)
   }, [])
-
   role = user?.role_id
   adminLevel = role?.admin_level
   permissions = role?.permissions
@@ -72,6 +75,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const show = isReadBoxOpen || isEditBoxOpen ? { opacity: 1 } : { opacity: 0 };
   return (
     <>
+    
       <Row style={show} gutter={(24, 24)}>
         <Col span={10}>
           <p style={{ marginBottom: '10px' }}>{labels}</p>
@@ -86,9 +90,9 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           >
             {translate('remove')}
           </Button>
+          
             : ""
           }
-
           {(permissions?.[entity + '_edit'] || isSAAS == true) ?
             <Button
               onClick={editItem}
@@ -116,12 +120,9 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
 
 function FixHeaderPanel({ config }) {
   const entity = config.entity
-
   role = user?.role_id
   permissions = role?.permissions
   isSAAS = role?.is_saas
-  // console.log({ adminLevel, permissions });
-
   const { crudContextAction } = useCrudContext();
   const { collapsedBox } = crudContextAction;
 
@@ -163,9 +164,7 @@ function CrudModule({ config, createForm, updateForm, withUpload = false }) {
       }
     >
       <DataTable config={config} />
-
       <DeleteModal config={config} />
-     
     </CrudLayout>
   );
 }

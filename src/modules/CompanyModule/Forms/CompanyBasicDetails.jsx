@@ -193,7 +193,7 @@ const CompanyBasicDetails = () => {
             <Form.List name="items">
                 {(fields, { add, remove }) => (
                     <>
-                        {fields.map((field) => {
+                        {fields?.map((field) => {
                             return <CertificateSection key={field.key} remove={remove} field={field} current={current}></CertificateSection>
                         })}
                         <Form.Item>

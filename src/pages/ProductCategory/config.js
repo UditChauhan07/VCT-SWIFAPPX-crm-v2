@@ -7,15 +7,16 @@ export const fields = {
   },
   description: {
     type: 'textarea',
-    required: true,
+    disableForTable: true,
   },
   color: {
     type: 'color',
     options: [...color],
     required: true,
+    label: 'Color',
   },
   enabled: {
     type: 'boolean',
-    required: true,
+    label: 'Status',
   },
 };

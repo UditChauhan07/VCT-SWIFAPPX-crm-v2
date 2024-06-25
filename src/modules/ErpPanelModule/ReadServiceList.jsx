@@ -54,13 +54,12 @@ export default function ReadServiceList({ config, selectedItem }) {
     console.log("currentErp", currentErp);
     const [options, setOptions] = useState([]);
     useEffect(() => {
-        // Fetch data from API
         const fetchData = async () => {
             try {
-                const response = await request.getServiceCategory(); // Assuming your request function is named getData()
-                // Assuming your API response contains an array of options as response.options
+                const response = await request.getServiceCategory();
+               
                 if (response.success) {
-                    setOptions(response.result); // Set options state based on API response
+                    setOptions(response.result); 
                 }
 
                 console.log(response)
@@ -69,37 +68,36 @@ export default function ReadServiceList({ config, selectedItem }) {
             }
         };
 
-        fetchData(); // Call fetchData function when component mounts
+        fetchData(); 
     }, []);
-    // Function to extract subscription names
+
+   
     const getSubscriptionNames = () => {
-        console.log('name', currentErp.subscriptions.map(item => item.subscription.name));
-        return currentErp.subscriptions.map(item => item.subscription.name);
+        // console.log('name', currentErp.subscriptions.map(item => item.subscription.name));
+        return currentErp.subscriptions?.map(item => item.subscription.name);
     };
 
-    // Function to extract price values
     const getPriceValues = () => {
-        console.log('item', currentErp.subscriptions.map(item => Object.values(item.data).map(subitem => subitem.price)));
-        return currentErp.subscriptions.map(item => Object.values(item.data).map(subitem => subitem.price));
+        console.log('item', currentErp.subscriptions?.map(item => Object.values(item.data).map(subitem => subitem.price)));
+        return currentErp.subscriptions?.map(item => Object.values(item.data)?.map(subitem => subitem.price));
     };
 
-    // Function to generate table columns
     const generateColumns = () => {
-        console.log('key pair ', ...currentErp.subscriptions.map((item => Object.values(item.data).map((subitem, key) => ({
+        console.log('key pair ', ...currentErp.subscriptions?.map((item => Object.values(item.data).map((subitem, key) => ({
             title: subitem.name,
             dataIndex: subitem.name,
-        })))), 'old key pair ', ...currentErp.subscriptions.map((item, key) => ({
-            title: item.data[key].name,
-            dataIndex: item.data[key].name,
+        })))), 'old key pair ', ...currentErp.subscriptions?.map((item, key) => ({
+            title: item.data[key]?.name,
+            dataIndex: item.data[key]?.name,
         })));
         const columns = [
             {
                 title: 'Subscription',
                 dataIndex: 'subscription',
             },
-            ...currentErp.subscriptions.map((item, key) => ({
-                title: item.data[key].name,
-                dataIndex: item.data[key].name,
+            ...currentErp.subscriptions?.map((item, key) => ({
+                title: item.data[key]?.name,
+                dataIndex: item.data[key]?.name,
             })),
             // ...currentErp.subscriptions.map((item => Object.values(item.data).map((subitem, key) => ({
             //     title: subitem.name,
@@ -110,25 +108,24 @@ export default function ReadServiceList({ config, selectedItem }) {
         return columns;
     };
 
-    // Function to generate table data
+  
     const generateTableData = () => {
         const subscriptionNames = getSubscriptionNames();
         const priceValues = getPriceValues();
-        console.log(subscriptionNames, priceValues);
-        const tableData = subscriptionNames.map((subscription, index) => {
-            // console.log(subscription);
+        console.log( priceValues);
+        const tableData = subscriptionNames?.map((subscription, index) => {
+     
             const rowData = {
                 subscription: subscription,
             };
-            priceValues[index].forEach((price, idx) => {
-                // console.log(currentErp.subscriptions, idx, price);
+            priceValues[index]?.forEach((price, idx) => {
+    
                 rowData[currentErp.subscriptions[index].data[idx].name] = price;
             });
             return rowData;
         });
         return tableData;
     };
-    console.log(options.filter((ele) => ele._id === currentErp.serviceCategory)?.[0]?.name);
     return (
         <>
             <PageHeader
@@ -187,8 +184,7 @@ export default function ReadServiceList({ config, selectedItem }) {
                 </Col>
                 <Col className="gutter-row" span={12}>
 
-                    {/* <p>{currentErp.serviceCategory?.name}</p> */}
-                    <p>{options.filter((ele) => ele._id === currentErp.serviceCategory)?.[0]?.name}</p>
+                    <p>{currentErp.serviceCategory.name}</p>
                 </Col>
             </Row>
             <Row gutter={[12, 12]}>

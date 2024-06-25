@@ -14,13 +14,13 @@ const request = {
   create: async ({ entity, id, jsonData }) => {
     // console.log('dsds', jsonData);
     try {
-
       let url = entity + '/create';
       if (entity === 'clientaddress' && id) {
         url = `${entity}/create/${id}`;
       }
 
       const response = await axios.post(url, jsonData);
+      // console.log({res:response})
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -47,9 +47,11 @@ const request = {
     }
   },
   read: async ({ entity, id }) => {
+    console.log(id)
     try {
       // console.log('data entities --- ', {entity, id});
       const response = await axios.get(entity + '/read/' + id);
+      console.log(response)
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: true,
@@ -92,6 +94,7 @@ const request = {
   delete: async ({ entity, id }) => {
     try {
       const response = await axios.delete(entity + '/delete/' + id);
+     
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -117,9 +120,8 @@ const request = {
       return errorHandler(error);
     }
   },
-  search: async ({ entity, options = {} }) => {
-    console.log(entity);
-
+  search: async ({ entity, value, options = {} }) => {
+    console.log(value);
     try {
       let query = '?';
       for (var key in options) {
@@ -128,7 +130,6 @@ const request = {
       query = query.slice(0, -1);
       // headersInstance.cancelToken = source.token;
       const response = await axios.get(entity + '/search' + query);
-
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -138,9 +139,9 @@ const request = {
       return errorHandler(error);
     }
   },
-   
+
   list: async ({ entity, options = {} }) => {
-    try { 
+    try {
       let query = '?';
 
       for (var key in options) {
@@ -151,16 +152,14 @@ const request = {
 
       let url = entity + '/list' + query;
 
-     
-      
       if (entity === 'clientaddress') {
         // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
         const ClientId = localStorage.getItem('key');
         url = entity + '/list/' + ClientId + query;
       }
-       
+
       const response = await axios.get(url);
-  
+
       // const response = await axios.get(entity + '/list'  + query);
       // console.log({response});
       successHandler(response, {
@@ -169,8 +168,7 @@ const request = {
       });
       return response.data;
     } catch (error) {
-      return errorHandler(error); 
-   
+      return errorHandler(error);
     }
   },
 
@@ -321,6 +319,14 @@ const request = {
       return errorHandler(error);
     }
   },
+  getTaxes: async () => {
+    try {
+      const response = await axios.get(`/taxes/show`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
   getCateGorySubscription: async ({ id }) => {
     try {
       const response = await axios.get(`/servicecategory/subscriptions/${id}`);
@@ -337,5 +343,135 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  create2: async ({ entity, jsonData }) => {
+    console.log('dsds', jsonData);
+    try {
+      const response = await axios.post(entity + '/create', jsonData);
+      successHandler(response, {
+        notifyOnSuccess: true,
+        notifyOnFailed: true,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  getSearchClientAddress: async (id) => {
+    try {
+      const response = await axios.get(`/clientaddress/search?q=ho&client=${id}&fields=label`);
+      return response.data;
+    } catch (error) {
+      console.log({ lll: error });
+      return errorHandler(error);
+    }
+  },
+
+  getServiceCategoryName: async (id) => {
+    try {
+      const response = await axios.get(`/servicelist/show/${id}`);
+      return response.data;
+    } catch (error) {
+      console.log({ lll: error });
+      return errorHandler(error);
+    }
+  },
+  getSalesPerson: async () => {
+    try {
+      const response = await axios.get('/admin/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  getLeadWorker: async () => {
+    try {
+      const response = await axios.get('/worker/listAll');
+   
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  getServiceCategoryOptions: async () => {
+    try {
+      const response = await axios.get('/servicecategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getProductList: async () => {
+    try {
+      const response = await axios.get('/productcategory/listAll');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceListShow: async ({ id }) => {
+    console.log(id);
+    try {
+      const response = await axios.get(`/servicelist/service/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  getServiceListShowContract: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicelist/show/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getServiceListShows: async ({ id }) => {
+    try {
+      const response = await axios.get(`/servicelist/show/${id}`);
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+
+  getSubscriptiononetime: async () => {
+    try {
+      const response = await axios.get(`/subscriptiontype/oneTime`);
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  getTax: async () => {
+    try {
+      const response = await axios.get('/taxes/show');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  Loogout: async () => {
+    try {
+      const response = await axios.post('/logout');
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
+
 export default request;

@@ -28,7 +28,7 @@ export default function Delete({ config }) {
       dispatch(erp.list({ entity, options }));
     }
     if (current) {
-      let labels = deleteModalLabels.map((x) => valueByString(current, x)).join(' ');
+      let labels = deleteModalLabels?.map((x) => valueByString(current, x)).join(' ');
 
       setDisplayItem(labels);
     }
@@ -39,6 +39,7 @@ export default function Delete({ config }) {
     dispatch(erp.delete({ entity, id }));
     modal.close();
     dispatch(erp.list({ entity }));
+    dispatch(erp.resetAction({ actionType: "delete" }))
   };
   const handleCancel = () => {
     if (!isLoading) modal.close();

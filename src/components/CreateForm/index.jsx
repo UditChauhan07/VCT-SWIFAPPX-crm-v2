@@ -10,18 +10,19 @@ import useLanguage from '@/locale/useLanguage';
 import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
-export default function CreateForm({ config, formElements, withUpload = false  }) {
+export default function CreateForm({ config, formElements, withUpload = false, sidePanelVisible  }) {
+  console.log(formElements)
   let { entity,  } = config;
-
-
   const dispatch = useDispatch();
   const { isLoading, isSuccess } = useSelector(selectCreatedItem);
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, readBox } = crudContextAction;
+  console.log(panel)
   const [form] = Form.useForm();
   const translate = useLanguage();
   const onSubmit = (fieldsValue) => {
-      console.log(fieldsValue)
+  
+  
     // Manually trim values before submission
     console.log('ddd')
 
@@ -42,7 +43,7 @@ export default function CreateForm({ config, formElements, withUpload = false  }
     } else {
       dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload }));
     }
-        
+    
     // dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload   }));
   };
 
@@ -56,6 +57,16 @@ export default function CreateForm({ config, formElements, withUpload = false  }
       dispatch(crud.list({ entity }));
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (!sidePanelVisible) {
+      form.resetFields();
+    }
+  }, [sidePanelVisible]);
+
+
+
+
 
   return (
     <Loading isLoading={isLoading}>
