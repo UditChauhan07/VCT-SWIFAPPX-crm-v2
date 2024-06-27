@@ -243,28 +243,28 @@ export default function QuoteReadPage({ config, selectedItem }) {
                     >
                         {translate('Close')}
                     </Button>,
-                    <Button
-                        key={`${uniqueId()}`}
-                        onClick={() => {
-                            window.open(
-                                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp?._id}.pdf`,
-                                '_blank'
-                            );
-                        }}
-                        icon={<FilePdfOutlined />}
-                    >
-                        {translate('Download PDF')}
-                    </Button>,
-                    <Button
-                        key={`${uniqueId()}`}
-                        loading={mailInProgress}
-                        onClick={() => {
-                            send(currentErp?._id);
-                        }}
-                        icon={<MailOutlined />}
-                    >
-                        {translate('Send by Email')}
-                    </Button>,
+                    // <Button
+                    //     key={`${uniqueId()}`}
+                    //     onClick={() => {
+                    //         window.open(
+                    //             `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp?._id}.pdf`,
+                    //             '_blank'
+                    //         );
+                    //     }}
+                    //     icon={<FilePdfOutlined />}
+                    // >
+                    //     {translate('Download PDF')}
+                    // </Button>,
+                    // <Button
+                    //     key={`${uniqueId()}`}
+                    //     loading={mailInProgress}
+                    //     onClick={() => {
+                    //         send(currentErp?._id);
+                    //     }}
+                    //     icon={<MailOutlined />}
+                    // >
+                    //     {translate('Send by Email')}
+                    // </Button>,
                     <Button
                         key={`${uniqueId()}`}
                         onClick={() => {
