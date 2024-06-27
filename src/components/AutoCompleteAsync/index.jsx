@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { request } from '@/request';
 import useOnFetch from '@/hooks/useOnFetch';
 import useDebounce from '@/hooks/useDebounce';
-
+import { Spin } from 'antd';
 import { Select, Empty, Input } from 'antd';
 
 export default function AutoCompleteAsync({
@@ -117,7 +117,8 @@ const [, cancel] = useDebounce(
       placeholder={'Search Here'}
       defaultActiveFirstOption={false}
       filterOption={false}
-      notFoundContent={searching ? '... Searching' : <Empty />}
+      // notFoundContent={searching ? '... Searching' : <Empty />} <Spin size="small" /> Loading...
+      notFoundContent={searching ? <Spin size="small" />  : <Empty />}
       value={currentValue}
       onSearch={onSearch}
       onChange={(newValue) => {
