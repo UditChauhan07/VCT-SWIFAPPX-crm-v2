@@ -4153,6 +4153,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [accordionData, setAccordionData] = useState([]);
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
   const [selectedSalesPerson, setSelectedSalesPerson] = useState();
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const handleDropdownChange = async (value) => {
     setSelectedOption(value);
@@ -4371,7 +4372,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [price, quantity]);
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions();
 
@@ -4380,9 +4381,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
       }
+      // finally {
+      //   setLoading(false);
+      // }
     };
     fetchData();
   }, []);
@@ -4447,39 +4449,90 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const [salesContactNumber, setSalesContactNumber] = useState();
+  console.log(salesContactNumber)
+
+  localStorage.setItem('Salespersoncontact', JSON.stringify(salesContactNumber));
+
+
   useEffect(() => {
     if (selectedSalesPerson) {
       let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
       setSalesContactNumber(number);
       ContactHandler({ salesContactNumber: number });
-      let saleRepConElement = document.getElementById('salesContactNumber');
-      saleRepConElement.value = number || null;
-      // console.log({ number, salesContactNumber });
+      // let saleRepConElement = document.getElementById('salesContactNumber');
+      // console.log(saleRepConElement)
+      // saleRepConElement.value = number || null;
+
     }
-  }, [selectedSalesPerson, salesContactNumber]);
+  }, [selectedSalesPerson,salesContactNumber ]);
+
+
+  // NEW CODE -: 1
+  // useEffect(() => {
+  //   if (selectedSalesPerson) {
+  //     let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
+  //      console.log(number)
+  //     setSalesContactNumber(number);
+  //     let saleRepConElement = document.getElementById('salesContactNumber');
+  //     if (saleRepConElement) {
+  //       saleRepConElement.value = number || null;
+  //     }
+  //   }
+  // }, [selectedSalesPerson]);
+
+
+
+  const validateSalesPersonContact = (_, value) => {
+    if (value || salesContactNumber) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('Please select Sales Person Contact.'));
+  };
+
+
   const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
-  useEffect(() => {}, [selectedSalesPerson]);
+  // useEffect(() => {}, [selectedSalesPerson]);
   const ContactHandler = ({ salesContactNumber }) => {
-    return (
+      // console.log(salesContactNumber)
+    return ( 
+ 
+
       <Form.Item
         label={translate('Sales Person Contact')}
-        name="SalesPersonContact"
-        rules={[
+         name="SalesPersonContact"
+         rules={[
+        
           {
-            required: true,
+            validator: validateSalesPersonContact,
+            required: true
           },
         ]}
-        initialValue={salesContactNumber}
       >
-        <Input
-          style={{
-            width: '100%',
-          }}
-          placeholder=""
-          id="salesContactNumber"
-          value={salesContactNumber}
-        />
+          <div style={{height:"32px", width:"100%", border:"1px solid rgb(214,212,217)", marginTop:"-0.2%",borderRadius:"5px", textAlign:"start", fontSize:"15px"}}>
+          <p style={{padding:"0px 0px 0px 14px", marginTop:"4px"}}>{salesContactNumber}</p>
+          </div>
+
       </Form.Item>
+      // <Form.Item
+      //   label={translate('Sales Person Contact')}
+      //   name="SalesPersonContact"
+      //   rules={[
+      //     {
+      //       required: true,
+      //     },
+      //   ]}
+      //   initialValue={salesContactNumber}
+      // >
+      //   <Input
+      //     style={{
+      //       width: '100%',
+      //     }}
+      //     placeholder=""
+      //     id="salesContactNumber"
+      //     // value={salesContactNumber}
+        
+      //   />
+      // </Form.Item>
     );
   };
 
@@ -4645,7 +4698,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [subscriptionIds, setSubscriptionIds] = useState([]);
 
   const [discountValue, setdiscount] = useState(0);
-  console.log(discountValue);
+ 
 
   const [serviceCost, setServiceCost] = useState(initialServiceCost);
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
@@ -4662,47 +4715,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     localStorage.setItem('WorkOrderSubId', id);
   };
 
-  // useEffect(() => {
-  //   const calculateCosts = () => {
-  //     const discountValueParsed = parseFloat(discountValue) || 0;
-  //     let subscriptionsArray = [];
-  //     let newServiceCost = { ...initialServiceCost };
-
-  //     ShowServiceId?.forEach((subscriptionObj) => {
-  //       subscriptionObj.data.forEach((dataObj) => {
-  //         if (subscriptionIds.includes(dataObj._id)) {
-  //           const servicePerWO = parseFloat(
-  //             dataObj.price / subscriptionObj.subscription.package_divider
-  //           ).toFixed(2);
-  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
-  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-  //           const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
-
-  //           newServiceCost = {
-  //             servicePerWO,
-  //             discount,
-  //             subTotal,
-  //             tax: taxAmount,
-  //             totalPackageCost,
-  //           };
-
-  //           subscriptionsArray.push({
-  //             subscription: subscriptionObj.subscription._id,
-  //             subModule: dataObj._id,
-  //             serviceCost: newServiceCost,
-  //           });
-  //         }
-  //       });
-  //     });
-
-  //     setServiceCost(newServiceCost);
-  //     localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray));
-  //   };
-
-  //   calculateCosts();
-  // }, [subscriptionIds, discountValue, ShowServiceId, tax]);
+ 
 
   useEffect(() => {
     const calculateCosts = () => {
@@ -4789,264 +4802,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return tableData;
   };
 
-  // const CalculatorFilled = () => {
-  //   return ShowServiceList.map((element, _id) =>
-  //     element.subscriptions.map((subscriptions, __id) =>
-  //       subscriptions.data.map((subscription, ___id) => {
-  //         let package_divider = parseFloat(subscriptions.subscription.package_divider);
-  //         subscritionAmount = parseFloat(subscription.price / package_divider);
-  //         let subTotal = parseFloat(subscription.price / package_divider);
-  //         if (active == 2) {
-  //           subTotal += parseFloat(adjustmentvalue);
-  //         }
-  //         if (active == 3) {
-  //           subTotal -= parseFloat(adjustmentvalue);
-  //         }
-  //         let discount = 0;
-  //         if (discountValue) {
-  //           discount = subTotal * (parseFloat(discountValue) / 100);
-  //           subTotal -= subTotal * (parseFloat(discountValue) / 100);
-  //         }
-  //         let taxValue = 0;
-  //         if (tax.taxValue) {
-  //           taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
-  //         }
-  //         if (subscriptionIds.includes(subscription._id)) {
-  //           subscriptionSubTotal = subTotal + taxValue;
-  //           // serviceCost.servicePerWO = parseFloat(subscription.price / package_divider).toFixed(2);
-  //           // serviceCost.discount = parseFloat(discount || 0).toFixed(2);
-  //           // serviceCost.subTotal = parseFloat(subTotal).toFixed(2);
-  //           // serviceCost.tax = parseFloat(taxValue).toFixed(2);
-  //           // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
-  //           // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
-  //           // localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
-  //           return (
-  //             <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-  //               <ul
-  //                 style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: '2.3' }}
-  //               >
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '-1px',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {subscription.name}:{subscriptions.subscription.name}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {parseFloat(adjustmentvalue || 0).toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {parseFloat(discount || 0).toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {parseFloat(subTotal).toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {parseFloat(taxValue).toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {parseFloat(subTotal + taxValue).toFixed(2)}
-  //                 </li>
-  //               </ul>
-  //             </td>
-  //           );
-  //         }
-  //       })
-  //     )
-  //   );
-  // };
-
-  // const CalculatorFilledItem = () => {
-  //   return ShowServiceList.map((element, _id) =>
-  //     element.subscriptions.map((subscriptions, __id) =>
-  //       subscriptions.data.map((subscription, ___id) => {
-  //         let package_divider = parseFloat(subscriptions.subscription.package_divider);
-  //         subscritionAmount = parseFloat(subscription.price / package_divider);
-  //         let subTotal = parseFloat(subscription.price / package_divider);
-  //         if (active == 2) {
-  //           subTotal += parseFloat(adjustmentvalue);
-  //         }
-  //         if (active == 3) {
-  //           subTotal -= parseFloat(adjustmentvalue);
-  //         }
-  //         let discount1 = 0;
-  //         if (discountValue) {
-  //           discount1 = subTotal * (parseFloat(discountValue) / 100);
-  //           subTotal -= subTotal * (parseFloat(discountValue) / 100);
-  //         }
-  //         let taxValue = 0;
-  //         if (tax.taxValue) {
-  //           taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
-  //         }
-  //         if (subscriptionIds.includes(subscription._id)) {
-  //           subscriptionSubTotal = subTotal + taxValue;
-  //           let itemPrice = 0;
-  //           let itemMPrice = 0;
-  //           let discount = 0;
-  //           let taxValue1 = 0;
-  //           let subITotal = 0;
-
-  //           return (
-  //             <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-  //               <ul
-  //                 style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: '2.3' }}
-  //               >
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '-1px',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {Subitems.map((item, index) => {
-  //                     itemMPrice += parseFloat(item.total) * package_divider * item.qty;
-  //                     itemPrice += parseFloat(item.total) * package_divider * item.qty;
-  //                     subITotal = itemPrice;
-  //                     if (discountValue) {
-  //                       discount = (parseFloat(itemMPrice) * parseInt(discountValue)) / 100;
-  //                       subITotal = subITotal - discount;
-  //                     }
-  //                     else {
-  //                     }
-  //                     if (tax.taxValue) {
-  //                       taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
-  //                     }
-  //                     localStorage.setItem(
-  //                       'jv1GYkk6plxCpgx',
-  //                       parseFloat(subscriptionSubTotal + subITotal + taxValue1).toFixed(2)
-  //                     );
-  //                     additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
-  //                     additionalCost.tax = parseFloat(taxValue).toFixed(2);
-  //                     additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(
-  //                       2
-  //                     );
-  //                     localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
-  //                     return (
-  //                       <>
-  //                         item:{item.name} (x{item.qty}){index != Subitems.length && <br />}
-  //                       </>
-  //                     );
-  //                   })}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-
-  //                   {/* { console.log(itemMPrice)} */}
-  //                   {itemMPrice.toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {discount.toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {subITotal.toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {(taxValue || 0).toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {(subITotal + taxValue).toFixed(2)}
-  //                 </li>
-  //                 <li
-  //                   style={{
-  //                     borderBottom: '1px solid rgb(217,217,217)',
-  //                     fontSize: '15px',
-  //                     marginTop: '',
-  //                     color: 'rgb(49,91,140)',
-  //                   }}
-  //                 >
-  //                   {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
-  //                 </li>
-  //               </ul>
-  //             </td>
-  //           );
-  //         }
-  //       })
-  //     )
-  //   );
-  // };
+ 
 
   const CalculatorFilled = () => {
     return ShowServiceList.map((element, _id) =>
@@ -5443,7 +5199,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setTotals(updatedTotals);
   };
 
-  const optionsss = ['Addition', 'Substraction'];
+  const optionsss = ['Addition', 'Subtraction'];
 
   useEffect(() => {
     const fetchData2 = async () => {
@@ -5470,7 +5226,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // localStorage.setItem('CustomItems', JSON.stringify(CustomItems));
   const [customItems, setCustomItems] = useState([]);
   const [Iscustomm, setIscustomm] = useState(false);
-  console.log(Iscustomm);
+
 
   localStorage.setItem('CustomItems', JSON.stringify(customItems));
 
@@ -5747,13 +5503,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               // loading={loading}
+              allowClear
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {/* {customerAddress?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>
-                  {option.label}
-                </Select.Option>
-              ))} */}
+          
 
               {loading ? (
                 <Select.Option key="loading" disabled>
@@ -5785,6 +5538,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
+              allowClear
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
               {loading ? (
@@ -5881,15 +5635,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={6}>
           <Form.Item
             name="expectedRequiredTime"
-            label={translate('Expected Time Required')}
+            label={translate('Expected Time')}
             rules={[
               {
                 required: true,
-                message: 'Please select Expected Time Required.',
+                message: 'Please select Expected Time.',
               },
             ]}
           >
-            <TimePicker style={{ width: '100%' }} format="HH:mm A" />
+            <TimePicker style={{ width: '100%' }} format="HH:mm" />
           </Form.Item>
         </Col>
       </Row>
@@ -6025,7 +5779,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={12}>
-          <Form.Item name="serviceCategory" label={translate('Service Category')}>
+          <Form.Item
+            name="serviceCategory"
+            label={translate('Service Category')}
+            rules={[
+              {
+                required: true,
+                message: 'Please select Service Category.',
+              },
+            ]}
+          >
             <Select
               style={{
                 width: '100%',
@@ -6033,7 +5796,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               onChange={getCategorySubscriptionHandler}
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {loading ? (
+              {/* {loading ? (
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
@@ -6041,16 +5804,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 serviceCategoryOptions?.map((option, index) => (
                   <Select.Option key={option._id} value={option._id}>
                     {option.name}
+                    {option.name ? option.name : 'Loading...'}
+                  
                   </Select.Option>
                 ))
-              )}
+              )} */}
 
-              {/* 
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
-                  {option.name}
+                  {/* {option.name} */}
+                  {option.name ? option.name : 'Loading...'}
                 </Select.Option>
-              ))} */}
+              ))}
             </Select>
           </Form.Item>
         </Col>
@@ -6078,30 +5843,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
-              ) : (
+              ) : selectedValue ? (
                 <>
                   <Select.Option value="custom" onClick={() => setIsCustom(true)}>
                     Custom Service (One Time)
                   </Select.Option>
-                  {isFirstServiceCategorySelect &&
-                    ShowServiceList?.map((option) => (
-                      <Select.Option key={option._id} value={option._id}>
-                        {option.name}
-                      </Select.Option>
-                    ))}
+                  {ShowServiceList?.map((option) => (
+                    <Select.Option key={option._id} value={option._id}>
+                      {option.name}
+                    </Select.Option>
+                  ))}
                 </>
-              )}
-
-              {/* <Select.Option value="custom" onClick={() => setIscustomm(true)}>
-                Custom Service (One Time)
-              </Select.Option>
-
-              {isFirstServiceCategorySelect &&
-                ShowServiceList?.map((option) => (
-                  <Select.Option key={option._id} value={option._id}>
-                    {option.name}
-                  </Select.Option>
-                ))} */}
+              ) : null}
             </Select>
           </Form.Item>
         </Col>
@@ -6608,28 +6361,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={12}>
+        {/* <Col className="gutter-row" span={12}>
           <Form.Item
             name="PaymentMode"
             f
             label={translate('Payment Mode')}
-            // rules={[
-            //   {
-            //     required: true,
-            //   },
-            // ]}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
           >
             <Select
               style={{
                 width: '100%',
               }}
             >
-              {/* {SalesPerson?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-              ))} */}
+           
             </Select>
           </Form.Item>
-        </Col>
+        </Col> */}
       </Row>
 
       {subscriptionIds.length > 0 && (
