@@ -248,13 +248,17 @@ export default function CreateItem({ config, CreateForm }) {
       const isCustommString = localStorage.getItem('IssCustomm');
       const isCustomm = JSON.parse(isCustommString);
 
+
+      const SPC = localStorage.getItem('Salespersoncontact');
+      const  SalesPersonContact= JSON.parse(SPC);
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
           sendworkorderEmail: fieldsValue.sendQuotationEmail,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.SalesPersonContact,
+          salesPersonContact:SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,

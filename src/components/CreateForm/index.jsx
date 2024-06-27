@@ -12,7 +12,6 @@ import Loading from '@/components/Loading';
 
 export default function CreateForm({ config, formElements, withUpload = false  }) {
   let { entity,  } = config;
-  console.log(config)
 
 
   const dispatch = useDispatch();
@@ -22,8 +21,8 @@ export default function CreateForm({ config, formElements, withUpload = false  }
   const [form] = Form.useForm();
   const translate = useLanguage();
   const onSubmit = (fieldsValue) => {
-      console.log(fieldsValue)
-    // Manually trim values before submission
+
+ 
 
     if (fieldsValue.file && withUpload) {
       fieldsValue.file = fieldsValue.file[0].originFileObj;
@@ -34,7 +33,6 @@ export default function CreateForm({ config, formElements, withUpload = false  }
       return acc;
     }, {});
 
-    // console.log(trimmedValues)  
 
     if (entity === 'clientaddress') {
       const ClientId = localStorage.getItem('key');

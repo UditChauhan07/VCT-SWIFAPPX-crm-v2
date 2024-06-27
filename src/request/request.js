@@ -12,7 +12,7 @@ axios.defaults.withCredentials = true;
 
 const request = {
   create: async ({ entity, id, jsonData }) => {
-    // console.log('dsds', jsonData);
+    console.log('dsds', jsonData);
     try {
       let url = entity + '/create';
       if (entity === 'clientaddress' && id) {
