@@ -166,7 +166,7 @@ export const crud = {
   create:
     ({ entity, id, jsonData, withUpload = false }) =>
     async (dispatch) => {
-      // console.log(id)
+      console.log(entity)
       dispatch({
         type: actionTypes.REQUEST_LOADING,
         keyState: 'create',

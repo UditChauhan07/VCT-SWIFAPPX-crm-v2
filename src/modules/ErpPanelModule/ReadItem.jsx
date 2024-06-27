@@ -106,25 +106,6 @@ export default function ReadItem({ config, selectedItem }) {
   console.log(currentErp);
   const [client, setClient] = useState({});
 
-  // currentErp.fieldUsers.map((item)=> {
-  //   // console.log(item.endTime)
-  //   const date = new Date(item.endTime);
-
-  //   const monthNames = [
-  //     "January", "February", "March", "April", "May", "June",
-  //     "July", "August", "September", "October", "November", "December"
-  //   ];
-
-  //   const day = date.getUTCDate();
-  //   const month = monthNames[date.getUTCMonth()];
-  //   const year = date.getUTCFullYear();
-  //   const hours = date.getUTCHours();
-  //   const minutes = date.getUTCMinutes();
-  //   const seconds = date.getUTCSeconds();
-
-  //   const fielduserDate = `${day} ${month}, ${year} ${hours}:${minutes}:${seconds}`;
-
-  // })
 
   useEffect(() => {
     if (currentResult) {
@@ -258,46 +239,46 @@ export default function ReadItem({ config, selectedItem }) {
         //   ),
         // ]}
         extra={[
-          <Button
-            key={`${uniqueId()}`}
-            onClick={() => {
-              navigate(`/${entity.toLowerCase()}`);
-            }}
-            icon={<CloseCircleOutlined />}
-          >
-            {translate('Close')}
-          </Button>,
-          <Button
-            key={`${uniqueId()}`}
-            onClick={() => {
-              window.open(
-                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
-                '_blank'
-              );
-            }}
-            icon={<FilePdfOutlined />}
-          >
-            {translate('Download PDF')}
-          </Button>,
-          <Button
-            key={`${uniqueId()}`}
-            loading={mailInProgress}
-            onClick={() => {
-              send(currentErp._id);
-            }}
-            icon={<MailOutlined />}
-          >
-            {translate('Send by Email')}
-          </Button>,
-          <Button
-            key={`${uniqueId()}`}
-            onClick={() => {
-              dispatch(erp.convert({ entity, id: currentErp._id }));
-            }}
-            icon={<RetweetOutlined />}
-          >
-            {translate('Convert to Invoice')}
-          </Button>,
+          // <Button
+          //   key={`${uniqueId()}`}
+          //   onClick={() => {
+          //     navigate(`/${entity.toLowerCase()}`);
+          //   }}
+          //   icon={<CloseCircleOutlined />}
+          // >
+          //   {translate('Close')}
+          // </Button>,
+          // <Button
+          //   key={`${uniqueId()}`}
+          //   onClick={() => {
+          //     window.open(
+          //       `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
+          //       '_blank'
+          //     );
+          //   }}
+          //   icon={<FilePdfOutlined />}
+          // >
+          //   {translate('Download PDF')}
+          // </Button>,
+          // <Button
+          //   key={`${uniqueId()}`}
+          //   loading={mailInProgress}
+          //   onClick={() => {
+          //     send(currentErp._id);
+          //   }}
+          //   icon={<MailOutlined />}
+          // >
+          //   {translate('Send by Email')}
+          // </Button>,
+          // <Button
+          //   key={`${uniqueId()}`}
+          //   onClick={() => {
+          //     dispatch(erp.convert({ entity, id: currentErp._id }));
+          //   }}
+          //   icon={<RetweetOutlined />}
+          // >
+          //   {translate('Convert to Invoice')}
+          // </Button>,
         ]}
         style={{
           padding: '20px 0px',

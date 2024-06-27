@@ -26,6 +26,7 @@ import { useParams } from 'react-router-dom';
 
 
 export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
+  
   const [feedback, setFeedback] = useState();
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
@@ -106,7 +107,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
             return <FormElement key={key} field={field} entity={entity} />;
-            return <FormElement key={key} field={field} entity={entity} />;
+            // return <FormElement key={key} field={field} entity={entity} />;
           }
         }
       })}
@@ -115,6 +116,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
 }
 
 function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }) {
+  
   const placeholderText = field.name === 'package_divider' ? 'Please enter package divider' : 'Please enter Name';
 
   const translate = useLanguage();
@@ -402,7 +404,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-  console.log(renderComponent)
+  
 
 
   return (

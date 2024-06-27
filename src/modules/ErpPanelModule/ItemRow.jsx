@@ -237,21 +237,55 @@ export default function ItemRow({ key, field, remove, current = null, response, 
     setTotal(currentTotal);
   }, [price, quantity]);
 
+  const validateNumber = (_, value) => {
+    if (!value) {
+      return Promise.resolve();
+    }
+    if (!/^\d{1,10}$/.test(value)) {
+      return Promise.reject(new Error('Price must be at most 10 digits.'));
+    }
+    return Promise.resolve();
+  };
+  const validateNumberqt = (_, value) => {
+    if (!value) {
+      return Promise.resolve();
+    }
+    if (!/^\d{1,10}$/.test(value)) {
+      return Promise.reject(new Error('Quantity must be at most 10 digits.'));
+    }
+    return Promise.resolve();
+  };
+
+
+
   return (
     <>
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={4}>
           <Form.Item
-            name={[field.name, 'item']}>
+            name={[field.name, 'item']}
+            rules={[
+              { max: 15, message: 'Item name must be at most 15 characters' },
+            ]}
+            
+            >
             <Input onChange={updateName} placeholder="Item Name" onKeyUp={(e) => { CustomItemNameHandler(`CI-${field.key}`, e.target.value) }} />
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
-          <Form.Item name={[field.name, 'price']} >
+          <Form.Item name={[field.name, 'price']}
+           rules={[
+            {
+              validator: validateNumber,
+            },
+          ]}
+          >
+
             <InputNumber
               className="moneyInput"
               onChange={(value) => updatePrice(value, `CI-${field.key}`)}
-              min={0}
+              formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
+              // min={0}
               controls={false}
               addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
               addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
@@ -259,8 +293,18 @@ export default function ItemRow({ key, field, remove, current = null, response, 
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={3}>
-          <Form.Item name={[field.name, 'quantity']}>
-            <InputNumber style={{ width: '100%' }} min={0} onChange={(value) => updateQt(value, `CI-${field.key}`)} />
+          <Form.Item name={[field.name, 'quantity']}
+           rules={[
+            {
+              validator: validateNumberqt,
+            },
+          ]}
+          
+          >
+            <InputNumber style={{ width: '100%' }}
+            //  min={0} 
+            formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
+             onChange={(value) => updateQt(value, `CI-${field.key}`)} />
           </Form.Item>
         </Col>
 
@@ -276,7 +320,7 @@ export default function ItemRow({ key, field, remove, current = null, response, 
               <InputNumber
                 readOnly
                 className="moneyInput"
-                value={totalState}
+                value={totalState ? totalState : price}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
