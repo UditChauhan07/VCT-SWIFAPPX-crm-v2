@@ -430,7 +430,8 @@ export default function CreateItem({ config, CreateForm }) {
 
 
       if (entity === "quote") {
-        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
+        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || [];
+         // Retrieve array of subscription objects
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
         console.log(storedSubscriptions)
 

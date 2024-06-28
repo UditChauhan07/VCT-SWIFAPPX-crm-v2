@@ -84,13 +84,29 @@ export default function DataTable({ config, extra = [] }) {
     });
   }
 
-  if (entity !== 'client' && (permissions?.[entity + '_edit'] || isSAAS === true)) {
+  // if (!(entity === 'client' && 'quote') && (permissions?.[entity + '_edit'] || isSAAS === true)) {
+  //   items.push({
+  //     label: translate('Edit'),
+  //     key: 'edit',
+  //     icon: <EditOutlined />,
+  //   });
+  // }
+
+  if ((permissions?.[entity + '_edit'] === true || isSAAS === true) && entity !== 'workorder' && entity !== 'contract' && entity !== 'quote' &&  entity !== 'client') {
     items.push({
       label: translate('Edit'),
       key: 'edit',
       icon: <EditOutlined />,
-    });
+    })
   }
+
+  // if (entity !== 'quote'&& 'client' ) && (permissions?.[entity + '_edit'] || isSAAS === true)) {
+  //   items.push({
+  //     label: translate('Edit'),
+  //     key: 'edit',
+  //     icon: <EditOutlined />,
+  //   });
+  // }
 
   if (permissions?.[entity + 'address_list'] || isSAAS === true) {
     items.push({
