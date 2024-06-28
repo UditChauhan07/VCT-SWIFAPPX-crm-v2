@@ -447,12 +447,13 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
               return Promise.reject('Please select type.');
             }
             return Promise.resolve();
-          } : field.name === 'company' ? (rule, value) => {
-            // if (field.name === 'company' && (!value || value === '')) {
-            //   return Promise.reject('Please select company.');
-            // }
-
-          } : field.name === 'role' ? (rule, value) => {
+          } 
+          // : field.name === 'company' ? (rule, value) => {
+          //   if (field.name === 'company' && (!value || value === '')) {
+          //     return Promise.reject('Please select company.');
+          //   }
+          // }
+           : field.name === 'role' ? (rule, value) => {
             if (field.name === 'role' && (!value || value === '')) {
               return Promise.reject('Please select role.');
             }
