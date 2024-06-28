@@ -232,7 +232,7 @@ export default function CreateItem({ config, CreateForm }) {
           remarks: fieldsValue.InitialRemarks,
           serviceCost,
           additionalCost,
-          grandTotal
+          // grandTotal
         }
 
         fieldsValue = Data

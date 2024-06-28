@@ -27,7 +27,7 @@ import { request } from '@/request';
 import ItemRow from '@/modules/ErpPanelModule/ItemRow';
 const { Option } = Select;
 const { Panel } = Collapse;
-
+import { Spin } from 'antd';
 export default function QuotionForm({ subTotal = 0, current = null }) {
   const { last_quote_number } = useSelector(selectFinanceSettings);
 
@@ -91,7 +91,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [SalesPerson, setSalesPerson] = useState()
   const [WorkLead, setWorkLead] = useState()
   const [Workers, setWorkers] = useState()
-  const [CheckedId, setCheckedId] = useState()
+
   // console.log(CheckedId)
   const [customerAddress, setCustomerAddress] = useState([])
 
@@ -99,8 +99,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [accordionData, setAccordionData] = useState([])
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([])
   const [selectedSalesPerson, setSelectedSalesPerson] = useState()
-
-
+  const [loading, setLoading] = useState(false);
+  const [CheckedId, setCheckedId] = useState()
 
   const handleDropdownChange = async (value) => {
     setSelectedOption(value);
@@ -190,6 +190,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubscriptionCount(0);
     // setIsFirstServiceCategorySelect(false);
     const fetchData2 = async () => {
+      setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions({ id: value });
         console.log(response)
@@ -202,9 +203,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       } catch (error) {
         setServiceOptions(null)
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
     const fetchData3 = async () => {
+      setLoading(true);
       try {
         const response = await request.getServiceListShows({ id: value });
         console.log(response)
@@ -217,13 +221,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       } catch (error) {
         setShowServiceList(null)
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
+
     };
     fetchData2();
     fetchData3();
   }
 
   const handleFirstDropdownChange = async (event) => {
+    setLoading(true);
     console.log("event", event);
     try {
       const response = await request.getSearchClientAddress(event);
@@ -237,6 +245,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     } catch (error) {
 
       console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
 
   }
@@ -311,6 +321,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [price, quantity]);
   useEffect(() => {
     const fetchData = async () => {
+      // setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions();
         console.log(response)
@@ -319,6 +330,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        // setLoading(false);/
       }
     };
     fetchData()
@@ -329,6 +342,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   useEffect(() => {
 
     const fetchData1 = async () => {
+      setLoading(true);
       try {
         const response = await request.getSalesPerson();
         if (response.success) {
@@ -336,6 +350,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData1()
@@ -739,48 +755,48 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setShowServiceList(temp)
   }
 
-  useEffect(() => {
-    const calculateCosts = () => {
-      const discountValueParsed = parseFloat(discountValue) || 0;
-      let subscriptionsArray = []
-      console.log(subscriptionsArray)
+  // useEffect(() => {
+  //   const calculateCosts = () => {
+  //     const discountValueParsed = parseFloat(discountValue) || 0;
+  //     let subscriptionsArray = []
+  //     console.log(subscriptionsArray)
 
-      let newServiceCost = { ...initialServiceCost };
-      let CustomsubscriptionArray = [];
-      ShowServiceId?.forEach(subscriptionObj => {
-        subscriptionObj.data?.forEach(dataObj => {
-          console.log(dataObj._id, "dataObj_id")
-          if (subscriptionIds.includes(dataObj._id)) {
-            const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-            const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-            const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-            const taxValueParsed = parseFloat(tax.taxValue) || 0;
-            const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-            const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
+  //     let newServiceCost = { ...initialServiceCost };
+  //     let CustomsubscriptionArray = [];
+  //     ShowServiceId?.forEach(subscriptionObj => {
+  //       subscriptionObj.data?.forEach(dataObj => {
+  //         console.log(dataObj._id, "dataObj_id")
+  //         if (subscriptionIds.includes(dataObj._id)) {
+  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
+  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+  //           const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
 
-            newServiceCost = {
-              servicePerWO,
-              discount,
-              subTotal,
-              tax: taxAmount,
-              totalPackageCost,
-            };
+  //           newServiceCost = {
+  //             servicePerWO,
+  //             discount,
+  //             subTotal,
+  //             tax: taxAmount,
+  //             totalPackageCost,
+  //           };
 
-            subscriptionsArray.push({
-              subscription: subscriptionObj.subscription._id,
-              subModule: dataObj._id,
-              serviceCost: newServiceCost,
-            });
-          }
-        });
-      });
+  //           subscriptionsArray.push({
+  //             subscription: subscriptionObj.subscription._id,
+  //             subModule: dataObj._id,
+  //             serviceCost: newServiceCost,
+  //           });
+  //         }
+  //       });
+  //     });
 
-      setServiceCost({ ...initialServiceCost });
-      localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
-    };
+  //     setServiceCost({ ...initialServiceCost });
+  //     localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
+  //   };
 
-    calculateCosts();
-  }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
+  //   calculateCosts();
+  // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
 
 
@@ -880,7 +896,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return tableData;
   };
 
+
+  let subcostData = []
+
   const CalculatorFilled = () => {
+
     return (
       ShowServiceList.map((element, _id) => (
         element.subscriptions.map((subscriptions, __id) => (
@@ -907,13 +927,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             }
             if (subscriptionIds.includes(subscription._id)) {
               subscriptionSubTotal = subTotal + taxValue;
-              // serviceCost.servicePerWO = parseFloat(subscription.price / package_divider).toFixed(2);
-              // serviceCost.discount = parseFloat(discount || 0).toFixed(2);
-              // serviceCost.subTotal = parseFloat(subTotal).toFixed(2);
-              // serviceCost.tax = parseFloat(taxValue).toFixed(2);
-              // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
-              // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
-              let serviceCostData = [
+             
+              subcostData.push(
                 {
                   subscription: subscriptions.subscription._id,
                   subModule: subscription._id,
@@ -925,7 +940,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
                   }
                 }
-              ]
+              )
+
+              // if (subscriptionIds.includes(subscription._id)) {
+              //   let serviceCostData = subscriptionIds.map(selectedId => ({
+              //     subscription: selectedId,
+              //     subModule: subscription._id,
+              //     serviceCost: {
+              //       servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+              //       discount: parseFloat(discount || 0).toFixed(2),
+              //       subTotal: parseFloat(subTotal).toFixed(2),
+              //       tax: parseFloat(taxValue).toFixed(2),
+              //       totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+              //     }
+              //   }));
 
               let abc = [
                 {
@@ -939,16 +967,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   }
                 }
               ]
+
               if (isCustom == true) {
                 localStorage.setItem('Subscriptions', JSON.stringify(abc))
               }
               else {
-                localStorage.setItem('Subscriptions', JSON.stringify(serviceCostData))
+                localStorage.setItem('Subscriptions', JSON.stringify(subcostData))
               }
 
               localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
 
-
+              // }
               // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitwm))
               return (
                 <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
@@ -960,7 +989,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li>
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(taxValue).toFixed(2)}</li>
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal + taxValue).toFixed(2)}</li>
-                  </ul></td>)
+                  </ul>
+                </td>)
             }
           }
           )
@@ -968,275 +998,461 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       ))
     )
   }
+  const [isCustom, setIsCustom] = useState(false)
 
+
+ 
 
 
   // const CalculatorFilled = () => {
+  //   let serviceCostData = []; // Initialize an empty array to store multiple entries
 
   //   return (
   //     ShowServiceList.map((element, _id) => (
   //       element.subscriptions.map((subscriptions, __id) => (
-  //         subscriptions.data.map((dataObj) => {
-
-  //           // Check if the current subscription ID is included in subscriptionIds
-  //           if (subscriptionIds.includes(dataObj._id)) {
-  //             let package_divider = parseFloat(subscriptions.subscription.package_divider);
-  //             let subTotal = parseFloat(dataObj.price / package_divider);
-
-  //             // Adjust subTotal based on active and adjustmentvalue conditions
-  //             if (active === 2) {
-  //               subTotal += parseFloat(adjustmentvalue);
-  //             }
-  //             if (active === 3) {
-  //               subTotal -= parseFloat(adjustmentvalue);
-  //             }
-
-  //             let discount = 0;
-  //             if (discountValue) {
-  //               discount = subTotal * (parseFloat(discountValue) / 100);
-  //               subTotal -= discount;
-  //             }
-
-  //             let taxValue = 0;
-  //             if (tax.taxValue) {
-  //               taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
-  //             }
-
-  //             // Prepare the serviceCost object
-  //             const serviceCost = {
-  //               servicePerWO: parseFloat(dataObj.price / package_divider).toFixed(2),
-  //               discount: parseFloat(discount || 0).toFixed(2),
-  //               subTotal: parseFloat(subTotal).toFixed(2),
-  //               tax: parseFloat(taxValue).toFixed(2),
-  //               totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-  //             };
-
-  //             // Prepare the data structure to be stored in localStorage
-  //             const serviceCostData = [
-  //               {
-  //                 subscription: subscriptionIds, // Assuming subscriptionIds is an array of IDs
-  //                 serviceCost: serviceCost,
-  //                subModule: dataObj._id,
-  //               }
-  //             ];
-
-  //             // Store data in localStorage based on isCustom flag
-  //             if (isCustom === true) {
-  //               localStorage.setItem('Subscriptions', JSON.stringify(serviceCostData));
-  //             } else {
-  //               // Use the same storage key as in useEffect, if needed
-  //               localStorage.setItem('Subscriptions', JSON.stringify(serviceCostData));
-  //             }
-
-  //             // Output HTML for display purposes (returning JSX)
-  //             return (
-  //               <td key={dataObj._id} style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-  //                 <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)" }}>{dataObj.name}:{subscriptions.subscription.name}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(dataObj.price / package_divider).toFixed(2)}/Workorder</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(discount || 0).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(taxValue).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal + taxValue).toFixed(2)}</li>
-  //                 </ul>
-  //               </td>
-  //             );
-  //           } else {
-  //             return null; // If subscription ID is not included, return null or handle accordingly
-  //           }
-  //         })
-  //       ))
-  //     ))
-  //   );
-  // };
-
-
-  // const CalculatorFilledItem = () => {
-  //   let addiTempArr = []
-  //   return (
-  //     ShowServiceList?.map((element, _id) => (
-  //       element.subscriptions?.map((subscriptions, __id) => (
-  //         subscriptions.data?.map((subscription, ___id) => {
+  //         subscriptions.data.map((subscription, ___id) => {
   //           let package_divider = parseFloat(subscriptions.subscription.package_divider);
-  //           subscritionAmount = parseFloat(subscription.price / package_divider)
   //           let subTotal = parseFloat(subscription.price / package_divider);
+  //           let discount = 0;
+  //           let taxValue = 0;
+
+  //           // Calculate subTotal based on adjustments
   //           if (active == 2) {
   //             subTotal += parseFloat(adjustmentvalue);
   //           }
   //           if (active == 3) {
   //             subTotal -= parseFloat(adjustmentvalue);
   //           }
-  //           let discount1 = 0;
+
+  //           // Calculate discount if applicable
   //           if (discountValue) {
-  //             discount1 = (subTotal * (parseFloat(discountValue) / 100))
-  //             subTotal -= (subTotal * (parseFloat(discountValue) / 100))
+  //             discount = (subTotal * (parseFloat(discountValue) / 100));
+  //             subTotal -= discount;
   //           }
-  //           let taxValue = 0;
+
+  //           // Calculate taxValue if tax is applicable
   //           if (tax.taxValue) {
-  //             taxValue = (subTotal * (parseFloat(tax.taxValue) / 100))
+  //             taxValue = (subTotal * (parseFloat(tax.taxValue) / 100));
   //           }
-  //           if (subscriptionIds.includes(subscription._id)) {
-  //             subscriptionSubTotal = subTotal + taxValue;
-  //             let itemPrice = 0;
-  //             let itemMPrice = 0;
-  //             let discount = 0;
-  //             let taxValue1 = 0;
-  //             let subITotal = 0;
-  //             console.log(subITotal)
-  //             return (
-  //               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-  //                 <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
 
-  //                     {Subitems.map((item, index) => {
-  //                       itemMPrice += parseFloat(item.price) * package_divider * item.qty;
-  //                       itemPrice += (parseFloat(item.price) * package_divider * item.qty);
-  //                       subITotal = itemPrice
-  //                       if (discountValue) {
-  //                         discount = (parseFloat(itemMPrice) * parseInt(discountValue) / 100)
-  //                         subITotal = subITotal - discount
-  //                       } else {
-  //                       }
-  //                       if (tax.taxValue) {
-  //                         taxValue1 = (parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100))
-  //                       }
-  //                       // subITotal + taxValue
-  //                       localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2));
-                       
-  //                       let additionalCost = {
-  //                         id: item._id,
-  //                         subTotal: parseFloat(subITotal).toFixed(2),
-  //                         tax: parseFloat(taxValue).toFixed(2),
-  //                         totalPackageCost: parseFloat(subITotal + taxValue).toFixed(2),
-  //                         itemTotal: parseFloat(itemMPrice / package_divider).toFixed(2),
-  //                         discount: parseFloat(discount).toFixed(2)
-  //                       };
+  //           // Prepare serviceCost object for current subscription
+  //           let currentServiceCost = {
+  //             subscription: subscriptions.subscription._id,
+  //             subModule: subscription._id,
+  //             serviceCost: {
+  //               servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+  //               discount: parseFloat(discount || 0).toFixed(2),
+  //               subTotal: parseFloat(subTotal).toFixed(2),
+  //               tax: parseFloat(taxValue).toFixed(2),
+  //               totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+  //             }
+  //           };
 
-  //                       // Check if an item with the same _id already exists in addiTempArr
-  //                       const existingIndex = addiTempArr.findIndex(existingItem => existingItem.id === item._id);
+  //           // Store currentServiceCost in serviceCostData array
+  //           serviceCostData.push(currentServiceCost);
 
-  //                       if (existingIndex !== -1) {
-  //                         // Update existing item in addiTempArr
-  //                         addiTempArr[existingIndex] = { ...additionalCost };
-  //                       } else {
-  //                         // Add new item to addiTempArr
-  //                         addiTempArr.push(additionalCost);
-  //                       }
+  //           // Handle localStorage based on conditions (not shown in detail here)
 
-  //                       console.log(additionalCost,"additionalCost")
-  //                       localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(addiTempArr));
-  //                       return (
-  //                         <>
-  //                           item:{item.name} (x{item.qty ?? 0})
-  //                           {index != Subitems.length && <br />}
-  //                         </>
-  //                       )
-  //                     })
-  //                     }
-  //                   </li>
-  //                   <li
-  //                     style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}
-  //                   >{itemMPrice.toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{discount.toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{subITotal.toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(taxValue || 0).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(subITotal + taxValue).toFixed(2)}</li>
-  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(parseFloat(subscriptionSubTotal + subITotal + taxValue)).toFixed(2)}</li>
-  //                 </ul></td>
-  //             )
-  //           }
-  //         }
-  //         )
+  //           // Render UI for the current subscription
+  //           return (
+  //             <td key={`${subscription._id}-${subscriptions.subscription._id}`} style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+  //               <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>{subscription.name}:{subscriptions.subscription.name}</li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(discount || 0).toFixed(2)}</li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(taxValue).toFixed(2)}</li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal + taxValue).toFixed(2)}</li>
+  //               </ul>
+  //             </td>
+  //           );
+  //         })
   //       ))
-        
   //     ))
-      
-  //   )
+  //   );
   // }
-  const CalculatorFilledItem = () => {
-    return (
-      ShowServiceList?.map((element, _id) => (
-        element.subscriptions?.map((subscriptions, __id) => (
-          subscriptions.data?.map((subscription, ___id) => {
-            let package_divider = parseFloat(subscriptions.subscription.package_divider);
-            subscritionAmount = parseFloat(subscription.price / package_divider)
-            let subTotal = parseFloat(subscription.price / package_divider);
-            if (active == 2) {
-              subTotal += parseFloat(adjustmentvalue);
-            }
-            if (active == 3) {
-              subTotal -= parseFloat(adjustmentvalue);
-            }
-            let discount1 = 0;
-            if (discountValue) {
-              discount1 = (subTotal * (parseFloat(discountValue) / 100))
-              subTotal -= (subTotal * (parseFloat(discountValue) / 100))
-            }
-            let taxValue = 0;
-            if (tax.taxValue) {
-              taxValue = (subTotal * (parseFloat(tax.taxValue) / 100))
-            }
-            if (subscriptionIds.includes(subscription._id)) {
-              subscriptionSubTotal = subTotal + taxValue;
-              let itemPrice = 0;
-              let itemMPrice = 0;
-              let discount = 0;
-              let taxValue1 = 0;
-              let subITotal = 0;
-              console.log(subITotal)
-              return (
-                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-                  <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
-                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>
 
-                      {Subitems.map((item, index) => {
-                        itemMPrice += parseFloat(item.price) * package_divider * item.qty;
-                        itemPrice += (parseFloat(item.price) * package_divider * item.qty);
-                        subITotal = itemPrice
-                        if (discountValue) {
-                          discount = (parseFloat(itemMPrice) * parseInt(discountValue) / 100)
-                          subITotal = subITotal - discount
-                        } else {
-                        }
-                        if (tax.taxValue) {
-                          taxValue1 = (parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100))
-                        }
-                        // subITotal + taxValue
-                        localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2));
-                        additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
-                        additionalCost.tax = parseFloat(taxValue).toFixed(2);
-                        // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
-                        additionalCost.totalPackageCost = parseFloat(subITotal + taxValue).toFixed(2);
-                        additionalCost.itemTotal = parseFloat(itemMPrice).toFixed(2)
-                        additionalCost.discount = parseFloat(discount).toFixed(2)
-                        localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
-                        return (
-                          <>
-                            item:{item.name} (x{item.qty ?? 0})
-                            {index != Subitems.length && <br />}
-                          </>
-                        )
-                      })
-                      }
-                    </li>
-                    <li
-                      style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}
-                    >{itemMPrice.toFixed(2)}</li>
-                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{discount.toFixed(2)}</li>
-                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{subITotal.toFixed(2)}</li>
-                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(taxValue || 0).toFixed(2)}</li>
-                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(subITotal + taxValue).toFixed(2)}</li>
-                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{(parseFloat(subscriptionSubTotal + subITotal + taxValue)).toFixed(2)}</li>
-                  </ul></td>
-              )
-            }
+  // const CalculatorFilledItem = () => {
+  //   // Define variables to store calculated costs
+  //   let serviceCostData = []; // Array to store subscription costs
+  //   let additionalCost = {}; // Object to store additional item costs
+
+  //   // Iterate through ShowServiceList, subscriptions, and data to calculate costs
+  //   ShowServiceList?.forEach((element, _id) => {
+  //     element.subscriptions?.forEach((subscriptions, __id) => {
+  //       subscriptions.data?.forEach((subscription, ___id) => {
+  //         let package_divider = parseFloat(subscriptions.subscription.package_divider);
+  //         let subTotal = parseFloat(subscription.price / package_divider);
+  //         let discount = 0;
+  //         let taxValue = 0;
+  //         let subscriptionSubTotal = 0;
+
+  //         // Calculate subscription costs
+  //         if (active == 2) {
+  //           subTotal += parseFloat(adjustmentvalue);
+  //         }
+  //         if (active == 3) {
+  //           subTotal -= parseFloat(adjustmentvalue);
+  //         }
+  //         if (discountValue) {
+  //           discount = (subTotal * (parseFloat(discountValue) / 100));
+  //           subTotal -= discount;
+  //         }
+  //         if (tax.taxValue) {
+  //           taxValue = (subTotal * (parseFloat(tax.taxValue) / 100));
+  //         }
+  //         if (subscriptionIds.includes(subscription._id)) {
+  //           subscriptionSubTotal = subTotal + taxValue;
+
+  //           // Push subscription cost data to serviceCostData array
+  //           serviceCostData.push({
+  //             subscription: subscriptions.subscription._id,
+  //             subModule: subscription._id,
+  //             serviceCost: {
+  //               servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+  //               discount: parseFloat(discount || 0).toFixed(2),
+  //               subTotal: parseFloat(subTotal).toFixed(2),
+  //               tax: parseFloat(taxValue).toFixed(2),
+  //               totalPackageCost: parseFloat(subscriptionSubTotal).toFixed(2),
+  //             }
+  //           });
+
+  //           // Calculate and store additional item costs
+  //           let itemMPrice = 0; // Initialize itemMPrice
+  //           Subitems.forEach(item => {
+  //             itemMPrice += parseFloat(item.price) * package_divider * (item.qty || 1);
+  //           });
+
+  //           // Calculate additional costs
+  //           additionalCost = {
+  //             subTotal: itemMPrice.toFixed(2),
+  //             discount: (discountValue ? (parseFloat(itemMPrice) * parseInt(discountValue) / 100).toFixed(2) : 0),
+  //             tax: (tax.taxValue ? (parseFloat(itemMPrice) * parseFloat(tax.taxValue) / 100).toFixed(2) : 0),
+  //             totalPackageCost: (parseFloat(itemMPrice) + parseFloat(additionalCost.tax)).toFixed(2),
+  //             itemTotal: itemMPrice.toFixed(2)
+  //           };
+
+  //           // Store additionalCost in localStorage or send to backend
+  //           localStorage.setItem("BQaBocV8yvv9ELm", JSON.stringify(additionalCost));
+  //         }
+  //       });
+  //     });
+  //   });
+
+  //   // Store serviceCostData in localStorage or send to backend (if needed)
+
+
+  // }
+// let additionalCostData=[]
+//   const CalculatorFilledItem = () => {
+//     return ShowServiceList?.map((element, _id) =>
+//       element.subscriptions?.map((subscriptions, __id) =>
+//         subscriptions.data?.map((subscription, ___id) => {
+//           let package_divider = parseFloat(subscriptions.subscription.package_divider);
+//           subscritionAmount = parseFloat(subscription.price / package_divider);
+//           let subTotal = parseFloat(subscription.price / package_divider);
+//           if (active == 2) {
+//             subTotal += parseFloat(adjustmentvalue);
+//           }
+//           if (active == 3) {
+//             subTotal -= parseFloat(adjustmentvalue);
+//           }
+//           let discount1 = 0;
+//           if (discountValue) {
+//             discount1 = subTotal * (parseFloat(discountValue) / 100);
+//             subTotal -= subTotal * (parseFloat(discountValue) / 100);
+//           }
+//           let taxValue = 0;
+//           if (tax.taxValue) {
+//             taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
+//           }
+//           if (subscriptionIds.includes(subscription._id)) {
+//             subscriptionSubTotal = subTotal + taxValue;
+//             let itemPrice = 0;
+//             let itemMPrice = 0;
+//             let discount = 0;
+//             let taxValue1 = 0;
+//             let subITotal = 0;
+//             console.log(subITotal);
+//             return (
+//               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+//                 <ul
+//                   style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: '2.3' }}
+//                 >
+//                   <li
+//                     style={{
+//                       borderBottom: '1px solid rgb(217,217,217)',
+//                       fontSize: '15px',
+//                       marginTop: '-1px',
+//                       color: 'rgb(49,91,140)',
+//                     }}
+//                   >
+//                     {Subitems.map((item, index) => {
+//                       itemMPrice += parseFloat(item.price) * package_divider * item.qty;
+//                       itemPrice += parseFloat(item.price) * package_divider * item.qty;
+//                       subITotal = itemPrice;
+//                       if (discountValue) {
+//                         discount = (parseFloat(itemMPrice) * parseInt(discountValue)) / 100;
+//                         subITotal = subITotal - discount;
+//                       } else {
+//                       }
+//                       if (tax.taxValue) {
+//                         taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
+//                       }
+//                       // subITotal + taxValue
+//                       // localStorage.setItem(
+//                       //   'jv1GYkk6plxCpgx',
+//                       // Find if the item with the same id already exists in additionalCostData
+//                       let addi_index = additionalCostData.findIndex(costItem => costItem.id == item._id);
+
+//                       // If index is -1, it means id doesn't exist, so add a new object; otherwise, update existing object
+//                       if (addi_index === -1) {
+//                         additionalCostData.push({
+//                           id: item._id,
+//                           grandTotal: parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2),
+//                           subTotal: parseFloat(subITotal).toFixed(2),
+//                           tax: parseFloat(taxValue).toFixed(2),
+//                           totalPackageCost: parseFloat(subITotal + taxValue).toFixed(2),
+//                           itemTotal: parseFloat(itemMPrice).toFixed(2),
+//                           discount: parseFloat(discount).toFixed(2)
+//                         });
+//                       } else {
+//                         // Update existing object
+//                         additionalCostData[addi_index] = {
+//                           id: item._id,
+//                           grandTotal: parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2),
+//                           subTotal: parseFloat(subITotal).toFixed(2),
+//                           tax: parseFloat(taxValue).toFixed(2),
+//                           totalPackageCost: parseFloat(subITotal + taxValue).toFixed(2),
+//                           itemTotal: parseFloat(itemMPrice).toFixed(2),
+//                           discount: parseFloat(discount).toFixed(2)
+//                         };
+//                       }
+
+//                       localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCostData));
+
+//                       return (
+//                         <>
+//                           item:{item.name} (x{item.qty ?? 0}){index != Subitems.length && <br />}
+//                         </>
+//                       );
+//                     })}
+//                   </li>
+//                   <li
+//                     style={{
+//                       borderBottom: '1px solid rgb(217,217,217)',
+//                       fontSize: '15px',
+//                       marginTop: '',
+//                       color: 'rgb(49,91,140)',
+//                     }}
+//                   >
+//                     {itemMPrice.toFixed(2)}
+//                   </li>
+//                   <li
+//                     style={{
+//                       borderBottom: '1px solid rgb(217,217,217)',
+//                       fontSize: '15px',
+//                       marginTop: '',
+//                       color: 'rgb(49,91,140)',
+//                     }}
+//                   >
+//                     {discount.toFixed(2)}
+//                   </li>
+//                   <li
+//                     style={{
+//                       borderBottom: '1px solid rgb(217,217,217)',
+//                       fontSize: '15px',
+//                       marginTop: '',
+//                       color: 'rgb(49,91,140)',
+//                     }}
+//                   >
+//                     {subITotal.toFixed(2)}
+//                   </li>
+//                   <li
+//                     style={{
+//                       borderBottom: '1px solid rgb(217,217,217)',
+//                       fontSize: '15px',
+//                       marginTop: '',
+//                       color: 'rgb(49,91,140)',
+//                     }}
+//                   >
+//                     {(taxValue || 0).toFixed(2)}
+//                   </li>
+//                   <li
+//                     style={{
+//                       borderBottom: '1px solid rgb(217,217,217)',
+//                       fontSize: '15px',
+//                       marginTop: '',
+//                       color: 'rgb(49,91,140)',
+//                     }}
+//                   >
+//                     {(subITotal + taxValue).toFixed(2)}
+//                   </li>
+//                   <li
+//                     style={{
+//                       borderBottom: '1px solid rgb(217,217,217)',
+//                       fontSize: '15px',
+//                       marginTop: '',
+//                       color: 'rgb(49,91,140)',
+//                     }}
+//                   >
+//                     {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
+//                   </li>
+//                 </ul>
+//               </td>
+//             );
+//           }
+//         })
+//       )
+//     );
+//   };
+
+  const CalculatorFilledItem = () => {
+    return ShowServiceList?.map((element, _id) =>
+      element.subscriptions?.map((subscriptions, __id) =>
+        subscriptions.data?.map((subscription, ___id) => {
+          let package_divider = parseFloat(subscriptions.subscription.package_divider);
+          subscritionAmount = parseFloat(subscription.price / package_divider);
+          let subTotal = parseFloat(subscription.price / package_divider);
+          if (active == 2) {
+            subTotal += parseFloat(adjustmentvalue);
           }
-          )
-        ))
-      ))
-    )
-  }
+          if (active == 3) {
+            subTotal -= parseFloat(adjustmentvalue);
+          }
+          let discount1 = 0;
+          if (discountValue) {
+            discount1 = subTotal * (parseFloat(discountValue) / 100);
+            subTotal -= subTotal * (parseFloat(discountValue) / 100);
+          }
+          let taxValue = 0;
+          if (tax.taxValue) {
+            taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
+          }
+          if (subscriptionIds.includes(subscription._id)) {
+            subscriptionSubTotal = subTotal + taxValue;
+            let itemPrice = 0;
+            let itemMPrice = 0;
+            let discount = 0;
+            let taxValue1 = 0;
+            let subITotal = 0;
+            console.log(subITotal);
+            return (
+              <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+                <ul
+                  style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: '2.3' }}
+                >
+                  <li
+                    style={{
+                      borderBottom: '1px solid rgb(217,217,217)',
+                      fontSize: '15px',
+                      marginTop: '-1px',
+                      color: 'rgb(49,91,140)',
+                    }}
+                  >
+                    {Subitems.map((item, index) => {
+                      itemMPrice += parseFloat(item.price) * package_divider * item.qty;
+                      itemPrice += parseFloat(item.price) * package_divider * item.qty;
+                      subITotal = itemPrice;
+                      if (discountValue) {
+                        discount = (parseFloat(itemMPrice) * parseInt(discountValue)) / 100;
+                        subITotal = subITotal - discount;
+                      } else {
+                      }
+                      if (tax.taxValue) {
+                        taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
+                      }
+                      // subITotal + taxValue
+                      localStorage.setItem(
+                        'jv1GYkk6plxCpgx',
+                        parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)
+                      );
+                      additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
+                      additionalCost.tax = parseFloat(taxValue).toFixed(2);
+                      // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
+                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue).toFixed(2);
+                      additionalCost.itemTotal = parseFloat(itemMPrice).toFixed(2);
+                      additionalCost.discount = parseFloat(discount).toFixed(2);
+                      localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
+                      return (
+                        <>
+                          item:{item.name} (x{item.qty ?? 0}){index != Subitems.length && <br />}
+                        </>
+                      );
+                    })}
+                  </li>
+                  <li
+                    style={{
+                      borderBottom: '1px solid rgb(217,217,217)',
+                      fontSize: '15px',
+                      marginTop: '',
+                      color: 'rgb(49,91,140)',
+                    }}
+                  >
+                    {itemMPrice.toFixed(2)}
+                  </li>
+                  <li
+                    style={{
+                      borderBottom: '1px solid rgb(217,217,217)',
+                      fontSize: '15px',
+                      marginTop: '',
+                      color: 'rgb(49,91,140)',
+                    }}
+                  >
+                    {discount.toFixed(2)}
+                  </li>
+                  <li
+                    style={{
+                      borderBottom: '1px solid rgb(217,217,217)',
+                      fontSize: '15px',
+                      marginTop: '',
+                      color: 'rgb(49,91,140)',
+                    }}
+                  >
+                    {subITotal.toFixed(2)}
+                  </li>
+                  <li
+                    style={{
+                      borderBottom: '1px solid rgb(217,217,217)',
+                      fontSize: '15px',
+                      marginTop: '',
+                      color: 'rgb(49,91,140)',
+                    }}
+                  >
+                    {(taxValue || 0).toFixed(2)}
+                  </li>
+                  <li
+                    style={{
+                      borderBottom: '1px solid rgb(217,217,217)',
+                      fontSize: '15px',
+                      marginTop: '',
+                      color: 'rgb(49,91,140)',
+                    }}
+                  >
+                    {(subITotal + taxValue).toFixed(2)}
+                  </li>
+                  <li
+                    style={{
+                      borderBottom: '1px solid rgb(217,217,217)',
+                      fontSize: '15px',
+                      marginTop: '',
+                      color: 'rgb(49,91,140)',
+                    }}
+                  >
+                    {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
+                  </li>
+                </ul>
+              </td>
+            );
+          }
+        })
+      )
+    );
+  };
+
+
+
 
   const AdjustmentValueHandler = (event) => {
     setadjustment(event.target.value || 0)
@@ -1245,7 +1461,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     console.log({ subTotal });
   }
   // const [customItems, setCustomItems] = useState([]);
-  const [isCustom, setIsCustom] = useState(false)
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
   const handleSelectChange = (value) => {
@@ -1354,6 +1569,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select customer.',
               },
             ]}
           >
@@ -1374,17 +1590,29 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select customer Address.',
               },
             ]}
           >
             <Select
               style={{
                 width: '100%',
+
               }}
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {customerAddress?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
-              ))}
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                customerAddress?.map((option) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.label}
+                  </Select.Option>
+                ))
+              )}
+
             </Select>
 
           </Form.Item>
@@ -1397,6 +1625,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Billing Address.',
               },
             ]}
           >
@@ -1404,10 +1633,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               style={{
                 width: '100%',
               }}
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {customerAddress?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
-              ))}
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                customerAddress?.map((option, index) => (
+                  <Select.Option key={option._id} value={option._id}>{option.label}</Select.Option>
+                ))
+              )}
+
             </Select>
 
           </Form.Item>
@@ -1445,6 +1682,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               {
                 required: true,
                 type: 'object',
+
               },
             ]}
             initialValue={dayjs()}
@@ -1474,10 +1712,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Start Time.',
               },
             ]}
           >
-            <TimePicker style={{ width: '100%' }} format="HH:mm" />
+            <TimePicker style={{ width: '100%' }} format="HH:mm A" />
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={6}>
@@ -1487,6 +1726,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Expected Time Required.',
               },
             ]}
           >
@@ -1502,7 +1742,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Sales Person.',
               },
+
             ]}
 
           >
@@ -1513,15 +1755,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
               // onChange={(event) => setcustomSelect(event) }
               onChange={(event) => setSelectedSalesPerson(event)}
-
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {SalesPerson?.map((option, index) => (
-                <Select.Option
-                  key={option._id}
-                  value={option._id}>
-                  {option.name}
+
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
                 </Select.Option>
-              ))}
+              ) : (
+                SalesPerson?.map((option, index) => (
+                  <Select.Option
+                    key={option._id}
+                    value={option._id}>
+                    {option.name}
+                  </Select.Option>
+                ))
+              )}
+
             </Select>
           </Form.Item>
         </Col>
@@ -1560,10 +1810,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               onChange={getCategorySubscriptionHandler}
+              // notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {serviceCategoryOptions?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-              ))}
+
+            
+                
+                {serviceCategoryOptions?.map((option, index) => (
+                  <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
+                ))}
+            
             </Select>
 
           </Form.Item>
@@ -1575,6 +1830,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
+                message: 'Please select Service Name.',
               },
             ]}
 
@@ -1586,18 +1842,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               value={selectedOption}
               onChange={handleSelectChange}
               subscriptionOneTime
+              notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              <Select.Option value="Select">Select</Select.Option>
 
-              <Select.Option value="custom" onClick={() => setIscustomm(true)}>Custom Service (One Time)</Select.Option>
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : (
+                <>
+                  <Select.Option value="custom" onClick={() => setIscustomm(true)}>Custom Service (One Time)</Select.Option>
+                  {isFirstServiceCategorySelect &&
+                    ShowServiceList?.map((option) => (
+                      <Select.Option key={option._id} value={option._id}>
+                        {option.name}
+                      </Select.Option>
+                    ))}
+                </>
+              )}
 
-
-              {isFirstServiceCategorySelect &&
-                ShowServiceList?.map((option) => (
-                  <Select.Option key={option._id} value={option._id}>
-                    {option.name}
-                  </Select.Option>
-                ))}
             </Select>
 
           </Form.Item>
@@ -2016,7 +2279,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               name="AdjustmentValue"
               rules={[
                 {
-                  // required: true,
+                  validator: (rule, value) => {
+                    if (isNaN(value)) {
+                      return Promise.reject('Only numeric value is accepted.');
+                    }
+                    return Promise.resolve();
+                  },
                 },
               ]}
             >
@@ -2029,7 +2297,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               name="AdjustmentValue"
               rules={[
                 {
-                  // required: true,
+                  validator: (rule, value) => {
+                    if (isNaN(value)) {
+                      return Promise.reject('Only numeric value is accepted.');
+                    }
+                    return Promise.resolve();
+                  },
                 },
               ]}
             >
@@ -2061,18 +2334,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="discount"
             label={translate('Discount')}
-          // rules={[
-          //   {
-          //     required: true,
-          //   },
-          // ]}
+            rules={[
+              {
+                validator: (rule, value) => {
+                  if (isNaN(value)) {
+                    return Promise.reject('Only numeric values are accepted.');
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
           >
             <InputNumber
               style={{ width: '100%' }}
               min={0}
               max={100}
-              value={discountValue}
-              onChange={DiscountValueHandler}
+            // You can bind the value and onChange directly if using a controlled input
+            // value={discountValue}
+            // onChange={DiscountValueHandler}
             />
           </Form.Item>
         </Col>
