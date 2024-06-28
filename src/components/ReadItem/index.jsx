@@ -9,10 +9,8 @@ import { valueByString } from '@/utils/helpers';
 import useLanguage from '@/locale/useLanguage';
 import { useDate } from '@/settings';
 
-
 export default function ReadItem({ config }) {
-
-  console.log( config )
+  console.log(config);
   const { dateFormat } = useDate();
   let { readColumns, fields } = config;
 
@@ -21,8 +19,8 @@ export default function ReadItem({ config }) {
   const { state } = useCrudContext();
   const { isReadBoxOpen } = state;
   const [listState, setListState] = useState([]);
- 
-  const readFields = !readColumns ? fields : readColumns
+
+  const readFields = !readColumns ? fields : readColumns;
   if (fields) readColumns = [...dataForRead({ fields: readFields, translate: translate })];
   useEffect(() => {
     const list = [];
@@ -31,16 +29,13 @@ export default function ReadItem({ config }) {
       const propsTitle = props.title;
       const isDate = props.isDate || false;
       let value = valueByString(currentResult, propsKey);
-      value = isDate  ? dayjs(value).format(dateFormat) : value;
+      value = isDate ? dayjs(value).format(dateFormat) : value;
       list.push({ propsKey, label: propsTitle, value: value });
     });
     setListState(list);
   }, [currentResult]);
 
   const show = isReadBoxOpen ? { display: 'block', opacity: 1 } : { display: 'none', opacity: 0 };
-
-
-
 
   const itemsList = listState?.map((item) => {
     // console.log(item)
@@ -56,19 +51,13 @@ export default function ReadItem({ config }) {
         <Col className="gutter-row" span={10}>
           {/* <p>{translate(item.value)}</p> */}
           {/* <p>{item.value}</p> */}
-          <p> 
-  {item.value === 'true' 
-    ? 'Active' 
-    : item.value === 'false' 
-      ? 'Inactive' 
-      : item.value}
-</p>
+          <p>
+            {item.value === 'true' ? 'Active' : item.value === 'false' ? 'Inactive' : item.value}
+          </p>
         </Col>
       </Row>
     );
   });
-
-
 
   return <div style={show}>{itemsList}</div>;
 }

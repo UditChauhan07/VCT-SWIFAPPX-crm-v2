@@ -248,7 +248,6 @@ export default function CreateItem({ config, CreateForm }) {
       const isCustommString = localStorage.getItem('IssCustomm');
       const isCustomm = JSON.parse(isCustommString);
 
-
       const SPC = localStorage.getItem('Salespersoncontact');
       const  SalesPersonContact= JSON.parse(SPC);
 

@@ -147,7 +147,7 @@ function FixHeaderPanel({ config }) {
 }
 
 function CrudModule({ config, createForm, updateForm, withUpload = false }) {
-//  console.log(config)
+
 
   const dispatch = useDispatch();
 
