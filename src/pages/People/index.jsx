@@ -1,3 +1,50 @@
+// import CrudModule from '@/modules/CrudModule/CrudModule';
+// import DynamicForm from '@/forms/DynamicForm';
+// import { fields } from './config';
+
+// import useLanguage from '@/locale/useLanguage';
+
+// export default function People() {
+//   const translate = useLanguage();
+//   const entity = 'people';
+//   const searchConfig = {
+//     displayLabels: ['firstname', 'lastname'],
+//     searchFields: 'firstname,lastname',
+//   };
+//   const deleteModalLabels = ['firstname', 'lastname'];
+
+//   const Labels = {
+//     PANEL_TITLE: translate('people'),
+//     DATATABLE_TITLE: translate('people_list'),
+//     ADD_NEW_ENTITY: translate('add_new_people'),
+//     ENTITY_NAME: translate('people'),
+//   };
+//   const configPage = {
+//     entity,
+//     ...Labels,
+//   };
+//   const config = {
+//     ...configPage,
+//     fields,
+//     searchConfig,
+//     deleteModalLabels,
+//   };
+//   return (
+//     <CrudModule
+//       createForm={<DynamicForm fields={fields} entity={entity} />}
+//       updateForm={<DynamicForm fields={fields} />}
+//       config={config}
+//     />
+//   );
+// }
+
+
+
+
+// NEW CODE 
+
+
+
 import CrudModule from '@/modules/CrudModule/CrudModule';
 import DynamicForm from '@/forms/DynamicForm';
 import { fields } from './config';
@@ -14,10 +61,10 @@ export default function People() {
   const deleteModalLabels = ['firstname', 'lastname'];
 
   const Labels = {
-    PANEL_TITLE: translate('people'),
+    PANEL_TITLE: translate('person'),
     DATATABLE_TITLE: translate('people_list'),
-    ADD_NEW_ENTITY: translate('add_new_people'),
-    ENTITY_NAME: translate('people'),
+    ADD_NEW_ENTITY: translate('add_new_person'),
+    ENTITY_NAME: translate('person'),
   };
   const configPage = {
     entity,
@@ -31,9 +78,10 @@ export default function People() {
   };
   return (
     <CrudModule
-      createForm={<DynamicForm fields={fields} entity={entity} />}
+      createForm={<DynamicForm fields={fields} />}
       updateForm={<DynamicForm fields={fields} />}
       config={config}
     />
   );
 }
+
