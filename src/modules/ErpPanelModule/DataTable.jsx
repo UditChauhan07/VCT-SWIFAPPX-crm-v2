@@ -97,7 +97,7 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  if ((permissions?.[entity + '_edit'] === true || isSAAS === true) && entity !== 'workorder' && entity !== 'contract') {
+  if ((permissions?.[entity + '_edit'] === true || isSAAS === true) && entity !== 'workorder' && entity !== 'contract'&& entity !== 'quote') {
     items.push({
       label: translate('Edit'),
       key: 'edit',

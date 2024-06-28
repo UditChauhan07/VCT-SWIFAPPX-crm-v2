@@ -248,7 +248,6 @@ export default function CreateItem({ config, CreateForm }) {
       const isCustommString = localStorage.getItem('IssCustomm');
       const isCustomm = JSON.parse(isCustommString);
 
-
       const SPC = localStorage.getItem('Salespersoncontact');
       const  SalesPersonContact= JSON.parse(SPC);
 
@@ -431,7 +430,8 @@ export default function CreateItem({ config, CreateForm }) {
 
 
       if (entity === "quote") {
-        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || []; // Retrieve array of subscription objects
+        const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || [];
+         // Retrieve array of subscription objects
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
         console.log(storedSubscriptions)
 

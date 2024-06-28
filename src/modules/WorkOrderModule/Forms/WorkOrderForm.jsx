@@ -4694,8 +4694,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   // console.log({ additionalCost });
-
+  const [isSubId, setSubId] = useState({});
+  console.log(isSubId)
   const [subscriptionIds, setSubscriptionIds] = useState([]);
+
 
   const [discountValue, setdiscount] = useState(0);
  
@@ -4703,14 +4705,30 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [serviceCost, setServiceCost] = useState(initialServiceCost);
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
-  const handleCheckboxClick = (id) => {
-    let temp = [...subscriptionIds];
+  const handleCheckboxClick = (e,id) => {
+    // const { value } = e.target;
+    // setSubId(prevState => {
+    //   const updatedState = { ...prevState };
+    //   Object.keys(updatedState)?.forEach(key => {
+    //     if (key !== id) {
+    //       updatedState[key] = undefined;
+    //     }
+    //   });
+    //   updatedState[id] = value;
+    //   return updatedState;
+    // });
+    setSubId(id)
+
+    let temp = [...subscriptionIds];  
     if (temp.includes(id)) {
       temp = temp.filter((item) => item !== id);
     } else {
       temp.push(id);
     }
-    setSubscriptionIds(temp);
+
+    setSubscriptionIds(id);
+
+    // setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
     localStorage.setItem('WorkOrderSubId', id);
   };
@@ -4724,7 +4742,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       let newServiceCost = { ...initialServiceCost };
       ShowServiceId?.forEach((subscriptionObj) => {
-        // console.log(subscriptionObj)
         subscriptionObj.data?.forEach((dataObj) => {
           if (subscriptionIds.includes(dataObj._id)) {
             const servicePerWO = parseFloat(
@@ -4786,14 +4803,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         const matchingItem = ele.data.find((item) => item.name === name);
 
         rowData[name] = matchingItem ? (
-          <Checkbox.Group
+          <Radio.Group
             key={matchingItem._id}
-            onChange={() => handleCheckboxClick(matchingItem._id)}
+            // value={isSubId[matchingItem._id]}
+            value={ isSubId === matchingItem._id ? matchingItem._id : null} 
+            onChange={(e) => handleCheckboxClick(e, matchingItem._id)}
           >
-            <Checkbox value={matchingItem._id}>
+            <Radio value={matchingItem._id}>
               {`${matchingItem.price}.00 /${ele.subscription.name}`}
-            </Checkbox>
-          </Checkbox.Group>
+            </Radio>
+          </Radio.Group>
         ) : null;
       });
 
@@ -4966,14 +4985,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                 <ul
-                  style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: '2.3' }}
+                  style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: '2.6' }}
                 >
                   <li
                     style={{
                       borderBottom: '1px solid rgb(217,217,217)',
                       fontSize: '15px',
-                      marginTop: '-1px',
+                      marginTop: '-22px',
                       color: 'rgb(49,91,140)',
+                      height: '105px',
+                      // border: "2px solid black",
+                      overflowY: 'auto', 
                     }}
                   >
                     {Subitems.map((item, index) => {
@@ -5053,6 +5075,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       fontSize: '15px',
                       marginTop: '',
                       color: 'rgb(49,91,140)',
+                      
                     }}
                   >
                     {(subITotal + taxValue).toFixed(2)}
@@ -5063,6 +5086,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       fontSize: '15px',
                       marginTop: '',
                       color: 'rgb(49,91,140)',
+                   
                     }}
                   >
                     {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
@@ -5113,6 +5137,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //     // setdiscount(null);
   //   }
   // };
+ 
+ 
   const [isCustom, setIsCustom] = useState(false);
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
@@ -6454,28 +6480,28 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           listStyle: 'none',
                           textAlign: 'start',
                           padding: '0',
-                          lineHeight: '2.1',
+                          lineHeight: '2.3',
                         }}
                       >
-                        <li style={{ borderBottom: '1px solid #fff', fontSize: '16px' }}>
+                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px',  height:"90px" }}>
                           Service Items Included(per workorder)
                         </li>
-                        <li style={{ borderBottom: '1px solid #fff', fontSize: '16px' }}>
+                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px' }}>
                           Item Total
                         </li>
-                        <li style={{ borderBottom: '1px solid #fff', fontSize: '16px' }}>
+                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px' }}>
                           Discount({discountValue}%)
                         </li>
-                        <li style={{ borderBottom: '1px solid #fff', fontSize: '16px' }}>
+                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px' }}>
                           Sub Total
                         </li>
-                        <li style={{ borderBottom: '1px solid #fff', fontSize: '16px' }}>
+                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px' }}>
                           Tax ({tax?.taxValue || 0}%)
                         </li>
-                        <li style={{ borderBottom: '1px solid #fff', fontSize: '16px' }}>
+                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px' }}>
                           Total Service Items Cost
                         </li>
-                        <li style={{ borderBottom: '1px solid #fff', fontSize: '16px' }}>
+                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px' }}>
                           Grand Total
                         </li>
                       </ul>
