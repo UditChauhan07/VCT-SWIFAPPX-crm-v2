@@ -11,6 +11,7 @@ import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
 export default function CreateForm({ config, formElements, withUpload = false  }) {
+  console.log(formElements)
   let { entity,  } = config;
 
 
@@ -20,10 +21,22 @@ export default function CreateForm({ config, formElements, withUpload = false  }
   const { panel, collapsedBox, readBox } = crudContextAction;
   const [form] = Form.useForm();
   const translate = useLanguage();
+
+  // const handleFinish = async () => {
+  //   try {
+  //     const fieldsValue = await form.validateFields();
+  //     onSubmit(fieldsValue);
+  //   } catch (error) {
+  //     console.log('Validation Failed:', error);
+  //   }
+  // };
+
+
+
   const onSubmit = (fieldsValue) => {
 
- 
-
+    console.log("Form Submitted:", fieldsValue);
+   
     if (fieldsValue.file && withUpload) {
       fieldsValue.file = fieldsValue.file[0].originFileObj;
     }
@@ -43,6 +56,8 @@ export default function CreateForm({ config, formElements, withUpload = false  }
         
     // dispatch(crud.create({ entity, jsonData: trimmedValues, withUpload   }));
   };
+
+
 
   useEffect(() => {
     if (isSuccess) {
