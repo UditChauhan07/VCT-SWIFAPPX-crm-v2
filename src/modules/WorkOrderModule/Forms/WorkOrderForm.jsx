@@ -4281,21 +4281,36 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     fetchData3();
   };
 
+  const [customerAddressEvent, setCustomerAddressEvent] = useState([]);
+ console.log(customerAddressEvent)
   const handleFirstDropdownChange = async (event) => {
+    
     setLoading(true);
+   
     try {
       const response = await request.getSearchClientAddress(event);
       console.log('response', response);
       if (response.success) {
         setCustomerAddress(response.result);
+        // setCustomerAddressEvent(event);
+        form.setFieldsValue({ clientAddress: null });
         // Set options state based on API response
       } else {
+        setCustomerAddress([]);
+        form.setFieldsValue({ clientAddress: null });
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+      form.setFieldsValue({ clientAddress: null });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCustomerClear = () => {
+    form.setFieldsValue({ client: null, clientAddress: null });
+    // setCustomerAddressEvent(null); 
+    setCustomerAddress([]); // Clear customer addresses
   };
 
   const getServicesSubAndItems = async (event) => {
@@ -4449,10 +4464,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const [salesContactNumber, setSalesContactNumber] = useState();
-  console.log(salesContactNumber)
+  console.log(salesContactNumber);
 
   localStorage.setItem('Salespersoncontact', JSON.stringify(salesContactNumber));
-
 
   useEffect(() => {
     if (selectedSalesPerson) {
@@ -4462,10 +4476,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // let saleRepConElement = document.getElementById('salesContactNumber');
       // console.log(saleRepConElement)
       // saleRepConElement.value = number || null;
-
     }
-  }, [selectedSalesPerson,salesContactNumber ]);
-
+  }, [selectedSalesPerson, salesContactNumber]);
 
   // NEW CODE -: 1
   // useEffect(() => {
@@ -4480,38 +4492,41 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //   }
   // }, [selectedSalesPerson]);
 
-
-
   const validateSalesPersonContact = (_, value) => {
     if (value || salesContactNumber) {
       return Promise.resolve();
     }
-    return Promise.reject(new Error('Please select Sales Person Contact.'));
+    return Promise.reject(new Error('Please Select Sales Person Contact.'));
   };
-
 
   const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
   // useEffect(() => {}, [selectedSalesPerson]);
   const ContactHandler = ({ salesContactNumber }) => {
-      // console.log(salesContactNumber)
-    return ( 
- 
-
+    // console.log(salesContactNumber)
+    return (
       <Form.Item
         label={translate('Sales Person Contact')}
-         name="SalesPersonContact"
-         rules={[
-        
+        name="SalesPersonContact"
+        rules={[
           {
             validator: validateSalesPersonContact,
-            required: true
+            required: true,
           },
         ]}
       >
-          <div style={{height:"32px", width:"100%", border:"1px solid rgb(214,212,217)", marginTop:"-0.2%",borderRadius:"5px", textAlign:"start", fontSize:"15px"}}>
-          <p style={{padding:"0px 0px 0px 14px", marginTop:"4px"}}>{salesContactNumber}</p>
-          </div>
-
+        <div
+          style={{
+            height: '32px',
+            width: '100%',
+            border: '1px solid rgb(214,212,217)',
+            marginTop: '-0.2%',
+            borderRadius: '5px',
+            textAlign: 'start',
+            fontSize: '15px',
+          }}
+        >
+          <p style={{ padding: '0px 0px 0px 14px', marginTop: '4px' }}>{salesContactNumber}</p>
+        </div>
       </Form.Item>
       // <Form.Item
       //   label={translate('Sales Person Contact')}
@@ -4530,7 +4545,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       //     placeholder=""
       //     id="salesContactNumber"
       //     // value={salesContactNumber}
-        
+
       //   />
       // </Form.Item>
     );
@@ -4695,17 +4710,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   // console.log({ additionalCost });
   const [isSubId, setSubId] = useState({});
-  console.log(isSubId)
+  console.log(isSubId);
   const [subscriptionIds, setSubscriptionIds] = useState([]);
 
-
   const [discountValue, setdiscount] = useState(0);
- 
 
   const [serviceCost, setServiceCost] = useState(initialServiceCost);
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
-  const handleCheckboxClick = (e,id) => {
+  const handleCheckboxClick = (e, id) => {
     // const { value } = e.target;
     // setSubId(prevState => {
     //   const updatedState = { ...prevState };
@@ -4717,9 +4730,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     //   updatedState[id] = value;
     //   return updatedState;
     // });
-    setSubId(id)
+    setSubId(id);
 
-    let temp = [...subscriptionIds];  
+    let temp = [...subscriptionIds];
     if (temp.includes(id)) {
       temp = temp.filter((item) => item !== id);
     } else {
@@ -4732,8 +4745,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubscriptionCount(temp.length);
     localStorage.setItem('WorkOrderSubId', id);
   };
-
- 
 
   useEffect(() => {
     const calculateCosts = () => {
@@ -4806,7 +4817,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Radio.Group
             key={matchingItem._id}
             // value={isSubId[matchingItem._id]}
-            value={ isSubId === matchingItem._id ? matchingItem._id : null} 
+            value={isSubId === matchingItem._id ? matchingItem._id : null}
             onChange={(e) => handleCheckboxClick(e, matchingItem._id)}
           >
             <Radio value={matchingItem._id}>
@@ -4820,8 +4831,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     });
     return tableData;
   };
-
- 
 
   const CalculatorFilled = () => {
     return ShowServiceList.map((element, _id) =>
@@ -4995,7 +5004,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       color: 'rgb(49,91,140)',
                       height: '105px',
                       // border: "2px solid black",
-                      overflowY: 'auto', 
+                      overflowY: 'auto',
                     }}
                   >
                     {Subitems.map((item, index) => {
@@ -5075,7 +5084,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       fontSize: '15px',
                       marginTop: '',
                       color: 'rgb(49,91,140)',
-                      
                     }}
                   >
                     {(subITotal + taxValue).toFixed(2)}
@@ -5086,7 +5094,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       fontSize: '15px',
                       marginTop: '',
                       color: 'rgb(49,91,140)',
-                   
                     }}
                   >
                     {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
@@ -5137,12 +5144,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //     // setdiscount(null);
   //   }
   // };
- 
- 
+
   const [isCustom, setIsCustom] = useState(false);
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
   const handleSelectChange = (value) => {
+
     // setadjustment(null);
     // setdiscount(null);
     setSubscriptionIds([]);
@@ -5252,7 +5259,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // localStorage.setItem('CustomItems', JSON.stringify(CustomItems));
   const [customItems, setCustomItems] = useState([]);
   const [Iscustomm, setIscustomm] = useState(false);
-
 
   localStorage.setItem('CustomItems', JSON.stringify(customItems));
 
@@ -5500,7 +5506,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select customer.',
+                message: 'Please Select Customer.',
               },
             ]}
           >
@@ -5508,7 +5514,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               entity={'client'}
               displayLabels={['name']}
               searchFields={'name,surname'}
-              onChange={handleFirstDropdownChange}
+              // onChange={handleFirstDropdownChange}
+              onChange={(value) => {
+                if (value) {
+                  handleFirstDropdownChange(value);
+                } else {
+                  handleCustomerClear();
+                }
+              }}
             />
           </Form.Item>
         </Col>
@@ -5520,7 +5533,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select customer Address.',
+                message: 'Please Select Customer Address.',
               },
             ]}
           >
@@ -5529,12 +5542,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               // loading={loading}
+              value={form.getFieldValue('clientAddress')}
               allowClear
               notFoundContent={loading ? <Spin size="small" /> : null}
+              onChange={(value) => form.setFieldsValue({ clientAddress: value })} 
             >
-          
-
-              {loading ? (
+              {/* {loading ? (
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
@@ -5544,7 +5557,45 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     {option.label}
                   </Select.Option>
                 ))
-              )}
+              )} */}
+
+
+
+              {/* {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
+                </Select.Option>
+              ) : customerAddressEvent.length === 0 ? (
+                <Select.Option key="no-address" disabled>
+                  No addresses found
+                </Select.Option>
+              ) : (
+                customerAddress.map((option) => (
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.label}
+                  </Select.Option>
+                ))
+              )} */}
+
+
+
+{loading ? (
+              <Select.Option key="loading" disabled>
+                <Spin size="small" /> Loading...
+              </Select.Option>
+            ) : customerAddress.length === 0 ? (
+              <Select.Option key="no-address" disabled>
+                No Data Found 
+              </Select.Option>
+            ) : (
+              customerAddress.map((option) => (
+                // console.log(option)
+                <Select.Option key={option._id} value={option._id}>
+                  {option.label}
+                </Select.Option>
+              ))
+            )}
+
             </Select>
           </Form.Item>
         </Col>
@@ -5556,7 +5607,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Billing Address.',
+                message: 'Please Select Billing Address.',
               },
             ]}
           >
@@ -5651,7 +5702,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Start Time.',
+                message: 'Please Select Start Time.',
               },
             ]}
           >
@@ -5665,7 +5716,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Expected Time.',
+                message: 'Please Select Expected Time.',
               },
             ]}
           >
@@ -5681,7 +5732,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Sales Person.',
+                message: 'Please Select Sales Person.',
               },
             ]}
           >
@@ -5730,7 +5781,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Lead Worker.',
+                message: 'Please Select Lead Worker.',
               },
             ]}
           >
@@ -5770,7 +5821,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Workers.',
+                message: 'Please Select Workers.',
               },
             ]}
           >
@@ -5811,7 +5862,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Service Category.',
+                message: 'Please Select Service Category.',
               },
             ]}
           >
@@ -5852,20 +5903,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 required: true,
-                message: 'Please select Service Name.',
+                message: 'Please Select Service Name.',
               },
             ]}
           >
             <Select
               style={{
                 width: '100%',
+                
               }}
               value={selectedOption}
               onChange={handleSelectChange}
+              disabled={!selectedValue} 
+              // className={!selectedValue ? 'not-allowed' : ''}
               subscriptionOneTime
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {loading ? (
+              {/* {loading ? (
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
@@ -5880,7 +5934,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     </Select.Option>
                   ))}
                 </>
-              ) : null}
+              ) : null} */}
+
+{loading ? (
+              <Select.Option key="loading" disabled>
+                <Spin size="small" /> Loading...
+              </Select.Option>
+            ) : (
+              selectedValue && (
+                <>
+                  <Select.Option value="custom" onClick={() => setIsCustom(true)}>
+                    Custom Service (One Time)
+                  </Select.Option>
+                  {ShowServiceList?.map((option) => (
+                    <Select.Option key={option._id} value={option._id}>
+                      {option.name}
+                    </Select.Option>
+                  ))}
+                </>
+              )
+            )}
             </Select>
           </Form.Item>
         </Col>
@@ -6007,99 +6080,120 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 )}
               </Form.List>
             </Collapse.Panel>
+
             {productList?.map((mainData, i) => (
               <Collapse.Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                    {/* Column headers */}
+                    <Col className="gutter-row" span={4}>
+                      <p>{translate('Sub-Item')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
+                      <p>{translate('Price')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={3}>
+                      <p>{translate('Quantity')}</p>{' '}
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
+                      <p>{translate('Total')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
+                      <p>{translate('Remarks')}</p>
+                    </Col>
                   </Row>
+
                   {mainData.products?.map((data, index) => (
-                    <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
-                      <Col className="gutter-row mt-2">
-                        <Checkbox
-                          onChange={() => {
-                            ItemHandler(data);
-                          }}
-                        />
-                      </Col>
-                      <Col className="gutter-row" span={4}>
-                        <Form.Item
-                          name={['items', index, 'item']}
-                          initialValue={data._id}
-                          rules={[
-                            {
-                              validator: (_, value) => {
-                                if (value || data.name) {
-                                  return Promise.resolve();
-                                }
-                                return Promise.reject(new Error('Item name is required'));
+                    <>
+                      <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
+                        <Col className="gutter-row mt-2">
+                          <Checkbox
+                            onChange={() => {
+                              ItemHandler(data);
+                            }}
+                          />
+                        </Col>
+                        <Col className="gutter-row" span={4}>
+                          <Form.Item
+                            name={['items', index, 'item']}
+                            initialValue={data._id}
+                            rules={[
+                              {
+                                validator: (_, value) => {
+                                  if (value || data.name) {
+                                    return Promise.resolve();
+                                  }
+                                  return Promise.reject(new Error('Item name is required'));
+                                },
                               },
-                            },
-                          ]}
-                        >
-                          <span>{data.name}</span>
-                        </Form.Item>
-                      </Col>
-                      <Col className="gutter-row" span={4}>
-                        <Form.Item
-                          // name={['items', index, 'price']}
-                          initialValue={prices[data._id]}
-                        >
-                          <InputNumber
-                            className="moneyInput"
-                            onChange={updatePrice}
-                            min={0}
-                            controls={false}
-                            addonAfter={
-                              money.currency_position === 'after'
-                                ? money.currency_symbol
-                                : undefined
-                            }
-                            addonBefore={
-                              money.currency_position === 'before'
-                                ? money.currency_symbol
-                                : undefined
-                            }
-                            value={prices[data._id]}
-                            readOnly
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col className="gutter-row" span={3}>
-                        <Form.Item
-                          // name={['items', index, 'quantity']}
-                          initialValue={1}
-                        >
-                          <InputNumber
-                            style={{ width: '100%' }}
-                            min={0}
-                            defaultValue={1}
-                            value={data.quantity}
-                            onChange={(value) => updateQuantity(data._id, value)}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col className="gutter-row" span={4}>
-                        <Form.Item name={['items', index, 'total']} initialValue={totals[data._id]}>
-                          <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
-                        </Form.Item>
-                      </Col>
-                      <Col className="gutter-row" span={7}>
-                        <Form.Item
-                        //  name={[`items`, `${index}`, 'remarks']}
-                        >
-                          <Input
-                            placeholder=" Remarks for Workorder"
-                            // defaultValue={data.description}
-                            // onChange={(e) => {
-                            //   const remarks = e.target.value;
-                            //   ItemHandler(data, remarks);
-                            // }}
-                            onChange={(e) => handleRemarkChange(data._id, e.target.value)}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
+                            ]}
+                          >
+                            <span>{data.name}</span>
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={4}>
+                          <Form.Item
+                            // name={['items', index, 'price']}
+                            initialValue={prices[data._id]}
+                          >
+                            <InputNumber
+                              className="moneyInput"
+                              onChange={updatePrice}
+                              min={0}
+                              controls={false}
+                              addonAfter={
+                                money.currency_position === 'after'
+                                  ? money.currency_symbol
+                                  : undefined
+                              }
+                              addonBefore={
+                                money.currency_position === 'before'
+                                  ? money.currency_symbol
+                                  : undefined
+                              }
+                              value={prices[data._id]}
+                              readOnly
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={3}>
+                          <Form.Item
+                            // name={['items', index, 'quantity']}
+                            initialValue={1}
+                          >
+                            <InputNumber
+                              style={{ width: '100%' }}
+                              min={0}
+                              defaultValue={1}
+                              value={data.quantity}
+                              onChange={(value) => updateQuantity(data._id, value)}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={4}>
+                          <Form.Item
+                            name={['items', index, 'total']}
+                            initialValue={totals[data._id]}
+                          >
+                            <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={7}>
+                          <Form.Item
+                          //  name={[`items`, `${index}`, 'remarks']}
+                          >
+                            <Input
+                              placeholder=" Remarks for Workorder"
+                              // defaultValue={data.description}
+                              // onChange={(e) => {
+                              //   const remarks = e.target.value;
+                              //   ItemHandler(data, remarks);
+                              // }}
+                              onChange={(e) => handleRemarkChange(data._id, e.target.value)}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    </>
                   ))}
                 </div>
               </Collapse.Panel>
@@ -6198,7 +6292,21 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               <Collapse.Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                    {/* Column headers */}
+                    <Col className="gutter-row" span={4}>
+                      <p>{translate('Sub-Item')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
+                      <p>{translate('Price')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={3}>
+                      <p>{translate('Quantity')}</p>{' '}
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
+                      <p>{translate('Total')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
+                      <p>{translate('Remarks')}</p>
+                    </Col>
                   </Row>
                   {mainData.products?.map((data, index) => (
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
@@ -6483,7 +6591,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           lineHeight: '2.3',
                         }}
                       >
-                        <li style={{ borderBottom: '2px solid #fff', fontSize: '16px',  height:"90px" }}>
+                        <li
+                          style={{
+                            borderBottom: '2px solid #fff',
+                            fontSize: '16px',
+                            height: '90px',
+                          }}
+                        >
                           Service Items Included(per workorder)
                         </li>
                         <li style={{ borderBottom: '2px solid #fff', fontSize: '16px' }}>

@@ -237,15 +237,29 @@ export default function ItemRow({ key, field, remove, current = null, response, 
     setTotal(currentTotal);
   }, [price, quantity]);
 
+  // const validateNumber = (_, value) => {
+  //   if (!value) {
+  //     return Promise.resolve();
+  //   }
+  //   if (!/^\d{1,10}$/.test(value)) {
+  //     return Promise.reject(new Error('Price must be at most 10 digits.'));
+  //   }
+  //   return Promise.resolve();
+  // };
+
   const validateNumber = (_, value) => {
-    if (!value) {
+    if (value === undefined || value === null) {
       return Promise.resolve();
     }
-    if (!/^\d{1,10}$/.test(value)) {
+    if (typeof value !== 'number'  || isNaN(value)) {
+      return Promise.reject(new Error('Only numerical values are accepted.'));
+    }
+    if (!/^\d{1,10}$/.test(value.toString())) {
       return Promise.reject(new Error('Price must be at most 10 digits.'));
     }
     return Promise.resolve();
   };
+
   const validateNumberqt = (_, value) => {
     if (!value) {
       return Promise.resolve();
@@ -265,7 +279,7 @@ export default function ItemRow({ key, field, remove, current = null, response, 
           <Form.Item
             name={[field.name, 'item']}
             rules={[
-              { max: 15, message: 'Item name must be at most 15 characters' },
+              { max: 15, message: 'Name can have a maximum of 10 characters.' },
             ]}
             
             >
@@ -280,7 +294,6 @@ export default function ItemRow({ key, field, remove, current = null, response, 
             },
           ]}
           >
-
             <InputNumber
               className="moneyInput"
               onChange={(value) => updatePrice(value, `CI-${field.key}`)}
