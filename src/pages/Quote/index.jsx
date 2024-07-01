@@ -15,6 +15,7 @@ export default function Quote() {
     displayLabels: ['name'],
     searchFields: 'name',
   };
+
   const deleteModalLabels = [];//['number', 'client.name'];
   const dataTableColumns = [
     {
@@ -54,18 +55,20 @@ export default function Quote() {
     // },
     {
       title: translate('grand_total'),
-      dataIndex: 'grandTotal',
-      onCell: () => {
-        return {
-          style: {
-            textAlign: 'right',
-            whiteSpace: 'nowrap',
-          },
-        };
+      dataIndex: 'serviceCost',
+      onCell: () => ({
+        style: {
+          textAlign: 'right',
+          whiteSpace: 'nowrap',
+        },
+      }),
+      render: (serviceCost, record) => {
+        // Assuming serviceCost and additionalCost are keys in your data record
+        const { additionalCost } = record;
+        const total = additionalCost?.totalPackageCost + serviceCost?.totalPackageCost;
+        return moneyFormatter({ amount: total });
       },
-      render: (total) => moneyFormatter({ amount: total }),
     },
-
     // {
     //   title: translate('Status'),
     //   dataIndex: 'status',
