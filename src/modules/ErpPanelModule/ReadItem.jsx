@@ -106,7 +106,6 @@ export default function ReadItem({ config, selectedItem }) {
   console.log(currentErp);
   const [client, setClient] = useState({});
 
-
   useEffect(() => {
     if (currentResult) {
       const { items, invoice, customItems, ...others } = currentResult;
@@ -238,48 +237,50 @@ export default function ReadItem({ config, selectedItem }) {
         //     </Tag>
         //   ),
         // ]}
-        extra={[
-          // <Button
-          //   key={`${uniqueId()}`}
-          //   onClick={() => {
-          //     navigate(`/${entity.toLowerCase()}`);
-          //   }}
-          //   icon={<CloseCircleOutlined />}
-          // >
-          //   {translate('Close')}
-          // </Button>,
-          // <Button
-          //   key={`${uniqueId()}`}
-          //   onClick={() => {
-          //     window.open(
-          //       `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
-          //       '_blank'
-          //     );
-          //   }}
-          //   icon={<FilePdfOutlined />}
-          // >
-          //   {translate('Download PDF')}
-          // </Button>,
-          // <Button
-          //   key={`${uniqueId()}`}
-          //   loading={mailInProgress}
-          //   onClick={() => {
-          //     send(currentErp._id);
-          //   }}
-          //   icon={<MailOutlined />}
-          // >
-          //   {translate('Send by Email')}
-          // </Button>,
-          // <Button
-          //   key={`${uniqueId()}`}
-          //   onClick={() => {
-          //     dispatch(erp.convert({ entity, id: currentErp._id }));
-          //   }}
-          //   icon={<RetweetOutlined />}
-          // >
-          //   {translate('Convert to Invoice')}
-          // </Button>,
-        ]}
+        extra={
+          [
+            // <Button
+            //   key={`${uniqueId()}`}
+            //   onClick={() => {
+            //     navigate(`/${entity.toLowerCase()}`);
+            //   }}
+            //   icon={<CloseCircleOutlined />}
+            // >
+            //   {translate('Close')}
+            // </Button>,
+            // <Button
+            //   key={`${uniqueId()}`}
+            //   onClick={() => {
+            //     window.open(
+            //       `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
+            //       '_blank'
+            //     );
+            //   }}
+            //   icon={<FilePdfOutlined />}
+            // >
+            //   {translate('Download PDF')}
+            // </Button>,
+            // <Button
+            //   key={`${uniqueId()}`}
+            //   loading={mailInProgress}
+            //   onClick={() => {
+            //     send(currentErp._id);
+            //   }}
+            //   icon={<MailOutlined />}
+            // >
+            //   {translate('Send by Email')}
+            // </Button>,
+            // <Button
+            //   key={`${uniqueId()}`}
+            //   onClick={() => {
+            //     dispatch(erp.convert({ entity, id: currentErp._id }));
+            //   }}
+            //   icon={<RetweetOutlined />}
+            // >
+            //   {translate('Convert to Invoice')}
+            // </Button>,
+          ]
+        }
         style={{
           padding: '20px 0px',
         }}
@@ -831,10 +832,17 @@ export default function ReadItem({ config, selectedItem }) {
         <Divider style={{ marginTop: '1%' }} />
       </Row>
 
-      {itemslist.map((item) => (
+      {/* {itemslist.map((item) => (
         <Item key={item._id} item={item}></Item>
-      ))}
+      ))} */}
+      {itemslist.length > 0 ? (
+        itemslist.map((item) => <Item key={item._id} item={item}></Item>)
+      ) : (
+        <p style={{ textAlign: 'center', fontSize: '20px' }}>No Selected Items Found!</p>
+      )}
 
+      {itemslist.length === 0 && <Divider dashed style={{ marginTop: '1%' }} />}
+      
       {currentErp.customItems.map((item) => (
         <Row gutter={[12, 0]} key={item._id}>
           <Col className="gutter-row" span={11}>
@@ -884,11 +892,11 @@ export default function ReadItem({ config, selectedItem }) {
         }}
       >
         <Row gutter={[12, -5]}>
-          <Col className="gutter-row" span={17}>
+          <Col className="gutter-row" span={13}>
             <p style={{ fontSize: '17px' }}>{translate('Item Total')} :</p>
           </Col>
 
-          <Col className="gutter-row" span={7}>
+          <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.itemTotal,
@@ -896,13 +904,13 @@ export default function ReadItem({ config, selectedItem }) {
             </p>
           </Col>
 
-          <Col className="gutter-row" span={17}>
+          <Col className="gutter-row" span={13}>
             <p style={{ fontSize: '17px' }}>
               {translate('Discount')} ({currentErp.discount}%) :
             </p>
           </Col>
 
-          <Col className="gutter-row" span={7}>
+          <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.discount,
@@ -910,11 +918,11 @@ export default function ReadItem({ config, selectedItem }) {
             </p>
           </Col>
 
-          <Col className="gutter-row" span={17}>
+          <Col className="gutter-row" span={13}>
             <p style={{ fontSize: '17px' }}>{translate('sub total')} :</p>
           </Col>
 
-          <Col className="gutter-row" span={7}>
+          <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.subTotal,
@@ -922,12 +930,12 @@ export default function ReadItem({ config, selectedItem }) {
             </p>
           </Col>
 
-          <Col className="gutter-row" span={17}>
+          <Col className="gutter-row" span={13}>
             <p style={{ fontSize: '17px' }}>
               {translate('Tax')} ({currentErp.taxPercentage}%) :
             </p>
           </Col>
-          <Col className="gutter-row" span={7}>
+          <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.tax,
@@ -935,10 +943,10 @@ export default function ReadItem({ config, selectedItem }) {
             </p>
           </Col>
 
-          <Col className="gutter-row" span={17}>
+          <Col className="gutter-row" span={13}>
             <p style={{ fontSize: '17px' }}>{translate('Total Item Cost')} :</p>
           </Col>
-          <Col className="gutter-row" span={7}>
+          <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
               {moneyFormatter({
                 amount: currentErp.additionalCost.totalPackageCost,
@@ -962,8 +970,6 @@ export default function ReadItem({ config, selectedItem }) {
       </Row> */}
       <Divider />
 
-
-
       <h2 style={{ marginTop: '5%' }}>Total Workorder Cost</h2>
       <Divider />
 
@@ -973,7 +979,7 @@ export default function ReadItem({ config, selectedItem }) {
             <strong>{translate('Additonal Cost')}</strong>
           </p>
         </Col>
-      
+
         <Col className="gutter-row" span={12}>
           <p
             style={{
@@ -981,9 +987,9 @@ export default function ReadItem({ config, selectedItem }) {
               fontSize: '18px',
             }}
           >
-        {moneyFormatter({
-                amount: currentErp.additionalCost.totalPackageCost,
-              })}
+            {moneyFormatter({
+              amount: currentErp.additionalCost.totalPackageCost,
+            })}
           </p>
         </Col>
         <Divider dashed style={{ marginTop: '0%' }} />
@@ -995,7 +1001,7 @@ export default function ReadItem({ config, selectedItem }) {
             <strong>{translate('Service Cost')}</strong>
           </p>
         </Col>
-      
+
         <Col className="gutter-row" span={12}>
           <p
             style={{
@@ -1003,23 +1009,29 @@ export default function ReadItem({ config, selectedItem }) {
               fontSize: '18px',
             }}
           >
-             {moneyFormatter({
-                amount:currentErp.serviceCost.totalPackageCost,
-              })}
-     
+            {moneyFormatter({
+              amount: currentErp.serviceCost.totalPackageCost,
+            })}
           </p>
         </Col>
         {/* <Divider  dashed  /> */}
       </Row>
 
-
-      <Row gutter={[12, 0]} style={{ marginTop: '13px', backgroundColor:"rgb(141,40,221)", height:"68px", color:"white" }}>
+      <Row
+        gutter={[12, 0]}
+        style={{
+          marginTop: '13px',
+          backgroundColor: 'rgb(141,40,221)',
+          height: '68px',
+          color: 'white',
+        }}
+      >
         <Col className="gutter-row" span={11}>
           <p style={{ fontSize: '21px' }}>
             <strong>{translate('Grand Total')}</strong>
           </p>
         </Col>
-      
+
         <Col className="gutter-row" span={12}>
           <p
             style={{
@@ -1034,12 +1046,6 @@ export default function ReadItem({ config, selectedItem }) {
         </Col>
         <Divider style={{ marginTop: '0%' }} />
       </Row>
-
-
-
-
-
-
 
       <h2 style={{ marginTop: '5%' }}>Basic Attendence Details</h2>
       <Row className="gutter-row">
