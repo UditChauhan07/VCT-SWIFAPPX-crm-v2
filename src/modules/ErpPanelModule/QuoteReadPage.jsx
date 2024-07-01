@@ -118,9 +118,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
     // console.log(Item_Total )
 
 
-
-
-    useEffect(() => {
+useEffect(() => {
         if (currentResult) {
             const { items, invoice, customItems, ...others } = currentResult;
 
@@ -220,9 +218,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
     const serviceCost = currentErp.serviceCost.totalPackageCost;
     const grandTotal = additionalCost + serviceCost;
 
-
-
-    return (
+ return (
         <>
             <PageHeader
                 onBack={() => {
