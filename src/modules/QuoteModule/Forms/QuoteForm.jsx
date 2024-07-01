@@ -419,6 +419,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
       {
         required: true,
+        message: 'Please select Sales Person Contact .',
       },
     ]}
       initialValue={salesContactNumber}
@@ -974,7 +975,7 @@ const initialServiceCost = {
               // }
               // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitwm))
               return (
-                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none'  }}>
                   <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>{subscription.name}:{subscriptions.subscription.name}</li>
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
@@ -1035,8 +1036,11 @@ const CalculatorFilledItem = () => {
                     style={{
                       borderBottom: '1px solid rgb(217,217,217)',
                       fontSize: '15px',
-                      marginTop: '-1px',
+                      marginTop: '-22px',
                       color: 'rgb(49,91,140)',
+                      height: '105px',
+                      // border: "2px solid black",
+                      overflowY: 'auto',
                     }}
                   >
                     {Subitems.map((item, index) => {
@@ -1258,7 +1262,7 @@ const CalculatorFilledItem = () => {
             rules={[
               {
                 required: true,
-                message: 'Please Select customer.',
+                message: 'Please Select Customer.',
               },
             ]}
           >
@@ -1279,7 +1283,7 @@ const CalculatorFilledItem = () => {
             rules={[
               {
                 required: true,
-                message: 'Please Select customer Address.',
+                message: 'Please Select Customer Address.',
               },
             ]}
           >
@@ -1646,16 +1650,16 @@ const CalculatorFilledItem = () => {
                     <Col className="gutter-row" span={4}>
                       <p>{translate('Sub-Item')}</p>
                     </Col>
-                    <Col className="gutter-row" span={4}>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
                       <p>{translate('Price')}</p>
                     </Col>
                     <Col className="gutter-row" span={3}>
                       <p>{translate('Quantity')}</p>{' '}
                     </Col>
-                    <Col className="gutter-row" span={4}>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
                       <p>{translate('Total')}</p>
                     </Col>
-                    <Col className="gutter-row" span={6}>
+                    <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
                       <p>{translate('Remarks')}</p>
                     </Col>
                   </Row>
@@ -1846,16 +1850,16 @@ const CalculatorFilledItem = () => {
                     <Col className="gutter-row" span={4}>
                       <p>{translate('Sub-Item')}</p>
                     </Col>
-                    <Col className="gutter-row" span={4}>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
                       <p>{translate('Price')}</p>
                     </Col>
                     <Col className="gutter-row" span={3}>
                       <p>{translate('Quantity')}</p>{' '}
                     </Col>
-                    <Col className="gutter-row" span={4}>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
                       <p>{translate('Total')}</p>
                     </Col>
-                    <Col className="gutter-row" span={6}>
+                    <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
                       <p>{translate('Remarks')}</p>
                     </Col>
                   </Row>
@@ -2072,16 +2076,27 @@ const CalculatorFilledItem = () => {
       
       </Row>
 
-      {subscriptionIds.length > 0 && <>
+      {subscriptionIds.length > 0 && 
+      <>
         <Divider dashed />
         <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
           {translate('Selected Quotation Billing Details')}
         </Col>
-        <table style={{ width: "100%", height: "220px", marginTop: "3%" }}>
-          <tbody >
-            <tr >
+        <table style={{
+           width: "100%", height: "220px", marginTop: "3%", }}>
+          
+          <tbody style={{
+            // maxWidth: '1000px',
+            // overflowX: 'auto',  
+            // display: 'block',  
+          }}> 
+          <tr style={{ 
+              // maxWidth: '1000px',
+              // overflowX: 'auto',  
+              // display: 'block',   
+          }}>
               <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
-                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1", borderRight: 'none' }}>
+                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1", }}>
                   <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Workorder For</li>
                   <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
                   <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
@@ -2093,14 +2108,31 @@ const CalculatorFilledItem = () => {
               </th>
               {CalculatorFilled()}
             </tr>
-
+         
+          </tbody>
+        </table>
             {Subitems.length > 0 &&
               <>
-                <tr>
+              <table style={{
+                width: "100%", height: "220px", marginTop: "3%",
+              }}>
+
+                <tbody style={{
+                  // maxWidth: '1000px',
+                  // overflowX: 'auto',  
+                  // display: 'block',  
+                }}> 
+          <tr style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}>
                   {translate('Additional Service Items')}
                 </tr>
                 {/* <tr>Additional Service Items</tr> */}
-                <tr>
+              <tr 
+              // style={{
+              //   maxWidth: '1000px',
+              //   overflowX: 'auto',
+              //   display: 'block',
+              // }}
+              >
                   <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
                     <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
                       <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }
@@ -2115,10 +2147,13 @@ const CalculatorFilledItem = () => {
                   </th>
                   {CalculatorFilledItem()}
                 </tr>
+            </tbody>
+          </table>
               </>
+           
             }
-          </tbody>
-        </table>
+        
+        
       </>}
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
