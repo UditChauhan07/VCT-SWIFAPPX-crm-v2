@@ -53,7 +53,8 @@ function Sidebar({ collapsible, isMobile = false }) {
   const [currentPath, setCurrentPath] = useState(location.pathname.slice(1));
 
   const translate = useLanguage();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+  
 
   const items = [
     {
