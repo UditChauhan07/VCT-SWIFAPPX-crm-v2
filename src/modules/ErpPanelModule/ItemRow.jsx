@@ -219,26 +219,12 @@ export default function ItemRow({
       }
     }
   }, [current]);
-
+ console.log();
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
     setTotal(currentTotal);
   }, [price, quantity]);
- const [errorMessage, setErrorMessage]= useState()
-  const handleKeyPress = (event) => {
-    const charCode = event.which ? event.which : event.keyCode;
-    // Allow decimal point (.) and digits (0-9)
-    if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-      event.preventDefault();
-      setErrorMessage('Only numeric values are accepted');
-    } else {
-      setErrorMessage(''); // Clear error message if valid character
-    }
-  }
-  const numericFormatter = (value) => {
-    // Remove non-numeric characters
-    return value.replace(/[^0-9.]/g, '');
-  };
+
 
   // const validateNumber = (_, value) => {
   //   if (!value) {
@@ -300,6 +286,7 @@ export default function ItemRow({
   const numericFormatter = (value) => {
     return value.replace(/[^0-9.]/g, '');
   };
+   
 
   return (
     <>
@@ -335,8 +322,7 @@ export default function ItemRow({
               onKeyPress={handleKeyPress}
               min={0}
               // formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
-              formatter={numericFormatter}
-              onKeyPress={handleKeyPress}
+      
               controls={false}
               addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
               addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
