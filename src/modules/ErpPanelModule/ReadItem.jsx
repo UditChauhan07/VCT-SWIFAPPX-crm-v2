@@ -620,7 +620,8 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.servicePerWO}
+                  {/* {currentErp.serviceCost.servicePerWO} */}
+                  { currentErp.serviceCost &&   currentErp.serviceCost.servicePerWO ? currentErp.serviceCost.servicePerWO : '-'}
                   <br></br>
                 </p>{' '}
               </Col>
@@ -646,7 +647,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.discount}
+                  {currentErp.serviceCost &&  currentErp.serviceCost.discount ? currentErp.serviceCost.discount: '-'}
                   <br></br>
                 </p>
               </Col>
@@ -657,7 +658,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.subTotal}
+                  {currentErp.serviceCost &&  currentErp.serviceCost.subTotal ? currentErp.serviceCost.subTotal: '-'}
                   <br></br>
                 </p>
               </Col>
@@ -668,7 +669,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.tax}
+                {currentErp.serviceCost && currentErp.serviceCost.tax ? currentErp.serviceCost.tax : "-"}
                   <br></br>
                 </p>
               </Col>
@@ -680,7 +681,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.totalPackageCost}
+                {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? currentErp.serviceCost.totalPackageCost :"-" }
                   <br></br>
                 </p>
               </Col>
@@ -898,9 +899,10 @@ export default function ReadItem({ config, selectedItem }) {
 
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.itemTotal,
-              })}
+              })} */}
+              {currentErp.additionalCost &&  currentErp.additionalCost.itemTotal ? moneyFormatter({ amount: currentErp.additionalCost.itemTotal }) : '-'}
             </p>
           </Col>
 
@@ -912,9 +914,11 @@ export default function ReadItem({ config, selectedItem }) {
 
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.discount,
-              })}
+              })} */}
+
+{currentErp.additionalCost &&  currentErp.additionalCost.discount ? moneyFormatter({ amount: currentErp.additionalCost.discount }) : '-'}
             </p>
           </Col>
 
@@ -924,9 +928,10 @@ export default function ReadItem({ config, selectedItem }) {
 
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.subTotal,
-              })}
+              })} */}
+              {currentErp.additionalCost &&  currentErp.additionalCost.subTotal ? moneyFormatter({ amount: currentErp.additionalCost.subTotal }) : '-'}
             </p>
           </Col>
 
@@ -937,9 +942,10 @@ export default function ReadItem({ config, selectedItem }) {
           </Col>
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.tax,
-              })}
+              })} */}
+              {currentErp.additionalCost &&  currentErp.additionalCost.tax ? moneyFormatter({ amount: currentErp.additionalCost.tax }) : '-'}
             </p>
           </Col>
 
@@ -948,9 +954,10 @@ export default function ReadItem({ config, selectedItem }) {
           </Col>
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.totalPackageCost,
-              })}
+              })} */}
+               {currentErp.additionalCost &&  currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : '-'}
             </p>
           </Col>
         </Row>
@@ -987,9 +994,10 @@ export default function ReadItem({ config, selectedItem }) {
               fontSize: '18px',
             }}
           >
-            {moneyFormatter({
+            {/* {moneyFormatter({
               amount: currentErp.additionalCost.totalPackageCost,
-            })}
+            })} */}
+            {currentErp.additionalCost &&  currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : '-'}
           </p>
         </Col>
         <Divider dashed style={{ marginTop: '0%' }} />
@@ -1009,9 +1017,10 @@ export default function ReadItem({ config, selectedItem }) {
               fontSize: '18px',
             }}
           >
-            {moneyFormatter({
+            {/* {moneyFormatter({
               amount: currentErp.serviceCost.totalPackageCost,
-            })}
+            })} */}
+                {currentErp.additionalCost &&  currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : '-'}
           </p>
         </Col>
         {/* <Divider  dashed  /> */}
