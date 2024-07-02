@@ -430,6 +430,7 @@ export default function CreateItem({ config, CreateForm }) {
 
 
       if (entity === "quote") {
+
                 const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || [];
                 const WorkOrderstoredId = localStorage.getItem('Subscriptions');
                 console.log(storedSubscriptions);
@@ -519,6 +520,7 @@ export default function CreateItem({ config, CreateForm }) {
                  console.log(fieldData);
                 fieldsValue = fieldData;
               }
+
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     }
   };
