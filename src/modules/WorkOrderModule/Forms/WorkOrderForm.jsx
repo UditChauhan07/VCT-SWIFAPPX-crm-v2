@@ -5542,10 +5542,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               // loading={loading}
-              value={form.getFieldValue('clientAddress')}
+              // value={form.getFieldValue('clientAddress')}
               allowClear
+             
               notFoundContent={loading ? <Spin size="small" /> : null}
               onChange={(value) => form.setFieldsValue({ clientAddress: value })} 
+              value={
+                customerAddress.length === 0
+                  ? undefined
+                  : form.getFieldValue('clientAddress') || ""
+              }
             >
               {/* {loading ? (
                 <Select.Option key="loading" disabled>
@@ -5579,7 +5585,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
 
-{loading ? (
+            {loading ? (
               <Select.Option key="loading" disabled>
                 <Spin size="small" /> Loading...
               </Select.Option>
@@ -5737,11 +5743,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
+                showSearch
               style={{
                 width: '100%',
               }}
+               optionFilterProp="children"
               onChange={(event) => setSelectedSalesPerson(event)}
-              notFoundContent={loading ? <Spin size="small" /> : null}
+              // notFoundContent={loading ? <Spin size="small" /> : null} 
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              filterSort={(optionA, optionB) =>
+                (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+              } 
             >
               {loading ? (
                 <Select.Option key="loading" disabled>
@@ -5786,11 +5798,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
+               showSearch
+                optionFilterProp="children"
+                notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+                filterSort={(optionA, optionB) =>
+                  (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+                } 
               style={{
                 width: '100%',
               }}
               onChange={(event) => setWorkers(event)}
-              notFoundContent={loading ? <Spin size="small" /> : null}
+              // notFoundContent={loading ? <Spin size="small" /> : null}
             >
               {loading ? (
                 <Select.Option key="loading" disabled>
@@ -6030,7 +6048,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
                 </Col>
                 <Col className="gutter-row" span={4}>
-                  <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
+                  <p style={{ marginLeft: '20px' }}>{translate('Total')}</p>
                 </Col>
                 <Col className="gutter-row" span={6}>
                   <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
