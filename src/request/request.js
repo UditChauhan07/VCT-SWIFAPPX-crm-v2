@@ -11,21 +11,32 @@ axios.defaults.withCredentials = true;
 
 const getToken = () => {
   let data = JSON.parse(localStorage.getItem('auth'));
-  let token = data.token;
+  let token = data ? data.token : null;
 
   return token;
 };
 
 // Adding a request interceptor
+
 axios.interceptors.request.use(
   (config) => {
     const token = getToken();
-    if (token) {
+    console.log({ token });
+
+    // List of routes to exclude
+    const excludedRoutes = ['/login', '/register'];
+
+    // Check if the request URL is in the excluded routes
+    const isExcludedRoute = excludedRoutes.some((route) => config.url.includes(route));
+
+    if (token && !isExcludedRoute) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => {
+    console.log({ ll: error });
     return Promise.reject(error);
   }
 );
