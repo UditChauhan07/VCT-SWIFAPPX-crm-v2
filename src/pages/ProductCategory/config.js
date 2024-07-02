@@ -18,5 +18,7 @@ export const fields = {
   enabled: {
     type: 'boolean',
     label: 'Status',
+    // required: true,
+
   },
 };

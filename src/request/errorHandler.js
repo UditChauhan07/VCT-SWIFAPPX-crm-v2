@@ -4,7 +4,7 @@ import codeMessage from './codeMessage';
 const errorHandler = (error) => {
   const { response } = error;
 
-  // console.log({response});
+  console.log({ response });
 
   if (response.data && response.data.jwtExpired) {
     const result = window.localStorage.getItem('auth');

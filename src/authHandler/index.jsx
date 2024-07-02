@@ -5,10 +5,9 @@ function AuthHandler() {
     useEffect(() => {
         let data = getLocalUserData;
         let user = data.current
+        let token = data.token
         let user_id = user._id
-        // let data = JSON.parse(localStorage.getItem('auth'))
-        GetAdminDataHandler({ user_id }).then((res) => {
-            // console.log({ user_id: res.result });
+        GetAdminDataHandler({ token, user_id }).then((res) => {
             if (res.result) {
                 data.current = res.result
                 localStorage.setItem('auth', JSON.stringify(data));

@@ -104,7 +104,7 @@ export default function CreateItem({ config, CreateForm }) {
         navigate(`/${entity.toLowerCase()}/read/${result._id}`);
       }
     }
-    return () => {};
+    return () => { };
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
@@ -184,8 +184,8 @@ export default function CreateItem({ config, CreateForm }) {
           startTime: fieldsValue.startTime,
           endTime: fieldsValue.endTime,
         }));
-  
-      
+
+
         const fielduser = [Leader, ...Worker];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
@@ -208,21 +208,21 @@ export default function CreateItem({ config, CreateForm }) {
         let submodule = localStorage.getItem('WorkOrderSubId');
 
         let MyItems = {};
-       
+
         let Items = localStorage.getItem('myItems');
 
         if (Items) {
           MyItems = JSON.parse(Items);
         }
-       
-             
+
+
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
-       
+
         const subsdata = JSON.parse(WorkOrderstoredId);
-        
+
 
         const subFinalData = subsdata[0];
-       
+
 
         // const serviceCost = firstItem.serviceCost;
         // const subscription = firstItem.subscription;
@@ -234,22 +234,22 @@ export default function CreateItem({ config, CreateForm }) {
           // subModule: subModule,
         };
         const Tax = localStorage.getItem('TaxPercentage');
-    
+
         const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
-    
+
         const CustomItemData = Customitem.map(item => ({
           item: item.name,
           quantity: item.qty,
           price: item.price,
           total: item.total,
           remarks: item.remarks
-      }));
-   
-      const isCustommString = localStorage.getItem('IssCustomm');
-      const isCustomm = JSON.parse(isCustommString);
+        }));
 
-      const SPC = localStorage.getItem('Salespersoncontact');
-      const  SalesPersonContact= JSON.parse(SPC);
+        const isCustommString = localStorage.getItem('IssCustomm');
+        const isCustomm = JSON.parse(isCustommString);
+
+        const SPC = localStorage.getItem('Salespersoncontact');
+        const SalesPersonContact = JSON.parse(SPC);
 
         let Data = {
           client: fieldsValue.client,
@@ -257,7 +257,7 @@ export default function CreateItem({ config, CreateForm }) {
           billingAddress: fieldsValue.billingAddress,
           sendworkorderEmail: fieldsValue.sendQuotationEmail,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact:SalesPersonContact,
+          salesPersonContact: SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,
@@ -271,7 +271,7 @@ export default function CreateItem({ config, CreateForm }) {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
           },
-          subscription: subFinalData.subscription,           
+          subscription: subFinalData.subscription,
           // subModule: subFinalData.subModule,
           fieldUsers: fielduser,
           customService: {
@@ -319,8 +319,8 @@ export default function CreateItem({ config, CreateForm }) {
           startTime: fieldsValue.startTime,
           endTime: fieldsValue.endTime,
         }));
-  
-      
+
+
         const fielduser = [Leader, ...Worker];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
@@ -343,21 +343,21 @@ export default function CreateItem({ config, CreateForm }) {
         let submodule = localStorage.getItem('WorkOrderSubId');
 
         let MyItems = {};
-       
+
         let Items = localStorage.getItem('myItems');
 
         if (Items) {
           MyItems = JSON.parse(Items);
         }
-       
-             
+
+
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
-       
+
         const subsdata = JSON.parse(WorkOrderstoredId);
-        
+
 
         const subFinalData = subsdata[0];
-       
+
 
         // const serviceCost = firstItem.serviceCost;
         // const subscription = firstItem.subscription;
@@ -369,19 +369,19 @@ export default function CreateItem({ config, CreateForm }) {
           // subModule: subModule,
         };
         const Tax = localStorage.getItem('TaxPercentage');
-    
+
         const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
-    
+
         const CustomItemData = Customitem.map(item => ({
           item: item.name,
           quantity: item.qty,
           price: item.price,
           total: item.total,
           remarks: item.remarks
-      }));
-   
-      const isCustommString = localStorage.getItem('IssCustomm');
-      const isCustomm = JSON.parse(isCustommString);
+        }));
+
+        const isCustommString = localStorage.getItem('IssCustomm');
+        const isCustomm = JSON.parse(isCustommString);
 
         let Data = {
           client: fieldsValue.client,
@@ -403,7 +403,7 @@ export default function CreateItem({ config, CreateForm }) {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
           },
-          subscription: subFinalData.subscription,           
+          subscription: subFinalData.subscription,
           // subModule: subFinalData.subModule,
           fieldUsers: fielduser,
           customService: {
@@ -430,7 +430,6 @@ export default function CreateItem({ config, CreateForm }) {
 
 
       if (entity === "quote") {
-           
                 const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || [];
                 const WorkOrderstoredId = localStorage.getItem('Subscriptions');
                 console.log(storedSubscriptions);
@@ -520,8 +519,6 @@ export default function CreateItem({ config, CreateForm }) {
                  console.log(fieldData);
                 fieldsValue = fieldData;
               }
-
-
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     }
   };
