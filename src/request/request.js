@@ -1,14 +1,37 @@
 import axios from 'axios';
 import { API_BASE_URL } from '@/config/serverApiConfig';
-
 import errorHandler from './errorHandler';
 import successHandler from './successHandler';
-import { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
+// import { useEffect, useState } from 'react'
+// import { useParams } from 'react-router-dom'
 
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
-// let { id } = useParams();
+// let { id } = useParams()
+
+let data = JSON.parse(localStorage.getItem('auth'));
+let token = data.token;
+
+const getToken = () => {
+  let data = JSON.parse(localStorage.getItem('auth'));
+  let token = data.token;
+
+  return token;
+};
+
+// Adding a request interceptor
+axios.interceptors.request.use(
+  (config) => {
+    const token = getToken() || token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const request = {
   create: async ({ entity, id, jsonData }) => {
@@ -30,6 +53,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   createAndUpload: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity + '/create', jsonData, {
@@ -46,12 +70,13 @@ const request = {
       return errorHandler(error);
     }
   },
+
   read: async ({ entity, id }) => {
-    console.log(id)
+    console.log(id);
     try {
-      // console.log('data entities --- ', {entity, id});
+      // console.log('data entities --- ', {entity, id})
       const response = await axios.get(entity + '/read/' + id);
-      console.log(response)
+      console.log(response);
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: true,
@@ -61,6 +86,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   update: async ({ entity, id, jsonData }) => {
     try {
       const response = await axios.patch(entity + '/update/' + id, jsonData);
@@ -73,9 +99,10 @@ const request = {
       return errorHandler(error);
     }
   },
+
   updateAndUpload: async ({ entity, id, jsonData }) => {
     try {
-      // console.log({ entity, id, jsonData });
+      // console.log({ entity, id, jsonData })
       const response = await axios.patch(entity + '/update/' + id, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -85,16 +112,17 @@ const request = {
         notifyOnSuccess: true,
         notifyOnFailed: true,
       });
-      // console.log({response});
-      // return response.data;
+      // console.log({response})
+      // return response.data
     } catch (error) {
       return errorHandler(error);
     }
   },
+
   delete: async ({ entity, id }) => {
     try {
       const response = await axios.delete(entity + '/delete/' + id);
-     
+
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -104,6 +132,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   filter: async ({ entity, options = {} }) => {
     try {
       let filter = options.filter ? 'filter=' + options.filter : '';
@@ -120,6 +149,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   search: async ({ entity, value, options = {} }) => {
     console.log(value);
     try {
@@ -128,7 +158,7 @@ const request = {
         query += key + '=' + options[key] + '&';
       }
       query = query.slice(0, -1);
-      // headersInstance.cancelToken = source.token;
+      // headersInstance.cancelToken = source.token
       const response = await axios.get(entity + '/search' + query);
       successHandler(response, {
         notifyOnSuccess: false,
@@ -160,8 +190,8 @@ const request = {
 
       const response = await axios.get(url);
 
-      // const response = await axios.get(entity + '/list'  + query);
-      // console.log({response});
+      // const response = await axios.get(entity + '/list'  + query)
+      // console.log({response})
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -187,7 +217,7 @@ const request = {
       query = query.slice(0, -1);
 
       const response = await axios.get(entity + 'address/list' + `/${id}` + query);
-      // console.log({response});
+      // console.log({response})
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -211,6 +241,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   post: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity, jsonData);
@@ -219,6 +250,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   get: async ({ entity }) => {
     try {
       const response = await axios.get(entity);
@@ -227,6 +259,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   patch: async ({ entity, jsonData }) => {
     try {
       const response = await axios.patch(entity, jsonData);
@@ -239,6 +272,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   upload: async ({ entity, id, jsonData }) => {
     try {
       const response = await axios.patch(entity + '/upload/' + id, jsonData, {
@@ -255,11 +289,13 @@ const request = {
       return errorHandler(error);
     }
   },
+
   source: () => {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
     return source;
   },
+
   summary: async ({ entity }) => {
     try {
       const response = await axios.get(entity + '/summary');
@@ -274,6 +310,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   mail: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity + '/mail/', jsonData);
@@ -286,6 +323,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   convert: async ({ entity, id }) => {
     try {
       const response = await axios.get(`${entity}/convert/${id}`);
@@ -298,6 +336,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getRoles: async () => {
     try {
       const response = await axios.get(`/roles/show`);
@@ -306,30 +345,34 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getCategorySubscription: async () => {
     try {
-      const response = await axios.get(`/subscriptiontype/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      const response = await axios.get(`/subscriptiontype/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`)
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
+
   getServiceCategory: async () => {
     try {
-      const response = await axios.get(`/servicecategory/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      const response = await axios.get(`/servicecategory/listAll`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`)
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
+
   getTaxes: async () => {
     try {
-      const response = await axios.get(`/taxes/show`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`);
+      const response = await axios.get(`/taxes/show`); //axios.get(`/servicecategory/subscriptions/660250420b127c22abc78818`)
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
+
   getCateGorySubscription: async ({ id }) => {
     try {
       const response = await axios.get(`/servicecategory/subscriptions/${id}`);
@@ -338,6 +381,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getCateGoryDetails: async ({ id }) => {
     try {
       const response = await axios.get(`/servicecategory/read/${id}`);
@@ -380,10 +424,11 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getSalesPerson: async () => {
     try {
       const response = await axios.get('/admin/listAll');
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -393,7 +438,7 @@ const request = {
   getLeadWorker: async () => {
     try {
       const response = await axios.get('/worker/listAll');
-   
+
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -408,6 +453,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getProductList: async () => {
     try {
       const response = await axios.get('/productcategory/listAll');
@@ -416,6 +462,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getTax: async () => {
     try {
       const response = await axios.get('/taxes/show');
@@ -424,6 +471,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getServiceListShow: async ({ id }) => {
     console.log(id);
     try {
@@ -442,6 +490,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   getServiceListShows: async ({ id }) => {
     try {
       const response = await axios.get(`/servicelist/show/${id}`);
@@ -454,12 +503,13 @@ const request = {
   getSubscriptiononetime: async () => {
     try {
       const response = await axios.get(`/subscriptiontype/oneTime`);
-      console.log(response)
+      console.log(response);
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
+
   getTax: async () => {
     try {
       const response = await axios.get('/taxes/show');
@@ -468,6 +518,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   Loogout: async () => {
     try {
       const response = await axios.post('/logout');

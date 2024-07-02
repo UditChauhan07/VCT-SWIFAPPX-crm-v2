@@ -53,7 +53,7 @@ const CompanyUpdate = lazy(() => import('@/pages/Company/CompanyUpdate'));
 const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
 const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
-const CustomerAddresses =  lazy(() => import('@/pages/Address'));
+const CustomerAddresses = lazy(() => import('@/pages/Address'));
 
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
@@ -311,7 +311,7 @@ export default function AppRouter() {
     },
     {
       path: '/customer/address/:id',
-      element: <CustomerAddresses/>,
+      element: <CustomerAddresses />,
     },
     {
       path: '/workorder',
@@ -327,15 +327,15 @@ export default function AppRouter() {
     },
     {
       path: '/contract',
-      element: <Contracts/>,
+      element: <Contracts />,
     },
     {
       path: '/contract/create',
-      element: <ContractCreate/>,
+      element: <ContractCreate />,
     },
     {
       path: '/contract/read/:id',
-      element: <ContractRead /> ,
+      element: <ContractRead />,
     },
     {
       path: '*',
