@@ -217,7 +217,17 @@ useEffect(() => {
     const additionalCost = currentErp.additionalCost.totalPackageCost;
     const serviceCost = currentErp.serviceCost.totalPackageCost;
     const grandTotal = additionalCost + serviceCost;
+    // ...........
+  
 
+    // Create a Date object to format the time
+    const formattedTime = new Date(0, 0, 0, hours, minutes);
+    let formattedHours = formattedTime.getHours();
+    const ampm = formattedHours >= 12 ? 'PM' : 'AM';
+
+    // Convert hours to 12-hour format
+    formattedHours = formattedHours % 12;
+    formattedHours = formattedHours ? formattedHours : 12; // Handle midnight (0 hours)
  return (
         <>
             <PageHeader
@@ -358,10 +368,11 @@ useEffect(() => {
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Time')} :<br></br>
                                         </p></Col>
-                                    <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${hours}:${minutes} hrs`} <br></br>
-                                        </p>
-                                    </Col>
+                                 <Col span={12}>
+                                     <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>
+                                         {`${formattedHours}:${minutes}`} {ampm}
+                                     </p>
+                                 </Col>
                                 </Row>
 
                             </Col>
@@ -430,7 +441,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {/* {currentErp.customService.description}<br></br> */}
+                                    {currentErp.customService.description}<br></br>
                                 </p>
                             </Col>
                         </Row>
@@ -756,7 +767,7 @@ useEffect(() => {
             <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
                 <Col className="gutter-row" span={11}>
                     <p style={{ fontSize: '18px' }}>
-                        <strong>{translate('Additonal Cost')}</strong>
+                        <strong>{translate('Additional Cost')}</strong>
                     </p>
                 </Col>
                 <Col className="gutter-row" span={12}>
