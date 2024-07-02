@@ -119,7 +119,7 @@ const [, cancel] = useDebounce(
       filterOption={false}
       // notFoundContent={searching ? '... Searching' : <Empty />} <Spin size="small" /> Loading...
       notFoundContent={searching ? <Spin size="small" />  : <Empty />}
-      value={currentValue}
+      // value={currentValue}
       onSearch={onSearch}
       onChange={(newValue) => {
         // console.log('107', { newValue });

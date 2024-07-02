@@ -32,7 +32,8 @@ import {
   BarsOutlined,
   ReconciliationOutlined,
   TeamOutlined,
-  ControlOutlined
+  ControlOutlined,
+  ConsoleSqlOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -53,24 +54,209 @@ function Sidebar({ collapsible, isMobile = false }) {
   const [currentPath, setCurrentPath] = useState(location.pathname.slice(1));
 
   const translate = useLanguage();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+  // const  item = localStorage.getItem('auth');
+  // // console.log(item)
+  // let adminLevel = 0;
 
-  const items = [
+  // if (item !== null){
+  //   const parsedUser = JSON.parse(item);
+  //   adminLevel = parsedUser.current.role_id.admin_level;
+  // }
+ 
+  const [adminLevel, setAdminLevel] = useState(null);
+ 
+
+  useEffect(() => {
+    const item = localStorage.getItem('auth');
+    if (item !== null) {
+      const parsedUser = JSON.parse(item);
+      setAdminLevel(parsedUser.current.role_id?.admin_level);
+    }
+    
+  }, []);
+
+
+
+//   // const items = [
+//   //   {
+//   //     key: 'dashboard',
+//   //     icon: <DashboardOutlined />,
+//   //     label: <Link to={'/'}>{translate('dashboard')}</Link>,
+//   //   },
+//   //   // {
+//   //   //   key: 'pricingmodel',
+//   //   //   icon: <InsertRowAboveOutlined />,
+//   //   //   label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
+//   //   // },
+//   //   {
+//   //     key: 'subscriptiontype',
+//   //     icon: <ProfileOutlined />,
+//   //     label: <Link to={'/subscriptiontype'}>{translate('subscriptions')}</Link>,
+//   //   },
+//   //   {
+//   //     key: 'services',
+//   //     icon: <BarsOutlined />,
+//   //     label: translate('services'),
+//   //     children: [
+//   //       {
+//   //         key: 'servicecategory',
+//   //         label: <Link to={'/servicecategory'}>{translate('service_category')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'servicelist',
+//   //         label: <Link to={'/servicelist'}>{translate('service_list')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'categoryproduct',
+//   //         // icon: <TagsOutlined />,
+//   //         label: <Link to={'/category/product'}>{translate('product_category')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'product',
+//   //         // icon: <TagOutlined />,
+//   //         label: <Link to={'/product'}>{translate('products')}</Link>,
+//   //       },
+//   //     ]
+//   //   },
+//   //   {
+//   //     key: 'customer',
+//   //     icon: <CustomerServiceOutlined />,
+//   //     label: <Link to={'/customer'}>{translate('customers')}</Link>,
+//   //   },
+//   //   {
+//   //     key: 'people',
+//   //     icon: <UserOutlined />,
+//   //     label: <Link to={'/people'}>{translate('peoples')}</Link>,
+//   //   },
+//   //   // {
+//   //   //   key: 'worker',
+//   //   //   icon: <UserOutlined />,
+//   //   //   label: <Link to={'/worker'}>{translate('worker')}</Link>,
+//   //   // },
+//   //   {
+//   //     key: 'company',
+//   //     icon: <ShopOutlined />,
+//   //     label: <Link to={'/company'}>{translate('companies')}</Link>,
+//   //   },
+
+//   //   {
+//   //     key: 'quote',
+//   //     icon: <FileSyncOutlined />,
+//   //     label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
+//   //   },
+//   //   {
+//   //     key: 'contract',
+//   //     icon: <ControlOutlined />,
+//   //     label: <Link to={'/contract'}>{translate('Contracts')}</Link>,
+//   //   },
+//   //   {
+//   //     key: 'workorder',
+//   //     icon: <LineChartOutlined />,
+//   //     label: <Link to={'/workorder'}>{translate('Work Order')}</Link>,
+//   //   },
+
+
+//   //   {
+//   //     key: 'lead',
+//   //     icon: <FilterOutlined />,
+//   //     label: <Link to={'/lead'}>{translate('leads')}</Link>,
+//   //   },
+//   //   {
+//   //     key: 'offer',
+//   //     icon: <FileOutlined />,
+//   //     label: <Link to={'/offer'}>{translate('offers')}</Link>,
+//   //   },
+//   //   // {
+//   //   //   key: 'invoice',
+//   //   //   icon: <ContainerOutlined />,
+//   //   //   label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
+//   //   // },
+
+//   //   // {
+//   //   //   key: 'payment',
+//   //   //   icon: <CreditCardOutlined />,
+//   //   //   label: <Link to={'/payment'}>{translate('payments')}</Link>,
+//   //   // },
+//   //   // {
+//   //   //   key: 'expenses',
+//   //   //   icon: <WalletOutlined />,
+//   //   //   label: <Link to={'/expenses'}>{translate('expenses')}</Link>,
+//   //   // },
+//   //   // {
+//   //   //   key: 'expensesCategory',
+//   //   //   icon: <ReconciliationOutlined />,
+//   //   //   label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
+//   //   // },
+//   //   // {
+//   //   //   key: 'employee',
+//   //   //   icon: <UserOutlined />,
+//   //   //   label: <Link to={'/employee'}>{translate('employee')}</Link>,
+//   //   // },
+//   //   {
+//   //     label: translate('Settings'),
+//   //     key: 'settings',
+//   //     icon: <SettingOutlined />,
+//   //     children: [
+//   //       {
+//   //         key: 'admin',
+//   //         icon: <TeamOutlined />,
+//   //         label: <Link to={'/admin'}>{translate('admin')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'generalSettings',
+//   //         label: <Link to={'/settings'}>{translate('settings')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'roles',
+//   //         label: <Link to={'/roles'}>{translate('roles')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'publicholiday',
+//   //         label: <Link to={'/publicholiday'}>{translate('public_holiday')}</Link>,
+//   //       },
+//   //       // {
+//   //       //   key: 'currency',
+//   //       //   label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
+//   //       // },
+//   //       // {
+//   //       //   key: 'emailTemplates',
+//   //       //   label: <Link to={'/email'}>{translate('email_templates')}</Link>,
+//   //       // },
+//   //       {
+//   //         key: 'paymentMode',
+//   //         label: <Link to={'/payment/mode'}>{translate('payment_mode')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'taxes',
+//   //         label: <Link to={'/taxes'}>{translate('taxes')}</Link>,
+//   //       },
+//   //       {
+//   //         key: 'about',
+//   //         label: <Link to={'/about'}>{translate('about')}</Link>,
+//   //       },
+//   //     ],
+//   //   },
+//   // ];
+
+
+
+//    // NEW CODE 
+
+   const items = [
     {
       key: 'dashboard',
       icon: <DashboardOutlined />,
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
-    // {
-    //   key: 'pricingmodel',
-    //   icon: <InsertRowAboveOutlined />,
-    //   label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
-    // },
-    {
-      key: 'subscriptiontype',
-      icon: <ProfileOutlined />,
-      label: <Link to={'/subscriptiontype'}>{translate('subscriptions')}</Link>,
-    },
+
+    ...(adminLevel === 1 ? [
+      {
+        key: 'subscriptiontype',
+        icon: <ProfileOutlined />,
+        label: <Link to={'/subscriptiontype'}>{translate('subscriptions')}</Link>,
+      },
+    ] : []),
     {
       key: 'services',
       icon: <BarsOutlined />,
@@ -86,15 +272,13 @@ function Sidebar({ collapsible, isMobile = false }) {
         },
         {
           key: 'categoryproduct',
-          // icon: <TagsOutlined />,
           label: <Link to={'/category/product'}>{translate('product_category')}</Link>,
         },
         {
           key: 'product',
-          // icon: <TagOutlined />,
           label: <Link to={'/product'}>{translate('products')}</Link>,
         },
-      ]
+      ],
     },
     {
       key: 'customer',
@@ -106,17 +290,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <UserOutlined />,
       label: <Link to={'/people'}>{translate('peoples')}</Link>,
     },
-    // {
-    //   key: 'worker',
-    //   icon: <UserOutlined />,
-    //   label: <Link to={'/worker'}>{translate('worker')}</Link>,
-    // },
     {
       key: 'company',
       icon: <ShopOutlined />,
       label: <Link to={'/company'}>{translate('companies')}</Link>,
     },
-
     {
       key: 'quote',
       icon: <FileSyncOutlined />,
@@ -132,8 +310,6 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <LineChartOutlined />,
       label: <Link to={'/workorder'}>{translate('Work Order')}</Link>,
     },
-
-
     {
       key: 'lead',
       icon: <FilterOutlined />,
@@ -144,32 +320,6 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <FileOutlined />,
       label: <Link to={'/offer'}>{translate('offers')}</Link>,
     },
-    // {
-    //   key: 'invoice',
-    //   icon: <ContainerOutlined />,
-    //   label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
-    // },
-
-    // {
-    //   key: 'payment',
-    //   icon: <CreditCardOutlined />,
-    //   label: <Link to={'/payment'}>{translate('payments')}</Link>,
-    // },
-    // {
-    //   key: 'expenses',
-    //   icon: <WalletOutlined />,
-    //   label: <Link to={'/expenses'}>{translate('expenses')}</Link>,
-    // },
-    // {
-    //   key: 'expensesCategory',
-    //   icon: <ReconciliationOutlined />,
-    //   label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
-    // },
-    // {
-    //   key: 'employee',
-    //   icon: <UserOutlined />,
-    //   label: <Link to={'/employee'}>{translate('employee')}</Link>,
-    // },
     {
       label: translate('Settings'),
       key: 'settings',
@@ -192,14 +342,6 @@ function Sidebar({ collapsible, isMobile = false }) {
           key: 'publicholiday',
           label: <Link to={'/publicholiday'}>{translate('public_holiday')}</Link>,
         },
-        // {
-        //   key: 'currency',
-        //   label: <Link to={'/settings/currency'}>{translate('currencies')}</Link>,
-        // },
-        // {
-        //   key: 'emailTemplates',
-        //   label: <Link to={'/email'}>{translate('email_templates')}</Link>,
-        // },
         {
           key: 'paymentMode',
           label: <Link to={'/payment/mode'}>{translate('payment_mode')}</Link>,
@@ -215,6 +357,12 @@ function Sidebar({ collapsible, isMobile = false }) {
       ],
     },
   ];
+
+
+
+
+  
+
   useEffect(() => {
     if (location)
       if (currentPath !== location.pathname) {
@@ -325,3 +473,13 @@ function MobileSidebar() {
     </>
   );
 }
+
+
+
+
+
+
+ 
+
+
+
