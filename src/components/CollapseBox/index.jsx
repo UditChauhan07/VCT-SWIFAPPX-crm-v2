@@ -28,6 +28,8 @@ const CollapseBoxButton = ({ onChange, title, config }) => {
 
   let create = permissions?.[entity + '_create']
   let condition = create || isSAAS == true ? true : false
+
+  console.log({ create, isSAAS })
   return (
     <div>
       {permissions?.[entity + '_create'] || isSAAS == true ?
