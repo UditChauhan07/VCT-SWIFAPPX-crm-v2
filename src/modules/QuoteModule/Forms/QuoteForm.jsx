@@ -403,36 +403,121 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const [salesContactNumber, setSalesContactNumber] = useState();
+  // useEffect(() => {
+  //   if (selectedSalesPerson) {
+  //     let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone
+  //     setSalesContactNumber(number)
+  //     ContactHandler({ salesContactNumber: number })
+  //     let saleRepConElement = document.getElementById("salesContactNumber")
+  //     saleRepConElement.value = number || null
+  //     // console.log({ number, salesContactNumber });
+  //   }
+  // }, [selectedSalesPerson, salesContactNumber])
+  // const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null })
+  // useEffect(() => { }, [selectedSalesPerson])
+  // const ContactHandler = ({ salesContactNumber }) => {
+  //   return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
+  //     {
+  //       required: true,
+  //       message: 'Please select Sales Person Contact .',
+  //     },
+  //   ]}
+  //     initialValue={salesContactNumber}
+  //   >
+  //     <Input style={{
+  //       width: '100%',
+  //     }} placeholder=""
+  //       id='salesContactNumber'
+  //       value={salesContactNumber}
+  //     />
+  //   </Form.Item>
+  //   )
+
+  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
+
+
   useEffect(() => {
     if (selectedSalesPerson) {
-      let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone
-      setSalesContactNumber(number)
-      ContactHandler({ salesContactNumber: number })
-      let saleRepConElement = document.getElementById("salesContactNumber")
-      saleRepConElement.value = number || null
-      // console.log({ number, salesContactNumber });
+      let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
+      setSalesContactNumber(number);
+      ContactHandler({ salesContactNumber: number });
+      // let saleRepConElement = document.getElementById('salesContactNumber');
+      // console.log(saleRepConElement)
+      // saleRepConElement.value = number || null;
     }
-  }, [selectedSalesPerson, salesContactNumber])
-  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null })
-  useEffect(() => { }, [selectedSalesPerson])
+  }, [selectedSalesPerson, salesContactNumber]);
+
+  // NEW CODE -: 1
+  // useEffect(() => {
+  //   if (selectedSalesPerson) {
+  //     let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
+  //      console.log(number)
+  //     setSalesContactNumber(number);
+  //     let saleRepConElement = document.getElementById('salesContactNumber');
+  //     if (saleRepConElement) {
+  //       saleRepConElement.value = number || null;
+  //     }
+  //   }
+  // }, [selectedSalesPerson]);
+
+  const validateSalesPersonContact = (_, value) => {
+    if (value || salesContactNumber) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('Please Select Sales Person Contact.'));
+  };
+
+ 
+  // useEffect(() => {}, [selectedSalesPerson]);
   const ContactHandler = ({ salesContactNumber }) => {
-    return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
-      {
-        required: true,
-        message: 'Please select Sales Person Contact .',
-      },
-    ]}
-      initialValue={salesContactNumber}
-    >
-      <Input style={{
-        width: '100%',
-      }} placeholder=""
-        id='salesContactNumber'
-        value={salesContactNumber}
-      />
-    </Form.Item>
-    )
-  }
+    // console.log(salesContactNumber)
+    return (
+      <Form.Item
+        label={translate('Sales Person Contact')}
+        name="SalesPersonContact"
+        rules={[
+          {
+            validator: validateSalesPersonContact,
+            required: true,
+          },
+        ]}
+      >
+        <div
+          style={{
+            height: '32px',
+            width: '100%',
+            border: '1px solid rgb(214,212,217)',
+            marginTop: '-0.2%',
+            borderRadius: '5px',
+            textAlign: 'start',
+            fontSize: '15px',
+          }}
+        >
+          <p style={{ padding: '0px 0px 0px 14px', marginTop: '4px' }}>{salesContactNumber}</p>
+        </div>
+      </Form.Item>
+      // <Form.Item
+      //   label={translate('Sales Person Contact')}
+      //   name="SalesPersonContact"
+      //   rules={[
+      //     {
+      //       required: true,
+      //     },
+      //   ]}
+      //   initialValue={salesContactNumber}
+      // >
+      //   <Input
+      //     style={{
+      //       width: '100%',
+      //     }}
+      //     placeholder=""
+      //     id="salesContactNumber"
+      //     // value={salesContactNumber}
+
+      //   />
+      // </Form.Item>
+    );
+  };
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers)
 
@@ -605,6 +690,27 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const DiscountValueHandler = (value) => {
     setdiscount(value ?? 0);
   };
+  const [errorMessage, setErrorMessage] = useState()
+
+  const handleKeyPress = (event) => {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Allow decimal point (.) and digits (0-9)
+    if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      setErrorMessage('Only numeric values are accepted');
+    } else {
+      setErrorMessage(''); // Clear error message if valid character
+    }
+  }
+  const numericFormatter = (value) => {
+    // Remove non-numeric characters
+    return value.replace(/[^0-9.]/g, '');
+  };
+
+  // const numericParser = (value) => {
+  //   // Parse numeric value
+  //   return parseFloat(value);
+  // };
 
   const CustomItemQTYHandler = (_id, qty, price = 0) => {
     const tempId = [...subItemIds];
@@ -1040,7 +1146,7 @@ const CalculatorFilledItem = () => {
                       color: 'rgb(49,91,140)',
                       height: '105px',
                       // border: "2px solid black",
-                      overflowY: 'auto',
+                      // overflowY: 'auto',
                     }}
                   >
                     {Subitems.map((item, index) => {
@@ -1076,65 +1182,12 @@ const CalculatorFilledItem = () => {
                       );
                     })}
                   </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {itemMPrice.toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {discount.toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {subITotal.toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {(taxValue || 0).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {(subITotal + taxValue).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
+                  <li style={{borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px',marginTop: '',color: 'rgb(49,91,140)',}} >{itemMPrice.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{discount.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)',  fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)',}}>{subITotal.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{(taxValue || 0).toFixed(2)}</li>
+                  <li style={{borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)',}}>{(subITotal + taxValue).toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px',marginTop: '',color: 'rgb(49,91,140)',}} >{parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
                   </li>
                 </ul>
               </td>
@@ -1145,9 +1198,7 @@ const CalculatorFilledItem = () => {
     );
   };
 
- 
-
- const AdjustmentValueHandler = (event) => {
+const AdjustmentValueHandler = (event) => {
     setadjustment(event.target.value || 0)
     let subTotal = document.getElementById("subTotal")
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
@@ -1470,9 +1521,8 @@ const CalculatorFilledItem = () => {
         </Col>
 
         <Col className="gutter-row" span={8}>
-          <ContactHandler salesContactNumber={salesContactNumber} />
+          <ContactHandler salesContactNumber={salesContactNumber} disabled={!selectedSalesPerson} />
         </Col>
-
         <Col className="gutter-row" span={8}>
           <Form.Item label={translate('Files')} name="Files"
 
@@ -1534,6 +1584,7 @@ const CalculatorFilledItem = () => {
               }}
               value={selectedOption}
               onChange={handleSelectChange}
+              disabled={!selectedValue} 
               subscriptionOneTime
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
@@ -1543,15 +1594,18 @@ const CalculatorFilledItem = () => {
                   <Spin size="small" /> Loading...
                 </Select.Option>
               ) : (
-                <>
-                  <Select.Option value="custom" onClick={() => setIscustomm(true)}>Custom Service (One Time)</Select.Option>
-                  {isFirstServiceCategorySelect &&
-                    ShowServiceList?.map((option) => (
+                selectedValue && (
+                  <>
+                    <Select.Option value="custom" onClick={() => setIsCustom(true)}>
+                      Custom Service (One Time)
+                    </Select.Option>
+                    {ShowServiceList?.map((option) => (
                       <Select.Option key={option._id} value={option._id}>
                         {option.name}
                       </Select.Option>
                     ))}
-                </>
+                  </>
+                )
               )}
 
             </Select>
@@ -2047,10 +2101,8 @@ const CalculatorFilledItem = () => {
 
       </Row>
 
-
-
-      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
-        <Col className="gutter-row" span={12}>
+<Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
+        {/* <Col className="gutter-row" span={12}>
           <Form.Item
             name="discount"
             label={translate('Discount')}
@@ -2071,9 +2123,34 @@ const CalculatorFilledItem = () => {
               onChange={DiscountValueHandler}
             />
           </Form.Item>
-        </Col>
+        </Col> */}
 
-      
+        <Col className="gutter-row" span={12}>
+          <Form.Item
+            name="discount"
+            label={translate('Discount')}
+            rules={[
+              {
+                validator: async (rule, value) => {
+                  // if (isNaN(value)) {
+                  //   return Promise.reject('Only numeric values are accepted.');
+                  // }
+                  // return Promise.resolve();
+                },
+              },
+            ]}
+          >
+            <InputNumber
+              style={{ width: '100%' }}
+              // defaultValue={0.0}
+              onChange={DiscountValueHandler}
+              formatter={numericFormatter}
+              // parser={numericParser}
+              onKeyPress={handleKeyPress}
+            />
+          </Form.Item>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        </Col>
       </Row>
 
       {subscriptionIds.length > 0 && 
@@ -2084,17 +2161,12 @@ const CalculatorFilledItem = () => {
         </Col>
         <table style={{
            width: "100%", height: "220px", marginTop: "3%", }}>
-          
-          <tbody style={{
+           <tbody style={{
             // maxWidth: '1000px',
             // overflowX: 'auto',  
             // display: 'block',  
           }}> 
-          <tr style={{ 
-              // maxWidth: '1000px',
-              // overflowX: 'auto',  
-              // display: 'block',   
-          }}>
+          <tr>
               <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
                 <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1", }}>
                   <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Workorder For</li>
@@ -2152,9 +2224,7 @@ const CalculatorFilledItem = () => {
               </>
            
             }
-        
-        
-      </>}
+          </>}
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
         <Row gutter={[12, -5]}>

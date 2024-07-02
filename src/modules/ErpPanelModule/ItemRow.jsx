@@ -66,6 +66,21 @@ useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
     setTotal(currentTotal);
   }, [price, quantity]);
+ const [errorMessage, setErrorMessage]= useState()
+  const handleKeyPress = (event) => {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Allow decimal point (.) and digits (0-9)
+    if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      setErrorMessage('Only numeric values are accepted');
+    } else {
+      setErrorMessage(''); // Clear error message if valid character
+    }
+  }
+  const numericFormatter = (value) => {
+    // Remove non-numeric characters
+    return value.replace(/[^0-9.]/g, '');
+  };
 
   return (
     <>
@@ -81,11 +96,15 @@ useEffect(() => {
             <InputNumber
               className="moneyInput"
               onChange={(value) => updatePrice(value, `CI-${field.key}`)}
+              formatter={numericFormatter}
+              
+              onKeyPress={handleKeyPress}
               min={0}
               controls={false}
               addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
               addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
             />
+            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={3}>
