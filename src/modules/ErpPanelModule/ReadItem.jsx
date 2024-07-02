@@ -1021,6 +1021,7 @@ export default function ReadItem({ config, selectedItem }) {
               amount: currentErp.serviceCost.totalPackageCost,
             })} */}
                 {currentErp.serviceCost &&  currentErp.serviceCost.totalPackageCost ? moneyFormatter({ amount: currentErp.serviceCost.totalPackageCost }) : '-'}
+
           </p>
         </Col>
         {/* <Divider  dashed  /> */}
