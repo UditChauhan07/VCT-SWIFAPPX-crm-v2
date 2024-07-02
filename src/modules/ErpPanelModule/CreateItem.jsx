@@ -104,7 +104,7 @@ export default function CreateItem({ config, CreateForm }) {
         navigate(`/${entity.toLowerCase()}/read/${result._id}`);
       }
     }
-    return () => {};
+    return () => { };
   }, [isSuccess]);
 
   const onSubmit = (fieldsValue) => {
@@ -184,8 +184,8 @@ export default function CreateItem({ config, CreateForm }) {
           startTime: fieldsValue.startTime,
           endTime: fieldsValue.endTime,
         }));
-  
-      
+
+
         const fielduser = [Leader, ...Worker];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
@@ -208,21 +208,21 @@ export default function CreateItem({ config, CreateForm }) {
         let submodule = localStorage.getItem('WorkOrderSubId');
 
         let MyItems = {};
-       
+
         let Items = localStorage.getItem('myItems');
 
         if (Items) {
           MyItems = JSON.parse(Items);
         }
-       
-             
+
+
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
-       
+
         const subsdata = JSON.parse(WorkOrderstoredId);
-        
+
 
         const subFinalData = subsdata[0];
-       
+
 
         // const serviceCost = firstItem.serviceCost;
         // const subscription = firstItem.subscription;
@@ -234,22 +234,22 @@ export default function CreateItem({ config, CreateForm }) {
           // subModule: subModule,
         };
         const Tax = localStorage.getItem('TaxPercentage');
-    
+
         const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
-    
+
         const CustomItemData = Customitem.map(item => ({
           item: item.name,
           quantity: item.qty,
           price: item.price,
           total: item.total,
           remarks: item.remarks
-      }));
-   
-      const isCustommString = localStorage.getItem('IssCustomm');
-      const isCustomm = JSON.parse(isCustommString);
+        }));
 
-      const SPC = localStorage.getItem('Salespersoncontact');
-      const  SalesPersonContact= JSON.parse(SPC);
+        const isCustommString = localStorage.getItem('IssCustomm');
+        const isCustomm = JSON.parse(isCustommString);
+
+        const SPC = localStorage.getItem('Salespersoncontact');
+        const SalesPersonContact = JSON.parse(SPC);
 
         let Data = {
           client: fieldsValue.client,
@@ -257,7 +257,7 @@ export default function CreateItem({ config, CreateForm }) {
           billingAddress: fieldsValue.billingAddress,
           sendworkorderEmail: fieldsValue.sendQuotationEmail,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact:SalesPersonContact,
+          salesPersonContact: SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,
@@ -271,7 +271,7 @@ export default function CreateItem({ config, CreateForm }) {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
           },
-          subscription: subFinalData.subscription,           
+          subscription: subFinalData.subscription,
           // subModule: subFinalData.subModule,
           fieldUsers: fielduser,
           customService: {
@@ -319,8 +319,8 @@ export default function CreateItem({ config, CreateForm }) {
           startTime: fieldsValue.startTime,
           endTime: fieldsValue.endTime,
         }));
-  
-      
+
+
         const fielduser = [Leader, ...Worker];
         const startTime = new Date(fieldsValue.startTime).getTime();
         const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
@@ -343,21 +343,21 @@ export default function CreateItem({ config, CreateForm }) {
         let submodule = localStorage.getItem('WorkOrderSubId');
 
         let MyItems = {};
-       
+
         let Items = localStorage.getItem('myItems');
 
         if (Items) {
           MyItems = JSON.parse(Items);
         }
-       
-             
+
+
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
-       
+
         const subsdata = JSON.parse(WorkOrderstoredId);
-        
+
 
         const subFinalData = subsdata[0];
-       
+
 
         // const serviceCost = firstItem.serviceCost;
         // const subscription = firstItem.subscription;
@@ -369,19 +369,19 @@ export default function CreateItem({ config, CreateForm }) {
           // subModule: subModule,
         };
         const Tax = localStorage.getItem('TaxPercentage');
-    
+
         const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
-    
+
         const CustomItemData = Customitem.map(item => ({
           item: item.name,
           quantity: item.qty,
           price: item.price,
           total: item.total,
           remarks: item.remarks
-      }));
-   
-      const isCustommString = localStorage.getItem('IssCustomm');
-      const isCustomm = JSON.parse(isCustommString);
+        }));
+
+        const isCustommString = localStorage.getItem('IssCustomm');
+        const isCustomm = JSON.parse(isCustommString);
 
         let Data = {
           client: fieldsValue.client,
@@ -403,7 +403,7 @@ export default function CreateItem({ config, CreateForm }) {
             type: fieldsValue.Adjustment,
             value: fieldsValue.AdjustmentValue,
           },
-          subscription: subFinalData.subscription,           
+          subscription: subFinalData.subscription,
           // subModule: subFinalData.subModule,
           fieldUsers: fielduser,
           customService: {
@@ -430,7 +430,99 @@ export default function CreateItem({ config, CreateForm }) {
 
 
       if (entity === "quote") {
+
            
+//                 const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || [];
+//                 const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+//                 console.log(storedSubscriptions);
+        
+//                 const subsdata = JSON.parse(WorkOrderstoredId);
+//                 const subFinalData = subsdata[0];
+        
+//                 let additionalCost = {};
+//                 let serviceCostObj = {};
+        
+//                 let serviceCostStr = localStorage.getItem("ServiceCostitem") || "{}";
+//                 if (serviceCostStr) {
+//                   serviceCostObj = JSON.parse(serviceCostStr);
+//                 }
+        
+//                 let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
+//                 if (additionalCostStr) {
+//                   additionalCost = JSON.parse(additionalCostStr);
+//                 }
+        
+//                 // Calculate grandTotal
+//                 let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
+//                 let grandTotal = parseFloat(grandTotalStr) || 0;
+        
+//                 // Update grandTotal by adding serviceCost and additionalCost
+//                 // grandTotal += (serviceCostObj.totalPackageCost || 0) + (additionalCost.totalPackageCost || 0);
+        
+//                 let MyItems = {};
+//                 let Items = localStorage.getItem('myItems');
+//                 if (Items) {
+//                   MyItems = JSON.parse(Items);
+//                 }
+        
+//                 const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
+//                 console.log({ Customitem });
+        
+//                 const CustomItemData = Customitem.map(item => ({
+//                   item: item.name,
+//                   quantity: item.qty,
+//                   price: item.price,
+//                   total: item.total,
+//                   // remarks: item.remarks
+//                 }));
+        
+//                 console.log(CustomItemData);
+//                 const Tax = localStorage.getItem('TaxPercentage');
+//                 const discount = localStorage.getItem('discountValue');
+        
+//                 const isCustommString = localStorage.getItem('IssCustomm');
+//                 const isCustomm = JSON.parse(isCustommString);
+        
+//                 const fieldData = {
+//                   client: fieldsValue.client,
+//                   clientAddress: fieldsValue.clientAddress,
+//                   billingAddress: fieldsValue.billingAddress,
+//                   sendQuotationEmail: fieldsValue.sendQuotationEmail,
+//                   startDate: fieldsValue.startDate,
+//                   expiredDate: fieldsValue.expiredDate,
+//                   startTime: fieldsValue.startTime,
+//                   expectedRequiredTime: fieldsValue.expectedRequiredTime,
+//                   salesPerson: fieldsValue.salesPerson,
+//                   salesPersonContact: fieldsValue.SalesPersonContact,
+//                   serviceCategory: fieldsValue.serviceCategory,
+//                   subscriptions: [...storedSubscriptions],
+//                   isCustom: isCustomm,
+//                   taxPercentage: Tax,
+        
+//                   customService: {
+//                     name: fieldsValue.ServiceName,
+//                     price: fieldsValue.ServicePrice,
+//                     description: fieldsValue.ServiceDescription,
+//                   },
+//                   items: MyItems,
+//                   customItems: CustomItemData,
+//                   remarks: fieldsValue.InitialRemarks,
+//                   serviceCost: serviceCostObj,
+//                   additionalCost,
+//                   grandTotal, // Ensure grandTotal is included in the payload
+//                   ...(!isCustomm ? { serviceList: fieldsValue.serviceList } : {}),
+//                   ...(!isCustomm ? { subModule: subFinalData.subModule } : {}),
+//                   adjustment: {
+//                     type: fieldsValue.Adjustment,
+//                     value: fieldsValue.AdjustmentValue,
+//                   },
+//                   InitialRemarks: fieldsValue.InitialRemarks,
+//                 };
+//                  console.log(fieldData);
+//                 fieldsValue = fieldData;
+//               }
+
+
                 const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) || [];
                 const WorkOrderstoredId = localStorage.getItem('Subscriptions');
                 console.log(storedSubscriptions);
@@ -520,7 +612,6 @@ export default function CreateItem({ config, CreateForm }) {
                  console.log(fieldData);
                 fieldsValue = fieldData;
               }
-
 
       dispatch(erp.create({ entity, jsonData: fieldsValue }));
     }
