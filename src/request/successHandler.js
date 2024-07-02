@@ -4,7 +4,7 @@ import codeMessage from './codeMessage';
 
 const successHandler = (response, options = { notifyOnSuccess: false, notifyOnFailed: true }) => {
   const { data } = response;
-  console.log({ response });
+  // console.log({ response });
   if (data && data.success === true) {
     const message = response.data && data.message;
     // console.log(message)

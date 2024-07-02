@@ -9,9 +9,6 @@ axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
 // let { id } = useParams()
 
-let data = JSON.parse(localStorage.getItem('auth'));
-let token = data.token;
-
 const getToken = () => {
   let data = JSON.parse(localStorage.getItem('auth'));
   let token = data.token;
@@ -22,7 +19,7 @@ const getToken = () => {
 // Adding a request interceptor
 axios.interceptors.request.use(
   (config) => {
-    const token = getToken() || token;
+    const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
