@@ -983,7 +983,7 @@ export default function ReadItem({ config, selectedItem }) {
       <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
         <Col className="gutter-row" span={11}>
           <p style={{ fontSize: '18px' }}>
-            <strong>{translate('Additonal Cost')}</strong>
+            <strong>{translate('Additional Cost')}</strong>
           </p>
         </Col>
 
@@ -1056,7 +1056,7 @@ export default function ReadItem({ config, selectedItem }) {
         <Divider style={{ marginTop: '0%' }} />
       </Row>
 
-      <h2 style={{ marginTop: '5%' }}>Basic Attendence Details</h2>
+      <h2 style={{ marginTop: '5%' }}>Basic Attendance Details</h2>
       <Row className="gutter-row">
         <Col span={24}>
           <div

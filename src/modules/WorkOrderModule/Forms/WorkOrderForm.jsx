@@ -5885,11 +5885,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
+             showSearch
+             optionFilterProp="children"
+             notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+             filterSort={(optionA, optionB) =>
+               (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+             } 
               style={{
                 width: '100%',
               }}
               onChange={getCategorySubscriptionHandler}
-              notFoundContent={loading ? <Spin size="small" /> : null}
+              // notFoundContent={loading ? <Spin size="small" /> : null}
             >
               {/* {loading ? (
                 <Select.Option key="loading" disabled>
@@ -5926,6 +5932,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
+             showSearch
+             optionFilterProp="children"
+             notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+             filterSort={(optionA, optionB) =>
+               (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+             } 
               style={{
                 width: '100%',
                 
@@ -5935,7 +5947,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               disabled={!selectedValue} 
               // className={!selectedValue ? 'not-allowed' : ''}
               subscriptionOneTime
-              notFoundContent={loading ? <Spin size="small" /> : null}
+              // notFoundContent={loading ? <Spin size="small" /> : null}
             >
               {/* {loading ? (
                 <Select.Option key="loading" disabled>
@@ -6086,7 +6098,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     <Form.Item>
                       <Button
                         type="dashed"
-                        onClick={() => add()}
+                        // onClick={() => add()}
+                        onClick={() => add({ quantity: 1 })}
                         block
                         icon={<PlusOutlined />}
                         ref={addField}
