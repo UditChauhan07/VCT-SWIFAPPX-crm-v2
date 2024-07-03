@@ -1146,7 +1146,7 @@ const CalculatorFilledItem = () => {
                       color: 'rgb(49,91,140)',
                       height: '105px',
                       // border: "2px solid black",
-                      // overflowY: 'auto',
+                      overflowY: 'auto',
                     }}
                   >
                     {Subitems.map((item, index) => {

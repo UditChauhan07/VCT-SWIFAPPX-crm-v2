@@ -451,7 +451,7 @@ useEffect(() => {
 
 
             {/* ................. */}
-            <h3 style={{ marginTop: "4%" }}>Quotetion Billing Detail</h3>
+            <h3 style={{ marginTop: "4%" }}>Quotation Billing Detail</h3>
             <Row className="gutter-row" style={{ marginTop: "20px" }}>
                 <Col span={24}>
                     <div className='' style={{ width: "100%", border: "1px solid rgb(240,240,240)", height: "360px", borderRadius: "5px", boxShadow: "0px 0px 0px 1px rgb(240,240,240)" }}>
