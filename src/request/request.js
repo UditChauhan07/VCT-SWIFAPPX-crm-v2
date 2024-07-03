@@ -178,28 +178,57 @@ const request = {
     }
   },
 
+  // list: async ({ entity, options = {} }) => {
+  //   try {
+  //     let query = '?';
+
+  //     for (var key in options) {
+  //       query += key + '=' + options[key] + '&';
+  //     }
+
+  //     query = query.slice(0, -1);
+
+  //     let url = entity + '/list' + query;
+
+  //     if (entity === 'clientaddress') {
+  //       // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
+  //       const ClientId = localStorage.getItem('key');
+  //       url = entity + '/list/' + ClientId + query;
+  //     }
+
+  //     const response = await axios.get(url);
+
+  //     // const response = await axios.get(entity + '/list'  + query)
+  //     // console.log({response})
+  //     successHandler(response, {
+  //       notifyOnSuccess: false,
+  //       notifyOnFailed: false,
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     return errorHandler(error);
+  //   }
+  // },
+
   list: async ({ entity, options = {} }) => {
     try {
       let query = '?';
-
       for (var key in options) {
         query += key + '=' + options[key] + '&';
       }
-
       query = query.slice(0, -1);
-
-      let url = entity + '/list' + query;
-
+  
+      let url = `${entity}/list${query}`;
+  
       if (entity === 'clientaddress') {
-        // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
         const ClientId = localStorage.getItem('key');
-        url = entity + '/list/' + ClientId + query;
+        if (ClientId) {
+          url = `${entity}/list/${ClientId}${query}`;
+        }
       }
-
+  
       const response = await axios.get(url);
-
-      // const response = await axios.get(entity + '/list'  + query)
-      // console.log({response})
+  
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -209,6 +238,7 @@ const request = {
       return errorHandler(error);
     }
   },
+  
 
   Addresslist: async ({ entity, id, options = {} }) => {
     try {
@@ -527,14 +557,33 @@ const request = {
     }
   },
 
-  Loogout: async () => {
+  // Loogout: async () => {
+  //   try {
+  //     const response = await axios.post('/logout');
+  //     return response.data;
+  //   } catch (error) {
+  //     return errorHandler(error);
+  //   }
+  // },
+
+   Loogout : async () => {
+  
     try {
-      const response = await axios.post('/logout');
+      console.log('eeeeeeeeeee')
+      const token = getToken();
+      const response = await axios.post('logout', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
-  },
+  }
+  
+
+  
 };
 
 export default request;
