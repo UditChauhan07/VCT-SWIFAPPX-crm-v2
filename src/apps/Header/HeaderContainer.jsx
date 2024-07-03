@@ -72,8 +72,24 @@ export default function HeaderContent() {
     method: 'POST',
   
   };
+  // try {
+  //   const response = await request.getServiceCategoryOptions({ id: value });
+  //   console.log(response);
+  //   if (response.success) {
+  //     setServiceOptions(response.result);
+  //     getProductHandler();
+  //   } else {
+  //     setServiceOptions(null);
+  //   }
+  // } catch (error) {
+  //   setServiceOptions(null);
+  //   console.error('Error fetching data:', error);
+  // }
 
 const Loogout = async () =>{
+  // console.log("pppppppppp")
+  const response = await request.Loogout();
+  console.log(response)
   // const res = await fetch(`http://localhost:8001/api/logout`, settings )
   //  console.log(res)
   // localStorage.clear();

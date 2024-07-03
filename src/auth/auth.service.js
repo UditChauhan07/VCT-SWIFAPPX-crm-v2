@@ -84,25 +84,25 @@ export const resetPassword = async ({ resetPasswordData }) => {
     return errorHandler(error);
   }
 };
-export const logout = async () => {
-  axios.defaults.withCredentials = true;
-  try {
-    // window.localStorage.clear();
-    const response = await axios.post(API_BASE_URL + `/logout`);
-    const { status, data } = response;
+// export const logout = async () => {
+//   axios.defaults.withCredentials = true;
+//   try {
+//     // window.localStorage.clear();
+//     const response = await axios.post(API_BASE_URL + `/logout`);
+//     const { status, data } = response;
 
-    successHandler(
-      { data, status },
-      {
-        notifyOnSuccess: false,
-        notifyOnFailed: true,
-      }
-    );
-    return data;
-  } catch (error) {
-    return errorHandler(error);
-  }
-};
+//     successHandler(
+//       { data, status },
+//       {
+//         notifyOnSuccess: false,
+//         notifyOnFailed: true,
+//       }
+//     );
+//     return data;
+//   } catch (error) {
+//     return errorHandler(error);
+//   }
+// };
 
 //  console.log(
 //    '🚀 Welcome to IDURAR ERP CRM! Did you know that we also offer commercial customization services? Contact us at hello@idurarapp.com for more information.'
