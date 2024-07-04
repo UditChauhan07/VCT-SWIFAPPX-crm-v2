@@ -8,11 +8,11 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { Dropdown, Table, Button } from 'antd';
+import { Dropdown, Table, Button, Spin } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
 import { useSelector, useDispatch } from 'react-redux';
 import { crud } from '@/redux/crud/actions';
-import { selectListItems } from '@/redux/crud/selectors';
+import { selectListItems, selectReadItem } from '@/redux/crud/selectors';
 import useLanguage from '@/locale/useLanguage';
 import { dataForTable } from '@/utils/dataStructure';
 import { useMoney, useDate } from '@/settings';
@@ -21,6 +21,7 @@ import { generate as uniqueId } from 'shortid';
 import { useCrudContext } from '@/context/crud';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import Loading from '../Loading';
 
 let data = JSON.parse(localStorage.getItem('auth'));
 let user = data?.current || {};
@@ -34,6 +35,10 @@ function AddNewItem({ config }) {
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
   const navigate = useNavigate();
+
+ 
+
+
   const handleClick = () => {
     if (entity == 'customer') {
       setIsVisible(true);
@@ -45,7 +50,9 @@ function AddNewItem({ config }) {
   return (
     <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
       {ADD_NEW_ENTITY}
+
     </Button>
+ 
   );
 }
 
@@ -58,6 +65,7 @@ export default function DataTable({ config, extra = [] }) {
   const { dateFormat } = useDate();
   const [authUser, setAuthUser] = useState({});
   const [admin, setAdmin] = useState(null);
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -74,6 +82,9 @@ export default function DataTable({ config, extra = [] }) {
     isSAAS = role?.is_saas;
     permissions = role?.permissions;
   }, [user]);
+
+
+ 
 
   let items = [];
   if (permissions?.[entity + '_read'] || isSAAS === true) {
@@ -225,7 +236,7 @@ export default function DataTable({ config, extra = [] }) {
   ];
 
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
-
+  const { isLoading } = useSelector(selectReadItem);
   const { pagination, items: dataSource } = listResult;
 
   const handleDataTableLoad = useCallback((pagination) => {
@@ -254,7 +265,8 @@ export default function DataTable({ config, extra = [] }) {
 
   return (
     <>
-      <PageHeader
+            <Loading isLoading={isLoading}>
+            <PageHeader
         onBack={() => window.history.back()}
         title={DATATABLE_TITLE}
         ghost={false}
@@ -267,7 +279,9 @@ export default function DataTable({ config, extra = [] }) {
           ),
         ]}
         style={{ padding: '20px 0px' }}
-      ></PageHeader>
+      >
+     
+      </PageHeader>
       <Table
         columns={dataTableColumns}
         rowKey={(item) => item._id}
@@ -277,6 +291,35 @@ export default function DataTable({ config, extra = [] }) {
         onChange={handleDataTableLoad}
         scroll={{ x: true }}
       />
+      </Loading>
+
+
+
+      {/* <PageHeader
+        onBack={() => window.history.back()}
+        title={DATATABLE_TITLE}
+        ghost={false}
+        extra={[
+          <Button onClick={handleDataTableLoad} key={`${uniqueId()}`} icon={<RedoOutlined />}>
+            {translate('Refresh')}
+          </Button>,
+          (permissions?.[entity + '_create'] || isSAAS === true) && (
+            <AddNewItem key={`${uniqueId()}`} config={config} />
+          ),
+        ]}
+        style={{ padding: '20px 0px' }}
+      >
+     
+      </PageHeader>
+      <Table
+        columns={dataTableColumns}
+        rowKey={(item) => item._id}
+        dataSource={dataSource}
+        pagination={pagination}
+        loading={listIsLoading}
+        onChange={handleDataTableLoad}
+        scroll={{ x: true }}
+      /> */}
     </>
   );
 }
