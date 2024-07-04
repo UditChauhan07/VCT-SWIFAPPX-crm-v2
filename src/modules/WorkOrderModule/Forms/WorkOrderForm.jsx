@@ -975,6 +975,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           if (tax.taxValue) {
             taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
           }
+       
+
           if (subscriptionIds.includes(subscription._id)) {
             subscriptionSubTotal = subTotal + taxValue;
             let itemPrice = 0;
@@ -982,7 +984,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             let discount = 0;
             let taxValue1 = 0;
             let subITotal = 0;
-            console.log(subITotal);
+            let taxValue22 = 0;
+            // console.log(subITotal);
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                 <ul
@@ -1011,15 +1014,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       if (tax.taxValue) {
                         taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
                       }
+
+                      // let taxValue22 = 0;
+                      if (tax.taxValue) {
+                        taxValue22 = subITotal * (parseFloat(tax.taxValue) / 100);
+                      }
+
+                       console.log(taxValue22)
+
+
                       // subITotal + taxValue
                       localStorage.setItem(
                         'jv1GYkk6plxCpgx',
                         parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)
                       );
                       additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
-                      additionalCost.tax = parseFloat(taxValue).toFixed(2);
+                      additionalCost.tax = parseFloat(taxValue22).toFixed(2);
                       // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
-                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue).toFixed(2);
+                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue22).toFixed(2);
                       additionalCost.itemTotal = parseFloat(itemMPrice).toFixed(2);
                       additionalCost.discount = parseFloat(discount).toFixed(2);
                       localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
@@ -1070,7 +1082,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       color: 'rgb(49,91,140)',
                     }}
                   >
-                    {(taxValue || 0).toFixed(2)}
+                    {(taxValue22 || 0).toFixed(2)}
                   </li>
                   <li
                     style={{
@@ -1080,7 +1092,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       color: 'rgb(49,91,140)',
                     }}
                   >
-                    {(subITotal + taxValue).toFixed(2)}
+                    {(subITotal + taxValue22).toFixed(2)}
                   </li>
                   <li
                     style={{
@@ -1090,7 +1102,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       color: 'rgb(49,91,140)',
                     }}
                   >
-                    {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
+                    {parseFloat(subscriptionSubTotal + subITotal + taxValue22).toFixed(2)}
                   </li>
                 </ul>
               </td>
