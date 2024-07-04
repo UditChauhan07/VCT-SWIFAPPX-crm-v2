@@ -258,6 +258,7 @@ export default function CreateItem({ config, CreateForm }) {
           sendworkorderEmail: fieldsValue.sendQuotationEmail,
           salesPerson: fieldsValue.salesPerson,
           salesPersonContact: SalesPersonContact,
+          salesPersonContact: SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,
