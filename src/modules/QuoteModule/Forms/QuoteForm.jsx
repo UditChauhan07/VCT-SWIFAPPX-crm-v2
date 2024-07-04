@@ -642,8 +642,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   localStorage.setItem('CustomItems', JSON.stringify(customItems));
 
-  const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false) => {
-    console.log(_id, name, price = 0, qty = 1, remove = false);
+  const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false, remarks = '') => {
+    console.log(_id, name, (price = 0), (qty = 1), (remove = false), remarks);
     const tempId = [...subItemIds];
     const temp = [...Subitems];
     let tempcustom = [...customItems]; // Assuming you have a state or variable to hold custom items
@@ -652,11 +652,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       const selectedIndex = tempId.indexOf(_id);
       if (selectedIndex !== -1) {
         tempId.splice(selectedIndex, 1);
-        const itemIndex = temp.findIndex(item => item._id === _id);
+        const itemIndex = temp.findIndex((item) => item._id === _id);
         if (itemIndex !== -1) {
           temp.splice(itemIndex, 1);
         }
-        const customItemIndex = tempcustom.findIndex(item => item._id === _id);
+        const customItemIndex = tempcustom.findIndex((item) => item._id === _id);
         if (customItemIndex !== -1) {
           tempcustom.splice(customItemIndex, 1);
         }
@@ -667,13 +667,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         temp.map((item) => {
           if (item._id === _id) {
             item.name = name;
+            item.remarks = remarks;
           }
         });
       } else {
         let element = {
-          _id, price, name,
+          _id,
+          price,
+          name,
           total: price * qty,
-          qty
+          qty,
+          remarks,
         };
 
         console.warn({ element });
@@ -686,7 +690,90 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setItems(temp);
     setCustomItems(tempcustom);
     setSubItemCount(temp.length);
-  }
+  };
+
+  const CustomItemQTYHandler = (_id, qty, price = 0) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.qty = qty;
+          item.total = item.price * qty;
+        }
+      });
+    } else {
+      let element = {
+        _id,
+        price,
+        name: null,
+        total: price * qty,
+        qty,
+      };
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+  const CustomItemPriceHandler = (_id, price = 0) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.price = price;
+          item.total = item.price * item.qty;
+        }
+      });
+    } else {
+      let element = {
+        _id,
+        price,
+        name: null,
+        total: price * 1,
+        qty: 1,
+      };
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+
+  const CustomItemRemarksHandler = (_id, remarks) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.remarks = remarks;
+        }
+      });
+    } else {
+      let element = {
+        _id,
+        price: 0,
+        name: null,
+        total: 0,
+        qty: 1,
+        remarks,
+      };
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+  
   const DiscountValueHandler = (value) => {
     setdiscount(value ?? 0);
   };
@@ -712,66 +799,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //   return parseFloat(value);
   // };
 
-  const CustomItemQTYHandler = (_id, qty, price = 0) => {
-    const tempId = [...subItemIds];
-    let temp = [...Subitems]; // Changed to let for mutability
-
-    const selectedIndex = tempId.indexOf(_id);
-    if (selectedIndex !== -1) {
-      temp = temp.map((item) => {
-        if (item._id === _id) {
-          item.qty = qty;
-          item.total = item.price * qty; // Recalculate total based on new quantity
-        }
-        return item;
-      });
-    } else {
-      // Default total calculation based on default price and new quantity
-      let element = {
-        _id,
-        price,
-        name: null,
-        total: price * qty, // Calculate total based on new quantity and default price
-        qty
-      };
-      tempId.push(_id);
-      temp.push(element);
-    }
-    setSubItemId(tempId);
-    setItems(temp);
-    setSubItemCount(temp.length);
-  };
-
-
-  const CustomItemPriceHandler = (_id, price = 0) => {
-    const tempId = [...subItemIds];
-    let temp = [...Subitems]; // Changed to let for mutability
-
-    const selectedIndex = tempId.indexOf(_id);
-    if (selectedIndex !== -1) {
-      temp = temp.map((item) => {
-        if (item._id === _id) {
-          item.price = price;
-          item.total = price * item.qty; // Recalculate total based on new price and existing quantity
-        }
-        return item;
-      });
-    } else {
-      // Default quantity and total calculation based on default quantity
-      let element = {
-        _id,
-        price,
-        name: null,
-        total: price * 1, // Calculate total based on default quantity (1)
-        qty: 1 // Default quantity
-      };
-      tempId.push(_id);
-      temp.push(element);
-    }
-    setSubItemId(tempId);
-    setItems(temp);
-    setSubItemCount(temp.length);
-  };
+  
 
 const initialServiceCost = {
     servicePerWO: null,
@@ -787,6 +815,18 @@ const initialServiceCost = {
     tax: null,
     totalPackageCost: null,
     discount: null
+  }
+  let additionalCostNull = {
+    subTotal: 0,
+    tax: 0,
+    totalPackageCost: 0,
+    itemTotal: 0,
+    discount: 0,
+  };
+  if (CheckedId) {
+    localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
+  } else {
+    localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCostNull));
   }
   const [serviceCost, setServiceCost] = useState(initialServiceCost);
 
@@ -810,54 +850,7 @@ const initialServiceCost = {
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
   };
-  const handleCustomServiceInput = (name) => {
-    let temp = isCustom ? [] : ShowServiceList;
-    if (temp.length > 0) {
-      setSubscriptionCount(0);
-      temp.map((element, _id) => {
-        element.subscriptions.map((subscriptions, __id) => {
-          subscriptions.data.map((subscription, ___id) => {
-            console.log({ subscription });
-            subscription.name = name
-          })
-        })
-      })
-    } else {
-      setSubscriptionCount(0);
-      setShowServiceList([{
-        subscriptions: [{
-          subscription: {
-            name: "One Time",
-            package_divider: 1
-          },
-          data: [{
-            _id: "CS-1",
-            name: name ?? "Custom Service",
-            price: 0
-          }]
-        }]
-      }])
-    }
-    setSubscriptionIds(["CS-1"]);
-    setSubscriptionCount(1);
-  }
-  const handleCustomServicePriceInput = (price) => {
-    let temp = [];
-    setSubscriptionCount(0);
-
-    ShowServiceList.map((element, _id) => {
-      element.subscriptions.map((subscriptions, __id) => {
-        subscriptions.data.map((subscription, ___id) => {
-          console.log({ subscription });
-          subscription.price = price
-        })
-      })
-      temp.push(element)
-    })
-    console.log({ ShowServiceList });
-    setSubscriptionCount(1);
-    setShowServiceList(temp)
-  }
+  
 
   // useEffect(() => {
   //   const calculateCosts = () => {
@@ -902,78 +895,7 @@ const initialServiceCost = {
   //   calculateCosts();
   // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
-
-
-
-  // useEffect(() => {
-  //   const calculateCosts = () => {
-  //     const discountValueParsed = parseFloat(discountValue) || 0;
-  //     let subscriptionsArray = [];
-
-  //     ShowServiceId?.forEach(subscriptionObj => {
-  //       subscriptionObj.data?.forEach(dataObj => {
-  //         if (subscriptionIds.includes(dataObj._id)) {
-  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
-  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-  //           const totalPackageCost = parseFloat(subTotal) + parseFloat(taxAmount);
-  //           // let package_divider = parseFloat(subscriptionObj.subscription.package_divider);
-  //           // let servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-  //           // // subscritionAmount = parseFloat(dataObj.price / servicePerWO)
-  //           // let subTotal = parseFloat(dataObj.price / servicePerWO);
-  //           // if (active == 2) {
-  //           //   subTotal += parseFloat(adjustmentvalue).toFixed(2);;
-  //           // }
-  //           // if (active == 3) {
-  //           //   subTotal -= parseFloat(adjustmentvalue).toFixed(2);
-  //           // }
-  //           // let discount = 0;
-  //           // if (discountValue) {
-  //           //   discount = (subTotal * (parseFloat(discountValue) / 100)).toFixed(2);
-  //           //   subTotal -= (subTotal * (parseFloat(discountValue) / 100)).toFixed(2);
-  //           // }
-  //           // let taxValue = 0;
-  //           // if (tax.taxValue) {
-  //           //   taxValue = (subTotal * (parseFloat(tax.taxValue) / 100)).toFixed(2);
-  //           // }
-
-  //           // let totalPackageCost = parseFloat(subTotal) + parseFloat(taxValue);
-
-  //           const ServiceCost = {
-  //             servicePerWO: parseFloat(subscriptionObj.price / package_divider).toFixed(2),
-  //             discount: parseFloat(discount || 0).toFixed(2),
-  //             subTotal: parseFloat(subTotal).toFixed(2),
-  //             tax: parseFloat(taxValue).toFixed(2),
-  //             totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-  //           };
-
-  //           console.log(ServiceCost,"ServiceCost")
-
-  //           subscriptionsArray.push({
-  //             subscription: subscriptionObj.subscription._id,
-  //             subModule: dataObj._id,
-  //             serviceCost: ServiceCost,
-  //           });
-  //         }
-  //       });
-  //     });
-
-  //     // If subscriptionsArray is empty, use CustomsubscriptionArray
-  //     const finalSubscriptions = subscriptionsArray.length > 0 ? subscriptionsArray : [];
-
-  //     setServiceCost({ ...initialServiceCost });
-  //     localStorage.setItem('Subscriptions', JSON.stringify(finalSubscriptions));
-  //   };
-
-  //   calculateCosts();
-  // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
-
-
- 
-
-  const generateTableData = () => {
+const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
     ShowServiceId?.forEach(ele => {
@@ -1043,18 +965,7 @@ const initialServiceCost = {
                 }
               )
 
-              // if (subscriptionIds.includes(subscription._id)) {
-              //   let serviceCostData = subscriptionIds.map(selectedId => ({
-              //     subscription: selectedId,
-              //     subModule: subscription._id,
-              //     serviceCost: {
-              //       servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
-              //       discount: parseFloat(discount || 0).toFixed(2),
-              //       subTotal: parseFloat(subTotal).toFixed(2),
-              //       tax: parseFloat(taxValue).toFixed(2),
-              //       totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-              //     }
-              //   }));
+              
 
               let abc = [
                 {
@@ -1488,34 +1399,37 @@ const AdjustmentValueHandler = (event) => {
                 required: true,
                 message: 'Please Select Sales Person.',
               },
-
             ]}
-
           >
             <Select
+              showSearch
               style={{
                 width: '100%',
-
               }}
-              // onChange={(event) => setcustomSelect(event) }
+              optionFilterProp="children"
               onChange={(event) => setSelectedSalesPerson(event)}
-              notFoundContent={loading ? <Spin size="small" /> : null}
+              // notFoundContent={loading ? <Spin size="small" /> : null} 
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              filterSort={(optionA, optionB) =>
+                (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+              }
             >
-
               {loading ? (
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
               ) : (
                 SalesPerson?.map((option, index) => (
-                  <Select.Option
-                    key={option._id}
-                    value={option._id}>
+                  <Select.Option key={option._id} value={option._id}>
                     {option.name}
                   </Select.Option>
                 ))
               )}
-
+              {/* {SalesPerson?.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}>
+                  {option.name}
+                </Select.Option>
+              ))} */}
             </Select>
           </Form.Item>
         </Col>
@@ -1546,24 +1460,33 @@ const AdjustmentValueHandler = (event) => {
           <Form.Item
             name="serviceCategory"
             label={translate('Service Category')}
-
+            rules={[
+              {
+                required: true,
+                message: 'Please Select Service Category.',
+              },
+            ]}
           >
             <Select
+              showSearch
+              optionFilterProp="children"
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              filterSort={(optionA, optionB) =>
+                (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+              }
               style={{
                 width: '100%',
               }}
               onChange={getCategorySubscriptionHandler}
-              // notFoundContent={loading ? <Spin size="small" /> : null}
+            // notFoundContent={loading ? <Spin size="small" /> : null}
             >
-
-            
-                
-                {serviceCategoryOptions?.map((option, index) => (
-                  <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-                ))}
-            
+             {serviceCategoryOptions?.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}>
+                  {/* {option.name} */}
+                  {option.name ? option.name : 'Loading...'}
+                </Select.Option>
+              ))}
             </Select>
-
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={12}>
@@ -1584,7 +1507,7 @@ const AdjustmentValueHandler = (event) => {
               }}
               value={selectedOption}
               onChange={handleSelectChange}
-              disabled={!selectedValue} 
+              // disabled={!selectedValue} 
               subscriptionOneTime
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
@@ -1680,7 +1603,7 @@ const AdjustmentValueHandler = (event) => {
 
                       {fields.map((field, index) => (
                         <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current}
-                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler }}></ItemRow>
+                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler, CustomItemRemarksHandler }}></ItemRow>
 
                       ))}
                       <Form.Item>
@@ -1880,7 +1803,7 @@ const AdjustmentValueHandler = (event) => {
                           field={field}
                           current={current}
                           isFirstRow={index === 0}
-                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler }}
+                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler, CustomItemRemarksHandler }}
                         />
                       ))}
                       <Form.Item>
