@@ -9,6 +9,7 @@ import {
   Tag,
   Checkbox,
   notification,
+  Spin
 } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
@@ -34,6 +35,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   const [checkedOption, setcheckedOption] = useState('');
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, readBox } = crudContextAction;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +52,34 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   }, []);
 
   if (fields.subscription_type) {
+    // useEffect(() => {
+    //   const fetchData = async () => {
+    //     try {
+    //       const response = await request.getCategorySubscription();
+    //       if (response.success) {
+    //         console.log({ response });
+    //         setCheckBoxes(response.result);
+    //       } else {
+    //         readBox.close();
+    //         collapsedBox.close();
+    //         panel.close();
+    //         notification.config({
+    //           duration: 4,
+    //           maxCount: 2,
+    //         });
+    //         notification.error({
+    //           message: `Request error`,
+    //           description: response.message,
+    //         });
+    //       }
+    //     } catch (error) {
+    //       console.error('Error fetching data:', error);
+    //     }
+        
+    //   };
+
+    //   fetchData();
+    // }, []);
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -58,25 +88,19 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
             console.log({ response });
             setCheckBoxes(response.result);
           } else {
-            readBox.close();
-            collapsedBox.close();
-            panel.close();
-            notification.config({
-              duration: 4,
-              maxCount: 2,
-            });
-            notification.error({
-              message: `Request error`,
-              description: response.message,
-            });
+            // Handle error notification or UI changes
+            console.error('Request error:', response.message);
           }
         } catch (error) {
           console.error('Error fetching data:', error);
+        } finally {
+          setLoading(false); // Set loading to false once data fetching is done
         }
       };
-
+  
       fetchData();
     }, []);
+  
   }
 
 
@@ -96,12 +120,29 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
             );
           } else if (field.hasOptions) {
             return (
-              <FormElement
-                setFeedback={setcheckedOption}
-                key={key}
-                field={field}
-                checkboxes={checkboxes}
-              />
+
+              <>
+        
+            <Spin spinning={loading}>
+        {checkboxes.length > 0 && (
+          <FormElement
+            setFeedback={setFeedback}
+            field={field}
+            checkboxes={checkboxes}
+          />
+        )}
+      </Spin>
+      
+            </>
+
+
+              
+              // <FormElement
+              //   setFeedback={setcheckedOption}
+              //   key={key}
+              //   field={field}
+              //   checkboxes={checkboxes}
+              // />
             );
           } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;

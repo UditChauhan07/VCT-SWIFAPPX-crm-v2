@@ -4258,6 +4258,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         console.error('Error fetching data:', error);
       }
     };
+
+
+
+    
     const fetchData3 = async () => {
       setLoading(true);
 
@@ -4658,9 +4662,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const ItemHandler = (element) => {
+    // console.log(element._id)
     setNewiitems((prevItems) => [...prevItems, element]);
 
-    setCheckedId(element.price);
+    setCheckedId(element._id);
     const tempId = [...subItemIds];
     const temp = [...Subitems];
 
@@ -4708,9 +4713,26 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     discount: null,
   };
 
+
+  
+  let additionalCostNull  = {
+    subTotal: 0,
+    tax: 0,
+    totalPackageCost: 0,
+    itemTotal: 0,
+    discount: 0,
+  };
+
+
+  if (CheckedId) {
+    localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
+  } else {
+    localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCostNull));
+  }
+
   // console.log({ additionalCost });
   const [isSubId, setSubId] = useState({});
-  console.log(isSubId);
+  
   const [subscriptionIds, setSubscriptionIds] = useState([]);
 
   const [discountValue, setdiscount] = useState(0);
@@ -5031,6 +5053,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       additionalCost.itemTotal = parseFloat(itemMPrice).toFixed(2);
                       additionalCost.discount = parseFloat(discount).toFixed(2);
                       localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
+                      //  console.log(CheckedId)
+                      // localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(CheckedId ? additionalCost: additionalCostNull));
                       return (
                         <>
                           item:{item.name} (x{item.qty ?? 0}){index != Subitems.length && <br />}
@@ -6111,7 +6135,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 )}
               </Form.List>
             </Collapse.Panel>
-
+          
             {productList?.map((mainData, i) => (
               <Collapse.Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
@@ -6307,7 +6331,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     <Form.Item>
                       <Button
                         type="dashed"
-                        onClick={() => add()}
+                        // onClick={() => add()}
+                        onClick={() => add({ quantity: 1 })}
                         block
                         icon={<PlusOutlined />}
                         ref={addField}
@@ -6319,6 +6344,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 )}
               </Form.List>
             </Collapse.Panel>
+            {loading && <Spin size="large" />}
             {productList?.map((mainData, i) => (
               <Collapse.Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
