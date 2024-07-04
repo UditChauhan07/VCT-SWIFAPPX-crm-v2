@@ -288,6 +288,7 @@ export default function ItemRow({
   };
    
 
+
   return (
     <>
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -318,7 +319,7 @@ export default function ItemRow({
               className="moneyInput"
               onChange={(value) => updatePrice(value, `CI-${field.key}`)}
               formatter={numericFormatter}
-              
+
               onKeyPress={handleKeyPress}
               min={0}
               // formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
