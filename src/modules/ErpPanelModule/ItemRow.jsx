@@ -254,9 +254,7 @@ export default function ItemRow({
     if (value === undefined || value === null) {
       return Promise.resolve();
     }
-    if (isNaN(value) || value === '') {
-      return Promise.reject(new Error('Only numerical values are accepted.'));
-    }
+ 
     if (!/^\d{1,10}$/.test(value.toString())) {
       return Promise.reject(new Error('Price must be at most 10 digits.'));
     }
@@ -273,8 +271,28 @@ export default function ItemRow({
     return Promise.resolve();
   };
 
+  // const handleKeyPress = (event) => {
+  //   const charCode = event.which ? event.which : event.keyCode;
+  //   if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+  //     event.preventDefault();
+  //     setErrorMessage('Only numeric values are accepted.');
+  //   } else {
+  //     setErrorMessage('');
+  //   }
+  // };
+
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
+    const inputValue = event.target.value;
+
+    // Check if input length is already 10 digits
+    if (inputValue.length >= 10 && charCode !== 8 && charCode !== 46) {
+      event.preventDefault();
+      setErrorMessage('You can only enter up to 10 digits.');
+      return;
+    }
+
+    // Allow only numeric values and a single decimal point
     if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
       event.preventDefault();
       setErrorMessage('Only numeric values are accepted.');
@@ -282,6 +300,7 @@ export default function ItemRow({
       setErrorMessage('');
     }
   };
+
 
   const numericFormatter = (value) => {
     return value.replace(/[^0-9.]/g, '');
