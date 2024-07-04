@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Divider } from 'antd';
+import { Divider, Tooltip } from 'antd';
 
 import { Button, Row, Col, Descriptions, Statistic, Tag } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -29,12 +29,48 @@ import { current } from '@reduxjs/toolkit';
 // import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
+    const RemarksComponent = ({ remarks }) => {
+        const [isHovered, setIsHovered] = useState(false);
+
+        const handleMouseEnter = () => {
+            setIsHovered(true);
+        };
+
+        const handleMouseLeave = () => {
+            setIsHovered(false);
+        };
+
+        const renderRemarks = (remarks) => {
+            if (remarks.length > 10) {
+                return (
+                    <Tooltip title={remarks}>
+                        <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                            {remarks.substring(0, 12)}...
+                        </span>
+                    </Tooltip>
+                );
+            }
+            return remarks;
+        };
+
+        return (
+            <p
+                style={{
+                    textAlign: 'right',
+                    fontWeight: '700',
+                }}
+            >
+                {renderRemarks(remarks)}
+            </p>
+        );
+    };
+
     const { moneyFormatter } = useMoney();
     return (
         <Row gutter={[12, 0]} key={item._id}>
-            <Col className="gutter-row" span={11}>
+            <Col className="gutter-row" span={8}>
                 <p style={{ marginBottom: 5 }}>
-                    <strong>{item?.item?.name}</strong>
+                    <strong>{item.item.name}</strong>
                 </p>
                 <p>{item.description}</p>
             </Col>
@@ -56,7 +92,7 @@ const Item = ({ item }) => {
                     {item.qty}
                 </p>
             </Col>
-            <Col className="gutter-row" span={5}>
+            <Col className="gutter-row" span={4}>
                 <p
                     style={{
                         textAlign: 'right',
@@ -64,6 +100,18 @@ const Item = ({ item }) => {
                     }}
                 >
                     {moneyFormatter({ amount: item.total })}
+                </p>
+            </Col>
+            <Col className="gutter-row" span={4}>
+                <p
+                    style={{
+                        textAlign: 'right',
+                        fontWeight: '700',
+                    }}
+                >
+                    {/* {item.remarks} */}
+                    <RemarksComponent remarks={item.remarks} />
+                    {/* {moneyFormatter({ amount: item.remark })} */}
                 </p>
             </Col>
             <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
@@ -228,6 +276,64 @@ useEffect(() => {
     // Convert hours to 12-hour format
     formattedHours = formattedHours % 12;
     formattedHours = formattedHours ? formattedHours : 12; // Handle midnight (0 hours)
+
+    const renderItems = currentErp.customItems.map((item) => {
+        const remarks = item.remarks || '';
+        const truncatedRemarks = remarks.length > 12 ? `${remarks.substring(0, 12)}...` : remarks;
+
+        return (
+            <Row gutter={[12, 0]} key={item._id}>
+                <Col className="gutter-row" span={8}>
+                    <p style={{ marginBottom: 5 }}>
+                        <strong>{item.item}</strong>
+                    </p>
+                    <p>{item.description}</p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                        }}
+                    >
+                        {moneyFormatter({ amount: item.price })}
+                    </p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                        }}
+                    >
+                        {item.quantity}
+                    </p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontWeight: '700',
+                        }}
+                    >
+                        {moneyFormatter({ amount: item.total })}
+                    </p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <Tooltip title={remarks}>
+                        <p
+                            style={{
+                                textAlign: 'right',
+                                fontWeight: '700',
+                            }}
+                        >
+                            {truncatedRemarks}
+                        </p>
+                    </Tooltip>
+                </Col>
+                <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
+            </Row>
+        );
+    });
+
  return (
         <>
             <PageHeader
@@ -398,13 +504,23 @@ useEffect(() => {
                                     </Col>
                                 </Row>
                                 <Row className="gutter-row" >
-                                    <Col span={12}>
-                                        <p style={{ fontSize: "15px", fontWeight: "600", marginTop: "19px" }}>{translate('Sales Person Contact')} :<br></br>
-                                        </p> </Col>
-                                    <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{currentErp?.salesPersonContact} <br></br></p>
-
-                                    </Col>
+                                 <Col span={12}>
+                                     <p style={{ fontSize: '15px', fontWeight: '600', marginTop: '19px' }}>
+                                         {translate('Sales Person Contact')} :<br></br>
+                                     </p>{' '}
+                                 </Col>
+                                 <Col span={12}>
+                                     <p
+                                         style={{
+                                             fontSize: '13px',
+                                             fontWeight: '600',
+                                             color: '#a3a3a3',
+                                             marginTop: '19px',
+                                         }}
+                                     >
+                                         {currentErp.salesPersonContact} <br></br>
+                                     </p>
+                                 </Col>
                                 </Row>
                             </Col>
                         </Row>
@@ -441,7 +557,11 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                    {currentErp.customService.description}<br></br>
+                                 {currentErp?.customService?.description?.trim() ? (
+                                     <span>{currentErp.customService.description}</span>
+                                 ) : (
+                                     <span>--</span>
+                                 )}<br></br>
                                 </p>
                             </Col>
                         </Row>
@@ -480,7 +600,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                    {currentErp.serviceCost.servicePerWO}
+                                 {currentErp.serviceCost && currentErp.serviceCost.servicePerWO ? currentErp.serviceCost.servicePerWO : '-'}
                                     <br></br>
                                 </p>{' '}
                             </Col>
@@ -492,9 +612,9 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                    {currentErp.adjustment && currentErp.adjustment.value
-                                        ? currentErp.adjustment.value
-                                        : ''}
+                                 {currentErp.adjustment && currentErp.adjustment.value
+                                     ? currentErp.adjustment.value
+                                     : ''}
                                     <br></br>
                                 </p>{' '}
                             </Col>
@@ -506,7 +626,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                    {currentErp.serviceCost.discount}
+                                 {currentErp.serviceCost && currentErp.serviceCost.discount ? currentErp.serviceCost.discount : '-'}
                                     <br></br>
                                 </p>
                             </Col>
@@ -517,7 +637,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                    {currentErp.serviceCost.subTotal}
+                                 {currentErp.serviceCost && currentErp.serviceCost.subTotal ? currentErp.serviceCost.subTotal : '-'}
                                     <br></br>
                                 </p>
                             </Col>
@@ -528,7 +648,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                    {currentErp.serviceCost.tax}
+                                 {currentErp.serviceCost && currentErp.serviceCost.tax ? currentErp.serviceCost.tax : "-"}
                                     <br></br>
                                 </p>
                             </Col>
@@ -540,7 +660,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                    {currentErp.serviceCost.totalPackageCost}
+                                 {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? currentErp.serviceCost.totalPackageCost : "-"}
                                     <br></br>
                                 </p>
                             </Col>
@@ -605,207 +725,295 @@ useEffect(() => {
             </Row>
 
 
-            <h2 style={{ marginTop: '4%' }}>Additional Cost</h2>
-            <Divider />
-            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+         <h2 style={{ marginTop: '4%' }}>Additional Cost</h2>
+         <Divider />
+         <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+             <Col className="gutter-row" span={8}>
+                 <p style={{ fontSize: '16px' }}>
+                     <strong>{translate('Product')}</strong>
+                 </p>
+             </Col>
+             <Col className="gutter-row" span={4}>
+                 <p
+                     style={{
+                         textAlign: 'right',
+                         fontSize: '16px',
+                     }}
+                 >
+                     <strong>{translate('Price')}</strong>
+                 </p>
+             </Col>
+             <Col className="gutter-row" span={4}>
+                 <p
+                     style={{
+                         textAlign: 'right',
+                         fontSize: '16px',
+                     }}
+                 >
+                     <strong>{translate('Quantity')}</strong>
+                 </p>
+             </Col>
+             <Col className="gutter-row" span={4}>
+                 <p
+                     style={{
+                         textAlign: 'right',
+                         fontSize: '16px',
+                     }}
+                 >
+                     <strong>{translate('Total')}</strong>
+                 </p>
+             </Col>
+             <Col className="gutter-row" span={4}>
+                 <p
+                     style={{
+                         textAlign: 'right',
+                         fontSize: '16px',
+                     }}
+                 >
+                     <strong>{translate('Remarks')}</strong>
+                 </p>
+             </Col>
+             <Divider style={{ marginTop: '1%' }} />
+         </Row>
 
-                <Col className="gutter-row" span={11}>
-                    <p style={{ fontSize: "15px" }}>
-                        <strong>{translate('Product')}</strong>
-                    </p>
-                </Col>
-                <Col className="gutter-row" span={4}>
-                    <p
-                        style={{
-                            textAlign: 'right',
-                            fontSize: "15px"
-                        }}
-                    >
-                        <strong>{translate('Price')}</strong>
-                    </p>
-                </Col>
-                <Col className="gutter-row" span={4}>
-                    <p
-                        style={{
-                            textAlign: 'right',
-                            fontSize: "15px"
-                        }}
-                    >
-                        <strong>{translate('Quantity')}</strong>
-                    </p>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                    <p
-                        style={{
-                            textAlign: 'right',
-                            fontSize: "15px"
-                        }}
-                    >
-                        <strong>{translate('Total')}</strong>
-                    </p>
-                </Col>
-                <Divider style={{ marginTop: "1%" }} />
-            </Row>
+         {/* {itemslist.map((item) => (
+        <Item key={item._id} item={item}></Item>
+      ))} */}
+         {itemslist.length > 0 ? (
+             itemslist.map((item) => <Item key={item._id} item={item}></Item>)
+         ) : (
+             <p style={{ textAlign: 'center', fontSize: '20px' }}>No Selected Items Found!</p>
+         )}
 
-            {itemslist.map((item) => (
+         {itemslist.length === 0 && <Divider dashed style={{ marginTop: '1%' }} />}
 
-                <Item key={item._id} item={item}></Item>
-            ))}
-            {currentErp.customItems.map((item) => (
-                <Row gutter={[12, 0]} key={item._id}>
-                    <Col className="gutter-row" span={11}>
-                        <p style={{ marginBottom: 5 }}>
-                            <strong>{item.item}</strong>
-                        </p>
-                        <p>{item.description}</p>
-                    </Col>
-                    <Col className="gutter-row" span={4}>
-                        <p
-                            style={{
-                                textAlign: 'right',
-                            }}
-                        >
-                            {moneyFormatter({ amount: item.price })}
-                        </p>
-                    </Col>
-                    <Col className="gutter-row" span={4}>
-                        <p
-                            style={{
-                                textAlign: 'right',
-                            }}
-                        >
-                            {item.quantity}
-                        </p>
-                    </Col>
-                    <Col className="gutter-row" span={5}>
-                        <p
-                            style={{
-                                textAlign: 'right',
-                                fontWeight: '700',
-                            }}
-                        >
-                            {moneyFormatter({ amount: item.total })}
-                        </p>
-                    </Col>
-                    <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
-                </Row>
-            ))}
-
-            <div
-                style={{
-                    width: '300px',
-                    float: 'right',
-                    textAlign: 'right',
-                    fontWeight: '700',
-                }}
+         {/* {currentErp.customItems.map((item) => (
+        
+        <Row gutter={[12, 0]} key={item._id}>
+          <Col className="gutter-row" span={5}>
+            <p style={{ marginBottom: 5 }}>
+              <strong>{item.item}</strong>
+            </p>
+            <p>{item.description}</p>
+          </Col>
+          <Col className="gutter-row" span={4}>
+            <p
+              style={{
+                textAlign: 'right',
+              }}
             >
+              {moneyFormatter({ amount: item.price })}
+            </p>
+          </Col>
+          <Col className="gutter-row" span={4}>
+            <p
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              {item.quantity}
+            </p>
+          </Col>
+          <Col className="gutter-row" span={5}>
+            <p
+              style={{
+                textAlign: 'right',
+                fontWeight: '700',
+              }}
+            >
+              {moneyFormatter({ amount: item.total })}
+            </p>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            <p
+              style={{
+                textAlign: 'right',
+                fontWeight: '700',
+              }}
+            >
+              {item.remarks}
+            
+            </p>
+          </Col>
+          <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
+        </Row>
+      ))} */}
+         {renderItems}
 
-                <Row gutter={[12, -5]}>
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: '16px' }}>{translate('Item Total')} :</p>
-                    </Col>
 
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: '16px' }}>
-                            {moneyFormatter({
-                                amount: currentErp.additionalCost.itemTotal,
-                            })}
-                        </p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>
-                            {translate('Discount')}  :
-                        </p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>
-                            {moneyFormatter({
-                                amount: currentErp.additionalCost.discount,
-                            })}
-                        </p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>{translate('Sub Total')} :</p>
-                    </Col>
 
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>
-                            {moneyFormatter({
-                                amount: currentErp.additionalCost.subTotal,
-                            })}
-                        </p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>
-                            {translate('Tax Total')} ({currentErp.taxPercentage}%) :
-                        </p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>
-                            {moneyFormatter({
-                                amount: currentErp.additionalCost.tax,
-                            })}
-                        </p>
-                    </Col>
 
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>{translate('Total Items Cost')} :</p>
-                    </Col>
-                    <Col className="gutter-row" span={12}>
-                        <p style={{ fontSize: "15px" }}>
-                            {moneyFormatter({
-                                amount: currentErp.additionalCost.totalPackageCost,
-                            })}
-                        </p>
-                    </Col>
-                </Row>
-            </div>
-            <Divider />
-            <h2 style={{ marginTop: '5%' }}>Total Workorder Cost</h2>
-            <Divider />
+         <div
+             style={{
+                 width: '300px',
+                 float: 'right',
+                 textAlign: 'right',
+                 // fontWeight: '700',
+             }}
+         >
+             <Row gutter={[12, -5]}>
+                 <Col className="gutter-row" span={13}>
+                     <p style={{ fontSize: '17px' }}>{translate('Item Total')} :</p>
+                 </Col>
 
-            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
-                <Col className="gutter-row" span={11}>
-                    <p style={{ fontSize: '18px' }}>
-                        <strong>{translate('Additional Cost')}</strong>
-                    </p>
-                </Col>
-                <Col className="gutter-row" span={12}>
-                    <p style={{ textAlign: 'right', fontSize: '18px' }}>
-                        {moneyFormatter({ amount: additionalCost })}
-                    </p>
-                </Col>
-                <Divider dashed style={{ marginTop: '0%' }} />
-            </Row>
+                 <Col className="gutter-row" span={11}>
+                     <p style={{ fontSize: '16px' }}>
+                         {/* {moneyFormatter({
+                amount: currentErp.additionalCost.itemTotal,
+              })} */}
+                         {currentErp.additionalCost && currentErp.additionalCost.itemTotal ? moneyFormatter({ amount: currentErp.additionalCost.itemTotal }) : ''}
+                     </p>
+                 </Col>
 
-            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
-                <Col className="gutter-row" span={11}>
-                    <p style={{ fontSize: '18px' }}>
-                        <strong>{translate('Service Cost')}</strong>
-                    </p>
-                </Col>
-                <Col className="gutter-row" span={12}>
-                    <p style={{ textAlign: 'right', fontSize: '18px' }}>
-                        {moneyFormatter({ amount: serviceCost })}
-                    </p>
-                </Col>
-                {/* <Divider  dashed  /> */}
-            </Row>
+                 <Col className="gutter-row" span={13}>
+                     <p style={{ fontSize: '17px' }}>
+                         {translate('Discount')} ({currentErp.discount}%) :
+                     </p>
+                 </Col>
 
-            <Row gutter={[12, 0]} style={{ marginTop: '13px', backgroundColor: "rgb(141,40,221)", height: "68px", color: "white" }}>
-                <Col className="gutter-row" span={11}>
-                    <p style={{ fontSize: '21px' }}>
-                        <strong>{translate('Grand Total')}</strong>
-                    </p>
-                </Col>
-                <Col className="gutter-row" span={12}>
-                    <p style={{ textAlign: 'right', fontSize: '21px' }}>
-                        {moneyFormatter({ amount: grandTotal })}
-                    </p>
-                </Col>
-                <Divider style={{ marginTop: '0%' }} />
-            </Row>
+                 <Col className="gutter-row" span={11}>
+                     <p style={{ fontSize: '16px' }}>
+                         {/* {moneyFormatter({
+                amount: currentErp.additionalCost.discount,
+              })} */}
 
+                         {currentErp.additionalCost && currentErp.additionalCost.discount ? moneyFormatter({ amount: currentErp.additionalCost.discount }) : ''}
+                     </p>
+                 </Col>
+
+                 <Col className="gutter-row" span={13}>
+                     <p style={{ fontSize: '17px' }}>{translate('sub total')} :</p>
+                 </Col>
+
+                 <Col className="gutter-row" span={11}>
+                     <p style={{ fontSize: '16px' }}>
+                         {/* {moneyFormatter({
+                amount: currentErp.additionalCost.subTotal,
+              })} */}
+                         {currentErp.additionalCost && currentErp.additionalCost.subTotal ? moneyFormatter({ amount: currentErp.additionalCost.subTotal }) : ''}
+                     </p>
+                 </Col>
+
+                 <Col className="gutter-row" span={13}>
+                     <p style={{ fontSize: '17px' }}>
+                         {translate('Tax')} ({currentErp.taxPercentage}%) :
+                     </p>
+                 </Col>
+                 <Col className="gutter-row" span={11}>
+                     <p style={{ fontSize: '16px' }}>
+                         {/* {moneyFormatter({
+                amount: currentErp.additionalCost.tax,
+              })} */}
+                         {currentErp.additionalCost && currentErp.additionalCost.tax ? moneyFormatter({ amount: currentErp.additionalCost.tax }) : ''}
+                     </p>
+                 </Col>
+
+                 <Col className="gutter-row" span={13}>
+                     <p style={{ fontSize: '17px' }}>{translate('Total Item Cost')} :</p>
+                 </Col>
+                 <Col className="gutter-row" span={11}>
+                     <p style={{ fontSize: '16px' }}>
+                         {/* {moneyFormatter({
+                amount: currentErp.additionalCost.totalPackageCost,
+              })} */}
+                         {currentErp.additionalCost && currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : ''}
+                     </p>
+                 </Col>
+             </Row>
+         </div>
+
+         {/* <Row style={{ marginTop: '23%' }}>
+        <Col className="gutter-row" span={4}>
+          <h3 style={{ fontSize: '18px' }}>{translate('Grand Total')} :</h3>
+        </Col>
+        <Col className="gutter-row" style={{ marginLeft: '1%' }}>
+          <h3 style={{ fontSize: '18px' }}>
+            {moneyFormatter({
+              amount: currentErp.grandTotal,
+            })}
+          </h3>
+        </Col>
+      </Row> */}
+         <Divider />
+
+         <h2 style={{ marginTop: '5%' }}>Total Workorder Cost</h2>
+         <Divider />
+
+         <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+             <Col className="gutter-row" span={11}>
+                 <p style={{ fontSize: '18px' }}>
+                     <strong>{translate('Additional Cost')}</strong>
+                 </p>
+             </Col>
+
+             <Col className="gutter-row" span={12}>
+                 <p
+                     style={{
+                         textAlign: 'right',
+                         fontSize: '18px',
+                     }}
+                 >
+                     {/* {moneyFormatter({
+              amount: currentErp.additionalCost.totalPackageCost,
+            })} */}
+                     {currentErp.additionalCost && currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : '-'}
+                 </p>
+             </Col>
+             <Divider dashed style={{ marginTop: '0%' }} />
+         </Row>
+
+         <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+             <Col className="gutter-row" span={11}>
+                 <p style={{ fontSize: '18px' }}>
+                     <strong>{translate('Service Cost')}</strong>
+                 </p>
+             </Col>
+
+             <Col className="gutter-row" span={12}>
+                 <p
+                     style={{
+                         textAlign: 'right',
+                         fontSize: '18px',
+                     }}
+                 >
+                     {/* {moneyFormatter({
+              amount: currentErp.serviceCost.totalPackageCost,
+            })} */}
+                     {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? moneyFormatter({ amount: currentErp.serviceCost.totalPackageCost }) : '-'}
+                 </p>
+             </Col>
+             {/* <Divider  dashed  /> */}
+         </Row>
+
+         <Row
+             gutter={[12, 0]}
+             style={{
+                 marginTop: '13px',
+                 backgroundColor: 'rgb(141,40,221)',
+                 height: '68px',
+                 color: 'white',
+             }}
+         >
+             <Col className="gutter-row" span={11}>
+                 <p style={{ fontSize: '21px' }}>
+                     <strong>{translate('Grand Total')}</strong>
+                 </p>
+             </Col>
+
+             <Col className="gutter-row" span={12}>
+                 <p
+                     style={{
+                         textAlign: 'right',
+                         fontSize: '21px',
+                     }}
+                 >
+                     {moneyFormatter({
+                         amount: currentErp.grandTotal,
+                     })}
+                 </p>
+             </Col>
+             <Divider style={{ marginTop: '0%' }} />
+         </Row>
 
 
         </>

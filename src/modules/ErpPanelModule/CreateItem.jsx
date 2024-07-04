@@ -204,13 +204,15 @@ export default function CreateItem({ config, CreateForm }) {
         let grandTotal = localStorage.getItem("jv1GYkk6plxCpgx") || 0
         let submodule = localStorage.getItem('WO-RadioId')
 
+      
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
           sendworkorderEmail: fieldsValue.sendworkorderEmail,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.salesPersonContact,
+          salesPersonContact: SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,
@@ -352,7 +354,7 @@ export default function CreateItem({ config, CreateForm }) {
           quantity: item.qty,
           price: item.price,
           total: item.total,
-          // remarks: item.remarks
+          remarks: item.remarks
         }));
 
         console.log(CustomItemData);
@@ -361,6 +363,9 @@ export default function CreateItem({ config, CreateForm }) {
 
         const isCustommString = localStorage.getItem('IssCustomm');
         const isCustomm = JSON.parse(isCustommString);
+
+        const SPC = localStorage.getItem('Salespersoncontact');
+        const SalesPersonContact = JSON.parse(SPC);
 
         const fieldData = {
           client: fieldsValue.client,
@@ -372,7 +377,7 @@ export default function CreateItem({ config, CreateForm }) {
           startTime: fieldsValue.startTime,
           expectedRequiredTime: fieldsValue.expectedRequiredTime,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.SalesPersonContact,
+          salesPersonContact: SalesPersonContact,
           serviceCategory: fieldsValue.serviceCategory,
           subscriptions: [...storedSubscriptions],
           isCustom: isCustomm,

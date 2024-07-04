@@ -231,25 +231,29 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const handleFirstDropdownChange = async (event) => {
+
     setLoading(true);
-    console.log("event", event);
+
     try {
       const response = await request.getSearchClientAddress(event);
-      console.log("response", response);
+      console.log('response', response);
       if (response.success) {
-        setCustomerAddress(response.result)
+        setCustomerAddress(response.result);
+        // setCustomerAddressEvent(event);
+        form.setFieldsValue({ clientAddress: null });
         // Set options state based on API response
       } else {
-
+        setCustomerAddress([]);
+        form.setFieldsValue({ clientAddress: null });
       }
     } catch (error) {
-
       console.error('Error fetching data:', error);
+      form.setFieldsValue({ clientAddress: null });
     } finally {
       setLoading(false);
     }
+  };
 
-  }
 
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
@@ -403,38 +407,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const [salesContactNumber, setSalesContactNumber] = useState();
-  // useEffect(() => {
-  //   if (selectedSalesPerson) {
-  //     let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone
-  //     setSalesContactNumber(number)
-  //     ContactHandler({ salesContactNumber: number })
-  //     let saleRepConElement = document.getElementById("salesContactNumber")
-  //     saleRepConElement.value = number || null
-  //     // console.log({ number, salesContactNumber });
-  //   }
-  // }, [selectedSalesPerson, salesContactNumber])
-  // const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null })
-  // useEffect(() => { }, [selectedSalesPerson])
-  // const ContactHandler = ({ salesContactNumber }) => {
-  //   return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
-  //     {
-  //       required: true,
-  //       message: 'Please select Sales Person Contact .',
-  //     },
-  //   ]}
-  //     initialValue={salesContactNumber}
-  //   >
-  //     <Input style={{
-  //       width: '100%',
-  //     }} placeholder=""
-  //       id='salesContactNumber'
-  //       value={salesContactNumber}
-  //     />
-  //   </Form.Item>
-  //   )
+
 
   const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
-
+  localStorage.setItem('Salespersoncontact', JSON.stringify(salesContactNumber));
 
   useEffect(() => {
     if (selectedSalesPerson) {
@@ -447,27 +423,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
   }, [selectedSalesPerson, salesContactNumber]);
 
-  // NEW CODE -: 1
-  // useEffect(() => {
-  //   if (selectedSalesPerson) {
-  //     let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
-  //      console.log(number)
-  //     setSalesContactNumber(number);
-  //     let saleRepConElement = document.getElementById('salesContactNumber');
-  //     if (saleRepConElement) {
-  //       saleRepConElement.value = number || null;
-  //     }
-  //   }
-  // }, [selectedSalesPerson]);
-
   const validateSalesPersonContact = (_, value) => {
     if (value || salesContactNumber) {
       return Promise.resolve();
     }
     return Promise.reject(new Error('Please Select Sales Person Contact.'));
   };
-
- 
   // useEffect(() => {}, [selectedSalesPerson]);
   const ContactHandler = ({ salesContactNumber }) => {
     // console.log(salesContactNumber)
@@ -518,6 +479,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // </Form.Item>
     );
   };
+  ;
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers)
 
@@ -569,7 +531,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   ;
   useEffect(() => { }, [subscriptionCount, subItemCount])
   let subscriptionSubTotal = 0;
-  
+
   let subscritionAmount = 0;
   const [Newiitems, setNewiitems] = useState([]);
   const [remarks, setRemarks] = useState([]);
@@ -747,6 +709,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const CustomItemRemarksHandler = (_id, remarks) => {
+
     const tempId = [...subItemIds];
     const temp = [...Subitems];
 
@@ -757,6 +720,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           item.remarks = remarks;
         }
       });
+      console.log(temp)
     } else {
       let element = {
         _id,
@@ -773,7 +737,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setItems(temp);
     setSubItemCount(temp.length);
   };
-  
+
   const DiscountValueHandler = (value) => {
     setdiscount(value ?? 0);
   };
@@ -799,9 +763,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //   return parseFloat(value);
   // };
 
-  
 
-const initialServiceCost = {
+
+  const initialServiceCost = {
     servicePerWO: null,
     discount: null,
     subTotal: null,
@@ -836,7 +800,7 @@ const initialServiceCost = {
 
   localStorage.setItem("discountValue", discountValue?.taxValue);
 
- // const [subItemCount, setSubItemCount] = useState(0);
+  // const [subItemCount, setSubItemCount] = useState(0);
 
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
@@ -850,7 +814,7 @@ const initialServiceCost = {
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
   };
-  
+
 
   // useEffect(() => {
   //   const calculateCosts = () => {
@@ -895,7 +859,7 @@ const initialServiceCost = {
   //   calculateCosts();
   // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
-const generateTableData = () => {
+  const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
     ShowServiceId?.forEach(ele => {
@@ -924,7 +888,7 @@ const generateTableData = () => {
   let subcostData = []
 
   const CalculatorFilled = () => {
- return (
+    return (
       ShowServiceList.map((element, _id) => (
         element.subscriptions.map((subscriptions, __id) => (
           subscriptions.data.map((subscription, ___id) => {
@@ -950,7 +914,7 @@ const generateTableData = () => {
             }
             if (subscriptionIds.includes(subscription._id)) {
               subscriptionSubTotal = subTotal + taxValue;
-             
+
               subcostData.push(
                 {
                   subscription: subscriptions.subscription._id,
@@ -964,8 +928,6 @@ const generateTableData = () => {
                   }
                 }
               )
-
-              
 
               let abc = [
                 {
@@ -992,7 +954,7 @@ const generateTableData = () => {
               // }
               // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitwm))
               return (
-                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none'  }}>
+                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                   <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>{subscription.name}:{subscriptions.subscription.name}</li>
                     <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
@@ -1012,8 +974,7 @@ const generateTableData = () => {
   }
   const [isCustom, setIsCustom] = useState(false)
 
-
-const CalculatorFilledItem = () => {
+  const CalculatorFilledItem = () => {
     return ShowServiceList?.map((element, _id) =>
       element.subscriptions?.map((subscriptions, __id) =>
         subscriptions.data?.map((subscription, ___id) => {
@@ -1043,6 +1004,7 @@ const CalculatorFilledItem = () => {
             let discount = 0;
             let taxValue1 = 0;
             let subITotal = 0;
+            let taxValue2 = 0;
             console.log(subITotal);
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
@@ -1072,20 +1034,24 @@ const CalculatorFilledItem = () => {
                       if (tax.taxValue) {
                         taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
                       }
+                      if (tax.taxValue) {
+                        taxValue2 = subITotal * (parseFloat(tax.taxValue) / 100);
+                      } console.log(taxValue2)
+
                       // subITotal + taxValue
                       localStorage.setItem(
                         'jv1GYkk6plxCpgx',
                         parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)
                       );
                       additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
-                      additionalCost.tax = parseFloat(taxValue).toFixed(2);
+                      additionalCost.tax = parseFloat(taxValue2).toFixed(2);
                       // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
-                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue).toFixed(2);
+                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue2).toFixed(2);
                       additionalCost.itemTotal = parseFloat(itemMPrice / package_divider).toFixed(2);
                       additionalCost.discount = parseFloat(discount).toFixed(2);
                       localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
 
-                      
+
                       return (
                         <>
                           item:{item.name} (x{item.qty ?? 0}){index != Subitems.length && <br />}
@@ -1093,12 +1059,12 @@ const CalculatorFilledItem = () => {
                       );
                     })}
                   </li>
-                  <li style={{borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px',marginTop: '',color: 'rgb(49,91,140)',}} >{itemMPrice.toFixed(2)}</li>
-                  <li style={{ borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{discount.toFixed(2)}</li>
-                  <li style={{ borderBottom: '1px solid rgb(217,217,217)',  fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)',}}>{subITotal.toFixed(2)}</li>
-                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{(taxValue || 0).toFixed(2)}</li>
-                  <li style={{borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)',}}>{(subITotal + taxValue).toFixed(2)}</li>
-                  <li style={{ borderBottom: '1px solid rgb(217,217,217)',fontSize: '15px',marginTop: '',color: 'rgb(49,91,140)',}} >{parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }} >{itemMPrice.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{discount.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{subITotal.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{(taxValue2 || 0).toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{(subITotal + taxValue2).toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }} >{parseFloat(subscriptionSubTotal + subITotal + taxValue2).toFixed(2)}
                   </li>
                 </ul>
               </td>
@@ -1109,7 +1075,7 @@ const CalculatorFilledItem = () => {
     );
   };
 
-const AdjustmentValueHandler = (event) => {
+  const AdjustmentValueHandler = (event) => {
     setadjustment(event.target.value || 0)
     let subTotal = document.getElementById("subTotal")
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
@@ -1210,7 +1176,62 @@ const AdjustmentValueHandler = (event) => {
     updatedTotals[productId] = prices[productId] * value;
     setTotals(updatedTotals);
   };
-  const optionsss = ['Addition', 'Substraction'];
+  const optionsss = ['Addition', 'Subtraction'];
+
+  const handleCustomServicePriceInput = (price) => {
+    let temp = [];
+    setSubscriptionCount(0);
+
+    ShowServiceList.map((element, _id) => {
+      element.subscriptions.map((subscriptions, __id) => {
+        subscriptions.data.map((subscription, ___id) => {
+          subscription.price = price;
+        });
+      });
+      temp.push(element);
+    });
+    setSubscriptionCount(1);
+    setShowServiceList(temp);
+  };
+  const handleCustomServiceInput = (name) => {
+    let temp = isCustom ? [] : ShowServiceList;
+    if (temp.length > 0) {
+      setSubscriptionCount(0);
+      temp.map((element, _id) => {
+        element.subscriptions.map((subscriptions, __id) => {
+          subscriptions.data.map((subscription, ___id) => {
+            console.log({ subscription });
+            subscription.name = name;
+          });
+        });
+      });
+    } else {
+      setSubscriptionCount(0);
+      setShowServiceList([
+        {
+          subscriptions: [
+            {
+              subscription: {
+                name: 'One Time',
+                package_divider: 1,
+              },
+              data: [
+                {
+                  _id: 'CS-1',
+                  name: name ?? 'Custom Service',
+                  price: 0,
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    }
+    setSubscriptionIds(['CS-1']);
+    setSubscriptionCount(1);
+  };
+
+
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
@@ -1480,7 +1501,7 @@ const AdjustmentValueHandler = (event) => {
               onChange={getCategorySubscriptionHandler}
             // notFoundContent={loading ? <Spin size="small" /> : null}
             >
-             {serviceCategoryOptions?.map((option, index) => (
+              {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
                   {/* {option.name} */}
                   {option.name ? option.name : 'Loading...'}
@@ -1569,7 +1590,7 @@ const AdjustmentValueHandler = (event) => {
               </Col>
             </Row>
 
-      <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "2%" }}>
+            <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "2%" }}>
               <Collapse.Panel header={"Custom Item"} key={'custom item'}>
                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
 
@@ -1609,7 +1630,7 @@ const AdjustmentValueHandler = (event) => {
                       <Form.Item>
                         <Button
                           type="dashed"
-                          onClick={() => add()}
+                          onClick={() => add({ quantity: 1 })}
                           block
                           icon={<PlusOutlined />}
                           ref={addField}
@@ -1641,7 +1662,7 @@ const AdjustmentValueHandler = (event) => {
                     </Col>
                   </Row>
                   <div key={`${i}`}>
-                    
+
                     {/* <Form.List name="items" >
                         <> */}
                     {mainData.products?.map((data, index) => (
@@ -1809,7 +1830,7 @@ const AdjustmentValueHandler = (event) => {
                       <Form.Item>
                         <Button
                           type="dashed"
-                          onClick={() => add()}
+                          onClick={() => add({ quantity: 1 })}
                           block
                           icon={<PlusOutlined />}
                           ref={addField}
@@ -2024,7 +2045,7 @@ const AdjustmentValueHandler = (event) => {
 
       </Row>
 
-<Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
+      <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
         {/* <Col className="gutter-row" span={12}>
           <Form.Item
             name="discount"
@@ -2076,38 +2097,39 @@ const AdjustmentValueHandler = (event) => {
         </Col>
       </Row>
 
-      {subscriptionIds.length > 0 && 
-      <>
-        <Divider dashed />
-        <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
-          {translate('Selected Quotation Billing Details')}
-        </Col>
-        <table style={{
-           width: "100%", height: "220px", marginTop: "3%", }}>
-           <tbody style={{
-            // maxWidth: '1000px',
-            // overflowX: 'auto',  
-            // display: 'block',  
-          }}> 
-          <tr>
-              <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
-                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1", }}>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Workorder For</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Subtotal</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total</li>
-                </ul>
-              </th>
-              {CalculatorFilled()}
-            </tr>
-         
-          </tbody>
-        </table>
-            {Subitems.length > 0 &&
-              <>
+      {subscriptionIds.length > 0 &&
+        <>
+          <Divider dashed />
+          <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
+            {translate('Selected Quotation Billing Details')}
+          </Col>
+          <table style={{
+            width: "100%", height: "220px", marginTop: "3%",
+          }}>
+            <tbody style={{
+              // maxWidth: '1000px',
+              // overflowX: 'auto',  
+              // display: 'block',  
+            }}>
+              <tr>
+                <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
+                  <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1", }}>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Workorder For</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Subtotal</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total</li>
+                  </ul>
+                </th>
+                {CalculatorFilled()}
+              </tr>
+
+            </tbody>
+          </table>
+          {Subitems.length > 0 &&
+            <>
               <table style={{
                 width: "100%", height: "220px", marginTop: "3%",
               }}>
@@ -2116,38 +2138,38 @@ const AdjustmentValueHandler = (event) => {
                   // maxWidth: '1000px',
                   // overflowX: 'auto',  
                   // display: 'block',  
-                }}> 
-          <tr style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}>
-                  {translate('Additional Service Items')}
-                </tr>
-                {/* <tr>Additional Service Items</tr> */}
-              <tr 
-              // style={{
-              //   maxWidth: '1000px',
-              //   overflowX: 'auto',
-              //   display: 'block',
-              // }}
-              >
-                  <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
-                    <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }
-                      }>Service Items Included(per workorder)</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Item Total</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Sub Total</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total Service Items Cost</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Grand Total</li>
-                    </ul>
-                  </th>
-                  {CalculatorFilledItem()}
-                </tr>
-            </tbody>
-          </table>
-              </>
-           
-            }
-          </>}
+                }}>
+                  <tr style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}>
+                    {translate('Additional Service Items')}
+                  </tr>
+                  {/* <tr>Additional Service Items</tr> */}
+                  <tr
+                  // style={{
+                  //   maxWidth: '1000px',
+                  //   overflowX: 'auto',
+                  //   display: 'block',
+                  // }}
+                  >
+                    <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
+                      <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }
+                        }>Service Items Included(per workorder)</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Item Total</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Sub Total</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total Service Items Cost</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Grand Total</li>
+                      </ul>
+                    </th>
+                    {CalculatorFilledItem()}
+                  </tr>
+                </tbody>
+              </table>
+            </>
+
+          }
+        </>}
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
         <Row gutter={[12, -5]}>
