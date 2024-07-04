@@ -158,39 +158,20 @@ export default function ItemRow({
     CustomItemQTYHandler,
     CustomItemRemarksHandler,
   } = onChange || null;
-export default function ItemRow({
-  key,
-  field,
-  remove,
-  current = null,
-  response,
-  isFirstRow,
-  onChange = {},
-}) {
-  const {
-    CustomItemNameHandler,
-    CustomItemPriceHandler,
-    CustomItemQTYHandler,
-    CustomItemRemarksHandler,
-  } = onChange || null;
 
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [name, setName] = useState('');
-  const [remarks, setRemarks] = useState('');
   const [remarks, setRemarks] = useState('');
   const [quantity, setQuantity] = useState(0);
 
   const money = useMoney();
   const updateQt = (value, _id) => {
     CustomItemQTYHandler(_id, value ?? 0);
-    CustomItemQTYHandler(_id, value ?? 0);
     setQuantity(value);
   };
   const updatePrice = (value, _id) => {
-    CustomItemPriceHandler(_id, value ?? 0);
     CustomItemPriceHandler(_id, value ?? 0);
     setPrice(value);
   };
@@ -203,15 +184,7 @@ export default function ItemRow({
     setRemarks(value);
   };
 
-
-  const updateRemarks = (value, _id) => {
-    CustomItemRemarksHandler(_id, value ?? '');
-    setRemarks(value);
-  };
-
   const [form] = useForm();
-
-  useEffect(() => {
 
   useEffect(() => {
     if (field.fieldKey === 0 && current && current.items && current.items.length > 0) {
@@ -220,7 +193,6 @@ export default function ItemRow({
       setName(firstItem.itemName || '');
       setPrice(firstItem.price || 0);
       setQuantity(firstItem.quantity || 0);
-      setRemarks(firstItem.remarks || '');
       setRemarks(firstItem.remarks || '');
     }
   }, [current, form]);
@@ -236,14 +208,12 @@ export default function ItemRow({
           setQuantity(item.quantity);
           setPrice(item.price);
           setRemarks(item.remarks);
-          setRemarks(item.remarks);
         }
       } else {
         const item = items[field.fieldKey];
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
-          setRemarks(item.remarks);
           setRemarks(item.remarks);
         }
       }
@@ -303,67 +273,14 @@ export default function ItemRow({
     return Promise.resolve();
   };
 
-
-
-  // const validateNumber = (_, value) => {
-  //   if (!value) {
-  //     return Promise.resolve();
-  //   }
-  //   if (!/^\d{1,10}$/.test(value)) {
-  //     return Promise.reject(new Error('Price must be at most 10 digits.'));
-  //   }
-  //   return Promise.resolve();
-  // };
-
-  // const validateNumber = (_, value) => {
-  //   console.log(typeof value)
-  //   if (value === undefined || value === null ) {
-  //     return Promise.resolve();
-  //   }
-  //   if (typeof value !== 'number'  || isNaN(value)) {
-  //     return Promise.reject(new Error('Only numerical values are accepted.'));
-  //   }
-  //   if (!/^\d{1,10}$/.test(value.toString())) {
-  //     return Promise.reject(new Error('Price must be at most 10 digits.'));
-  //   }
-  //   return Promise.resolve();
-  // };
-
-  const validateNumber = (_, value) => {
-    if (value === undefined || value === null) {
-      return Promise.resolve();
-    }
-    if (isNaN(value) || value === '') {
-      return Promise.reject(new Error('Only numerical values are accepted.'));
-    }
-    if (!/^\d{1,10}$/.test(value.toString())) {
-      return Promise.reject(new Error('Price must be at most 10 digits.'));
-    }
-    return Promise.resolve();
-  };
-
-  const validateNumberqt = (_, value) => {
-    if (!value) {
-      return Promise.resolve();
-    }
-    if (!/^\d{1,10}$/.test(value)) {
-      return Promise.reject(new Error('Quantity must be at most 10 digits.'));
-    }
-    return Promise.resolve();
-  };
-
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
     if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
       event.preventDefault();
       setErrorMessage('Only numeric values are accepted.');
-      setErrorMessage('Only numeric values are accepted.');
     } else {
       setErrorMessage('');
-      setErrorMessage('');
     }
-  };
-
   };
 
   const numericFormatter = (value) => {
@@ -371,21 +288,12 @@ export default function ItemRow({
   };
    
 
+
   return (
     <>
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
         <Col className="gutter-row" span={4}>
           <Form.Item
-            name={[field.name, 'item']}
-            rules={[{ max: 15, message: 'Name can have a maximum of 10 characters.' }]}
-          >
-            <Input
-              onChange={updateName}
-              placeholder="Item Name"
-              onKeyUp={(e) => {
-                CustomItemNameHandler(`CI-${field.key}`, e.target.value);
-              }}
-            />
             name={[field.name, 'item']}
             rules={[{ max: 15, message: 'Name can have a maximum of 10 characters.' }]}
           >
@@ -438,25 +346,10 @@ export default function ItemRow({
               formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
               onChange={(value) => updateQt(value, `CI-${field.key}`)}
             />
-          <Form.Item
-            name={[field.name, 'quantity']}
-            rules={[
-              {
-                validator: validateNumberqt,
-              },
-            ]}
-          >
-            <InputNumber
-              style={{ width: '100%' }}
-              //  min={0}
-              formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
-              onChange={(value) => updateQt(value, `CI-${field.key}`)}
-            />
           </Form.Item>
         </Col>
 
         <Col className="gutter-row" span={4}>
-          {/* <Form.Item
           {/* <Form.Item
             name={[field.name, 'total']}
             initialValue={totalState}
@@ -469,13 +362,9 @@ export default function ItemRow({
                 readOnly
                 className="moneyInput"
                 value={totalState ? totalState : price}
-                value={totalState ? totalState : price}
                 min={0}
                 controls={false}
                 addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-                addonBefore={
-                  money.currency_position === 'before' ? money.currency_symbol : undefined
-                }
                 addonBefore={
                   money.currency_position === 'before' ? money.currency_symbol : undefined
                 }
@@ -500,23 +389,9 @@ export default function ItemRow({
               placeholder=" Remarks "
               onChange={(e) => updateRemarks(e.target.value, `CI-${field.key}`)}
             />
-            <Input
-              placeholder=" Remarks "
-              onChange={(e) => updateRemarks(e.target.value, `CI-${field.key}`)}
-            />
           </Form.Item>
         </Col>
 
-        {!isFirstRow && (
-          <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
-            <DeleteOutlined
-              onClick={() => {
-                remove(field.name);
-                CustomItemNameHandler(`CI-${field.key}`, null, null, null, true);
-              }}
-            />
-          </div>
-        )}
         {!isFirstRow && (
           <div style={{ position: 'absolute', right: '10px', top: ' 5px' }}>
             <DeleteOutlined
@@ -531,4 +406,3 @@ export default function ItemRow({
     </>
   );
 }
-
