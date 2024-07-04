@@ -1,6 +1,3 @@
-
-
-
 // NEW CUSTOM ITEM WORK ORDER CODE
 
 import { useState, useEffect, useRef } from 'react';
@@ -101,6 +98,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [activeSelect, IsActiveSelect] = useState(1);
   const [loading, setLoading] = useState(false);
 
+
+
+
+
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
   };
@@ -162,6 +163,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // console.log({ serviceOptions });
 
   const [productList, setProductList] = useState([]);
+  
 
   const [tax, setTax] = useState({});
 
@@ -229,15 +231,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       }
     };
 
-
-
-    
     const fetchData3 = async () => {
       setLoading(true);
 
       try {
         const response = await request.getServiceListShow({ id: value });
-
+            console.log(response)
         if (response.success) {
           setShowServiceList(response.result);
           setProductList(ShowServiceList);
@@ -256,11 +255,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const [customerAddressEvent, setCustomerAddressEvent] = useState([]);
- console.log(customerAddressEvent)
+  console.log(customerAddressEvent);
   const handleFirstDropdownChange = async (event) => {
-    
     setLoading(true);
-   
+
     try {
       const response = await request.getSearchClientAddress(event);
       console.log('response', response);
@@ -283,7 +281,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const handleCustomerClear = () => {
     form.setFieldsValue({ client: null, clientAddress: null });
-    // setCustomerAddressEvent(null); 
+    // setCustomerAddressEvent(null);
     setCustomerAddress([]); // Clear customer addresses
   };
 
@@ -683,16 +681,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     discount: null,
   };
 
-
-  
-  let additionalCostNull  = {
+  let additionalCostNull = {
     subTotal: 0,
     tax: 0,
     totalPackageCost: 0,
     itemTotal: 0,
     discount: 0,
   };
-
 
   if (CheckedId) {
     localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
@@ -702,7 +697,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   // console.log({ additionalCost });
   const [isSubId, setSubId] = useState({});
-  
+
   const [subscriptionIds, setSubscriptionIds] = useState([]);
 
   const [discountValue, setdiscount] = useState(0);
@@ -975,7 +970,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           if (tax.taxValue) {
             taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
           }
-       
 
           if (subscriptionIds.includes(subscription._id)) {
             subscriptionSubTotal = subTotal + taxValue;
@@ -1020,8 +1014,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         taxValue22 = subITotal * (parseFloat(tax.taxValue) / 100);
                       }
 
-                       console.log(taxValue22)
-
+                      console.log(taxValue22);
 
                       // subITotal + taxValue
                       localStorage.setItem(
@@ -1031,7 +1024,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
                       additionalCost.tax = parseFloat(taxValue22).toFixed(2);
                       // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
-                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue22).toFixed(2);
+                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue22).toFixed(
+                        2
+                      );
                       additionalCost.itemTotal = parseFloat(itemMPrice).toFixed(2);
                       additionalCost.discount = parseFloat(discount).toFixed(2);
                       localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
@@ -1152,6 +1147,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   // };
 
   const [isCustom, setIsCustom] = useState(false);
+
+  // console.log(LoadValue)
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
   const handleSelectChange = (value) => {
@@ -1550,13 +1547,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               // loading={loading}
               // value={form.getFieldValue('clientAddress')}
               allowClear
-             
               notFoundContent={loading ? <Spin size="small" /> : null}
-              onChange={(value) => form.setFieldsValue({ clientAddress: value })} 
+              onChange={(value) => form.setFieldsValue({ clientAddress: value })}
               value={
-                customerAddress.length === 0
-                  ? undefined
-                  : form.getFieldValue('clientAddress') || ""
+                customerAddress.length === 0 ? undefined : form.getFieldValue('clientAddress') || ''
               }
             >
               {/* {loading ? (
@@ -1570,8 +1564,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   </Select.Option>
                 ))
               )} */}
-
-
 
               {/* {loading ? (
                 <Select.Option key="loading" disabled>
@@ -1589,25 +1581,22 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 ))
               )} */}
 
-
-
-            {loading ? (
-              <Select.Option key="loading" disabled>
-                <Spin size="small" /> Loading...
-              </Select.Option>
-            ) : customerAddress.length === 0 ? (
-              <Select.Option key="no-address" disabled>
-                No Data Found 
-              </Select.Option>
-            ) : (
-              customerAddress.map((option) => (
-                // console.log(option)
-                <Select.Option key={option._id} value={option._id}>
-                  {option.label}
+              {loading ? (
+                <Select.Option key="loading" disabled>
+                  <Spin size="small" /> Loading...
                 </Select.Option>
-              ))
-            )}
-
+              ) : customerAddress.length === 0 ? (
+                <Select.Option key="no-address" disabled>
+                  No Data Found
+                </Select.Option>
+              ) : (
+                customerAddress.map((option) => (
+                  // console.log(option)
+                  <Select.Option key={option._id} value={option._id}>
+                    {option.label}
+                  </Select.Option>
+                ))
+              )}
             </Select>
           </Form.Item>
         </Col>
@@ -1630,12 +1619,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               allowClear
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {loading ? (
+            {loading ? (
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
+              ) : customerAddress.length === 0 ? (
+                <Select.Option key="no-address" disabled>
+                  No Data Found
+                </Select.Option>
               ) : (
-                customerAddress?.map((option) => (
+                customerAddress.map((option) => (
+                  // console.log(option)
                   <Select.Option key={option._id} value={option._id}>
                     {option.label}
                   </Select.Option>
@@ -1749,17 +1743,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
-                showSearch
+              allowClear
+              showSearch
               style={{
                 width: '100%',
               }}
-               optionFilterProp="children"
+              optionFilterProp="children"
               onChange={(event) => setSelectedSalesPerson(event)}
-              // notFoundContent={loading ? <Spin size="small" /> : null} 
+              // notFoundContent={loading ? <Spin size="small" /> : null}
               notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
               filterSort={(optionA, optionB) =>
-                (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
-              } 
+                (optionA.children ?? '')
+                  .toLowerCase()
+                  .localeCompare((optionB.children ?? '').toLowerCase())
+              }
             >
               {loading ? (
                 <Select.Option key="loading" disabled>
@@ -1804,12 +1801,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
-               showSearch
-                optionFilterProp="children"
-                notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
-                filterSort={(optionA, optionB) =>
-                  (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
-                } 
+              showSearch
+              optionFilterProp="children"
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              filterSort={(optionA, optionB) =>
+                (optionA.children ?? '')
+                  .toLowerCase()
+                  .localeCompare((optionB.children ?? '').toLowerCase())
+              }
               style={{
                 width: '100%',
               }}
@@ -1891,12 +1890,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
-             showSearch
-             optionFilterProp="children"
-             notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
-             filterSort={(optionA, optionB) =>
-               (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
-             } 
+              showSearch
+              optionFilterProp="children"
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              filterSort={(optionA, optionB) =>
+                (optionA.children ?? '')
+                  .toLowerCase()
+                  .localeCompare((optionB.children ?? '').toLowerCase())
+              }
               style={{
                 width: '100%',
               }}
@@ -1938,58 +1939,39 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             ]}
           >
             <Select
-             showSearch
-             optionFilterProp="children"
-             notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
-             filterSort={(optionA, optionB) =>
-               (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
-             } 
+              showSearch
+              optionFilterProp="children"
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              //  filterSort={(optionA, optionB) =>
+              //    (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+              //  }
               style={{
                 width: '100%',
-                
               }}
               value={selectedOption}
               onChange={handleSelectChange}
-              disabled={!selectedValue} 
+              // disabled={!selectedValue}
               // className={!selectedValue ? 'not-allowed' : ''}
               subscriptionOneTime
               // notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {/* {loading ? (
+              <Select.Option value="custom" onClick={() => setIsCustom(true)}>
+                Custom Service (One Time)
+              </Select.Option>
+
+              {loading ? (
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
-              ) : selectedValue ? (
+              ) : (
                 <>
-                  <Select.Option value="custom" onClick={() => setIsCustom(true)}>
-                    Custom Service (One Time)
-                  </Select.Option>
                   {ShowServiceList?.map((option) => (
                     <Select.Option key={option._id} value={option._id}>
                       {option.name}
                     </Select.Option>
                   ))}
                 </>
-              ) : null} */}
-
-{loading ? (
-              <Select.Option key="loading" disabled>
-                <Spin size="small" /> Loading...
-              </Select.Option>
-            ) : (
-              selectedValue && (
-                <>
-                  <Select.Option value="custom" onClick={() => setIsCustom(true)}>
-                    Custom Service (One Time)
-                  </Select.Option>
-                  {ShowServiceList?.map((option) => (
-                    <Select.Option key={option._id} value={option._id}>
-                      {option.name}
-                    </Select.Option>
-                  ))}
-                </>
-              )
-            )}
+              )}
             </Select>
           </Form.Item>
         </Col>
@@ -1997,6 +1979,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       {/* NEW CODE */}
 
+      {/* CUSTOM PRODUCT ITEM */}
       {activeness == 2 && (
         <>
           <Row gutter={[12, 12]} style={{ position: 'relative' }}>
@@ -2028,7 +2011,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   },
                 ]}
               >
-                {/* <Input /> */}
+               
                 <Input
                   onKeyUp={(e) => {
                     handleCustomServicePriceInput(e.target.value);
@@ -2117,7 +2100,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 )}
               </Form.List>
             </Collapse.Panel>
-          
+
             {productList?.map((mainData, i) => (
               <Collapse.Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
@@ -2239,7 +2222,227 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         </>
       )}
 
-      {activeSelect == 2 && (
+      {/* PREDIFINED PRODUCT ITEM */}
+
+       {
+        activeSelect == 2 && (
+          <>
+          {
+             productList ?
+            <>
+            <Col className="gutter-row" span={24}>
+              <Form.Item label={translate('Service Description')} name="ServiceDescription">
+                <Input.TextArea />
+              </Form.Item>
+            </Col>
+            <Col className="gutter-row" span={24}>
+              <Row gutter={[12, 12]}>
+                <Col span={24}>
+                  <Table
+                    columns={generateColumns()}
+                    dataSource={generateTableData()}
+                    pagination={false}
+                  />
+                 </Col>
+              </Row>
+            </Col>
+                  
+          
+            <Collapse
+              accordion
+              activeKey={accordionActiveKey}
+              onChange={handleChange}
+              style={{ marginTop: '5%' }}
+            >
+              <Collapse.Panel header="Custom Item" key="custom-item">
+                <Row gutter={[12, 12]} style={{ position: 'relative' }} key="ci-11">
+                  <Col className="gutter-row" span={4}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Sub-Item')}</p>
+                  </Col>
+                  <Col className="gutter-row" span={4}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Price')}</p>
+                  </Col>
+                  <Col className="gutter-row" span={3}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Quantity')}</p>{' '}
+                  </Col>
+                  <Col className="gutter-row" span={4}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Total')}</p>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <p style={{ marginLeft: '6px' }}>{translate('Remarks')}</p>
+                  </Col>
+                </Row>
+                <Form.List
+                  name="customItems"
+                  initialValue={[
+                    {
+                      itemName: '',
+                      price: '',
+                      quantity: 1, // Ensure initial quantity is set to 1
+                      total: '',
+                      remarks: '',
+                    },
+                  ]}
+                >
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields?.map((field, index) => (
+                        <ItemRow
+                          key={field.key}
+                          remove={remove}
+                          field={field}
+                          current={current}
+                          isFirstRow={index === 0}
+                          onChange={{
+                            CustomItemNameHandler,
+                            CustomItemPriceHandler,
+                            CustomItemQTYHandler,
+                            CustomItemRemarksHandler,
+                          }}
+                        />
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          // onClick={() => add()}
+                          onClick={() => add({ quantity: 1 })}
+                          block
+                          icon={<PlusOutlined />}
+                          ref={addField}
+                        >
+                          {translate('Add field')}
+                        </Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
+              </Collapse.Panel>
+          
+              {productList?.map((mainData, i) => (
+                <Collapse.Panel header={mainData.name} key={mainData._id}>
+                  <div key={`${i}`}>
+                    <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
+                      <Col className="gutter-row" span={4}>
+                        <p>{translate('Sub-Item')}</p>
+                      </Col>
+                      <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
+                        <p>{translate('Price')}</p>
+                      </Col>
+                      <Col className="gutter-row" span={3}>
+                        <p>{translate('Quantity')}</p>{' '}
+                      </Col>
+                      <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
+                        <p>{translate('Total')}</p>
+                      </Col>
+                      <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
+                        <p>{translate('Remarks')}</p>
+                      </Col>
+                    </Row>
+                    {mainData.products?.map((data, index) => (
+                      <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
+                        <Col className="gutter-row mt-2">
+                          <Checkbox
+                            onChange={() => {
+                              ItemHandler(data);
+                            }}
+                          />
+                        </Col>
+                        <Col className="gutter-row" span={4}>
+                          <Form.Item
+                            name={['items', index, 'item']}
+                            initialValue={data._id}
+                            rules={[
+                              {
+                                validator: (_, value) => {
+                                  if (value || data.name) {
+                                    return Promise.resolve();
+                                  }
+                                  return Promise.reject(new Error('Item name is required'));
+                                },
+                              },
+                            ]}
+                          >
+                            <span>{data.name}</span>
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={4}>
+                          <Form.Item
+                            // name={['items', index, 'price']}
+                            initialValue={prices[data._id]}
+                          >
+                            <InputNumber
+                              className="moneyInput"
+                              onChange={updatePrice}
+                              min={0}
+                              controls={false}
+                              addonAfter={
+                                money.currency_position === 'after'
+                                  ? money.currency_symbol
+                                  : undefined
+                              }
+                              addonBefore={
+                                money.currency_position === 'before'
+                                  ? money.currency_symbol
+                                  : undefined
+                              }
+                              value={prices[data._id]}
+                              readOnly
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={3}>
+                          <Form.Item
+                            // name={['items', index, 'quantity']}
+                            initialValue={1}
+                          >
+                            <InputNumber
+                              style={{ width: '100%' }}
+                              min={0}
+                              defaultValue={1}
+                              value={data.quantity}
+                              onChange={(value) => updateQuantity(data._id, value)}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={4}>
+                          <Form.Item name={['items', index, 'total']} initialValue={totals[data._id]}>
+                            <span style={{ marginLeft: '24%' }}>{totals[data._id]}</span>
+                          </Form.Item>
+                        </Col>
+                        <Col className="gutter-row" span={7}>
+                          <Form.Item
+                          //  name={[`items`, `${index}`, 'remarks']}
+                          >
+                            <Input
+                              placeholder=" Remarks for Workorder"
+                              // defaultValue={data.description}
+                              // onChange={(e) => {
+                              //   const remarks = e.target.value;
+                              //   ItemHandler(data, remarks);
+                              // }}
+                              onChange={(e) => handleRemarkChange(data._id, e.target.value)}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    ))}
+                  </div>
+                </Collapse.Panel>
+              ))}
+            </Collapse>
+          </>
+             :
+             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+             <Spin size="small" />
+           </div>
+          }
+          </>
+        )
+       }
+
+
+
+      {/* {activeSelect == 2 && (
         <>
           <Col className="gutter-row" span={24}>
             <Form.Item label={translate('Service Description')} name="ServiceDescription">
@@ -2254,9 +2457,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   dataSource={generateTableData()}
                   pagination={false}
                 />
-              </Col>
+               </Col>
             </Row>
           </Col>
+                
+        
           <Collapse
             accordion
             activeKey={accordionActiveKey}
@@ -2326,8 +2531,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 )}
               </Form.List>
             </Collapse.Panel>
-            {loading && <Spin size="large" />}
-            {productList?.map((mainData, i) => (
+         
+
+
+        
+            {
+            productList?.map((mainData, i) => (
               <Collapse.Panel header={mainData.name} key={mainData._id}>
                 <div key={`${i}`}>
                   <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
@@ -2437,10 +2646,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   ))}
                 </div>
               </Collapse.Panel>
-            ))}
+            ))
+            }
           </Collapse>
         </>
-      )}
+      )} */}
+
+
 
       <Divider dashed />
 
