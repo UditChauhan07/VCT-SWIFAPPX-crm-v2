@@ -1008,7 +1008,7 @@ useEffect(() => {
                      }}
                  >
                      {moneyFormatter({
-                         amount: currentErp.grandTotal,
+                         amount: grandTotal,
                      })}
                  </p>
              </Col>
@@ -1019,3 +1019,4 @@ useEffect(() => {
         </>
     );
 }
+
