@@ -154,6 +154,12 @@ export default function ReadItem({ config, selectedItem }) {
   console.log(currentErp);
   const [client, setClient] = useState({});
 
+
+  const additionalCost = currentErp.additionalCost.totalPackageCost;
+  const serviceCost = currentErp.serviceCost.totalPackageCost;
+  const grandTotal = additionalCost + serviceCost;
+
+
   useEffect(() => {
     if (currentResult) {
       const { items, invoice, customItems, ...others } = currentResult;
@@ -1185,8 +1191,11 @@ export default function ReadItem({ config, selectedItem }) {
             }}
           >
             {moneyFormatter({
-              amount: currentErp.grandTotal,
+              amount: grandTotal,
             })}
+
+
+           
           </p>
         </Col>
         <Divider style={{ marginTop: '0%' }} />
