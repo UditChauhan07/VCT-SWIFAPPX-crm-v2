@@ -26,7 +26,7 @@ export const fields = {
     type: 'string',
     label: 'street',
     displayLabels: ['name'],
-    required: true,
+  
     disableForTable: false,
   },
   unit: {
@@ -45,7 +45,7 @@ export const fields = {
     type: 'string',
     label: 'state',
     displayLabels: ['name'],
-    required: true,
+  
     disableForTable: false,
   },
   country: {

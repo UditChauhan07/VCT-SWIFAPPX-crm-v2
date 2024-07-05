@@ -258,6 +258,7 @@ export default function CreateItem({ config, CreateForm }) {
           sendworkorderEmail: fieldsValue.sendQuotationEmail,
           salesPerson: fieldsValue.salesPerson,
           salesPersonContact: SalesPersonContact,
+          salesPersonContact: SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,
@@ -298,9 +299,6 @@ export default function CreateItem({ config, CreateForm }) {
 
 
       if (entity === 'contract') {
-        console.log(fieldsValue);
-
-
         const Leader = {
           user: fieldsValue.LeadWorker,
           startTime: fieldsValue.startTime,
@@ -354,20 +352,8 @@ export default function CreateItem({ config, CreateForm }) {
         const WorkOrderstoredId = localStorage.getItem('Subscriptions');
 
         const subsdata = JSON.parse(WorkOrderstoredId);
-
-
         const subFinalData = subsdata[0];
 
-
-        // const serviceCost = firstItem.serviceCost;
-        // const subscription = firstItem.subscription;
-        // const subModule = firstItem.subModule;
-
-        const finalData = {
-          // serviceCost: serviceCost,
-          // subscription: subscription,
-          // subModule: subModule,
-        };
         const Tax = localStorage.getItem('TaxPercentage');
 
         const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
@@ -383,13 +369,16 @@ export default function CreateItem({ config, CreateForm }) {
         const isCustommString = localStorage.getItem('IssCustomm');
         const isCustomm = JSON.parse(isCustommString);
 
+        const SPC = localStorage.getItem('Salespersoncontact');
+        const SalesPersonContact = JSON.parse(SPC);
+
         let Data = {
           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
           sendworkorderEmail: fieldsValue.sendQuotationEmail,
           salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: fieldsValue.SalesPersonContact,
+          salesPersonContact: SalesPersonContact,
           startDate: fieldsValue.startDate,
           endDate: fieldsValue.endDate,
           startTime: fieldsValue.startTime,

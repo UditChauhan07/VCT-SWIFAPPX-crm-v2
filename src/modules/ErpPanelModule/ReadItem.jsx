@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Divider } from 'antd';
+import { Divider,Tooltip } from 'antd';
 
 import { Button, Row, Col, Descriptions, Statistic, Tag } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -30,10 +30,46 @@ import Element from 'antd/es/skeleton/Element';
 // import { tagColor } from '@/utils/statusTagColor';
 
 const Item = ({ item }) => {
+  const RemarksComponent = ({ remarks }) => {
+    const [isHovered, setIsHovered] = useState(false);
+  
+    const handleMouseEnter = () => {
+      setIsHovered(true);
+    };
+  
+    const handleMouseLeave = () => {
+      setIsHovered(false);
+    };
+  
+    const renderRemarks = (remarks) => {
+      if (remarks.length > 10) {
+        return (
+          <Tooltip title={remarks}>
+            <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+              {remarks.substring(0, 12)}...
+            </span>
+          </Tooltip>
+        );
+      }
+      return remarks;
+    };
+  
+    return (
+      <p
+        style={{
+          textAlign: 'right',
+          fontWeight: '700',
+        }}
+      >
+        {renderRemarks(remarks)}
+      </p>
+    );
+  };
+
   const { moneyFormatter } = useMoney();
   return (
     <Row gutter={[12, 0]} key={item._id}>
-      <Col className="gutter-row" span={11}>
+      <Col className="gutter-row" span={5}>
         <p style={{ marginBottom: 5 }}>
           <strong>{item.item.name}</strong>
         </p>
@@ -65,6 +101,18 @@ const Item = ({ item }) => {
           }}
         >
           {moneyFormatter({ amount: item.total })}
+        </p>
+      </Col>
+      <Col className="gutter-row" span={5}>
+        <p
+          style={{
+            textAlign: 'right',
+            fontWeight: '700',
+          }}
+        >
+          {/* {item.remarks} */}
+          <RemarksComponent remarks={item.remarks} />
+          {/* {moneyFormatter({ amount: item.remark })} */}
         </p>
       </Col>
       <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
@@ -105,6 +153,12 @@ export default function ReadItem({ config, selectedItem }) {
   const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
   console.log(currentErp);
   const [client, setClient] = useState({});
+
+
+  const additionalCost = currentErp.additionalCost.totalPackageCost;
+  const serviceCost = currentErp.serviceCost.totalPackageCost;
+  const grandTotal = additionalCost + serviceCost;
+
 
   useEffect(() => {
     if (currentResult) {
@@ -218,6 +272,68 @@ export default function ReadItem({ config, selectedItem }) {
   const Createdseconds = Createddate.getSeconds();
 
   const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`;
+
+  const renderItems = currentErp.customItems.map((item) => {
+    const remarks = item.remarks || '';
+    const truncatedRemarks = remarks.length > 12 ? `${remarks.substring(0, 12)}...` : remarks;
+  
+    return (
+      <Row gutter={[12, 0]} key={item._id}>
+        <Col className="gutter-row" span={5}>
+          <p style={{ marginBottom: 5 }}>
+            <strong>{item.item}</strong>
+          </p>
+          <p>{item.description}</p>
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <p
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            {moneyFormatter({ amount: item.price })}
+          </p>
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <p
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            {item.quantity}
+          </p>
+        </Col>
+        <Col className="gutter-row" span={5}>
+          <p
+            style={{
+              textAlign: 'right',
+              fontWeight: '700',
+            }}
+          >
+            {moneyFormatter({ amount: item.total })}
+          </p>
+        </Col>
+        <Col className="gutter-row" span={5}>
+          <Tooltip title={remarks}>
+            <p
+              style={{
+                textAlign: 'right',
+                fontWeight: '700',
+              }}
+            >
+              {truncatedRemarks}
+            </p>
+          </Tooltip>
+        </Col>
+        <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
+      </Row>
+    );
+  });
+  
+  
+
+
+
 
   return (
     <>
@@ -620,7 +736,8 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.servicePerWO}
+                  {/* {currentErp.serviceCost.servicePerWO} */}
+                  { currentErp.serviceCost &&   currentErp.serviceCost.servicePerWO ? currentErp.serviceCost.servicePerWO : '-'}
                   <br></br>
                 </p>{' '}
               </Col>
@@ -646,7 +763,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.discount}
+                  {currentErp.serviceCost &&  currentErp.serviceCost.discount ? currentErp.serviceCost.discount: '-'}
                   <br></br>
                 </p>
               </Col>
@@ -657,7 +774,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.subTotal}
+                  {currentErp.serviceCost &&  currentErp.serviceCost.subTotal ? currentErp.serviceCost.subTotal: '-'}
                   <br></br>
                 </p>
               </Col>
@@ -668,7 +785,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.tax}
+                {currentErp.serviceCost && currentErp.serviceCost.tax ? currentErp.serviceCost.tax : "-"}
                   <br></br>
                 </p>
               </Col>
@@ -680,7 +797,7 @@ export default function ReadItem({ config, selectedItem }) {
               </Col>
               <Col className="gutter-row" span={12}>
                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                  {currentErp.serviceCost.totalPackageCost}
+                {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? currentErp.serviceCost.totalPackageCost :"-" }
                   <br></br>
                 </p>
               </Col>
@@ -794,7 +911,7 @@ export default function ReadItem({ config, selectedItem }) {
       <h2 style={{ marginTop: '4%' }}>Additional Cost</h2>
       <Divider />
       <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
-        <Col className="gutter-row" span={11}>
+        <Col className="gutter-row" span={5}>
           <p style={{ fontSize: '16px' }}>
             <strong>{translate('Product')}</strong>
           </p>
@@ -829,6 +946,16 @@ export default function ReadItem({ config, selectedItem }) {
             <strong>{translate('Total')}</strong>
           </p>
         </Col>
+        <Col className="gutter-row" span={5}>
+          <p
+            style={{
+              textAlign: 'right',
+              fontSize: '16px',
+            }}
+          >
+            <strong>{translate('Remarks')}</strong>
+          </p>
+        </Col>
         <Divider style={{ marginTop: '1%' }} />
       </Row>
 
@@ -843,9 +970,10 @@ export default function ReadItem({ config, selectedItem }) {
 
       {itemslist.length === 0 && <Divider dashed style={{ marginTop: '1%' }} />}
       
-      {currentErp.customItems.map((item) => (
+      {/* {currentErp.customItems.map((item) => (
+        
         <Row gutter={[12, 0]} key={item._id}>
-          <Col className="gutter-row" span={11}>
+          <Col className="gutter-row" span={5}>
             <p style={{ marginBottom: 5 }}>
               <strong>{item.item}</strong>
             </p>
@@ -879,9 +1007,24 @@ export default function ReadItem({ config, selectedItem }) {
               {moneyFormatter({ amount: item.total })}
             </p>
           </Col>
+          <Col className="gutter-row" span={6}>
+            <p
+              style={{
+                textAlign: 'right',
+                fontWeight: '700',
+              }}
+            >
+              {item.remarks}
+            
+            </p>
+          </Col>
           <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
         </Row>
-      ))}
+      ))} */}
+          {renderItems}
+
+
+      
 
       <div
         style={{
@@ -898,9 +1041,10 @@ export default function ReadItem({ config, selectedItem }) {
 
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.itemTotal,
-              })}
+              })} */}
+              {currentErp.additionalCost &&  currentErp.additionalCost.itemTotal ? moneyFormatter({ amount: currentErp.additionalCost.itemTotal }) : ''}
             </p>
           </Col>
 
@@ -912,9 +1056,11 @@ export default function ReadItem({ config, selectedItem }) {
 
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.discount,
-              })}
+              })} */}
+
+{currentErp.additionalCost &&  currentErp.additionalCost.discount ? moneyFormatter({ amount: currentErp.additionalCost.discount }) : ''}
             </p>
           </Col>
 
@@ -924,9 +1070,10 @@ export default function ReadItem({ config, selectedItem }) {
 
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.subTotal,
-              })}
+              })} */}
+              {currentErp.additionalCost &&  currentErp.additionalCost.subTotal ? moneyFormatter({ amount: currentErp.additionalCost.subTotal }) : ''}
             </p>
           </Col>
 
@@ -937,9 +1084,10 @@ export default function ReadItem({ config, selectedItem }) {
           </Col>
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.tax,
-              })}
+              })} */}
+              {currentErp.additionalCost &&  currentErp.additionalCost.tax ? moneyFormatter({ amount: currentErp.additionalCost.tax }) : ''}
             </p>
           </Col>
 
@@ -948,9 +1096,10 @@ export default function ReadItem({ config, selectedItem }) {
           </Col>
           <Col className="gutter-row" span={11}>
             <p style={{ fontSize: '16px' }}>
-              {moneyFormatter({
+              {/* {moneyFormatter({
                 amount: currentErp.additionalCost.totalPackageCost,
-              })}
+              })} */}
+               {currentErp.additionalCost &&  currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : ''}
             </p>
           </Col>
         </Row>
@@ -976,7 +1125,7 @@ export default function ReadItem({ config, selectedItem }) {
       <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
         <Col className="gutter-row" span={11}>
           <p style={{ fontSize: '18px' }}>
-            <strong>{translate('Additonal Cost')}</strong>
+            <strong>{translate('Additional Cost')}</strong>
           </p>
         </Col>
 
@@ -987,9 +1136,10 @@ export default function ReadItem({ config, selectedItem }) {
               fontSize: '18px',
             }}
           >
-            {moneyFormatter({
+            {/* {moneyFormatter({
               amount: currentErp.additionalCost.totalPackageCost,
-            })}
+            })} */}
+            {currentErp.additionalCost &&  currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : '-'}
           </p>
         </Col>
         <Divider dashed style={{ marginTop: '0%' }} />
@@ -1009,9 +1159,10 @@ export default function ReadItem({ config, selectedItem }) {
               fontSize: '18px',
             }}
           >
-            {moneyFormatter({
+            {/* {moneyFormatter({
               amount: currentErp.serviceCost.totalPackageCost,
-            })}
+            })} */}
+                {currentErp.serviceCost &&  currentErp.serviceCost.totalPackageCost ? moneyFormatter({ amount: currentErp.serviceCost.totalPackageCost }) : '-'}
           </p>
         </Col>
         {/* <Divider  dashed  /> */}
@@ -1040,14 +1191,17 @@ export default function ReadItem({ config, selectedItem }) {
             }}
           >
             {moneyFormatter({
-              amount: currentErp.grandTotal,
+              amount: grandTotal,
             })}
+
+
+           
           </p>
         </Col>
         <Divider style={{ marginTop: '0%' }} />
       </Row>
 
-      <h2 style={{ marginTop: '5%' }}>Basic Attendence Details</h2>
+      <h2 style={{ marginTop: '5%' }}>Basic Attendance Details</h2>
       <Row className="gutter-row">
         <Col span={24}>
           <div

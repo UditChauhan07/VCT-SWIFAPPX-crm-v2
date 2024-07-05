@@ -231,25 +231,29 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const handleFirstDropdownChange = async (event) => {
+
     setLoading(true);
-    console.log("event", event);
+
     try {
       const response = await request.getSearchClientAddress(event);
-      console.log("response", response);
+      console.log('response', response);
       if (response.success) {
-        setCustomerAddress(response.result)
+        setCustomerAddress(response.result);
+        // setCustomerAddressEvent(event);
+        form.setFieldsValue({ clientAddress: null });
         // Set options state based on API response
       } else {
-
+        setCustomerAddress([]);
+        form.setFieldsValue({ clientAddress: null });
       }
     } catch (error) {
-
       console.error('Error fetching data:', error);
+      form.setFieldsValue({ clientAddress: null });
     } finally {
       setLoading(false);
     }
+  };
 
-  }
 
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
@@ -403,35 +407,79 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }
 
   const [salesContactNumber, setSalesContactNumber] = useState();
+
+
+  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
+  localStorage.setItem('Salespersoncontact', JSON.stringify(salesContactNumber));
+
   useEffect(() => {
     if (selectedSalesPerson) {
-      let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone
-      setSalesContactNumber(number)
-      ContactHandler({ salesContactNumber: number })
-      let saleRepConElement = document.getElementById("salesContactNumber")
-      saleRepConElement.value = number || null
-      // console.log({ number, salesContactNumber });
+      let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
+      setSalesContactNumber(number);
+      ContactHandler({ salesContactNumber: number });
+      // let saleRepConElement = document.getElementById('salesContactNumber');
+      // console.log(saleRepConElement)
+      // saleRepConElement.value = number || null;
     }
-  }, [selectedSalesPerson, salesContactNumber])
-  const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null })
-  useEffect(() => { }, [selectedSalesPerson])
+  }, [selectedSalesPerson, salesContactNumber]);
+
+  const validateSalesPersonContact = (_, value) => {
+    if (value || salesContactNumber) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('Please Select Sales Person Contact.'));
+  };
+  // useEffect(() => {}, [selectedSalesPerson]);
   const ContactHandler = ({ salesContactNumber }) => {
-    return (<Form.Item label={translate('Sales Person Contact')} name="SalesPersonContact" rules={[
-      {
-        required: true,
-      },
-    ]}
-      initialValue={salesContactNumber}
-    >
-      <Input style={{
-        width: '100%',
-      }} placeholder=""
-        id='salesContactNumber'
-        value={salesContactNumber}
-      />
-    </Form.Item>
-    )
-  }
+    // console.log(salesContactNumber)
+    return (
+      <Form.Item
+        label={translate('Sales Person Contact')}
+        name="SalesPersonContact"
+        rules={[
+          {
+            validator: validateSalesPersonContact,
+            required: true,
+          },
+        ]}
+      >
+        <div
+          style={{
+            height: '32px',
+            width: '100%',
+            border: '1px solid rgb(214,212,217)',
+            marginTop: '-0.2%',
+            borderRadius: '5px',
+            textAlign: 'start',
+            fontSize: '15px',
+          }}
+        >
+          <p style={{ padding: '0px 0px 0px 14px', marginTop: '4px' }}>{salesContactNumber}</p>
+        </div>
+      </Form.Item>
+      // <Form.Item
+      //   label={translate('Sales Person Contact')}
+      //   name="SalesPersonContact"
+      //   rules={[
+      //     {
+      //       required: true,
+      //     },
+      //   ]}
+      //   initialValue={salesContactNumber}
+      // >
+      //   <Input
+      //     style={{
+      //       width: '100%',
+      //     }}
+      //     placeholder=""
+      //     id="salesContactNumber"
+      //     // value={salesContactNumber}
+
+      //   />
+      // </Form.Item>
+    );
+  };
+  ;
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers)
 
@@ -483,7 +531,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   ;
   useEffect(() => { }, [subscriptionCount, subItemCount])
   let subscriptionSubTotal = 0;
-  
+
   let subscritionAmount = 0;
   const [Newiitems, setNewiitems] = useState([]);
   const [remarks, setRemarks] = useState([]);
@@ -556,8 +604,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   localStorage.setItem('CustomItems', JSON.stringify(customItems));
 
-  const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false) => {
-    console.log(_id, name, price = 0, qty = 1, remove = false);
+  const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false, remarks = '') => {
+    console.log(_id, name, (price = 0), (qty = 1), (remove = false), remarks);
     const tempId = [...subItemIds];
     const temp = [...Subitems];
     let tempcustom = [...customItems]; // Assuming you have a state or variable to hold custom items
@@ -566,11 +614,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       const selectedIndex = tempId.indexOf(_id);
       if (selectedIndex !== -1) {
         tempId.splice(selectedIndex, 1);
-        const itemIndex = temp.findIndex(item => item._id === _id);
+        const itemIndex = temp.findIndex((item) => item._id === _id);
         if (itemIndex !== -1) {
           temp.splice(itemIndex, 1);
         }
-        const customItemIndex = tempcustom.findIndex(item => item._id === _id);
+        const customItemIndex = tempcustom.findIndex((item) => item._id === _id);
         if (customItemIndex !== -1) {
           tempcustom.splice(customItemIndex, 1);
         }
@@ -581,13 +629,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         temp.map((item) => {
           if (item._id === _id) {
             item.name = name;
+            item.remarks = remarks;
           }
         });
       } else {
         let element = {
-          _id, price, name,
+          _id,
+          price,
+          name,
           total: price * qty,
-          qty
+          qty,
+          remarks,
         };
 
         console.warn({ element });
@@ -600,32 +652,53 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setItems(temp);
     setCustomItems(tempcustom);
     setSubItemCount(temp.length);
-  }
-  const DiscountValueHandler = (value) => {
-    setdiscount(value ?? 0);
   };
 
   const CustomItemQTYHandler = (_id, qty, price = 0) => {
     const tempId = [...subItemIds];
-    let temp = [...Subitems]; // Changed to let for mutability
+    const temp = [...Subitems];
 
     const selectedIndex = tempId.indexOf(_id);
     if (selectedIndex !== -1) {
-      temp = temp.map((item) => {
+      temp.map((item) => {
         if (item._id === _id) {
           item.qty = qty;
-          item.total = item.price * qty; // Recalculate total based on new quantity
+          item.total = item.price * qty;
         }
-        return item;
       });
     } else {
-      // Default total calculation based on default price and new quantity
       let element = {
         _id,
         price,
         name: null,
-        total: price * qty, // Calculate total based on new quantity and default price
-        qty
+        total: price * qty,
+        qty,
+      };
+      tempId.push(_id);
+      temp.push(element);
+    }
+    setSubItemId(tempId);
+    setItems(temp);
+    setSubItemCount(temp.length);
+  };
+  const CustomItemPriceHandler = (_id, price = 0) => {
+    const tempId = [...subItemIds];
+    const temp = [...Subitems];
+    const selectedIndex = tempId.indexOf(_id);
+    if (selectedIndex !== -1) {
+      temp.map((item) => {
+        if (item._id === _id) {
+          item.price = price;
+          item.total = item.price * item.qty;
+        }
+      });
+    } else {
+      let element = {
+        _id,
+        price,
+        name: null,
+        total: price * 1,
+        qty: 1,
       };
       tempId.push(_id);
       temp.push(element);
@@ -635,28 +708,27 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemCount(temp.length);
   };
 
+  const CustomItemRemarksHandler = (_id, remarks) => {
 
-  const CustomItemPriceHandler = (_id, price = 0) => {
     const tempId = [...subItemIds];
-    let temp = [...Subitems]; // Changed to let for mutability
+    const temp = [...Subitems];
 
     const selectedIndex = tempId.indexOf(_id);
     if (selectedIndex !== -1) {
-      temp = temp.map((item) => {
+      temp.map((item) => {
         if (item._id === _id) {
-          item.price = price;
-          item.total = price * item.qty; // Recalculate total based on new price and existing quantity
+          item.remarks = remarks;
         }
-        return item;
       });
+      console.log(temp)
     } else {
-      // Default quantity and total calculation based on default quantity
       let element = {
         _id,
-        price,
+        price: 0,
         name: null,
-        total: price * 1, // Calculate total based on default quantity (1)
-        qty: 1 // Default quantity
+        total: 0,
+        qty: 1,
+        remarks,
       };
       tempId.push(_id);
       temp.push(element);
@@ -666,7 +738,34 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemCount(temp.length);
   };
 
-const initialServiceCost = {
+  const DiscountValueHandler = (value) => {
+    setdiscount(value ?? 0);
+  };
+  const [errorMessage, setErrorMessage] = useState()
+
+  const handleKeyPress = (event) => {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Allow decimal point (.) and digits (0-9)
+    if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      setErrorMessage('Only numeric values are accepted');
+    } else {
+      setErrorMessage(''); // Clear error message if valid character
+    }
+  }
+  const numericFormatter = (value) => {
+    // Remove non-numeric characters
+    return value.replace(/[^0-9.]/g, '');
+  };
+
+  // const numericParser = (value) => {
+  //   // Parse numeric value
+  //   return parseFloat(value);
+  // };
+
+
+
+  const initialServiceCost = {
     servicePerWO: null,
     discount: null,
     subTotal: null,
@@ -681,6 +780,18 @@ const initialServiceCost = {
     totalPackageCost: null,
     discount: null
   }
+  let additionalCostNull = {
+    subTotal: 0,
+    tax: 0,
+    totalPackageCost: 0,
+    itemTotal: 0,
+    discount: 0,
+  };
+  if (CheckedId) {
+    localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
+  } else {
+    localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCostNull));
+  }
   const [serviceCost, setServiceCost] = useState(initialServiceCost);
 
   const [subscriptionIds, setSubscriptionIds] = useState([]);
@@ -689,7 +800,7 @@ const initialServiceCost = {
 
   localStorage.setItem("discountValue", discountValue?.taxValue);
 
- // const [subItemCount, setSubItemCount] = useState(0);
+  // const [subItemCount, setSubItemCount] = useState(0);
 
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
@@ -703,54 +814,7 @@ const initialServiceCost = {
     setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
   };
-  const handleCustomServiceInput = (name) => {
-    let temp = isCustom ? [] : ShowServiceList;
-    if (temp.length > 0) {
-      setSubscriptionCount(0);
-      temp.map((element, _id) => {
-        element.subscriptions.map((subscriptions, __id) => {
-          subscriptions.data.map((subscription, ___id) => {
-            console.log({ subscription });
-            subscription.name = name
-          })
-        })
-      })
-    } else {
-      setSubscriptionCount(0);
-      setShowServiceList([{
-        subscriptions: [{
-          subscription: {
-            name: "One Time",
-            package_divider: 1
-          },
-          data: [{
-            _id: "CS-1",
-            name: name ?? "Custom Service",
-            price: 0
-          }]
-        }]
-      }])
-    }
-    setSubscriptionIds(["CS-1"]);
-    setSubscriptionCount(1);
-  }
-  const handleCustomServicePriceInput = (price) => {
-    let temp = [];
-    setSubscriptionCount(0);
 
-    ShowServiceList.map((element, _id) => {
-      element.subscriptions.map((subscriptions, __id) => {
-        subscriptions.data.map((subscription, ___id) => {
-          console.log({ subscription });
-          subscription.price = price
-        })
-      })
-      temp.push(element)
-    })
-    console.log({ ShowServiceList });
-    setSubscriptionCount(1);
-    setShowServiceList(temp)
-  }
 
   // useEffect(() => {
   //   const calculateCosts = () => {
@@ -795,77 +859,6 @@ const initialServiceCost = {
   //   calculateCosts();
   // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
-
-
-
-  // useEffect(() => {
-  //   const calculateCosts = () => {
-  //     const discountValueParsed = parseFloat(discountValue) || 0;
-  //     let subscriptionsArray = [];
-
-  //     ShowServiceId?.forEach(subscriptionObj => {
-  //       subscriptionObj.data?.forEach(dataObj => {
-  //         if (subscriptionIds.includes(dataObj._id)) {
-  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
-  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-  //           const totalPackageCost = parseFloat(subTotal) + parseFloat(taxAmount);
-  //           // let package_divider = parseFloat(subscriptionObj.subscription.package_divider);
-  //           // let servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-  //           // // subscritionAmount = parseFloat(dataObj.price / servicePerWO)
-  //           // let subTotal = parseFloat(dataObj.price / servicePerWO);
-  //           // if (active == 2) {
-  //           //   subTotal += parseFloat(adjustmentvalue).toFixed(2);;
-  //           // }
-  //           // if (active == 3) {
-  //           //   subTotal -= parseFloat(adjustmentvalue).toFixed(2);
-  //           // }
-  //           // let discount = 0;
-  //           // if (discountValue) {
-  //           //   discount = (subTotal * (parseFloat(discountValue) / 100)).toFixed(2);
-  //           //   subTotal -= (subTotal * (parseFloat(discountValue) / 100)).toFixed(2);
-  //           // }
-  //           // let taxValue = 0;
-  //           // if (tax.taxValue) {
-  //           //   taxValue = (subTotal * (parseFloat(tax.taxValue) / 100)).toFixed(2);
-  //           // }
-
-  //           // let totalPackageCost = parseFloat(subTotal) + parseFloat(taxValue);
-
-  //           const ServiceCost = {
-  //             servicePerWO: parseFloat(subscriptionObj.price / package_divider).toFixed(2),
-  //             discount: parseFloat(discount || 0).toFixed(2),
-  //             subTotal: parseFloat(subTotal).toFixed(2),
-  //             tax: parseFloat(taxValue).toFixed(2),
-  //             totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-  //           };
-
-  //           console.log(ServiceCost,"ServiceCost")
-
-  //           subscriptionsArray.push({
-  //             subscription: subscriptionObj.subscription._id,
-  //             subModule: dataObj._id,
-  //             serviceCost: ServiceCost,
-  //           });
-  //         }
-  //       });
-  //     });
-
-  //     // If subscriptionsArray is empty, use CustomsubscriptionArray
-  //     const finalSubscriptions = subscriptionsArray.length > 0 ? subscriptionsArray : [];
-
-  //     setServiceCost({ ...initialServiceCost });
-  //     localStorage.setItem('Subscriptions', JSON.stringify(finalSubscriptions));
-  //   };
-
-  //   calculateCosts();
-  // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
-
-
- 
-
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
@@ -895,7 +888,7 @@ const initialServiceCost = {
   let subcostData = []
 
   const CalculatorFilled = () => {
- return (
+    return (
       ShowServiceList.map((element, _id) => (
         element.subscriptions.map((subscriptions, __id) => (
           subscriptions.data.map((subscription, ___id) => {
@@ -921,7 +914,7 @@ const initialServiceCost = {
             }
             if (subscriptionIds.includes(subscription._id)) {
               subscriptionSubTotal = subTotal + taxValue;
-             
+
               subcostData.push(
                 {
                   subscription: subscriptions.subscription._id,
@@ -935,19 +928,6 @@ const initialServiceCost = {
                   }
                 }
               )
-
-              // if (subscriptionIds.includes(subscription._id)) {
-              //   let serviceCostData = subscriptionIds.map(selectedId => ({
-              //     subscription: selectedId,
-              //     subModule: subscription._id,
-              //     serviceCost: {
-              //       servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
-              //       discount: parseFloat(discount || 0).toFixed(2),
-              //       subTotal: parseFloat(subTotal).toFixed(2),
-              //       tax: parseFloat(taxValue).toFixed(2),
-              //       totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-              //     }
-              //   }));
 
               let abc = [
                 {
@@ -994,8 +974,7 @@ const initialServiceCost = {
   }
   const [isCustom, setIsCustom] = useState(false)
 
-
-const CalculatorFilledItem = () => {
+  const CalculatorFilledItem = () => {
     return ShowServiceList?.map((element, _id) =>
       element.subscriptions?.map((subscriptions, __id) =>
         subscriptions.data?.map((subscription, ___id) => {
@@ -1025,6 +1004,7 @@ const CalculatorFilledItem = () => {
             let discount = 0;
             let taxValue1 = 0;
             let subITotal = 0;
+            let taxValue2 = 0;
             console.log(subITotal);
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
@@ -1035,8 +1015,11 @@ const CalculatorFilledItem = () => {
                     style={{
                       borderBottom: '1px solid rgb(217,217,217)',
                       fontSize: '15px',
-                      marginTop: '-1px',
+                      marginTop: '-22px',
                       color: 'rgb(49,91,140)',
+                      height: '105px',
+                      // border: "2px solid black",
+                      overflowY: 'auto',
                     }}
                   >
                     {Subitems.map((item, index) => {
@@ -1051,20 +1034,24 @@ const CalculatorFilledItem = () => {
                       if (tax.taxValue) {
                         taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
                       }
+                      if (tax.taxValue) {
+                        taxValue2 = subITotal * (parseFloat(tax.taxValue) / 100);
+                      } console.log(taxValue2)
+
                       // subITotal + taxValue
                       localStorage.setItem(
                         'jv1GYkk6plxCpgx',
                         parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)
                       );
                       additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
-                      additionalCost.tax = parseFloat(taxValue).toFixed(2);
+                      additionalCost.tax = parseFloat(taxValue2).toFixed(2);
                       // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
-                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue).toFixed(2);
+                      additionalCost.totalPackageCost = parseFloat(subITotal + taxValue2).toFixed(2);
                       additionalCost.itemTotal = parseFloat(itemMPrice / package_divider).toFixed(2);
                       additionalCost.discount = parseFloat(discount).toFixed(2);
                       localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
 
-                      
+
                       return (
                         <>
                           item:{item.name} (x{item.qty ?? 0}){index != Subitems.length && <br />}
@@ -1072,65 +1059,12 @@ const CalculatorFilledItem = () => {
                       );
                     })}
                   </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {itemMPrice.toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {discount.toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {subITotal.toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {(taxValue || 0).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {(subITotal + taxValue).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)}
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }} >{itemMPrice.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{discount.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{subITotal.toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{(taxValue2 || 0).toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }}>{(subITotal + taxValue2).toFixed(2)}</li>
+                  <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: '15px', marginTop: '', color: 'rgb(49,91,140)', }} >{parseFloat(subscriptionSubTotal + subITotal + taxValue2).toFixed(2)}
                   </li>
                 </ul>
               </td>
@@ -1141,9 +1075,7 @@ const CalculatorFilledItem = () => {
     );
   };
 
- 
-
- const AdjustmentValueHandler = (event) => {
+  const AdjustmentValueHandler = (event) => {
     setadjustment(event.target.value || 0)
     let subTotal = document.getElementById("subTotal")
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
@@ -1244,7 +1176,62 @@ const CalculatorFilledItem = () => {
     updatedTotals[productId] = prices[productId] * value;
     setTotals(updatedTotals);
   };
-  const optionsss = ['Addition', 'Substraction'];
+  const optionsss = ['Addition', 'Subtraction'];
+
+  const handleCustomServicePriceInput = (price) => {
+    let temp = [];
+    setSubscriptionCount(0);
+
+    ShowServiceList.map((element, _id) => {
+      element.subscriptions.map((subscriptions, __id) => {
+        subscriptions.data.map((subscription, ___id) => {
+          subscription.price = price;
+        });
+      });
+      temp.push(element);
+    });
+    setSubscriptionCount(1);
+    setShowServiceList(temp);
+  };
+  const handleCustomServiceInput = (name) => {
+    let temp = isCustom ? [] : ShowServiceList;
+    if (temp.length > 0) {
+      setSubscriptionCount(0);
+      temp.map((element, _id) => {
+        element.subscriptions.map((subscriptions, __id) => {
+          subscriptions.data.map((subscription, ___id) => {
+            console.log({ subscription });
+            subscription.name = name;
+          });
+        });
+      });
+    } else {
+      setSubscriptionCount(0);
+      setShowServiceList([
+        {
+          subscriptions: [
+            {
+              subscription: {
+                name: 'One Time',
+                package_divider: 1,
+              },
+              data: [
+                {
+                  _id: 'CS-1',
+                  name: name ?? 'Custom Service',
+                  price: 0,
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    }
+    setSubscriptionIds(['CS-1']);
+    setSubscriptionCount(1);
+  };
+
+
   return (
     <>
       <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-1px;", marginBottom: "20px" }}>
@@ -1258,7 +1245,7 @@ const CalculatorFilledItem = () => {
             rules={[
               {
                 required: true,
-                message: 'Please Select customer.',
+                message: 'Please Select Customer.',
               },
             ]}
           >
@@ -1279,7 +1266,7 @@ const CalculatorFilledItem = () => {
             rules={[
               {
                 required: true,
-                message: 'Please Select customer Address.',
+                message: 'Please Select Customer Address.',
               },
             ]}
           >
@@ -1433,42 +1420,44 @@ const CalculatorFilledItem = () => {
                 required: true,
                 message: 'Please Select Sales Person.',
               },
-
             ]}
-
           >
             <Select
+              showSearch
               style={{
                 width: '100%',
-
               }}
-              // onChange={(event) => setcustomSelect(event) }
+              optionFilterProp="children"
               onChange={(event) => setSelectedSalesPerson(event)}
-              notFoundContent={loading ? <Spin size="small" /> : null}
+              // notFoundContent={loading ? <Spin size="small" /> : null} 
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              filterSort={(optionA, optionB) =>
+                (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+              }
             >
-
               {loading ? (
                 <Select.Option key="loading" disabled>
                   <Spin size="small" /> Loading...
                 </Select.Option>
               ) : (
                 SalesPerson?.map((option, index) => (
-                  <Select.Option
-                    key={option._id}
-                    value={option._id}>
+                  <Select.Option key={option._id} value={option._id}>
                     {option.name}
                   </Select.Option>
                 ))
               )}
-
+              {/* {SalesPerson?.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}>
+                  {option.name}
+                </Select.Option>
+              ))} */}
             </Select>
           </Form.Item>
         </Col>
 
         <Col className="gutter-row" span={8}>
-          <ContactHandler salesContactNumber={salesContactNumber} />
+          <ContactHandler salesContactNumber={salesContactNumber} disabled={!selectedSalesPerson} />
         </Col>
-
         <Col className="gutter-row" span={8}>
           <Form.Item label={translate('Files')} name="Files"
 
@@ -1492,24 +1481,33 @@ const CalculatorFilledItem = () => {
           <Form.Item
             name="serviceCategory"
             label={translate('Service Category')}
-
+            rules={[
+              {
+                required: true,
+                message: 'Please Select Service Category.',
+              },
+            ]}
           >
             <Select
+              showSearch
+              optionFilterProp="children"
+              notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
+              filterSort={(optionA, optionB) =>
+                (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
+              }
               style={{
                 width: '100%',
               }}
               onChange={getCategorySubscriptionHandler}
-              // notFoundContent={loading ? <Spin size="small" /> : null}
+            // notFoundContent={loading ? <Spin size="small" /> : null}
             >
-
-            
-                
-                {serviceCategoryOptions?.map((option, index) => (
-                  <Select.Option key={option._id} value={option._id}>{option.name}</Select.Option>
-                ))}
-            
+              {serviceCategoryOptions?.map((option, index) => (
+                <Select.Option key={option._id} value={option._id}>
+                  {/* {option.name} */}
+                  {option.name ? option.name : 'Loading...'}
+                </Select.Option>
+              ))}
             </Select>
-
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={12}>
@@ -1530,6 +1528,7 @@ const CalculatorFilledItem = () => {
               }}
               value={selectedOption}
               onChange={handleSelectChange}
+              // disabled={!selectedValue} 
               subscriptionOneTime
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
@@ -1539,15 +1538,18 @@ const CalculatorFilledItem = () => {
                   <Spin size="small" /> Loading...
                 </Select.Option>
               ) : (
-                <>
-                  <Select.Option value="custom" onClick={() => setIscustomm(true)}>Custom Service (One Time)</Select.Option>
-                  {isFirstServiceCategorySelect &&
-                    ShowServiceList?.map((option) => (
+                selectedValue && (
+                  <>
+                    <Select.Option value="custom" onClick={() => setIsCustom(true)}>
+                      Custom Service (One Time)
+                    </Select.Option>
+                    {ShowServiceList?.map((option) => (
                       <Select.Option key={option._id} value={option._id}>
                         {option.name}
                       </Select.Option>
                     ))}
-                </>
+                  </>
+                )
               )}
 
             </Select>
@@ -1588,7 +1590,7 @@ const CalculatorFilledItem = () => {
               </Col>
             </Row>
 
-      <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "2%" }}>
+            <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: "2%" }}>
               <Collapse.Panel header={"Custom Item"} key={'custom item'}>
                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key={'ci-11'}>
 
@@ -1622,13 +1624,13 @@ const CalculatorFilledItem = () => {
 
                       {fields.map((field, index) => (
                         <ItemRow key={field.key} remove={remove} field={field} isFirstRow={index === 0} current={current}
-                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler }}></ItemRow>
+                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler, CustomItemRemarksHandler }}></ItemRow>
 
                       ))}
                       <Form.Item>
                         <Button
                           type="dashed"
-                          onClick={() => add()}
+                          onClick={() => add({ quantity: 1 })}
                           block
                           icon={<PlusOutlined />}
                           ref={addField}
@@ -1646,21 +1648,21 @@ const CalculatorFilledItem = () => {
                     <Col className="gutter-row" span={4}>
                       <p>{translate('Sub-Item')}</p>
                     </Col>
-                    <Col className="gutter-row" span={4}>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
                       <p>{translate('Price')}</p>
                     </Col>
                     <Col className="gutter-row" span={3}>
                       <p>{translate('Quantity')}</p>{' '}
                     </Col>
-                    <Col className="gutter-row" span={4}>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
                       <p>{translate('Total')}</p>
                     </Col>
-                    <Col className="gutter-row" span={6}>
+                    <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
                       <p>{translate('Remarks')}</p>
                     </Col>
                   </Row>
                   <div key={`${i}`}>
-                    
+
                     {/* <Form.List name="items" >
                         <> */}
                     {mainData.products?.map((data, index) => (
@@ -1763,9 +1765,15 @@ const CalculatorFilledItem = () => {
           </>
         )
       }
-      {
+
+
+
+   {
         activeSelect == 2 && (
           <>
+          {
+             productList ?
+            <>
             <Col className="gutter-row" span={24}>
               <Form.Item label={translate('Service Description')} name="ServiceDescription">
                 <Input.TextArea />
@@ -1779,10 +1787,17 @@ const CalculatorFilledItem = () => {
                     dataSource={generateTableData()}
                     pagination={false}
                   />
-                </Col>
+                 </Col>
               </Row>
             </Col>
-            <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: '5%' }}>
+                  
+          
+            <Collapse
+              accordion
+              activeKey={accordionActiveKey}
+              onChange={handleChange}
+              style={{ marginTop: '5%' }}
+            >
               <Collapse.Panel header="Custom Item" key="custom-item">
                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key="ci-11">
                   <Col className="gutter-row" span={4}>
@@ -1822,13 +1837,18 @@ const CalculatorFilledItem = () => {
                           field={field}
                           current={current}
                           isFirstRow={index === 0}
-                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler }}
+                          onChange={{
+                            CustomItemNameHandler,
+                            CustomItemPriceHandler,
+                            CustomItemQTYHandler,
+                            CustomItemRemarksHandler,
+                          }}
                         />
                       ))}
                       <Form.Item>
                         <Button
                           type="dashed"
-                          onClick={() => add()}
+                          onClick={() => add({ quantity: 1 })}
                           block
                           icon={<PlusOutlined />}
                           ref={addField}
@@ -1840,28 +1860,26 @@ const CalculatorFilledItem = () => {
                   )}
                 </Form.List>
               </Collapse.Panel>
+          
               {productList?.map((mainData, i) => (
                 <Collapse.Panel header={mainData.name} key={mainData._id}>
-                  <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                    <Col className="gutter-row" span={4}>
-                      <p>{translate('Sub-Item')}</p>
-                    </Col>
-                    <Col className="gutter-row" span={4}>
-                      <p>{translate('Price')}</p>
-                    </Col>
-                    <Col className="gutter-row" span={3}>
-                      <p>{translate('Quantity')}</p>{' '}
-                    </Col>
-                    <Col className="gutter-row" span={4}>
-                      <p>{translate('Total')}</p>
-                    </Col>
-                    <Col className="gutter-row" span={6}>
-                      <p>{translate('Remarks')}</p>
-                    </Col>
-                  </Row>
                   <div key={`${i}`}>
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                      {/* Column headers */}
+                      <Col className="gutter-row" span={4}>
+                        <p>{translate('Sub-Item')}</p>
+                      </Col>
+                      <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
+                        <p>{translate('Price')}</p>
+                      </Col>
+                      <Col className="gutter-row" span={3}>
+                        <p>{translate('Quantity')}</p>{' '}
+                      </Col>
+                      <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
+                        <p>{translate('Total')}</p>
+                      </Col>
+                      <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
+                        <p>{translate('Remarks')}</p>
+                      </Col>
                     </Row>
                     {mainData.products?.map((data, index) => (
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
@@ -1946,7 +1964,6 @@ const CalculatorFilledItem = () => {
                               //   ItemHandler(data, remarks);
                               // }}
                               onChange={(e) => handleRemarkChange(data._id, e.target.value)}
-
                             />
                           </Form.Item>
                         </Col>
@@ -1957,8 +1974,14 @@ const CalculatorFilledItem = () => {
               ))}
             </Collapse>
           </>
+             :
+             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+             <Spin size="small" />
+           </div>
+          }
+          </>
         )
-      }
+       }
 
 
 
@@ -2043,10 +2066,8 @@ const CalculatorFilledItem = () => {
 
       </Row>
 
-
-
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
-        <Col className="gutter-row" span={12}>
+        {/* <Col className="gutter-row" span={12}>
           <Form.Item
             name="discount"
             label={translate('Discount')}
@@ -2067,59 +2088,109 @@ const CalculatorFilledItem = () => {
               onChange={DiscountValueHandler}
             />
           </Form.Item>
-        </Col>
+        </Col> */}
 
-      
+        <Col className="gutter-row" span={12}>
+          <Form.Item
+            name="discount"
+            label={translate('Discount')}
+            rules={[
+              {
+                validator: async (rule, value) => {
+                  // if (isNaN(value)) {
+                  //   return Promise.reject('Only numeric values are accepted.');
+                  // }
+                  // return Promise.resolve();
+                },
+              },
+            ]}
+          >
+            <InputNumber
+              style={{ width: '100%' }}
+              // defaultValue={0.0}
+              onChange={DiscountValueHandler}
+              formatter={numericFormatter}
+              // parser={numericParser}
+              onKeyPress={handleKeyPress}
+            />
+          </Form.Item>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        </Col>
       </Row>
 
-      {subscriptionIds.length > 0 && <>
-        <Divider dashed />
-        <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
-          {translate('Selected Quotation Billing Details')}
-        </Col>
-        <table style={{ width: "100%", height: "220px", marginTop: "3%" }}>
-          <tbody >
-            <tr >
-              <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
-                <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1", borderRight: 'none' }}>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Workorder For</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Subtotal</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
-                  <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total</li>
-                </ul>
-              </th>
-              {CalculatorFilled()}
-            </tr>
+      {subscriptionIds.length > 0 &&
+        <>
+          <Divider dashed />
+          <Col className="gutter-row" span={12} style={{ fontSize: '1.2rem', marginTop: "-9px;", marginBottom: "20px" }} >
+            {translate('Selected Quotation Billing Details')}
+          </Col>
+          <table style={{
+            width: "100%", height: "220px", marginTop: "3%",
+          }}>
+            <tbody style={{
+              // maxWidth: '1000px',
+              // overflowX: 'auto',  
+              // display: 'block',  
+            }}>
+              <tr>
+                <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
+                  <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1", }}>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Workorder For</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Per Workorder Cost</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Adjustment</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Subtotal</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
+                    <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total</li>
+                  </ul>
+                </th>
+                {CalculatorFilled()}
+              </tr>
 
-            {Subitems.length > 0 &&
-              <>
-                <tr>
-                  {translate('Additional Service Items')}
-                </tr>
-                {/* <tr>Additional Service Items</tr> */}
-                <tr>
-                  <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
-                    <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }
-                      }>Service Items Included(per workorder)</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Item Total</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Sub Total</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total Service Items Cost</li>
-                      <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Grand Total</li>
-                    </ul>
-                  </th>
-                  {CalculatorFilledItem()}
-                </tr>
-              </>
-            }
-          </tbody>
-        </table>
-      </>}
+            </tbody>
+          </table>
+          {Subitems.length > 0 &&
+            <>
+              <table style={{
+                width: "100%", height: "220px", marginTop: "3%",
+              }}>
+
+                <tbody style={{
+                  // maxWidth: '1000px',
+                  // overflowX: 'auto',  
+                  // display: 'block',  
+                }}>
+                  <tr style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}>
+                    {translate('Additional Service Items')}
+                  </tr>
+                  {/* <tr>Additional Service Items</tr> */}
+                  <tr
+                  // style={{
+                  //   maxWidth: '1000px',
+                  //   overflowX: 'auto',
+                  //   display: 'block',
+                  // }}
+                  >
+                    <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
+                      <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }
+                        }>Service Items Included(per workorder)</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Item Total</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Discount({discountValue}%)</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Sub Total</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Tax ({tax?.taxValue || 0}%)</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Total Service Items Cost</li>
+                        <li style={{ borderBottom: '1px solid #fff', fontSize: "16px" }}>Grand Total</li>
+                      </ul>
+                    </th>
+                    {CalculatorFilledItem()}
+                  </tr>
+                </tbody>
+              </table>
+            </>
+
+          }
+        </>}
 
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
         <Row gutter={[12, -5]}>
