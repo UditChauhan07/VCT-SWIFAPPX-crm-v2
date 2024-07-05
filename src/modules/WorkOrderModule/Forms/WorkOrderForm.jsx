@@ -602,7 +602,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   useEffect(() => {}, [subscriptionCount, subItemCount]);
   let subscriptionSubTotal = 0;
   let subscritionAmount = 0;
-
+  // console.log(subscriptionSubTotal)
+ 
   // const handleRemarkChange = (id, value) => {
   //   console.log(value)
   //   localStorage.setItem('Reamarksitem', value);
@@ -1014,7 +1015,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         taxValue22 = subITotal * (parseFloat(tax.taxValue) / 100);
                       }
 
-                      console.log(taxValue22);
+                
 
                       // subITotal + taxValue
                       localStorage.setItem(
@@ -2439,8 +2440,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </>
         )
        }
-
-
 
       {/* {activeSelect == 2 && (
         <>
