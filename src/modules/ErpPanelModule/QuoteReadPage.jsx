@@ -166,7 +166,7 @@ export default function QuoteReadPage({ config, selectedItem }) {
     // console.log(Item_Total )
 
 
-useEffect(() => {
+    useEffect(() => {
         if (currentResult) {
             const { items, invoice, customItems, ...others } = currentResult;
 
@@ -216,9 +216,9 @@ useEffect(() => {
     const hours = Time.getHours();
     const minutes = Time.getMinutes().toString();
 
-    const ExpectedTime = new Date(currentErp.expectedRequiredTime);
-    const Expectedhours = ExpectedTime.getHours();
-    const Expectedminutes = ExpectedTime.getMinutes().toString();
+    // const ExpectedTime = new Date(currentErp.expectedRequiredTime);
+    // const Expectedhours = ExpectedTime.getHours();
+    // const Expectedminutes = ExpectedTime.getMinutes().toString();
 
     function getStatusText(status) {
 
@@ -260,23 +260,38 @@ useEffect(() => {
     const Createdminutes = Createddate.getMinutes();
     const Createdseconds = Createddate.getSeconds();
 
-    const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`; 
+    const CreatedformattedDate = ` ${Createdday} ${Createdmonth}, ${Createdyear} ${Createdhours}:${Createdminutes}:${Createdseconds}`;
 
     const additionalCost = currentErp.additionalCost.totalPackageCost;
     const serviceCost = currentErp.serviceCost.totalPackageCost;
     const grandTotal = additionalCost + serviceCost;
     // ...........
-  
 
-    // Create a Date object to format the time
     const formattedTime = new Date(0, 0, 0, hours, minutes);
     let formattedHours = formattedTime.getHours();
-    const ampm = formattedHours >= 12 ? 'PM' : 'AM';
 
     // Convert hours to 12-hour format
+    const ampm = formattedHours >= 12 ? 'PM' : 'AM';
     formattedHours = formattedHours % 12;
     formattedHours = formattedHours ? formattedHours : 12; // Handle midnight (0 hours)
 
+    // Construct the formatted time string
+    const formattedTimeString = `${formattedHours}:${('0' + minutes).slice(-2)} ${ampm}`;
+    // ...............................
+
+    const ExpectedTime = new Date(0, 0, 0, hours, minutes);
+    let Expectedhours = ExpectedTime.getHours();
+
+    // Convert hours to 12-hour format
+    const hrs = Expectedhours >= 12 ? 'hrs' : 'hrs';
+    formattedHours = Expectedhours % 12;
+    Expectedhours = Expectedhours ? Expectedhours : 12; // Handle midnight (0 hours)
+
+    // Construct the formatted time string
+    const ExpectedTimeString = `${Expectedhours}:${('0' + minutes).slice(-2)} ${hrs}`;
+
+
+    // .............................
     const renderItems = currentErp.customItems.map((item) => {
         const remarks = item.remarks || '';
         const truncatedRemarks = remarks.length > 12 ? `${remarks.substring(0, 12)}...` : remarks;
@@ -334,7 +349,7 @@ useEffect(() => {
         );
     });
 
- return (
+    return (
         <>
             <PageHeader
                 onBack={() => {
@@ -474,11 +489,11 @@ useEffect(() => {
                                     <Col span={12}>
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Start Time')} :<br></br>
                                         </p></Col>
-                                 <Col span={12}>
-                                     <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>
-                                         {`${formattedHours}:${minutes}`} {ampm}
-                                     </p>
-                                 </Col>
+                                    <Col span={12}>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>
+                                            {`${formattedTimeString}`}
+                                        </p>
+                                    </Col>
                                 </Row>
 
                             </Col>
@@ -489,7 +504,7 @@ useEffect(() => {
                                         <p style={{ fontSize: "15px", fontWeight: "600" }}>{translate('Expected Time Required')} :<br></br>
                                         </p></Col>
                                     <Col span={12}>
-                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${Expectedhours}:${Expectedminutes} hrs`}  <br></br>
+                                        <p style={{ fontSize: "13px", fontWeight: "600", color: "#a3a3a3", marginTop: "19px" }}>{`${ExpectedTimeString}`}  <br></br>
                                         </p>
                                     </Col>
                                 </Row>
@@ -504,23 +519,23 @@ useEffect(() => {
                                     </Col>
                                 </Row>
                                 <Row className="gutter-row" >
-                                 <Col span={12}>
-                                     <p style={{ fontSize: '15px', fontWeight: '600', marginTop: '19px' }}>
-                                         {translate('Sales Person Contact')} :<br></br>
-                                     </p>{' '}
-                                 </Col>
-                                 <Col span={12}>
-                                     <p
-                                         style={{
-                                             fontSize: '13px',
-                                             fontWeight: '600',
-                                             color: '#a3a3a3',
-                                             marginTop: '19px',
-                                         }}
-                                     >
-                                         {currentErp.salesPersonContact} <br></br>
-                                     </p>
-                                 </Col>
+                                    <Col span={12}>
+                                        <p style={{ fontSize: '15px', fontWeight: '600', marginTop: '19px' }}>
+                                            {translate('Sales Person Contact')} :<br></br>
+                                        </p>{' '}
+                                    </Col>
+                                    <Col span={12}>
+                                        <p
+                                            style={{
+                                                fontSize: '13px',
+                                                fontWeight: '600',
+                                                color: '#a3a3a3',
+                                                marginTop: '19px',
+                                            }}
+                                        >
+                                            {currentErp.salesPersonContact} <br></br>
+                                        </p>
+                                    </Col>
                                 </Row>
                             </Col>
                         </Row>
@@ -557,11 +572,11 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: "13px", color: "#a3a3a3" }}>
-                                 {currentErp?.customService?.description?.trim() ? (
-                                     <span>{currentErp.customService.description}</span>
-                                 ) : (
-                                     <span>--</span>
-                                 )}<br></br>
+                                    {currentErp?.customService?.description?.trim() ? (
+                                        <span>{currentErp.customService.description}</span>
+                                    ) : (
+                                        <span>--</span>
+                                    )}<br></br>
                                 </p>
                             </Col>
                         </Row>
@@ -600,7 +615,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                 {currentErp.serviceCost && currentErp.serviceCost.servicePerWO ? currentErp.serviceCost.servicePerWO : '-'}
+                                    {currentErp.serviceCost && currentErp.serviceCost.servicePerWO ? currentErp.serviceCost.servicePerWO : '-'}
                                     <br></br>
                                 </p>{' '}
                             </Col>
@@ -612,9 +627,9 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                 {currentErp.adjustment && currentErp.adjustment.value
-                                     ? currentErp.adjustment.value
-                                     : ''}
+                                    {currentErp.adjustment && currentErp.adjustment.value
+                                        ? currentErp.adjustment.value
+                                        : ''}
                                     <br></br>
                                 </p>{' '}
                             </Col>
@@ -626,7 +641,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                 {currentErp.serviceCost && currentErp.serviceCost.discount ? currentErp.serviceCost.discount : '-'}
+                                    {currentErp.serviceCost && currentErp.serviceCost.discount ? currentErp.serviceCost.discount : '-'}
                                     <br></br>
                                 </p>
                             </Col>
@@ -637,7 +652,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                 {currentErp.serviceCost && currentErp.serviceCost.subTotal ? currentErp.serviceCost.subTotal : '-'}
+                                    {currentErp.serviceCost && currentErp.serviceCost.subTotal ? currentErp.serviceCost.subTotal : '-'}
                                     <br></br>
                                 </p>
                             </Col>
@@ -648,7 +663,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                 {currentErp.serviceCost && currentErp.serviceCost.tax ? currentErp.serviceCost.tax : "-"}
+                                    {currentErp.serviceCost && currentErp.serviceCost.tax ? currentErp.serviceCost.tax : "-"}
                                     <br></br>
                                 </p>
                             </Col>
@@ -660,7 +675,7 @@ useEffect(() => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 <p style={{ fontSize: '14px', color: '#a3a3a3' }}>
-                                 {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? currentErp.serviceCost.totalPackageCost : "-"}
+                                    {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? currentErp.serviceCost.totalPackageCost : "-"}
                                     <br></br>
                                 </p>
                             </Col>
@@ -725,69 +740,69 @@ useEffect(() => {
             </Row>
 
 
-         <h2 style={{ marginTop: '4%' }}>Additional Cost</h2>
-         <Divider />
-         <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
-             <Col className="gutter-row" span={8}>
-                 <p style={{ fontSize: '16px' }}>
-                     <strong>{translate('Product')}</strong>
-                 </p>
-             </Col>
-             <Col className="gutter-row" span={4}>
-                 <p
-                     style={{
-                         textAlign: 'right',
-                         fontSize: '16px',
-                     }}
-                 >
-                     <strong>{translate('Price')}</strong>
-                 </p>
-             </Col>
-             <Col className="gutter-row" span={4}>
-                 <p
-                     style={{
-                         textAlign: 'right',
-                         fontSize: '16px',
-                     }}
-                 >
-                     <strong>{translate('Quantity')}</strong>
-                 </p>
-             </Col>
-             <Col className="gutter-row" span={4}>
-                 <p
-                     style={{
-                         textAlign: 'right',
-                         fontSize: '16px',
-                     }}
-                 >
-                     <strong>{translate('Total')}</strong>
-                 </p>
-             </Col>
-             <Col className="gutter-row" span={4}>
-                 <p
-                     style={{
-                         textAlign: 'right',
-                         fontSize: '16px',
-                     }}
-                 >
-                     <strong>{translate('Remarks')}</strong>
-                 </p>
-             </Col>
-             <Divider style={{ marginTop: '1%' }} />
-         </Row>
+            <h2 style={{ marginTop: '4%' }}>Additional Cost</h2>
+            <Divider />
+            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+                <Col className="gutter-row" span={8}>
+                    <p style={{ fontSize: '16px' }}>
+                        <strong>{translate('Product')}</strong>
+                    </p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '16px',
+                        }}
+                    >
+                        <strong>{translate('Price')}</strong>
+                    </p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '16px',
+                        }}
+                    >
+                        <strong>{translate('Quantity')}</strong>
+                    </p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '16px',
+                        }}
+                    >
+                        <strong>{translate('Total')}</strong>
+                    </p>
+                </Col>
+                <Col className="gutter-row" span={4}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '16px',
+                        }}
+                    >
+                        <strong>{translate('Remarks')}</strong>
+                    </p>
+                </Col>
+                <Divider style={{ marginTop: '1%' }} />
+            </Row>
 
-         {/* {itemslist.map((item) => (
+            {/* {itemslist.map((item) => (
         <Item key={item._id} item={item}></Item>
       ))} */}
-         {itemslist.length > 0 ? (
-             itemslist.map((item) => <Item key={item._id} item={item}></Item>)
-         ) : (
-             <p style={{ textAlign: 'center', fontSize: '20px' }}>No Selected Items Found!</p>
-         )}
+            {itemslist.length > 0 ? (
+                itemslist.map((item) => <Item key={item._id} item={item}></Item>)
+            ) : (
+                <p style={{ textAlign: 'center', fontSize: '20px' }}>No Selected Items Found!</p>
+            )}
 
-         {itemslist.length === 0 && <Divider dashed style={{ marginTop: '1%' }} />}
+            {itemslist.length === 0 && <Divider dashed style={{ marginTop: '1%' }} />}
 
-         {/* {currentErp.customItems.map((item) => (
+            {/* {currentErp.customItems.map((item) => (
         
         <Row gutter={[12, 0]} key={item._id}>
           <Col className="gutter-row" span={5}>
@@ -838,91 +853,91 @@ useEffect(() => {
           <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
         </Row>
       ))} */}
-         {renderItems}
+            {renderItems}
 
 
 
 
-         <div
-             style={{
-                 width: '300px',
-                 float: 'right',
-                 textAlign: 'right',
-                 // fontWeight: '700',
-             }}
-         >
-             <Row gutter={[12, -5]}>
-                 <Col className="gutter-row" span={13}>
-                     <p style={{ fontSize: '17px' }}>{translate('Item Total')} :</p>
-                 </Col>
+            <div
+                style={{
+                    width: '300px',
+                    float: 'right',
+                    textAlign: 'right',
+                    // fontWeight: '700',
+                }}
+            >
+                <Row gutter={[12, -5]}>
+                    <Col className="gutter-row" span={13}>
+                        <p style={{ fontSize: '17px' }}>{translate('Item Total')} :</p>
+                    </Col>
 
-                 <Col className="gutter-row" span={11}>
-                     <p style={{ fontSize: '16px' }}>
-                         {/* {moneyFormatter({
+                    <Col className="gutter-row" span={11}>
+                        <p style={{ fontSize: '16px' }}>
+                            {/* {moneyFormatter({
                 amount: currentErp.additionalCost.itemTotal,
               })} */}
-                         {currentErp.additionalCost && currentErp.additionalCost.itemTotal ? moneyFormatter({ amount: currentErp.additionalCost.itemTotal }) : ''}
-                     </p>
-                 </Col>
+                            {currentErp.additionalCost && currentErp.additionalCost.itemTotal ? moneyFormatter({ amount: currentErp.additionalCost.itemTotal }) : ''}
+                        </p>
+                    </Col>
 
-                 <Col className="gutter-row" span={13}>
-                     <p style={{ fontSize: '17px' }}>
-                         {translate('Discount')} ({currentErp.discount}%) :
-                     </p>
-                 </Col>
+                    <Col className="gutter-row" span={13}>
+                        <p style={{ fontSize: '17px' }}>
+                            {translate('Discount')} ({currentErp.discount}%) :
+                        </p>
+                    </Col>
 
-                 <Col className="gutter-row" span={11}>
-                     <p style={{ fontSize: '16px' }}>
-                         {/* {moneyFormatter({
+                    <Col className="gutter-row" span={11}>
+                        <p style={{ fontSize: '16px' }}>
+                            {/* {moneyFormatter({
                 amount: currentErp.additionalCost.discount,
               })} */}
 
-                         {currentErp.additionalCost && currentErp.additionalCost.discount ? moneyFormatter({ amount: currentErp.additionalCost.discount }) : ''}
-                     </p>
-                 </Col>
+                            {currentErp.additionalCost && currentErp.additionalCost.discount ? moneyFormatter({ amount: currentErp.additionalCost.discount }) : ''}
+                        </p>
+                    </Col>
 
-                 <Col className="gutter-row" span={13}>
-                     <p style={{ fontSize: '17px' }}>{translate('sub total')} :</p>
-                 </Col>
+                    <Col className="gutter-row" span={13}>
+                        <p style={{ fontSize: '17px' }}>{translate('sub total')} :</p>
+                    </Col>
 
-                 <Col className="gutter-row" span={11}>
-                     <p style={{ fontSize: '16px' }}>
-                         {/* {moneyFormatter({
+                    <Col className="gutter-row" span={11}>
+                        <p style={{ fontSize: '16px' }}>
+                            {/* {moneyFormatter({
                 amount: currentErp.additionalCost.subTotal,
               })} */}
-                         {currentErp.additionalCost && currentErp.additionalCost.subTotal ? moneyFormatter({ amount: currentErp.additionalCost.subTotal }) : ''}
-                     </p>
-                 </Col>
+                            {currentErp.additionalCost && currentErp.additionalCost.subTotal ? moneyFormatter({ amount: currentErp.additionalCost.subTotal }) : ''}
+                        </p>
+                    </Col>
 
-                 <Col className="gutter-row" span={13}>
-                     <p style={{ fontSize: '17px' }}>
-                         {translate('Tax')} ({currentErp.taxPercentage}%) :
-                     </p>
-                 </Col>
-                 <Col className="gutter-row" span={11}>
-                     <p style={{ fontSize: '16px' }}>
-                         {/* {moneyFormatter({
+                    <Col className="gutter-row" span={13}>
+                        <p style={{ fontSize: '17px' }}>
+                            {translate('Tax')} ({currentErp.taxPercentage}%) :
+                        </p>
+                    </Col>
+                    <Col className="gutter-row" span={11}>
+                        <p style={{ fontSize: '16px' }}>
+                            {/* {moneyFormatter({
                 amount: currentErp.additionalCost.tax,
               })} */}
-                         {currentErp.additionalCost && currentErp.additionalCost.tax ? moneyFormatter({ amount: currentErp.additionalCost.tax }) : ''}
-                     </p>
-                 </Col>
+                            {currentErp.additionalCost && currentErp.additionalCost.tax ? moneyFormatter({ amount: currentErp.additionalCost.tax }) : ''}
+                        </p>
+                    </Col>
 
-                 <Col className="gutter-row" span={13}>
-                     <p style={{ fontSize: '17px' }}>{translate('Total Item Cost')} :</p>
-                 </Col>
-                 <Col className="gutter-row" span={11}>
-                     <p style={{ fontSize: '16px' }}>
-                         {/* {moneyFormatter({
+                    <Col className="gutter-row" span={13}>
+                        <p style={{ fontSize: '17px' }}>{translate('Total Item Cost')} :</p>
+                    </Col>
+                    <Col className="gutter-row" span={11}>
+                        <p style={{ fontSize: '16px' }}>
+                            {/* {moneyFormatter({
                 amount: currentErp.additionalCost.totalPackageCost,
               })} */}
-                         {currentErp.additionalCost && currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : ''}
-                     </p>
-                 </Col>
-             </Row>
-         </div>
+                            {currentErp.additionalCost && currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : ''}
+                        </p>
+                    </Col>
+                </Row>
+            </div>
 
-         {/* <Row style={{ marginTop: '23%' }}>
+            {/* <Row style={{ marginTop: '23%' }}>
         <Col className="gutter-row" span={4}>
           <h3 style={{ fontSize: '18px' }}>{translate('Grand Total')} :</h3>
         </Col>
@@ -934,86 +949,86 @@ useEffect(() => {
           </h3>
         </Col>
       </Row> */}
-         <Divider />
+            <Divider />
 
-         <h2 style={{ marginTop: '5%' }}>Total Workorder Cost</h2>
-         <Divider />
+            <h2 style={{ marginTop: '5%' }}>Total Workorder Cost</h2>
+            <Divider />
 
-         <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
-             <Col className="gutter-row" span={11}>
-                 <p style={{ fontSize: '18px' }}>
-                     <strong>{translate('Additional Cost')}</strong>
-                 </p>
-             </Col>
+            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+                <Col className="gutter-row" span={11}>
+                    <p style={{ fontSize: '18px' }}>
+                        <strong>{translate('Additional Cost')}</strong>
+                    </p>
+                </Col>
 
-             <Col className="gutter-row" span={12}>
-                 <p
-                     style={{
-                         textAlign: 'right',
-                         fontSize: '18px',
-                     }}
-                 >
-                     {/* {moneyFormatter({
+                <Col className="gutter-row" span={12}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '18px',
+                        }}
+                    >
+                        {/* {moneyFormatter({
               amount: currentErp.additionalCost.totalPackageCost,
             })} */}
-                     {currentErp.additionalCost && currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : '-'}
-                 </p>
-             </Col>
-             <Divider dashed style={{ marginTop: '0%' }} />
-         </Row>
+                        {currentErp.additionalCost && currentErp.additionalCost.totalPackageCost ? moneyFormatter({ amount: currentErp.additionalCost.totalPackageCost }) : '-'}
+                    </p>
+                </Col>
+                <Divider dashed style={{ marginTop: '0%' }} />
+            </Row>
 
-         <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
-             <Col className="gutter-row" span={11}>
-                 <p style={{ fontSize: '18px' }}>
-                     <strong>{translate('Service Cost')}</strong>
-                 </p>
-             </Col>
+            <Row gutter={[12, 0]} style={{ marginTop: '-14px' }}>
+                <Col className="gutter-row" span={11}>
+                    <p style={{ fontSize: '18px' }}>
+                        <strong>{translate('Service Cost')}</strong>
+                    </p>
+                </Col>
 
-             <Col className="gutter-row" span={12}>
-                 <p
-                     style={{
-                         textAlign: 'right',
-                         fontSize: '18px',
-                     }}
-                 >
-                     {/* {moneyFormatter({
+                <Col className="gutter-row" span={12}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '18px',
+                        }}
+                    >
+                        {/* {moneyFormatter({
               amount: currentErp.serviceCost.totalPackageCost,
             })} */}
-                     {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? moneyFormatter({ amount: currentErp.serviceCost.totalPackageCost }) : '-'}
-                 </p>
-             </Col>
-             {/* <Divider  dashed  /> */}
-         </Row>
+                        {currentErp.serviceCost && currentErp.serviceCost.totalPackageCost ? moneyFormatter({ amount: currentErp.serviceCost.totalPackageCost }) : '-'}
+                    </p>
+                </Col>
+                {/* <Divider  dashed  /> */}
+            </Row>
 
-         <Row
-             gutter={[12, 0]}
-             style={{
-                 marginTop: '13px',
-                 backgroundColor: 'rgb(141,40,221)',
-                 height: '68px',
-                 color: 'white',
-             }}
-         >
-             <Col className="gutter-row" span={11}>
-                 <p style={{ fontSize: '21px' }}>
-                     <strong>{translate('Grand Total')}</strong>
-                 </p>
-             </Col>
+            <Row
+                gutter={[12, 0]}
+                style={{
+                    marginTop: '13px',
+                    backgroundColor: 'rgb(141,40,221)',
+                    height: '68px',
+                    color: 'white',
+                }}
+            >
+                <Col className="gutter-row" span={11}>
+                    <p style={{ fontSize: '21px' }}>
+                        <strong>{translate('Grand Total')}</strong>
+                    </p>
+                </Col>
 
-             <Col className="gutter-row" span={12}>
-                 <p
-                     style={{
-                         textAlign: 'right',
-                         fontSize: '21px',
-                     }}
-                 >
-                     {moneyFormatter({
-                         amount: grandTotal,
-                     })}
-                 </p>
-             </Col>
-             <Divider style={{ marginTop: '0%' }} />
-         </Row>
+                <Col className="gutter-row" span={12}>
+                    <p
+                        style={{
+                            textAlign: 'right',
+                            fontSize: '21px',
+                        }}
+                    >
+                        {moneyFormatter({
+                            amount: grandTotal,
+                        })}
+                    </p>
+                </Col>
+                <Divider style={{ marginTop: '0%' }} />
+            </Row>
 
 
         </>

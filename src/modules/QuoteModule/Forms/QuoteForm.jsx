@@ -1765,15 +1765,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           </>
         )
       }
-
-
-
-   {
+      {
         activeSelect == 2 && (
           <>
-          {
-             productList ?
-            <>
             <Col className="gutter-row" span={24}>
               <Form.Item label={translate('Service Description')} name="ServiceDescription">
                 <Input.TextArea />
@@ -1787,17 +1781,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     dataSource={generateTableData()}
                     pagination={false}
                   />
-                 </Col>
+                </Col>
               </Row>
             </Col>
-                  
-          
-            <Collapse
-              accordion
-              activeKey={accordionActiveKey}
-              onChange={handleChange}
-              style={{ marginTop: '5%' }}
-            >
+            <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: '5%' }}>
               <Collapse.Panel header="Custom Item" key="custom-item">
                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key="ci-11">
                   <Col className="gutter-row" span={4}>
@@ -1837,12 +1824,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           field={field}
                           current={current}
                           isFirstRow={index === 0}
-                          onChange={{
-                            CustomItemNameHandler,
-                            CustomItemPriceHandler,
-                            CustomItemQTYHandler,
-                            CustomItemRemarksHandler,
-                          }}
+                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler, CustomItemRemarksHandler }}
                         />
                       ))}
                       <Form.Item>
@@ -1860,26 +1842,28 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   )}
                 </Form.List>
               </Collapse.Panel>
-          
               {productList?.map((mainData, i) => (
                 <Collapse.Panel header={mainData.name} key={mainData._id}>
+                  <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
+                    <Col className="gutter-row" span={4}>
+                      <p>{translate('Sub-Item')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
+                      <p>{translate('Price')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={3}>
+                      <p>{translate('Quantity')}</p>{' '}
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
+                      <p>{translate('Total')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
+                      <p>{translate('Remarks')}</p>
+                    </Col>
+                  </Row>
                   <div key={`${i}`}>
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                      <Col className="gutter-row" span={4}>
-                        <p>{translate('Sub-Item')}</p>
-                      </Col>
-                      <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
-                        <p>{translate('Price')}</p>
-                      </Col>
-                      <Col className="gutter-row" span={3}>
-                        <p>{translate('Quantity')}</p>{' '}
-                      </Col>
-                      <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
-                        <p>{translate('Total')}</p>
-                      </Col>
-                      <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
-                        <p>{translate('Remarks')}</p>
-                      </Col>
+                      {/* Column headers */}
                     </Row>
                     {mainData.products?.map((data, index) => (
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
@@ -1964,6 +1948,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                               //   ItemHandler(data, remarks);
                               // }}
                               onChange={(e) => handleRemarkChange(data._id, e.target.value)}
+
                             />
                           </Form.Item>
                         </Col>
@@ -1974,14 +1959,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               ))}
             </Collapse>
           </>
-             :
-             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-             <Spin size="small" />
-           </div>
-          }
-          </>
         )
-       }
+      }
 
 
 

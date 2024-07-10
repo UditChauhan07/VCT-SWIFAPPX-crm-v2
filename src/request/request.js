@@ -43,19 +43,22 @@ axios.interceptors.request.use(
 
 const request = {
   create: async ({ entity, id, jsonData }) => {
-    console.log('dsds', jsonData);
     try {
-      let url = entity + '/create';
+      let url = `${entity}/create`;
       if (entity === 'clientaddress' && id) {
         url = `${entity}/create/${id}`;
       }
 
       const response = await axios.post(url, jsonData);
-      // console.log({res:response})
+
+      // Remove item from localStorage
+      localStorage.removeItem('Subscriptions');
+
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
       });
+
       return response.data;
     } catch (error) {
       return errorHandler(error);
