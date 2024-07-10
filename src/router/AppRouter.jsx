@@ -69,6 +69,7 @@ const WorkRead = lazy(() => import('@/pages/WorkOrder/WorkRead'));
 const Contracts = lazy(() => import('@/pages/Contracts'));
 const ContractCreate = lazy(() => import('@/pages/Contracts/ContractCreate'));
 const ContractRead = lazy(() => import('@/pages/Contracts/ContractRead'));
+const ConvertQt_To_Contract = lazy(() => import('@/pages/Convert_QT_to_Contract/CreateContract'));
 
 export default function AppRouter() {
   let element = useRoutes([
@@ -337,6 +338,12 @@ export default function AppRouter() {
       path: '/contract/read/:id',
       element: <ContractRead />,
     },
+    {
+      path: '/quote/edit/:id',
+      element: <ConvertQt_To_Contract/>,
+    },
+    
+
     {
       path: '*',
       element: <NotFound />,

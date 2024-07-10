@@ -151,6 +151,8 @@ export default function ItemRow({
   response,
   isFirstRow,
   onChange = {},
+  Value
+
 }) {
   const {
     CustomItemNameHandler,
@@ -158,6 +160,9 @@ export default function ItemRow({
     CustomItemQTYHandler,
     CustomItemRemarksHandler,
   } = onChange || null;
+
+
+
 
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);

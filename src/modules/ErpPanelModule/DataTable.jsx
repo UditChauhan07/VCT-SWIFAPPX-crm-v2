@@ -8,6 +8,7 @@ import {
   PlusOutlined,
   PayCircleOutlined,
   EllipsisOutlined,
+  SwapOutlined 
 } from '@ant-design/icons';
 import { Dropdown, Table, Button } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -21,6 +22,7 @@ import { generate as uniqueId } from 'shortid';
 import { useNavigate } from 'react-router-dom';
 
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
+import { request } from '@/request';
 
 let data = JSON.parse(localStorage.getItem('auth'))
 let user = data.current
@@ -105,6 +107,23 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
+  // if (entity === 'quote') {
+  //   items.push({
+  //     label: translate('Convert_to_Contract'),
+  //     key: 'convert_to_contract',
+  //     icon: <SwapOutlined  />, // Assuming you have a relevant icon for "Convert to Contract"
+  //   });
+  // }
+
+
+  if ((permissions?.[entity + 'Convert_to_Contract'] === true || isSAAS === true) && entity === 'quote') {
+    items.push({
+      label: translate('Convert to Contract'),
+      key: 'convert_to_contract',
+      icon: <SwapOutlined />, // Assuming you have a relevant icon for "Convert to Contract"
+    });
+  }
+
 
 
   items.push(...extra,
@@ -150,6 +169,23 @@ export default function DataTable({ config, extra = [] }) {
     navigate(`/invoice/pay/${record._id}`);
   };
 
+
+  const handleConvertToContract = async (record) => {
+    let id = record._id;
+    const response = await request.read({entity:entity, id: id})
+    console.log(response.result)
+
+    const itemJSON = JSON.stringify(response.result);
+
+    localStorage.setItem('QtConvertToContract', itemJSON);
+
+    // dispatch(erp.read({ entity:entity, id: id }));
+    navigate(`/quote/edit/${id}`);
+
+ 
+  };
+
+
   if (entity === 'servicelist') {
     dataTableColumns = [
       ...updatedDataTableColumns,
@@ -163,9 +199,21 @@ export default function DataTable({ config, extra = [] }) {
       key: 'action',
       // fixed: 'right',
       render: (_, record) => {
+        const actionItems = [...items];
+
+        if (entity === 'quote') {
+          actionItems.push({
+            label: translate('Convert to Contract'),
+            key: 'convert_to_contract',
+            icon: <SwapOutlined />,
+          });
+        }
+
+
         return <Dropdown
           menu={{
-            items,
+            // items,
+            items: actionItems,
             onClick: ({ key }) => {
               switch (key) {
                 case 'read':
@@ -185,10 +233,12 @@ export default function DataTable({ config, extra = [] }) {
                   break;
                 case 'recordPayment':
                   handleRecordPayment(record);
+                  case 'convert_to_contract':
+                    handleConvertToContract(record);
                 default:
                   break;
               }
-
+              // Convert to Contract
             },
 
           }

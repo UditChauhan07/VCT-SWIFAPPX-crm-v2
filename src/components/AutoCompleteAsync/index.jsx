@@ -13,12 +13,16 @@ export default function AutoCompleteAsync({
   outputValue = '_id',  
   value, /// this is for update
   onChange, /// this is for update
-  client
+  client,
+  defaultValue
+
 }) 
 
+
+
 { 
- 
-  
+ console.log(defaultValue)
+
   const [selectOptions, setOptions] = useState([]);
   const [currentValue, setCurrentValue] = useState(undefined);
   const isUpdating = useRef(true);
@@ -116,6 +120,7 @@ const [, cancel] = useDebounce(
       allowClear
       placeholder={'Search Here'}
       defaultActiveFirstOption={false}
+      defaultValue={defaultValue}
       filterOption={false}
       // notFoundContent={searching ? '... Searching' : <Empty />} <Spin size="small" /> Loading...
       notFoundContent={searching ? <Spin size="small" />  : <Empty />}

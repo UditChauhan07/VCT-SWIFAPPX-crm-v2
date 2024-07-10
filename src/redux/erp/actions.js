@@ -126,7 +126,9 @@ export const erp = {
     },
   read:
     ({ entity, id }) =>
+  
     async (dispatch) => {
+   
       dispatch({
         type: actionTypes.REQUEST_LOADING,
         keyState: 'read',

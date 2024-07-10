@@ -21,7 +21,7 @@ const getToken = () => {
 axios.interceptors.request.use(
   (config) => {
     const token = getToken();
-    console.log({ token });
+  
 
     // List of routes to exclude
     const excludedRoutes = ['/login', '/register'];
@@ -80,7 +80,7 @@ const request = {
   },
 
   read: async ({ entity, id }) => {
-    console.log(id);
+ 
     try {
       // console.log('data entities --- ', {entity, id})
       const response = await axios.get(entity + '/read/' + id);
@@ -581,6 +581,16 @@ const request = {
       return errorHandler(error);
     }
   }
+
+  // getQuoteConvertContract: async (id) => {
+  //   try {
+  //     const response = await axios.get('`/servicelist/show/${id}`');
+
+  //     return response.data;
+  //   } catch (error) {
+  //     return errorHandler(error);
+  //   }
+  // },
   
 
   

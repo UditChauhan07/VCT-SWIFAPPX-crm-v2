@@ -120,6 +120,8 @@ const Item = ({ item }) => {
 };
 
 export default function QuoteReadPage({ config, selectedItem }) {
+
+   
     const translate = useLanguage();
     const { entity, ENTITY_NAME } = config;
     const dispatch = useDispatch();
@@ -1019,4 +1021,3 @@ useEffect(() => {
         </>
     );
 }
-
