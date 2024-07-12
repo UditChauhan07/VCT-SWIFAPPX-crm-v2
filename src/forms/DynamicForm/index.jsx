@@ -52,49 +52,22 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
   }, []);
 
   if (fields.subscription_type) {
-    // useEffect(() => {
-    //   const fetchData = async () => {
-    //     try {
-    //       const response = await request.getCategorySubscription();
-    //       if (response.success) {
-    //         console.log({ response });
-    //         setCheckBoxes(response.result);
-    //       } else {
-    //         readBox.close();
-    //         collapsedBox.close();
-    //         panel.close();
-    //         notification.config({
-    //           duration: 4,
-    //           maxCount: 2,
-    //         });
-    //         notification.error({
-    //           message: `Request error`,
-    //           description: response.message,
-    //         });
-    //       }
-    //     } catch (error) {
-    //       console.error('Error fetching data:', error);
-    //     }
-        
-    //   };
-
-    //   fetchData();
-    // }, []);
+  
     useEffect(() => {
       const fetchData = async () => {
         try {
           const response = await request.getCategorySubscription();
           if (response.success) {
-            console.log({ response });
+      
             setCheckBoxes(response.result);
           } else {
-            // Handle error notification or UI changes
+          
             console.error('Request error:', response.message);
           }
         } catch (error) {
           console.error('Error fetching data:', error);
         } finally {
-          setLoading(false); // Set loading to false once data fetching is done
+          setLoading(false); 
         }
       };
   
@@ -135,20 +108,12 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
       
             </>
 
-
-              
-              // <FormElement
-              //   setFeedback={setcheckedOption}
-              //   key={key}
-              //   field={field}
-              //   checkboxes={checkboxes}
-              // />
             );
           } else if (feedback && field.feedback) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
             return <FormElement key={key} field={field} entity={entity} />;
-            // return <FormElement key={key} field={field} entity={entity} />;
+        
           }
         }
       })}
@@ -181,7 +146,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
     password: <Input.Password autoComplete="new-password" />,
     boolean: <Switch defaultValue={true} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
-    // getclientId : <Input defaultValue={id} />,   
+    
     date: (
       <DatePicker
         placeholder={translate('select_date')}
@@ -431,14 +396,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     textarea: 'string',
     number: 'number',
     phone: 'phone',
-    //boolean: 'boolean',
-    // method: 'method',
-    // regexp: 'regexp',
-    // integer: 'integer',
-    // float: 'float',
-    // array: 'array',
-    // object: 'object',
-    // enum: 'enum',
     date: 'date',
     url: 'url',
     website: 'url',
@@ -448,48 +405,8 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
   
 
-
   return (
  
-
-    // <Form.Item
-    //   label={translate(field.label)}
-    //   name={field.name}
-    //   rules={[
-    //     {
-    //       required: field.required || false,
-    //       type: filedType[field.type] ?? 'any',
-    //       validator: field.type === 'phone' ? (rule, value) => {
-    //         if (!value) {
-    //           return Promise.resolve();
-    //         }
-    //         const pattern = /^[6-9]\d{9}$/;
-    //         if (!pattern.test(value)) {
-    //           return Promise.reject('Please enter a valid 10-digit mobile number.');
-    //         }
-    //         return Promise.resolve();
-    //       } : field.name === 'package_divider' ? (rule, value) => {
-    //         if (isNaN(value)) { 
-    //           return Promise.reject('Only numeric value is accepted.');
-    //         }
-    //         return Promise.resolve();
-    //       } : undefined,
-    //     },
-
-    //     ...(field.name === 'name' || field.name === 'firstname' ? (
-    //       entity === 'people' || 'subscriptiontype' ? [
-
-    //         { min: 3, message: 'Name must be at least 3 characters.' },
-    //         { max: 30, message: 'Name must be in 30 characters.' },
-    //       ] : []
-    //     ) : []),
-    //   ]}
-    //   valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-    // > 
-    // {renderComponent}
-    // </Form.Item>
-
-
     <Form.Item
       label={translate(field.label)}
       name={field.name}
@@ -577,18 +494,9 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
             return Promise.resolve();
           } : undefined,
         },
-
-        // ...(field.name === 'name' || 'firstname'   ? [  
-        //     // { required: true, message: 'Name is required' },
-        //     { min: 3, message: 'Name must be at least 3 characters.' },
-        //     { max: 30, message: 'Name must be in 30 characters.' },
-        //   ]
-        //   : []),
-
         ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' || field.name === 'contactPerson' || field.name === "street" || field.name === "unit" ? (
           entity === 'people' || 'subscriptiontype' || "clientaddress" ? [
             // { required: true, message: 'Name is required' },
-
             { min: 3, message: 'Name must be at least 3 characters.' },
             { max: 30, message: 'Name must be in 30 characters.' },
           ] : []

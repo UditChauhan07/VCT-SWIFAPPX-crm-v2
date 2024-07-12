@@ -21,29 +21,21 @@ const getToken = () => {
 axios.interceptors.request.use(
   (config) => {
     const token = getToken();
-  
-
-    // List of routes to exclude
     const excludedRoutes = ['/login', '/register'];
-
-    // Check if the request URL is in the excluded routes
     const isExcludedRoute = excludedRoutes.some((route) => config.url.includes(route));
-
     if (token && !isExcludedRoute) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => {
-    console.log({ ll: error });
+
     return Promise.reject(error);
   }
 );
 
 const request = {
   create: async ({ entity, id, jsonData }) => {
-    console.log('dsds', jsonData);
     try {
       let url = entity + '/create';
       if (entity === 'clientaddress' && id) {
@@ -51,7 +43,7 @@ const request = {
       }
 
       const response = await axios.post(url, jsonData);
-      // console.log({res:response})
+
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -82,9 +74,7 @@ const request = {
   read: async ({ entity, id }) => {
  
     try {
-      // console.log('data entities --- ', {entity, id})
       const response = await axios.get(entity + '/read/' + id);
-      console.log(response);
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: true,
@@ -110,7 +100,7 @@ const request = {
 
   updateAndUpload: async ({ entity, id, jsonData }) => {
     try {
-      // console.log({ entity, id, jsonData })
+    
       const response = await axios.patch(entity + '/update/' + id, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -120,8 +110,7 @@ const request = {
         notifyOnSuccess: true,
         notifyOnFailed: true,
       });
-      // console.log({response})
-      // return response.data
+
     } catch (error) {
       return errorHandler(error);
     }
@@ -159,14 +148,13 @@ const request = {
   },
 
   search: async ({ entity, value, options = {} }) => {
-    console.log(value);
+
     try {
       let query = '?';
       for (var key in options) {
         query += key + '=' + options[key] + '&';
       }
       query = query.slice(0, -1);
-      // headersInstance.cancelToken = source.token
       const response = await axios.get(entity + '/search' + query);
       successHandler(response, {
         notifyOnSuccess: false,
@@ -178,37 +166,6 @@ const request = {
     }
   },
 
-  // list: async ({ entity, options = {} }) => {
-  //   try {
-  //     let query = '?';
-
-  //     for (var key in options) {
-  //       query += key + '=' + options[key] + '&';
-  //     }
-
-  //     query = query.slice(0, -1);
-
-  //     let url = entity + '/list' + query;
-
-  //     if (entity === 'clientaddress') {
-  //       // const [ClientId, setClientId] = useState( localStorage.getItem('key'))
-  //       const ClientId = localStorage.getItem('key');
-  //       url = entity + '/list/' + ClientId + query;
-  //     }
-
-  //     const response = await axios.get(url);
-
-  //     // const response = await axios.get(entity + '/list'  + query)
-  //     // console.log({response})
-  //     successHandler(response, {
-  //       notifyOnSuccess: false,
-  //       notifyOnFailed: false,
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     return errorHandler(error);
-  //   }
-  // },
 
   list: async ({ entity, options = {} }) => {
     try {
@@ -255,7 +212,7 @@ const request = {
       query = query.slice(0, -1);
 
       const response = await axios.get(entity + 'address/list' + `/${id}` + query);
-      // console.log({response})
+  
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -430,7 +387,7 @@ const request = {
   },
 
   create2: async ({ entity, jsonData }) => {
-    console.log('dsds', jsonData);
+
     try {
       const response = await axios.post(entity + '/create', jsonData);
       successHandler(response, {
@@ -448,7 +405,7 @@ const request = {
       const response = await axios.get(`/clientaddress/search?q=ho&client=${id}&fields=label`);
       return response.data;
     } catch (error) {
-      console.log({ lll: error });
+
       return errorHandler(error);
     }
   },
@@ -458,7 +415,6 @@ const request = {
       const response = await axios.get(`/servicelist/show/${id}`);
       return response.data;
     } catch (error) {
-      console.log({ lll: error });
       return errorHandler(error);
     }
   },
@@ -466,7 +422,7 @@ const request = {
   getSalesPerson: async () => {
     try {
       const response = await axios.get('/admin/listAll');
-      console.log(response.data);
+   
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -511,7 +467,6 @@ const request = {
   },
 
   getServiceListShow: async ({ id }) => {
-    console.log(id);
     try {
       const response = await axios.get(`/servicelist/service/${id}`);
       return response.data;
@@ -541,7 +496,6 @@ const request = {
   getSubscriptiononetime: async () => {
     try {
       const response = await axios.get(`/subscriptiontype/oneTime`);
-      console.log(response);
       return response.data;
     } catch (error) {
       return errorHandler(error);
@@ -557,19 +511,8 @@ const request = {
     }
   },
 
-  // Loogout: async () => {
-  //   try {
-  //     const response = await axios.post('/logout');
-  //     return response.data;
-  //   } catch (error) {
-  //     return errorHandler(error);
-  //   }
-  // },
-
    Loogout : async () => {
-  
     try {
-      console.log('eeeeeeeeeee')
       const token = getToken();
       const response = await axios.post('logout', {}, {
         headers: {
@@ -581,18 +524,6 @@ const request = {
       return errorHandler(error);
     }
   }
-
-  // getQuoteConvertContract: async (id) => {
-  //   try {
-  //     const response = await axios.get('`/servicelist/show/${id}`');
-
-  //     return response.data;
-  //   } catch (error) {
-  //     return errorHandler(error);
-  //   }
-  // },
-  
-
   
 };
 

@@ -18,29 +18,21 @@ import { API_BASE_URL } from '@/config/serverApiConfig';
 let user = JSON.parse(window.localStorage.getItem('auth'))
 let user_id = user.current._id
 
-// console.log('admin data api url --- ', `${API_BASE_URL}admin/read/${user_id}`);
+
 var role
 var adminLevel
 var permissions
-// console.log({ role });
-// console.log({ adminLevel });
-// console.log({ permissions });
+
 
 function AddNewItem({ config }) {
-  // console.log({ config });
+  
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
-  // console.log({ entity });
+
   const navigate = useNavigate();
   const handelClick = () => {
-    // if (entity == 'admin') {
-    //   panel.open();
-    //   collapsedBox.close();
-    // }
-    // else {
-    //   navigate(`/${entity.toLowerCase()}/create`)
-    // }
+
     if (entity == 'customer') {
       setIsVisible(true);
     }
@@ -58,7 +50,6 @@ function AddNewItem({ config }) {
 
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
-  // console.log({ entity });
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
   const translate = useLanguage();
@@ -67,7 +58,6 @@ export default function DataTable({ config, extra = [] }) {
   const [admin, setAdmin] = useState([]);
   useEffect(() => {
     GetAdminDataHandler().then((res) => {
-      // console.log('result data --- ', res);
       setAdmin(res.result)
     }).catch((err) => {
       console.error({ err });
@@ -86,9 +76,7 @@ export default function DataTable({ config, extra = [] }) {
     let data = JSON.parse(await response.text());
     return data
   }
-  // console.log({ admin });
   role = admin?.role_id
-  // console.log({ role });
   adminLevel = role?.admin_level
   permissions = role?.permissions
 
@@ -124,28 +112,6 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  // const items = [
-  //   {
-  //     label: translate('Show'),
-  //     key: 'read',
-  //     icon: <EyeOutlined />,
-  //   },
-  //   {
-  //     label: translate('Edit'),
-  //     key: 'edit',
-  //     icon: <EditOutlined />,
-  //   },
-  //   ...extra,
-  //   {
-  //     type: 'divider',
-  //   },
-
-  //   {
-  //     label: translate('Delete'),
-  //     key: 'delete',
-  //     icon: <DeleteOutlined />,
-  //   },
-  // ];
 
   const handleRead = (record) => {
     dispatch(crud.currentItem({ data: record }));
@@ -246,7 +212,6 @@ export default function DataTable({ config, extra = [] }) {
     };
   }, []);
 
-  // console.log('kkkkk 999 --- ', { config });
   return (
     <>
       <PageHeader

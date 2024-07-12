@@ -11,7 +11,6 @@ const { Sider } = Layout;
 export default function SidePanel({ config, topContent, bottomContent, fixHeaderPanel }) {
 
   const [form] = Form.useForm();
-
   const screens = useBreakpoint();
 
   const { ADD_NEW_ENTITY } = config;
@@ -23,9 +22,6 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
   const [opacitySider, setOpacitySider] = useState(0);
   const [paddingTopSider, setPaddingTopSider] = useState('20px');
 
-  // const { state: stateApp, appContextAction } = useAppContext();
-  // const { isNavMenuClose } = stateApp;
-  // const { navMenu } = appContextAction;
 
   useEffect(() => {
     let timer = [];
@@ -83,23 +79,7 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
         ></CollapseBox>
       </div>
     </Drawer>
-    // <Sider
-    //   width={screens.md ? '400px' : '95%'}
-    //   collapsed={isSidePanelClose}
-    //   collapsedWidth={'0px'}
-    //   onCollapse={collapsePanel}
-    //   className="sidePanel"
-    //   zeroWidthTriggerStyle={{
-    //     right: '-50px',
-    //     top: '15px',
-    //   }}
-    //   style={{
-    //     left: leftSider,
-    //     zIndex: '100',
-    //   }}
-    // >
 
-    // </Sider>
   );
 }
 

@@ -2,29 +2,21 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import { Avatar, Dropdown, Layout } from 'antd';
-
-// import Notifications from '@/components/Notification';
-
 import { SettingOutlined, LogoutOutlined } from '@ant-design/icons';
-
 import { checkImage, request } from '@/request';
-   
 import { selectCurrentAdmin } from '@/redux/auth/selectors';
-
 import { useNavigate } from 'react-router-dom';
-
 import { BASE_URL } from '@/config/serverApiConfig';
-
 import useLanguage from '@/locale/useLanguage';
 import SelectLanguage from '@/components/SelectLanguage';
-
 import UpgradeButton from './UpgradeButton';
+
+
 
 export default function HeaderContent() {
   const currentAdmin = useSelector(selectCurrentAdmin);
   const { Header } = Layout;
   const navigate = useNavigate();
-
   const translate = useLanguage();
 
   const [hasPhotoprofile, setHasPhotoprofile] = useState(false);
@@ -72,22 +64,9 @@ export default function HeaderContent() {
     method: 'POST',
   
   };
-  // try {
-  //   const response = await request.getServiceCategoryOptions({ id: value });
-  //   console.log(response);
-  //   if (response.success) {
-  //     setServiceOptions(response.result);
-  //     getProductHandler();
-  //   } else {
-  //     setServiceOptions(null);
-  //   }
-  // } catch (error) {
-  //   setServiceOptions(null);
-  //   console.error('Error fetching data:', error);
-  // }
+
 
 const Loogout = async () =>{
-  // console.log("pppppppppp")
   const response = await request.Loogout();
   console.log(response)
   // const res = await fetch(`http://localhost:8001/api/logout`, settings )
@@ -140,7 +119,7 @@ const Loogout = async () =>{
         flexDirection: ' row-reverse',
         justifyContent: ' flex-start',
         gap: ' 15px',
-      //  width:"100%",
+
       }}
     >
       <Dropdown
@@ -175,6 +154,4 @@ const Loogout = async () =>{
   );
 }
 
-//  console.log(
-//    '🚀 Welcome to IDURAR ERP CRM! Did you know that we also offer commercial customization services? Contact us at hello@idurarapp.com for more information.'
-//  );
+

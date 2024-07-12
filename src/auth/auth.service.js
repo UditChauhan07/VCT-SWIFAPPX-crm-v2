@@ -6,13 +6,13 @@ import successHandler from '@/request/successHandler';
 
 export const login = async ({ loginData }) => {
   try {
-    console.log({ API_BASE_URL });
+
     const response = await axios.post(
       API_BASE_URL + `login?timestamp=${new Date().getTime()}`,
       loginData
     );
 
-    console.log({ response });
+
     const { status, data, token } = response;
 
     successHandler(
@@ -24,7 +24,7 @@ export const login = async ({ loginData }) => {
     );
     return data;
   } catch (error) {
-    console.log({ error });
+   
     return errorHandler(error);
   }
 };
@@ -104,9 +104,6 @@ export const resetPassword = async ({ resetPasswordData }) => {
 //   }
 // };
 
-//  console.log(
-//    '🚀 Welcome to IDURAR ERP CRM! Did you know that we also offer commercial customization services? Contact us at hello@idurarapp.com for more information.'
-//  );
 
 export const SaveQuotation = async ({ loginData }) => {
   try {

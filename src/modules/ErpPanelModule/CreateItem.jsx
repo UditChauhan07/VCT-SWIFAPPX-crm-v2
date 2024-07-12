@@ -221,6 +221,19 @@ export default function CreateItem({ config, CreateForm }) {
         const subsdata = JSON.parse(WorkOrderstoredId);
 
 
+        if (!subsdata || subsdata.length === 0) {
+          console.error("Please select one subscription");
+      } else {
+          const subFinalData = subsdata[0];
+          if (!subFinalData) {
+              console.error("Please select one subscription");
+          } else {
+              // Proceed with your logic using subFinalData
+              console.log(subFinalData);
+          }
+      }
+
+
         const subFinalData = subsdata[0];
 
 
@@ -251,8 +264,8 @@ export default function CreateItem({ config, CreateForm }) {
         const SPC = localStorage.getItem('Salespersoncontact');
         const SalesPersonContact = JSON.parse(SPC);
 
-        let Data = {
-          client: fieldsValue.client,
+        let Data = {         
+           client: fieldsValue.client,
           clientAddress: fieldsValue.clientAddress,
           billingAddress: fieldsValue.billingAddress,
           sendworkorderEmail: fieldsValue.sendQuotationEmail,

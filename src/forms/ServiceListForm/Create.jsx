@@ -15,9 +15,6 @@ export default function CreateForm({ fields, isUpdateForm = false }) {
 
   const [roles, setRoles] = useState([]);
 
-  // const { crudContextAction } = useCrudContext();
-  // const { panel, collapsedBox, readBox } = crudContextAction;
-
   useEffect(() => {
     const fetchData = async () => {
       try {

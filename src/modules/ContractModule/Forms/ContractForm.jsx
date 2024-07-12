@@ -1,5 +1,3 @@
-// NEW CUSTOM ITEM WORK ORDER CODE
-
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 import {
@@ -16,27 +14,20 @@ import {
   Checkbox,
   Table,
 } from 'antd';
-
 import { PlusOutlined, DeleteOutlined, ConsoleSqlOutlined } from '@ant-design/icons';
-
 import { DatePicker, TimePicker } from 'antd';
 import { Spin } from 'antd';
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
-
 import QuoteItemRow from '@/modules/ErpPanelModule/QuoteItemRow';
-// import ItemRow from '@/modules/ErpPanelModule/ItemRow';
-
 import MoneyInputFormItem from '@/components/MoneyInputFormItem';
 import { selectFinanceSettings } from '@/redux/settings/selectors';
 import { useMoney, useDate } from '@/settings';
 import useLanguage from '@/locale/useLanguage';
-
 import calculate from '@/utils/calculate';
 import { useSelector } from 'react-redux';
 import SelectAsync from '@/components/SelectAsync';
 import { response } from './jsonResponse';
-import styles from './styles.module.css'; // Import the CSS module
-
+import styles from './styles.module.css'; 
 import { useForm } from 'antd/lib/form/Form';
 import { request } from '@/request';
 import ItemRow from '@/modules/ErpPanelModule/ItemRow';
@@ -81,9 +72,7 @@ const initialShowServiceId = [
   },
 ];
 
-const tax = {
-  taxValue: 10, // Example tax value
-};
+const tax = {  taxValue: 10}
 function LoadQuoteForm({ subTotal = 0, current = null }) {
   const translate = useLanguage();
   const { dateFormat } = useDate();
@@ -108,14 +97,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [secondDropdownOptions, setSecondDropdownOptions] = useState([]);
   const [serviceCategory, setserviceCategory] = useState([]);
   const [serviceCategoryNam, setserviceCategoryNam] = useState();
-
   const [SalesPerson, setSalesPerson] = useState();
   const [WorkLead, setWorkLead] = useState();
   const [Workers, setWorkers] = useState();
   const [CheckedId, setCheckedId] = useState();
-  // console.log(CheckedId)
   const [customerAddress, setCustomerAddress] = useState([]);
-
   const [subscriptionData, setSubscriptionData] = useState({});
   const [accordionData, setAccordionData] = useState([]);
   const [serviceCategoryOptions, setserviceCategoryOptions] = useState([]);
@@ -125,8 +111,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const handleDropdownChange = async (value) => {
     setSelectedOption(value);
     try {
-      // const response = await axios.get(`client/search?q=${value}&fields=label`); // Replace YOUR_API_ENDPOINT with your actual API endpoint
-      // console.log(response)
+      
       setAccordionData(response); // Assuming the response contains an array of accordion data
     } catch (error) {
       console.error('Error fetching accordion data:', error);
@@ -150,23 +135,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const addField = useRef('');
 
   useEffect(() => {
-    // Check if addField.current is not null before clicking
     if (addField.current) {
       addField.current.click();
     }
-  }, []); // This effect runs only once when the component mounts
-
-  // console.log({ serviceOptions });
+  }, []); 
 
   const [productList, setProductList] = useState([]);
-
   const [tax, setTax] = useState({});
-
   localStorage.setItem('TaxPercentage', tax?.taxValue);
 
   useEffect(() => {
     getProductHandler();
-    // getClientHandler()
   }, []);
   const getProductHandler = async () => {
     try {
@@ -190,10 +169,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [serviceOptions, setServiceOptions] = useState(null);
   const [ShowServiceList, setShowServiceList] = useState(null);
   const [subscriptionOneTime, setSubcriptionOneTime] = useState();
-
   const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [subItemCount, setSubItemCount] = useState(0);
-  // const [ShowServiceId, setShowServiceId] = useState();
   const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -201,7 +178,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemId([]);
     setSubItemCount(0);
     setSelectedOption(true);
-    // Show all subscriptions corresponding to the selected option
     setShowServiceId();
     IsActiveness(0);
     IsActiveSelect(0);
@@ -213,7 +189,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const fetchData2 = async () => {
       try {
         const response = await request.getServiceCategoryOptions({ id: value });
-        console.log(response);
+    
         if (response.success) {
           setServiceOptions(response.result);
           getProductHandler();
@@ -231,7 +207,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
       try {
         const response = await request.getServiceListShows({ id: value });
-        console.log(response);
+  
         if (response.success) {
           setShowServiceList(response.result);
           setProductList(ShowServiceList);
@@ -250,13 +226,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const [customerAddressEvent, setCustomerAddressEvent] = useState([]);
-  console.log(customerAddressEvent);
+
   const handleFirstDropdownChange = async (event) => {
     setLoading(true);
 
     try {
       const response = await request.getSearchClientAddress(event);
-      console.log('response', response);
+      
       if (response.success) {
         setCustomerAddress(response.result);
         // setCustomerAddressEvent(event);
@@ -276,29 +252,21 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const handleCustomerClear = () => {
     form.setFieldsValue({ client: null, clientAddress: null });
-    // setCustomerAddressEvent(null);
-    setCustomerAddress([]); // Clear customer addresses
+    
+    setCustomerAddress([]); 
   };
 
   const getServicesSubAndItems = async (event) => {
-    // const selectedValue = event.target.value;
-    // setSelectedOption(selectedValue);
-
-    // Make API request with the selected value
     try {
-      // const response = await fetch(`your_api_endpoint/${selectedValue}`);
       const data = [
         { value: '1', label: 'Home' },
         { value: '3', label: 'Billing' },
         { value: '4', label: 'Shipping' },
       ];
-      // Extract options from the API response
       const extractedOptions = data?.map((item) => ({
         value: item.value,
         label: item.label,
       }));
-
-      // Update the options for the second dropdown
       setSecondDropdownOptions(extractedOptions);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -308,18 +276,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const handleChange = (key) => {
     setAccordionActiveKey(key);
   };
-  // const translate = useLanguage()
   const [totalState, setTotal2] = useState(undefined);
   const [price, setPrice] = useState();
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
 
-  // const money = useMoney();
+  
   const updateQt = (value) => {
     setQuantity(value);
   };
   const updatePrice = (value) => {
-    console.log(value);
+
     setPrice(value);
   };
   const updateName = (value) => {
@@ -330,7 +297,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   useEffect(() => {
     if (current) {
       const { items, invoice } = current;
-      console.log(items);
+     
       if (invoice) {
         const item = invoice[field.fieldKey];
         if (item) {
@@ -354,19 +321,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [price, quantity]);
   useEffect(() => {
     const fetchData = async () => {
-      // setLoading(true);
-      try {
+  
+     try {
         const response = await request.getServiceCategoryOptions();
-        console.log(response);
+    
         if (response.success) {
           setserviceCategoryOptions(response.result);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-      // finally {
-      //   setLoading(false);
-      // }
+      
     };
     fetchData();
   }, []);
@@ -406,9 +371,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const hendleOneTime = async () => {
       try {
         const response = await request.getSubscriptiononetime();
-        // console.log(response)
         if (response.success) {
-          //  console.log(response.result._id)
           setSubcriptionOneTime(response.result._id);
         }
       } catch (error) {
@@ -431,7 +394,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const [salesContactNumber, setSalesContactNumber] = useState();
-  console.log(salesContactNumber);
+ 
 
   localStorage.setItem('Salespersoncontact', JSON.stringify(salesContactNumber));
 
@@ -440,24 +403,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
       setSalesContactNumber(number);
       ContactHandler({ salesContactNumber: number });
-      // let saleRepConElement = document.getElementById('salesContactNumber');
-      // console.log(saleRepConElement)
-      // saleRepConElement.value = number || null;
     }
   }, [selectedSalesPerson, salesContactNumber]);
 
-  // NEW CODE -: 1
-  // useEffect(() => {
-  //   if (selectedSalesPerson) {
-  //     let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
-  //      console.log(number)
-  //     setSalesContactNumber(number);
-  //     let saleRepConElement = document.getElementById('salesContactNumber');
-  //     if (saleRepConElement) {
-  //       saleRepConElement.value = number || null;
-  //     }
-  //   }
-  // }, [selectedSalesPerson]);
 
   const validateSalesPersonContact = (_, value) => {
     if (value || salesContactNumber) {
@@ -467,9 +415,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
   const [selectedIds, setSelectedIds] = useState({ itemId: null, subscriptionId: null });
-  // useEffect(() => {}, [selectedSalesPerson]);
+
   const ContactHandler = ({ salesContactNumber }) => {
-    // console.log(salesContactNumber)
+ 
     return (
       <Form.Item
         label={translate('Sales Person Contact')}
@@ -495,26 +443,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <p style={{ padding: '0px 0px 0px 14px', marginTop: '4px' }}>{salesContactNumber}</p>
         </div>
       </Form.Item>
-      // <Form.Item
-      //   label={translate('Sales Person Contact')}
-      //   name="SalesPersonContact"
-      //   rules={[
-      //     {
-      //       required: true,
-      //     },
-      //   ]}
-      //   initialValue={salesContactNumber}
-      // >
-      //   <Input
-      //     style={{
-      //       width: '100%',
-      //     }}
-      //     placeholder=""
-      //     id="salesContactNumber"
-      //     // value={salesContactNumber}
-
-      //   />
-      // </Form.Item>
+      
     );
   };
 
@@ -523,9 +452,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId.forEach((ele) => {
-      // console.log(ele);
+     
       ele.data.forEach((item) => {
-        console.log(item)
+       
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
         }
@@ -553,32 +482,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     return columns;
   };
-  // const [subscriptionIds, setSubscriptionIds] = useState([]);
-  // const [subscriptionCount, setSubscriptionCount] = useState(0);
+
   const [isSubscriptionID, seTisSubscriptionID] = useState(null);
-
   const [adjustmentvalue, setadjustment] = useState(null);
-  // const [discountValue, setdiscount] = useState(null);
-  // console.log(discountValue)
-
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
   const [NewSubitems, setNewItems] = useState([]);
   const [NewsubItemIds, NewsetSubItemId] = useState([]);
   const [Newiitems, setNewiitems] = useState([]);
   const [remarks, setRemarks] = useState([]);
-  // console.log(remarks)
 
-  //  const MyiTems = Newiitems.map((items)=> (
-
-  //   {
-  //     item: items._id,
-  //     qty: items.qty,
-  //     price: items.price,
-  //     total: items.total,
-  //     remarks: remarks
-  //   }
-  // ))
   const MyiTems = Newiitems.map((item) => {
     const itemRemark = remarks.find((remark) => remark.id === item._id);
     return {
@@ -599,36 +512,23 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   let subscriptionSubTotal = 0;
   let subscritionAmount = 0;
 
-  // const handleRemarkChange = (id, value) => {
-  //   console.log(value)
-  //   localStorage.setItem('Reamarksitem', value);
-  // }
 
   const handleRemarkChange = (id, value) => {
     setRemarks((prevRemarks) => {
-      // Create a copy of the previous remarks
       const updatedRemarks = [...prevRemarks];
-      // Find the index of the object with the matching id
       const itemIndex = updatedRemarks.findIndex((item) => item.id === id);
-
       if (itemIndex > -1) {
-        // If the item exists, update the remark
         updatedRemarks[itemIndex].remarks = value;
       } else {
-        // If the item doesn't exist, add a new object
         updatedRemarks.push({ id, remarks: value });
       }
-
-      // Save the updated array back to localStorage
       localStorage.setItem('RemarksItem', JSON.stringify(updatedRemarks));
       return updatedRemarks;
     });
   };
 
   const ItemHandler = (element) => {
-    // console.log(element._id)
     setNewiitems((prevItems) => [...prevItems, element]);
-
     setCheckedId(element._id);
     const tempId = [...subItemIds];
     const temp = [...Subitems];
@@ -639,7 +539,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     element.total = element.price * (quantityvalue || 1);
     element.qty = 1;
 
-    // element.remarks = remarkvalue || "";
 
     const selectedIndex = tempId.indexOf(element._id);
     if (selectedIndex !== -1) {
@@ -691,40 +590,22 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCostNull));
   }
 
-  // console.log({ additionalCost });
+
   const [isSubId, setSubId] = useState({});
-
   const [subscriptionIds, setSubscriptionIds] = useState([]);
-
   const [discountValue, setdiscount] = useState(0);
-
   const [serviceCost, setServiceCost] = useState(initialServiceCost);
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
-  console.log(ShowServiceId)
+  
   const handleCheckboxClick = (e, id) => {
-    // const { value } = e.target;
-    // setSubId(prevState => {
-    //   const updatedState = { ...prevState };
-    //   Object.keys(updatedState)?.forEach(key => {
-    //     if (key !== id) {
-    //       updatedState[key] = undefined;
-    //     }
-    //   });
-    //   updatedState[id] = value;
-    //   return updatedState;
-    // });
     setSubId(id);
-
     let temp = [...subscriptionIds];
     if (temp.includes(id)) {
       temp = temp.filter((item) => item !== id);
     } else {
       temp.push(id);
     }
-
     setSubscriptionIds(id);
-
-    // setSubscriptionIds(temp);
     setSubscriptionCount(temp.length);
     localStorage.setItem('WorkOrderSubId', id);
   };
@@ -754,12 +635,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               tax: taxAmount,
               totalPackageCost,
             };
-
             subscriptionsArray.push({
               subscription: subscriptionObj.subscription._id,
-              // subModule: dataObj._id,
               subModule: dataObj._id,
-              // serviceCost: newServiceCost,
             });
           }
         });
@@ -789,7 +667,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const subscriptionNames = getUniqueSubscriptionNames();
     const tableData = [];
     ShowServiceId?.forEach((ele) => {
-      console.log(ele)
+   
       const rowData = {
         Subscription: ele.subscription.name,
       };
@@ -800,7 +678,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         rowData[name] = matchingItem ? (
           <Radio.Group
             key={matchingItem._id}
-            // value={isSubId[matchingItem._id]}
             value={isSubId === matchingItem._id ? matchingItem._id : null}
             onChange={(e) => handleCheckboxClick(e, matchingItem._id)}
           >
@@ -820,8 +697,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return ShowServiceList.map((element, _id) =>
       element.subscriptions.map((subscriptions, __id) =>
         subscriptions.data.map((subscription, ___id) => {
-          console.log({ subscriptions });
-
           let package_divider = parseFloat(subscriptions.subscription.package_divider);
           subscritionAmount = parseFloat(subscription.price / package_divider);
           let subTotal = parseFloat(subscription.price / package_divider);
@@ -842,13 +717,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           }
           if (subscriptionIds.includes(subscription._id)) {
             subscriptionSubTotal = subTotal + taxValue;
-            // serviceCost.servicePerWO = parseFloat(subscription.price / package_divider).toFixed(2);
-            // serviceCost.discount = parseFloat(discount || 0).toFixed(2);
-            // serviceCost.subTotal = parseFloat(subTotal).toFixed(2);
-            // serviceCost.tax = parseFloat(taxValue).toFixed(2);
-            // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
-            // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
-
             const ServiceCostitem = {
               servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
               discount: parseFloat(discount || 0).toFixed(2),
@@ -857,9 +725,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
             };
 
-            //  console.log({ServiceCostitem})
             localStorage.setItem('ServiceCostitem', JSON.stringify(ServiceCostitem));
-
             localStorage.setItem('ZeFnMqDC7ktkKDB', JSON.stringify(serviceCost));
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
@@ -976,7 +842,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             let taxValue1 = 0;
             let subITotal = 0;
             let taxValue22 = 0;
-            // console.log(subITotal);
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                 <ul
@@ -989,7 +854,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       marginTop: '-22px',
                       color: 'rgb(49,91,140)',
                       height: '105px',
-                      // border: "2px solid black",
                       overflowY: 'auto',
                     }}
                   >
@@ -1006,29 +870,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         taxValue1 = parseFloat(itemPrice) * (parseInt(tax.taxValue) / 100);
                       }
 
-                      // let taxValue22 = 0;
+                      
                       if (tax.taxValue) {
                         taxValue22 = subITotal * (parseFloat(tax.taxValue) / 100);
                       }
 
-                
-
-                      // subITotal + taxValue
                       localStorage.setItem(
                         'jv1GYkk6plxCpgx',
                         parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)
                       );
                       additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
                       additionalCost.tax = parseFloat(taxValue22).toFixed(2);
-                      // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
                       additionalCost.totalPackageCost = parseFloat(subITotal + taxValue22).toFixed(
                         2
                       );
                       additionalCost.itemTotal = parseFloat(itemMPrice).toFixed(2);
                       additionalCost.discount = parseFloat(discount).toFixed(2);
                       localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(additionalCost));
-                      //  console.log(CheckedId)
-                      // localStorage.setItem('BQaBocV8yvv9ELm', JSON.stringify(CheckedId ? additionalCost: additionalCostNull));
+                   
                       return (
                         <>
                           item:{item.name} (x{item.qty ?? 0}){index != Subitems.length && <br />}
@@ -1109,46 +968,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setadjustment(event.target.value || 0);
     let subTotal = document.getElementById('subTotal');
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value));
-    // console.log({ subTotal });
   };
 
-  // const handleSelectChange = (value) => {
-  //   // setadjustment(null);
-  //   // setdiscount(null);
-  //   setSubscriptionIds([]);
-  //   setSubscriptionCount(0);
-  //   setSubItemId([]);
-  //   setItems([]);
-  //   if (value === 'custom') {
-  //     // Handle custom option selection
-  //     IsActiveness(2);
-  //     IsActiveSelect(1);
-  //   } else {
-  //     const option = ShowServiceList?.find((option) => option._id === value);
-  //     if (option) {
-  //       // Show all subscriptions corresponding to the selected option
-  //       setShowServiceId(option.subscriptions);
-  //       IsActiveSelect(2);
-  //       IsActiveness(1);
-  //     } else {
-  //       IsActiveness(0);
-  //       IsActiveSelect(0);
-  //     }
-
-  //     // Clear previous subscription selection when switching options
-  //     setSubscriptionIds([]);
-  //     setSubscriptionCount(0);
-  //     // setadjustment(null);
-  //     // setdiscount(null);
-  //   }
-  // };
+ 
 
   const [isCustom, setIsCustom] = useState(false);
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
   const handleSelectChange = (value) => {
-    // setadjustment(null);
-    // setdiscount(null);
     setSubscriptionIds([]);
     setSubscriptionCount(0);
     setSubItemId([]);
@@ -1171,12 +998,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         IsActiveness(0);
         IsActiveSelect(0);
       }
-
-      // Clear previous subscription selection when switching options
-      // setadjustment(null);
-      // setdiscount(null);
     }
-    // console.log({ ShowServiceList });
+   
   };
 
   const [prices, setPrices] = useState({});
@@ -1209,16 +1032,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       });
 
-      // const MyiTems = Subitems.map((items)=> (
-      //   {
-      //     item: items._id,
-      //     qty: items.qty,
-      //     price: items.price,
-      //     total: items.total,
-      //     remarks: items.remarks
-      //   }
-      // ))
-      // localStorage.setItem('myItems', JSON.stringify(MyiTems));
     }
     setQuantiyvalue(value);
     const updatedQuantities = { ...quantities, [productId]: value };
@@ -1237,7 +1050,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       try {
         const response = await request.getLeadWorker();
         if (response.success) {
-          console.log(response.result);
+      
           setWorkLead(response.result);
         }
       } catch (error) {
@@ -1253,54 +1066,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   // CUSTOM ITEM
 
-  // localStorage.setItem('CustomItems', JSON.stringify(CustomItems));
   const [customItems, setCustomItems] = useState([]);
   const [Iscustomm, setIscustomm] = useState(false);
 
   localStorage.setItem('CustomItems', JSON.stringify(customItems));
 
-  // const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false) => {
-  //   console.log(_id, name, price = 0, qty = 1, remove = false)
-  //   const tempId = [...subItemIds];
-  //   const temp = [...Subitems];
 
-  //   if (remove && _id) {
-  //     const selectedIndex = tempId.indexOf(_id);
-  //     if (selectedIndex) {
-  //       tempId.splice(selectedIndex, 1);
-  //       const itemIndex = temp.findIndex(item => item._id === _id);
-  //       if (itemIndex !== -1) {
-  //         temp.splice(itemIndex, 1);
-  //       }
-  //     }
-  //   } else {
-  //     const selectedIndex = tempId.indexOf(_id);
-  //     if (selectedIndex !== -1) {
-  //       temp.map((item) => {
-  //         if (item._id === _id) {
-  //           item.name = name
-  //         }
-  //       })
-  //     } else {
-  //       let element = {
-  //         _id, price, name,
-  //         total: price * (qty),
-  //         qty
-  //       }
-
-  //       console.warn({ element });
-  //       tempId.push(_id);
-  //       temp.push(element);
-  //       tempcustom.push(element)
-
-  //     }
-  //   }
-  //   setSubItemId(tempId);
-  //   setItems(temp);
-  //   setSubItemCount(temp.length);
-  // }
   const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false, remarks = '') => {
-    console.log(_id, name, (price = 0), (qty = 1), (remove = false), remarks);
+
     const tempId = [...subItemIds];
     const temp = [...Subitems];
     let tempcustom = [...customItems]; // Assuming you have a state or variable to hold custom items
@@ -1438,7 +1211,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       temp.map((element, _id) => {
         element.subscriptions.map((subscriptions, __id) => {
           subscriptions.data.map((subscription, ___id) => {
-            console.log({ subscription });
+      
             subscription.name = name;
           });
         });
@@ -1547,33 +1320,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 customerAddress.length === 0 ? undefined : form.getFieldValue('clientAddress') || ''
               }
             >
-              {/* {loading ? (
-                <Select.Option key="loading" disabled>
-                  <Spin size="small" /> Loading...
-                </Select.Option>
-              ) : (
-                customerAddress?.map((option) => (
-                  <Select.Option key={option._id} value={option._id}>
-                    {option.label}
-                  </Select.Option>
-                ))
-              )} */}
-
-              {/* {loading ? (
-                <Select.Option key="loading" disabled>
-                  <Spin size="small" /> Loading...
-                </Select.Option>
-              ) : customerAddressEvent.length === 0 ? (
-                <Select.Option key="no-address" disabled>
-                  No addresses found
-                </Select.Option>
-              ) : (
-                customerAddress.map((option) => (
-                  <Select.Option key={option._id} value={option._id}>
-                    {option.label}
-                  </Select.Option>
-                ))
-              )} */}
+           
 
               {loading ? (
                 <Select.Option key="loading" disabled>
@@ -1585,7 +1332,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 </Select.Option>
               ) : (
                 customerAddress.map((option) => (
-                  // console.log(option)
                   <Select.Option key={option._id} value={option._id}>
                     {option.label}
                   </Select.Option>
@@ -1632,12 +1378,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="sendQuotationEmail"
             label={translate('Send WorkOrder Email')}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: 'Please select a Send Quotation Email:',
-            //   },
-            // ]}
+           
           >
             <Radio.Group style={{ display: 'flex', gap: '20px' }}>
               <Radio value="1" selected>
@@ -1738,7 +1479,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
               optionFilterProp="children"
               onChange={(event) => setSelectedSalesPerson(event)}
-              // notFoundContent={loading ? <Spin size="small" /> : null}
+          
               notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
               filterSort={(optionA, optionB) =>
                 (optionA.children ?? '')
@@ -1757,11 +1498,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   </Select.Option>
                 ))
               )}
-              {/* {SalesPerson?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>
-                  {option.name}
-                </Select.Option>
-              ))} */}
+             
             </Select>
           </Form.Item>
         </Col>
@@ -1801,7 +1538,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               onChange={(event) => setWorkers(event)}
-              // notFoundContent={loading ? <Spin size="small" /> : null}
+            
             >
               {loading ? (
                 <Select.Option key="loading" disabled>
@@ -1815,12 +1552,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 ))
               )}
 
-              {/* 
-              {WorkLead?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>
-                  {option.name}
-                </Select.Option>
-              ))} */}
+           
             </Select>
           </Form.Item>
         </Col>
@@ -1870,12 +1602,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="serviceCategory"
             label={translate('Service Category')}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: 'Please Select Service Category.',
-            //   },
-            // ]}
+           
           >
             <Select
               showSearch
@@ -1890,25 +1617,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               onChange={getCategorySubscriptionHandler}
-              // notFoundContent={loading ? <Spin size="small" /> : null}
+             
             >
-              {/* {loading ? (
-                <Select.Option key="loading" disabled>
-                  <Spin size="small" /> Loading...
-                </Select.Option>
-              ) : (
-                serviceCategoryOptions?.map((option, index) => (
-                  <Select.Option key={option._id} value={option._id}>
-                    {option.name}
-                    {option.name ? option.name : 'Loading...'}
-                  
-                  </Select.Option>
-                ))
-              )} */}
-
+           
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
-                  {/* {option.name} */}
+             
                   {option.name ? option.name : 'Loading...'}
                 </Select.Option>
               ))}
@@ -1928,37 +1642,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           >
             <Select
               showSearch
-              //  optionFilterProp="children"
               notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
-              //  filterSort={(optionA, optionB) =>
-              //    (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
-              //  }
               style={{
                 width: '100%',
               }}
               value={selectedOption}
               onChange={handleSelectChange}
-              // disabled={!selectedValue}
-              // className={!selectedValue ? 'not-allowed' : ''}
               subscriptionOneTime
-              // notFoundContent={loading ? <Spin size="small" /> : null}
             >
-              {/* {loading ? (
-                <Select.Option key="loading" disabled>
-                  <Spin size="small" /> Loading...
-                </Select.Option>
-              ) : selectedValue ? (
-                <>
-                  <Select.Option value="custom" onClick={() => setIsCustom(true)}>
-                    Custom Service (One Time)
-                  </Select.Option>
-                  {ShowServiceList?.map((option) => (
-                    <Select.Option key={option._id} value={option._id}>
-                      {option.name}
-                    </Select.Option>
-                  ))}
-                </>
-              ) : null} */}
+             
               <Select.Option value="custom" onClick={() => setIsCustom(true)}>
                 Custom Service (One Time)
               </Select.Option>
@@ -1996,7 +1688,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   },
                 ]}
               >
-                {/* <Input /> */}
+            
                 <Input
                   onKeyUp={(e) => {
                     handleCustomServiceInput(e.target.value);
@@ -2014,7 +1706,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   },
                 ]}
               >
-                {/* <Input /> */}
+         
                 <Input
                   onKeyUp={(e) => {
                     handleCustomServicePriceInput(e.target.value);
@@ -2064,7 +1756,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   {
                     itemName: '',
                     price: '',
-                    quantity: 1, // Ensure initial quantity is set to 1
+                    quantity: 1, 
                     total: '',
                     remarks: '',
                   },
@@ -2090,7 +1782,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     <Form.Item>
                       <Button
                         type="dashed"
-                        // onClick={() => add()}
                         onClick={() => add({ quantity: 1 })}
                         block
                         icon={<PlusOutlined />}
@@ -2155,7 +1846,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
-                            // name={['items', index, 'price']}
+              
                             initialValue={prices[data._id]}
                           >
                             <InputNumber
@@ -2180,7 +1871,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={3}>
                           <Form.Item
-                            // name={['items', index, 'quantity']}
+                          
                             initialValue={1}
                           >
                             <InputNumber
@@ -2202,15 +1893,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={7}>
                           <Form.Item
-                          //  name={[`items`, `${index}`, 'remarks']}
+                        
                           >
                             <Input
                               placeholder=" Remarks for Contract"
-                              // defaultValue={data.description}
-                              // onChange={(e) => {
-                              //   const remarks = e.target.value;
-                              //   ItemHandler(data, remarks);
-                              // }}
+                            
                               onChange={(e) => handleRemarkChange(data._id, e.target.value)}
                             />
                           </Form.Item>
@@ -2279,7 +1966,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     {
                       itemName: '',
                       price: '',
-                      quantity: 1, // Ensure initial quantity is set to 1
+                      quantity: 1, 
                       total: '',
                       remarks: '',
                     },
@@ -2305,7 +1992,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       <Form.Item>
                         <Button
                           type="dashed"
-                          // onClick={() => add()}
+                     
                           onClick={() => add({ quantity: 1 })}
                           block
                           icon={<PlusOutlined />}
@@ -2368,7 +2055,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
-                            // name={['items', index, 'price']}
+                   
                             initialValue={prices[data._id]}
                           >
                             <InputNumber
@@ -2393,7 +2080,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={3}>
                           <Form.Item
-                            // name={['items', index, 'quantity']}
+                    
                             initialValue={1}
                           >
                             <InputNumber
@@ -2412,15 +2099,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={7}>
                           <Form.Item
-                          //  name={[`items`, `${index}`, 'remarks']}
+                         
                           >
                             <Input
                               placeholder=" Remarks for Contract"
-                              // defaultValue={data.description}
-                              // onChange={(e) => {
-                              //   const remarks = e.target.value;
-                              //   ItemHandler(data, remarks);
-                              // }}
+                             
                               onChange={(e) => handleRemarkChange(data._id, e.target.value)}
                             />
                           </Form.Item>
@@ -2513,16 +2196,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="discount"
             label={translate('Discount')}
-            // rules={[
-            //   {
-            //     validator: (rule, value) => {
-            //       if (isNaN(value)) {
-            //         return Promise.reject('Only numeric value is accepted.');
-            //       }
-            //       return Promise.resolve();
-            //     },
-            //   },
-            // ]}
+     
           >
             <InputNumber
               style={{ width: '100%' }}

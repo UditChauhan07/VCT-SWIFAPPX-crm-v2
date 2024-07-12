@@ -164,7 +164,7 @@ export const erp = {
         payload: null,
       });
 
-      console.log({ jsonData });
+     
 
       let data = await request.update({ entity, id, jsonData });
 

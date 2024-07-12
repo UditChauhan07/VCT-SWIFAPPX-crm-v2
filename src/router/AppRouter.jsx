@@ -1,8 +1,6 @@
 import { lazy } from 'react';
-
 import { useRoutes } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
-
 const Logout = lazy(() => import('@/pages/Logout.jsx'));
 const NotFound = lazy(() => import('@/pages/NotFound.jsx'));
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
@@ -54,7 +52,6 @@ const About = lazy(() => import('@/pages/About'));
 const Verify = lazy(() => import('@/pages/Verify'));
 const CompanyRoleSelector = lazy(() => import('@/pages/CompanyRoleSelector'));
 const CustomerAddresses = lazy(() => import('@/pages/Address'));
-
 const PricingModel = lazy(() => import('@/pages/PricingModel'));
 const SubscriptionType = lazy(() => import('@/pages/SubscriptionType'));
 const ServiceCategory = lazy(() => import('@/pages/ServiceCategory'));
