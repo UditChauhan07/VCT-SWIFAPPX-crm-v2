@@ -38,7 +38,19 @@ export default function CreateItem({ config, CreateForm }) {
   // Remove 'Subscriptions' from localStorage on component load
   useEffect(() => {
     localStorage.removeItem('Subscriptions');
+    
   }, []);
+
+  useEffect(() => {
+localStorage.removeItem('ZeFnMqDC7ktkKDB');
+      }, []);
+
+  // useEffect(() => {
+  //   localStorage.removeItem('ServiceCostitem');
+
+  // }, [])
+  
+
 
   useEffect(() => {
     dispatch(settingsAction.list({ entity: 'setting' }));
@@ -148,132 +160,186 @@ export default function CreateItem({ config, CreateForm }) {
 
         fieldsValue = requestBody;
       }
-      if (entity === 'workorder') {
-        const Leader = {
-          user: fieldsValue.LeadWorker,
-          startTime: fieldsValue.startTime,
-          endTime: fieldsValue.endTime,
-          isLeader: true,
-        };
-        // const Worker = [
-        //   {
-        //     user: fieldsValue.SelectWorkers,
-        //     startTime: fieldsValue.startTime,
-        //     endTime: fieldsValue.endTime,
-        //   },
-        // ];
-        const Worker = fieldsValue.SelectWorkers.map(workerId => ({
-          user: workerId,
-          startTime: fieldsValue.startTime,
-          endTime: fieldsValue.endTime,
-        }));
+     
+        if (entity === 'workorder') {
+          const Leader = {
+            user: fieldsValue.LeadWorker,
+            startTime: fieldsValue.startTime,
+            endTime: fieldsValue.endTime,
+            isLeader: true,
+          };
+          // const Worker = [
+          //   {
+          //     user: fieldsValue.SelectWorkers,
+          //     startTime: fieldsValue.startTime,
+          //     endTime: fieldsValue.endTime,
+          //   },
+          // ];
+          const Worker = fieldsValue.SelectWorkers.map(workerId => ({
+            user: workerId,
+            startTime: fieldsValue.startTime,
+            endTime: fieldsValue.endTime,
+          }));
 
 
-        const fielduser = [Leader, ...Worker];
-        const startTime = new Date(fieldsValue.startTime).getTime();
-        const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
-        const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
-        fielduser.map((item) => {
-          item.endTime = EndTime;
-        });
+          const fielduser = [Leader, ...Worker];
+          const startTime = new Date(fieldsValue.startTime).getTime();
+          const expectedRequiredTime = new Date(fieldsValue.expectedRequiredTime).getTime();
+          const EndTime = new Date(startTime + expectedRequiredTime).toISOString();
+          fielduser.map((item) => {
+            item.endTime = EndTime;
+          });
 
-        let additionalCost = {};
-        let NewserviceCost = {};
-        let serviceCostStr = localStorage.getItem('ServiceCostitem') || '{}';
-        let additionalCostStr = localStorage.getItem('BQaBocV8yvv9ELm') || '{}';
-        if (serviceCostStr) {
-          NewserviceCost = JSON.parse(serviceCostStr);
-        }
-        if (additionalCostStr) {
-          additionalCost = JSON.parse(additionalCostStr);
-        }
-        let grandTotal = localStorage.getItem('jv1GYkk6plxCpgx') || 0;
-        let submodule = localStorage.getItem('WorkOrderSubId');
+          // ..................................
+          let additionalCost = {};
+          let NewserviceCost = {};
+          let serviceCostStr = localStorage.getItem('ServiceCostitem') || '{}';
+          let additionalCostStr = localStorage.getItem('BQaBocV8yvv9ELm') || '{}';
+          if (serviceCostStr) {
+            NewserviceCost = JSON.parse(serviceCostStr);
+          }
+          if (additionalCostStr) {
+            additionalCost = JSON.parse(additionalCostStr);
+          }
 
-        let MyItems = {};
+          // Check if NewserviceCost is empty
+          // if (!NewserviceCost || Object.keys(NewserviceCost).length === 0) {
+          //   message.error({
+          //     content: "One subscription is required.",
+          //     style: {
+          //       color: 'red',
+          //     },
+          //   });
+          // }
+          // let serviceCost = localStorage.getItem('ZeFnMqDC7ktkKDB');
 
-        let Items = localStorage.getItem('myItems');
-
-        if (Items) {
-          MyItems = JSON.parse(Items);
-        }
-
-
-        const WorkOrderstoredId = localStorage.getItem('Subscriptions');
-
-        const subsdata = JSON.parse(WorkOrderstoredId);
-
-
-        const subFinalData = subsdata[0];
+          let grandTotal = localStorage.getItem('jv1GYkk6plxCpgx') || 0;
+          let submodule = localStorage.getItem('WorkOrderSubId');
 
 
-        // const serviceCost = firstItem.serviceCost;
-        // const subscription = firstItem.subscription;
-        // const subModule = firstItem.subModule;
+          const WorkOrderstoredId = localStorage.getItem('Subscriptions');
 
-        const finalData = {
-          // serviceCost: serviceCost,
-          // subscription: subscription,
-          // subModule: subModule,
-        };
-        const Tax = localStorage.getItem('TaxPercentage');
 
-        const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
+          const subsdata = JSON.parse(WorkOrderstoredId);
 
-        const CustomItemData = Customitem.map(item => ({
-          item: item.name,
-          quantity: item.qty,
-          price: item.price,
-          total: item.total,
-          remarks: item.remarks
-        }));
 
-        const isCustommString = localStorage.getItem('IssCustomm');
-        const isCustomm = JSON.parse(isCustommString);
+          const subFinalData = subsdata[0];
 
-        const SPC = localStorage.getItem('Salespersoncontact');
-        const SalesPersonContact = JSON.parse(SPC);
 
-        let Data = {
-          client: fieldsValue.client,
-          clientAddress: fieldsValue.clientAddress,
-          billingAddress: fieldsValue.billingAddress,
-          sendworkorderEmail: fieldsValue.sendQuotationEmail,
-          salesPerson: fieldsValue.salesPerson,
-          salesPersonContact: SalesPersonContact,
-          salesPersonContact: SalesPersonContact,
-          startDate: fieldsValue.startDate,
-          endDate: fieldsValue.endDate,
-          startTime: fieldsValue.startTime,
-          expectedRequiredTime: fieldsValue.expectedRequiredTime,
-          serviceCategory: fieldsValue.serviceCategory,
-          // serviceList: fieldsValue.serviceList,
-          discount: fieldsValue.discount,
-          isCustom: isCustomm,
-          taxPercentage: Tax,
-          adjustment: {
-            type: fieldsValue.Adjustment,
-            value: fieldsValue.AdjustmentValue,
-          },
-          subscription: subFinalData.subscription,
-          // subModule: subFinalData.subModule,
-          fieldUsers: fielduser,
-          customService: {
-            name: fieldsValue.ServiceName,
-            price: fieldsValue.ServicePrice,
-            description: fieldsValue.ServiceDescription,
-          },
-          items: MyItems,
-          // items: fieldsValue.items,
-          customItems: CustomItemData,
-          remarks: fieldsValue.InitialRemarks,
-          serviceCost: NewserviceCost,
-          additionalCost,
-          grandTotal,
-          // ...(Array.isArray(fieldsValue.serviceList) ? { serviceList: fieldsValue.serviceList } : {}),
-          ...(fieldsValue.serviceList !== 'custom' ? { serviceList: fieldsValue.serviceList } : {}),
-          ...(subFinalData.subModule ? { subModule: subFinalData.subModule } : {})
-        };
+          // const serviceCost = firstItem.serviceCost;
+          // const subscription = firstItem.subscription;
+          // const subModule = firstItem.subModule;
+          // const storedSubscriptions = JSON.parse(localStorage.getItem('Subscriptions')) ||[];
+          // const WorkOrderstoredId = localStorage.getItem('Subscriptions');
+          // console.log(storedSubscriptions);
+          // if (storedSubscriptions.length === 0) {
+          //   message.error({
+          //     content: "One subscription is required.",
+          //     style: {
+          //       color: 'red',
+          //     },
+          //   });
+          // }
+
+
+          // const subsdata = JSON.parse(WorkOrderstoredId);
+          // const subFinalData = subsdata[0];
+
+          // let additionalCost = {};
+          // let serviceCostObj = {};
+
+          // let serviceCostStr = localStorage.getItem("ServiceCostitem") || "{}";
+          // if (serviceCostStr) {
+          //   serviceCostObj = JSON.parse(serviceCostStr);
+          // }
+
+          // let additionalCostStr = localStorage.getItem("BQaBocV8yvv9ELm") || "{}";
+          // if (additionalCostStr) {
+          //   additionalCost = JSON.parse(additionalCostStr);
+          // }
+
+          // // Calculate grandTotal
+          // let grandTotalStr = localStorage.getItem("jv1GYkk6plxCpgx") || "0";
+          // let grandTotal = parseFloat(grandTotalStr) || 0;
+
+          // //////////////////////////
+          let MyItems = {};
+
+          let Items = localStorage.getItem('myItems');
+
+          if (Items) {
+            MyItems = JSON.parse(Items);
+          }
+  
+
+          const finalData = {
+            // serviceCost: serviceCost,
+            // subscription: subscription,
+            // subModule: subModule,
+          };
+          const Tax = localStorage.getItem('TaxPercentage');
+
+          const Customitem = JSON.parse(localStorage.getItem('CustomItems'));
+
+          const CustomItemData = Customitem.map(item => ({
+            item: item.name,
+            quantity: item.qty,
+            price: item.price,
+            total: item.total,
+            remarks: item.remarks
+          }));
+
+          const isCustommString = localStorage.getItem('IssCustomm');
+          const isCustomm = JSON.parse(isCustommString);
+
+          const SPC = localStorage.getItem('Salespersoncontact');
+          const SalesPersonContact = JSON.parse(SPC);
+
+          let Data = {
+            client: fieldsValue.client,
+            clientAddress: fieldsValue.clientAddress,
+            billingAddress: fieldsValue.billingAddress,
+            sendworkorderEmail: fieldsValue.sendQuotationEmail,
+            salesPerson: fieldsValue.salesPerson,
+            salesPersonContact: SalesPersonContact,
+            salesPersonContact: SalesPersonContact,
+            startDate: fieldsValue.startDate,
+            endDate: fieldsValue.endDate,
+            startTime: fieldsValue.startTime,
+            expectedRequiredTime: fieldsValue.expectedRequiredTime,
+            serviceCategory: fieldsValue.serviceCategory,
+            // serviceList: fieldsValue.serviceList,
+            discount: fieldsValue.discount,
+            isCustom: isCustomm,
+            taxPercentage: Tax,
+            adjustment: {
+              type: fieldsValue.Adjustment,
+              value: fieldsValue.AdjustmentValue,
+            },
+            subscription: subFinalData.subscription,
+            // subModule: subFinalData.subModule,
+            fieldUsers: fielduser,
+            customService: {
+              name: fieldsValue.ServiceName,
+              price: fieldsValue.ServicePrice,
+              description: fieldsValue.ServiceDescription,
+            },
+            items: MyItems,
+            // items: fieldsValue.items,
+            customItems: CustomItemData,
+            remarks: fieldsValue.InitialRemarks,
+            serviceCost: NewserviceCost,
+            additionalCost,
+            grandTotal,
+            // ...(Array.isArray(fieldsValue.serviceList) ? { serviceList: fieldsValue.serviceList } : {}),
+            ...(!isCustomm ? { serviceList: fieldsValue.serviceList } : {}),
+            ...(!isCustomm ? { subModule: subFinalData.subModule } : {}),
+          };
+          console.log(Data);
+
+          fieldsValue = Data;
+        
+
         console.log(Data);
 
         fieldsValue = Data;
@@ -411,10 +477,7 @@ if (entity === 'contract') {
           });
         }
 
-        console.log(storedSubscriptions);
-
-
-        const subsdata = JSON.parse(WorkOrderstoredId);
+      const subsdata = JSON.parse(WorkOrderstoredId);
         const subFinalData = subsdata[0];
 
         let additionalCost = {};
@@ -548,6 +611,7 @@ if (entity === 'contract') {
           onFinishFailed={onFinishFailed}
           ref={formRef}
           onValuesChange={handleValuesChange}
+            // Adjust the value as needed
         >
           <CreateForm subTotal={subTotal} offerTotal={offerSubTotal} />
         </Form>

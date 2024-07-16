@@ -35,7 +35,7 @@ function AddNewItem({ config }) {
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
  
 
 
@@ -46,16 +46,26 @@ function AddNewItem({ config }) {
     panel.open();
     collapsedBox.close();
   };
+   useEffect(() => {
+  //  Check if config.ADD_NEW_ENTITY is available
+       if (ADD_NEW_ENTITY) {
+        setLoading(false);
+      }
+  }, [config]);
 
   return (
-    <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
-      {ADD_NEW_ENTITY}
-
-    </Button>
+    <div>
+          {loading ? (
+           <Spin /> // Show loader while loading
+          ) : (
+            <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+             {ADD_NEW_ENTITY}
+            </Button>
+          )}
+         </div>
  
   );
 }
-
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
   const { crudContextAction } = useCrudContext();
@@ -323,3 +333,7 @@ export default function DataTable({ config, extra = [] }) {
     </>
   );
 }
+
+
+
+

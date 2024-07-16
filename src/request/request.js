@@ -52,7 +52,7 @@ const request = {
       const response = await axios.post(url, jsonData);
 
       // Remove item from localStorage
-      localStorage.removeItem('Subscriptions');
+      // localStorage.removeItem('Subscriptions');
 
       successHandler(response, {
         notifyOnSuccess: true,

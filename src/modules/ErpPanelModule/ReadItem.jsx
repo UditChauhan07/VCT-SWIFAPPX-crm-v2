@@ -213,9 +213,9 @@ export default function ReadItem({ config, selectedItem }) {
   const hours = Time.getHours();
   const minutes = Time.getMinutes().toString();
 
-  const ExpectedTime = new Date(currentErp.expectedRequiredTime);
-  const Expectedhours = ExpectedTime.getHours();
-  const Expectedminutes = ExpectedTime.getMinutes().toString();
+  // const ExpectedTime = new Date(currentErp.expectedRequiredTime);
+  // const Expectedhours = ExpectedTime.getHours();
+  // const Expectedminutes = ExpectedTime.getMinutes().toString();
 
   function getStatusText(status) {
     switch (status) {
@@ -277,31 +277,7 @@ export default function ReadItem({ config, selectedItem }) {
     const remarks = item.remarks || '';
     const truncatedRemarks = remarks.length > 12 ? `${remarks.substring(0, 12)}...` : remarks;
   
-    // ................................
-    const formattedTime = new Date(0, 0, 0, hours, minutes);
-    let formattedHours = formattedTime.getHours();
-
-    // Convert hours to 12-hour format
-    const ampm = formattedHours >= 12 ? 'PM' : 'AM';
-    formattedHours = formattedHours % 12;
-    formattedHours = formattedHours ? formattedHours : 12; // Handle midnight (0 hours)
-
-    // Construct the formatted time string
-    const formattedTimeString = `${formattedHours}:${('0' + minutes).slice(-2)} ${ampm}`;
-    // ...............................
-
-    const ExpectedTime = new Date(0, 0, 0, hours, minutes);
-    let Expectedhours = ExpectedTime.getHours();
-
-    // Convert hours to 12-hour format
-    const hrs = Expectedhours >= 12 ? 'hrs' : 'hrs';
-    formattedHours = Expectedhours % 12;
-    Expectedhours = Expectedhours ? Expectedhours : 12; // Handle midnight (0 hours)
-
-    // Construct the formatted time string
-    const ExpectedTimeString = `${Expectedhours}:${('0' + minutes).slice(-2)} ${hrs}`;
-
-    // ...............
+    
     return (
       <Row gutter={[12, 0]} key={item._id}>
         <Col className="gutter-row" span={5}>
@@ -355,7 +331,28 @@ export default function ReadItem({ config, selectedItem }) {
     );
   });
   
-  
+  const formattedTime = new Date(0, 0, 0, hours, minutes);
+  let formattedHours = formattedTime.getHours();
+
+  // Convert hours to 12-hour format
+  const ampm = formattedHours >= 12 ? 'PM' : 'AM';
+  formattedHours = formattedHours % 12;
+  formattedHours = formattedHours ? formattedHours : 12; // Handle midnight (0 hours)
+
+  // Construct the formatted time string
+  const formattedTimeString = `${formattedHours}:${('0' + minutes).slice(-2)} ${ampm}`;
+  // ...............................
+
+  const ExpectedTime = new Date(0, 0, 0, hours, minutes);
+  let Expectedhours = ExpectedTime.getHours();
+
+  // Convert hours to 12-hour format
+  const hrs = Expectedhours >= 12 ? 'hrs' : 'hrs';
+  formattedHours = Expectedhours % 12;
+  Expectedhours = Expectedhours ? Expectedhours : 12; // Handle midnight (0 hours)
+
+  // Construct the formatted time string
+  const ExpectedTimeString = `${Expectedhours}:${('0' + minutes).slice(-2)} ${hrs}`;
 
 
 
@@ -1216,7 +1213,7 @@ export default function ReadItem({ config, selectedItem }) {
             }}
           >
             {moneyFormatter({
-              amount: grandTotal,
+              amount:grandTotal,
             })}
 
 

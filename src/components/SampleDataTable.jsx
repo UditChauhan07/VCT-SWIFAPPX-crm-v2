@@ -27,32 +27,41 @@ var permissions
 // console.log({ permissions });
 
 function AddNewItem({ config }) {
-  // console.log({ config });
+  const [loading, setLoading] = useState(true);
   const { crudContextAction } = useCrudContext();
   const { collapsedBox, panel } = crudContextAction;
   const { ADD_NEW_ENTITY, entity } = config;
-  // console.log({ entity });
   const navigate = useNavigate();
-  const handelClick = () => {
-    // if (entity == 'admin') {
-    //   panel.open();
-    //   collapsedBox.close();
-    // }
-    // else {
-    //   navigate(`/${entity.toLowerCase()}/create`)
-    // }
-    if (entity == 'customer') {
+
+  useEffect(() => {
+    // Simulate an API call or data fetching
+    setTimeout(() => {
+      setLoading(false); // Set loading to false after data is loaded
+    }, 2000); // Adjust the timeout duration as needed
+  }, []);
+
+  const handleClick = () => {
+    if (entity === 'customer') {
       setIsVisible(true);
     }
-
     panel.open();
     collapsedBox.close();
   };
 
   return (
-    <Button onClick={handelClick} type="primary" icon={<PlusOutlined />}>
-      {ADD_NEW_ENTITY}
-    </Button>
+    <>
+      {loading ? (
+        <Spin>
+          <Button type="primary" icon={<PlusOutlined />} disabled>
+            {ADD_NEW_ENTITY}
+          </Button>
+        </Spin>
+      ) : (
+        <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+          {ADD_NEW_ENTITY}
+        </Button>
+      )}
+    </>
   );
 }
 
