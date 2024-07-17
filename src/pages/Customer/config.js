@@ -102,7 +102,6 @@ export const readColumns = {
     displayLabels: ['email'],
     dataIndex: ['userAdmin', 'email'],
     disableForTable: true,
-   
   },
   // country: {
   //   type: 'country',
