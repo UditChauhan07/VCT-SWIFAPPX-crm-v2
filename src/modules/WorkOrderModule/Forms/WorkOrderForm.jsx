@@ -1270,7 +1270,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value));
   };
 
-  const [isCustom, setIsCustom] = useState(false);
+  // const [isCustom, setIsCustom] = useState(false);
 
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
