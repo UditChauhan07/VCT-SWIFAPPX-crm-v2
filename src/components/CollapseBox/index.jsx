@@ -20,9 +20,8 @@ const CollapseBoxButton = ({ onChange, title, config }) => {
     setAdmin(user?.role_id)
   }, [])
 
-  // console.log({ admin });
+
   role = user?.role_id
-  // console.log({ role });
   permissions = role?.permissions
   isSAAS = role?.is_saas
 

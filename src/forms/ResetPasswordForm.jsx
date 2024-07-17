@@ -12,6 +12,7 @@ export default function ResetPasswordForm() {
         rules={[
           {
             required: true,
+            
           },
         ]}
       >

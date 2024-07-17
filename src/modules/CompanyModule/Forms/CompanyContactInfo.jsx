@@ -28,7 +28,7 @@ const CompanyContactInfo = () => {
                     </div>
                 </Col>
             </Row>
-            {/* Checkbox- Use Same Address as Super Admin */}
+          
             <Row gutter={[12, 0]}>
                 <Col className={`gutter-row ${styles["mt-10"]} ${styles["mb-20"]}`} span={24}>
                     <Checkbox

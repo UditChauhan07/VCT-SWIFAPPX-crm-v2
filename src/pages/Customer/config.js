@@ -44,7 +44,7 @@ export const fields = {
     displayLabels: ['email'],
     dataIndex: ['userAdmin', 'email'],
     hasFeedback: true,
-    //  disableForForm: true,
+     disableForForm:false,
   },
   password: {
     type: 'password',
@@ -102,7 +102,6 @@ export const readColumns = {
     displayLabels: ['email'],
     dataIndex: ['userAdmin', 'email'],
     disableForTable: true,
-   
   },
   // country: {
   //   type: 'country',

@@ -11,6 +11,7 @@ export const fields = {
     displayLabels: ['firstname', 'lastname'],
     searchFields: 'firstname,lastname',
     dataIndex: ['people', 'firstname'],
+     disableForTable: true,
   },
   country: {
     type: 'country',

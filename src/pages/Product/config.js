@@ -7,7 +7,7 @@ export const fields = {
     type: 'async',
     label: 'product Category',
     displayLabels: ['productCategory', 'name'],
-    dataIndex: [ 'name'],
+    dataIndex: ["productCategory" ,'name'],
     entity: 'productcategory',
     required: true,
     disableForTable: false,

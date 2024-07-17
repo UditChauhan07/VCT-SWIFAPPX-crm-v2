@@ -11,27 +11,13 @@ import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
 export default function CreateForm({ config, formElements, withUpload = false  }) {
-  console.log(formElements)
   let { entity,  } = config;
-
-
   const dispatch = useDispatch();
   const { isLoading, isSuccess } = useSelector(selectCreatedItem);
   const { crudContextAction } = useCrudContext();
   const { panel, collapsedBox, readBox } = crudContextAction;
   const [form] = Form.useForm();
   const translate = useLanguage();
-
-  // const handleFinish = async () => {
-  //   try {
-  //     const fieldsValue = await form.validateFields();
-  //     onSubmit(fieldsValue);
-  //   } catch (error) {
-  //     console.log('Validation Failed:', error);
-  //   }
-  // };
-
-
 
   const onSubmit = (fieldsValue) => {
 
@@ -74,7 +60,7 @@ export default function CreateForm({ config, formElements, withUpload = false  }
     <Loading isLoading={isLoading}>
       <Form form={form} layout="vertical"  onFinish={onSubmit}>
         {formElements}
-        <Form.Item>
+        <Form.Item style={{ marginTop: '12%' }} >
           <Button type="primary" htmlType="submit" >
             {translate('Submit')}
           </Button>

@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button, Drawer, Layout, Menu } from 'antd';
-
 import { useAppContext } from '@/context/appContext';
-
 import useLanguage from '@/locale/useLanguage';
-// import logoIcon from '@/style/images/logo-icon.svg';
 import logoIcon from '@/style/images/swif.png';
-// import logoText from '@/style/images/logo-text.svg';
 import { useNavigate } from 'react-router-dom';
 import useResponsive from '@/hooks/useResponsive';
 
@@ -40,7 +36,6 @@ const { Sider } = Layout;
 
 export default function Navigation() {
   const { isMobile } = useResponsive();
-
   return isMobile ? <MobileSidebar /> : <Sidebar collapsible={false} />;
 }
 
@@ -55,28 +50,6 @@ function Sidebar({ collapsible, isMobile = false }) {
 
   const translate = useLanguage();
   const navigate = useNavigate(); 
-  // const  item = localStorage.getItem('auth');
-  // // console.log(item)
-  // let adminLevel = 0;
-
-  // if (item !== null){
-  //   const parsedUser = JSON.parse(item);
-  //   adminLevel = parsedUser.current.role_id.admin_level;
-  // }
- 
-  // const [adminLevel, setAdminLevel] = useState(null);
- 
-
-  // useEffect(() => {
-  //   const item = localStorage.getItem('auth');
-  //   if (item !== null) {
-  //     const parsedUser = JSON.parse(item);
-  //     setAdminLevel(parsedUser.current.role_id?.admin_level);
-  //   }
-    
-  // }, []);
-
-
 
   const items = [
     {
@@ -84,11 +57,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <DashboardOutlined />,
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
-    // {
-    //   key: 'pricingmodel',
-    //   icon: <InsertRowAboveOutlined />,
-    //   label: <Link to={'/pricingmodel'}>{translate('pricing_model')}</Link>,
-    // },
+  
     {
       key: 'subscriptiontype',
       icon: <ProfileOutlined />,
@@ -241,123 +210,6 @@ function Sidebar({ collapsible, isMobile = false }) {
 
 
 
-//    // NEW CODE 
-
-  //  const items = [
-  //   {
-  //     key: 'dashboard',
-  //     icon: <DashboardOutlined />,
-  //     label: <Link to={'/'}>{translate('dashboard')}</Link>,
-  //   },
-
-  //   ...(adminLevel === 1 ? [
-  //     {
-  //       key: 'subscriptiontype',
-  //       icon: <ProfileOutlined />,
-  //       label: <Link to={'/subscriptiontype'}>{translate('subscriptions')}</Link>,
-  //     },
-  //   ] : []),
-  //   {
-  //     key: 'services',
-  //     icon: <BarsOutlined />,
-  //     label: translate('services'),
-  //     children: [
-  //       {
-  //         key: 'servicecategory',
-  //         label: <Link to={'/servicecategory'}>{translate('service_category')}</Link>,
-  //       },
-  //       {
-  //         key: 'servicelist',
-  //         label: <Link to={'/servicelist'}>{translate('service_list')}</Link>,
-  //       },
-  //       {
-  //         key: 'categoryproduct',
-  //         label: <Link to={'/category/product'}>{translate('product_category')}</Link>,
-  //       },
-  //       {
-  //         key: 'product',
-  //         label: <Link to={'/product'}>{translate('products')}</Link>,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     key: 'customer',
-  //     icon: <CustomerServiceOutlined />,
-  //     label: <Link to={'/customer'}>{translate('customers')}</Link>,
-  //   },
-  //   {
-  //     key: 'people',
-  //     icon: <UserOutlined />,
-  //     label: <Link to={'/people'}>{translate('peoples')}</Link>,
-  //   },
-  //   {
-  //     key: 'company',
-  //     icon: <ShopOutlined />,
-  //     label: <Link to={'/company'}>{translate('companies')}</Link>,
-  //   },
-  //   {
-  //     key: 'quote',
-  //     icon: <FileSyncOutlined />,
-  //     label: <Link to={'/quote'}>{translate('Quotes')}</Link>,
-  //   },
-  //   {
-  //     key: 'contract',
-  //     icon: <ControlOutlined />,
-  //     label: <Link to={'/contract'}>{translate('Contracts')}</Link>,
-  //   },
-  //   {
-  //     key: 'workorder',
-  //     icon: <LineChartOutlined />,
-  //     label: <Link to={'/workorder'}>{translate('Work Order')}</Link>,
-  //   },
-  //   {
-  //     key: 'lead',
-  //     icon: <FilterOutlined />,
-  //     label: <Link to={'/lead'}>{translate('leads')}</Link>,
-  //   },
-  //   {
-  //     key: 'offer',
-  //     icon: <FileOutlined />,
-  //     label: <Link to={'/offer'}>{translate('offers')}</Link>,
-  //   },
-  //   {
-  //     label: translate('Settings'),
-  //     key: 'settings',
-  //     icon: <SettingOutlined />,
-  //     children: [
-  //       {
-  //         key: 'admin',
-  //         icon: <TeamOutlined />,
-  //         label: <Link to={'/admin'}>{translate('admin')}</Link>,
-  //       },
-  //       {
-  //         key: 'generalSettings',
-  //         label: <Link to={'/settings'}>{translate('settings')}</Link>,
-  //       },
-  //       {
-  //         key: 'roles',
-  //         label: <Link to={'/roles'}>{translate('roles')}</Link>,
-  //       },
-  //       {
-  //         key: 'publicholiday',
-  //         label: <Link to={'/publicholiday'}>{translate('public_holiday')}</Link>,
-  //       },
-  //       {
-  //         key: 'paymentMode',
-  //         label: <Link to={'/payment/mode'}>{translate('payment_mode')}</Link>,
-  //       },
-  //       {
-  //         key: 'taxes',
-  //         label: <Link to={'/taxes'}>{translate('taxes')}</Link>,
-  //       },
-  //       {
-  //         key: 'about',
-  //         label: <Link to={'/about'}>{translate('about')}</Link>,
-  //       },
-  //     ],
-  //   },
-  // ];
-
 
 
 
@@ -411,13 +263,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
         <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
 
-        {/* {showLogoApp && (
-          <img
-            src={logoIcon}
-            alt="Logo"
-            style={{ marginTop: '3px', marginLeft: '10px', height: '38px' }}
-          />
-        )} */}
+       
       </div>
       <Menu
         items={items}
@@ -430,7 +276,7 @@ function Sidebar({ collapsible, isMobile = false }) {
           border: "none",
 
           maxWidth: "200px",
-          // minWidth: "204px",
+     
           width: "188px"
         }}
       />

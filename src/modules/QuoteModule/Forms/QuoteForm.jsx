@@ -9,7 +9,7 @@ import { DatePicker, TimePicker } from 'antd';
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 
 import QuoteItemRow from '@/modules/ErpPanelModule/QuoteItemRow';
-// import ItemRow from '@/modules/ErpPanelModule/ItemRow';
+
 
 import MoneyInputFormItem from '@/components/MoneyInputFormItem';
 import { selectFinanceSettings } from '@/redux/settings/selectors';
@@ -20,7 +20,7 @@ import calculate from '@/utils/calculate';
 import { useSelector } from 'react-redux';
 import SelectAsync from '@/components/SelectAsync';
 import { response } from './jsonResponse';
-import styles from './styles.module.css'; // Import the CSS module
+import styles from './styles.module.css'; 
 
 import { useForm } from 'antd/lib/form/Form';
 import { request } from '@/request';
@@ -61,7 +61,7 @@ const initialShowServiceId = [
 ];
 
 const tax = {
-  taxValue: 10, // Example tax value
+  taxValue: 10, 
 };
 function LoadQuoteForm({ subTotal = 0, current = null }) {
   const translate = useLanguage()
@@ -75,7 +75,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [active, IsActive] = useState(1)
   const [activeness, IsActiveness] = useState(1)
   const [activeSelect, IsActiveSelect] = useState(1)
-  console.log(activeSelect)
+  
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100)
@@ -92,7 +92,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [WorkLead, setWorkLead] = useState()
   const [Workers, setWorkers] = useState()
 
-  // console.log(CheckedId)
+ 
   const [customerAddress, setCustomerAddress] = useState([])
 
   const [subscriptionData, setSubscriptionData] = useState({})
@@ -105,9 +105,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const handleDropdownChange = async (value) => {
     setSelectedOption(value);
     try {
-      // const response = await axios.get(`client/search?q=${value}&fields=label`); // Replace YOUR_API_ENDPOINT with your actual API endpoint
-      // console.log(response)
-      setAccordionData(response); // Assuming the response contains an array of accordion data
+
+      setAccordionData(response); 
     } catch (error) {
       console.error('Error fetching accordion data:', error);
     }
@@ -130,14 +129,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const addField = useRef("")
 
   useEffect(() => {
-    // Check if addField.current is not null before clicking
     if (addField.current) {
       addField.current.click();
     }
 
-  }, []) // This effect runs only once when the component mounts
-
-  // console.log({ serviceOptions });
+  }, []) 
 
   const [productList, setProductList] = useState([])
   const [tax, setTax] = useState({})
@@ -145,14 +141,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   localStorage.setItem("TaxPercentage", tax?.taxValue);
   useEffect(() => {
     getProductHandler()
-    // getClientHandler()
+
   }, [])
   const getProductHandler = async () => {
     try {
       const productListRes = await request.getProductList();
       if (productListRes.success) {
         const taxHandller = await request.getTax();
-        console.log(taxHandller)
+   
         if (taxHandller.success) {
           setTax(taxHandller.result)
         }
@@ -160,7 +156,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       } else {
         setProductList([]);
       }
-      console.log({ productList });
+  
     } catch (er) {
       console.error({ er });
     }
@@ -172,7 +168,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [subscriptionOneTime, setSubcriptionOneTime] = useState()
   const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [subItemCount, setSubItemCount] = useState(0);
-  // const [ShowServiceId, setShowServiceId] = useState();
   const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
@@ -180,20 +175,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubItemId([]);
     setSubItemCount(0);
     setSelectedOption(true);
-    // Show all subscriptions corresponding to the selected option
     setShowServiceId();
     IsActiveness(0);
     IsActiveSelect(0);
-
-    // Clear previous subscription selection when switching options
     setSubscriptionIds([]);
     setSubscriptionCount(0);
-    // setIsFirstServiceCategorySelect(false);
+
+
     const fetchData2 = async () => {
       setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions({ id: value });
-        console.log(response)
+      
         if (response.success) {
           setServiceOptions(response.result);
           getProductHandler();
@@ -211,7 +204,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       setLoading(true);
       try {
         const response = await request.getServiceListShows({ id: value });
-        console.log(response)
+       
         if (response.success) {
           setShowServiceList(response.result);
           setProductList(ShowServiceList)
@@ -236,12 +229,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     try {
       const response = await request.getSearchClientAddress(event);
-      console.log('response', response);
+    
       if (response.success) {
         setCustomerAddress(response.result);
-        // setCustomerAddressEvent(event);
         form.setFieldsValue({ clientAddress: null });
-        // Set options state based on API response
       } else {
         setCustomerAddress([]);
         form.setFieldsValue({ clientAddress: null });
@@ -256,20 +247,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
 
   const getServicesSubAndItems = async (event) => {
-    // const selectedValue = event.target.value;
-    // setSelectedOption(selectedValue);
-
-    // Make API request with the selected value
     try {
-      // const response = await fetch(`your_api_endpoint/${selectedValue}`);
       const data = [{ value: '1', label: 'Home' }, { value: '3', label: 'Billing' }, { value: '4', label: 'Shipping' }];
-      // Extract options from the API response
       const extractedOptions = data?.map((item) => ({
         value: item.value,
         label: item.label,
       }));
-
-      // Update the options for the second dropdown
       setSecondDropdownOptions(extractedOptions);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -279,18 +262,18 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const handleChange = (key) => {
     setAccordionActiveKey(key);
   }
-  // const translate = useLanguage()
+
   const [totalState, setTotal2] = useState(undefined);
   const [price, setPrice] = useState();
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
 
-  // const money = useMoney();
+
   const updateQt = (value) => {
     setQuantity(value);
   };
   const updatePrice = (value) => {
-    console.log(value)
+   
     setPrice(value);
   };
   const updateName = (value) => {
@@ -301,7 +284,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   useEffect(() => {
     if (current) {
       const { items, invoice } = current;
-      console.log(items)
+ 
       if (invoice) {
         const item = invoice[field.fieldKey];
         if (item) {
@@ -320,23 +303,22 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
-    console.log(currentTotal)
+
     setTotal2(currentTotal);
   }, [price, quantity]);
   useEffect(() => {
     const fetchData = async () => {
-      // setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions();
-        console.log(response)
+       
         if (response.success) {
           setserviceCategoryOptions(response.result);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        // setLoading(false);/
-      }
+      } 
+      
+      
     };
     fetchData()
   }, [])
@@ -379,9 +361,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     const hendleOneTime = async () => {
       try {
         const response = await request.getSubscriptiononetime();
-        // console.log(response)
+    
         if (response.success) {
-          //  console.log(response.result._id)
+       
           setSubcriptionOneTime(response.result._id);
         }
       } catch (error) {
@@ -417,9 +399,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       let number = SalesPerson?.find((option) => option._id === selectedSalesPerson)?.phone;
       setSalesContactNumber(number);
       ContactHandler({ salesContactNumber: number });
-      // let saleRepConElement = document.getElementById('salesContactNumber');
-      // console.log(saleRepConElement)
-      // saleRepConElement.value = number || null;
     }
   }, [selectedSalesPerson, salesContactNumber]);
 
@@ -429,9 +408,9 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
     return Promise.reject(new Error('Please Select Sales Person Contact.'));
   };
-  // useEffect(() => {}, [selectedSalesPerson]);
+
   const ContactHandler = ({ salesContactNumber }) => {
-    // console.log(salesContactNumber)
+    
     return (
       <Form.Item
         label={translate('Sales Person Contact')}
@@ -457,26 +436,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <p style={{ padding: '0px 0px 0px 14px', marginTop: '4px' }}>{salesContactNumber}</p>
         </div>
       </Form.Item>
-      // <Form.Item
-      //   label={translate('Sales Person Contact')}
-      //   name="SalesPersonContact"
-      //   rules={[
-      //     {
-      //       required: true,
-      //     },
-      //   ]}
-      //   initialValue={salesContactNumber}
-      // >
-      //   <Input
-      //     style={{
-      //       width: '100%',
-      //     }}
-      //     placeholder=""
-      //     id="salesContactNumber"
-      //     // value={salesContactNumber}
-
-      //   />
-      // </Form.Item>
+     
     );
   };
   ;
@@ -486,7 +446,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId?.forEach((ele) => {
-      console.log(ele)
+    
       ele.data?.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
@@ -516,17 +476,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     return columns;
   };
 
-
-  // const [subscriptionIds, setSubscriptionIds] = useState([]);
-  // const [subscriptionCount, setSubscriptionCount] = useState(0);
   const [isSubscriptionID, seTisSubscriptionID] = useState(null);
-
   const [adjustmentvalue, setadjustment] = useState(null);
-  // const [discountValue, setdiscount] = useState(null);
-  // console.log(discountValue)
   const [Subitems, setItems] = useState([]);
   const [subItemIds, setSubItemId] = useState([]);
-
   const [quantityvalue, setQuantiyvalue] = useState();
   ;
   useEffect(() => { }, [subscriptionCount, subItemCount])
@@ -551,20 +504,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   localStorage.setItem('myItems', JSON.stringify(MyiTems));
   const handleRemarkChange = (id, value) => {
     setRemarks(prevRemarks => {
-      // Create a copy of the previous remarks
       const updatedRemarks = [...prevRemarks];
-      // Find the index of the object with the matching id
       const itemIndex = updatedRemarks.findIndex(item => item.id === id);
-
       if (itemIndex > -1) {
-        // If the item exists, update the remark
         updatedRemarks[itemIndex].remarks = value;
       } else {
-        // If the item doesn't exist, add a new object
         updatedRemarks.push({ id, remarks: value });
       }
-
-      // Save the updated array back to localStorage
       localStorage.setItem('RemarksItem', JSON.stringify(updatedRemarks));
       return updatedRemarks;
     });
@@ -595,20 +541,20 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setItems(temp);
     setSubItemCount(temp.length);
   };
-  console.log({ Subitems });
+
 
   const [customItems, setCustomItems] = useState([]);
   const [Iscustomm, setIscustomm] = useState(false);
 
-  console.log(customItems)
+
 
   localStorage.setItem('CustomItems', JSON.stringify(customItems));
 
   const CustomItemNameHandler = (_id, name, price = 0, qty = 1, remove = false, remarks = '') => {
-    console.log(_id, name, (price = 0), (qty = 1), (remove = false), remarks);
+    
     const tempId = [...subItemIds];
     const temp = [...Subitems];
-    let tempcustom = [...customItems]; // Assuming you have a state or variable to hold custom items
+    let tempcustom = [...customItems]; 
 
     if (remove && _id) {
       const selectedIndex = tempId.indexOf(_id);
@@ -720,7 +666,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           item.remarks = remarks;
         }
       });
-      console.log(temp)
+     
     } else {
       let element = {
         _id,
@@ -745,25 +691,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
-    // Allow decimal point (.) and digits (0-9)
     if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
       event.preventDefault();
       setErrorMessage('Only numeric values are accepted');
     } else {
-      setErrorMessage(''); // Clear error message if valid character
+      setErrorMessage(''); 
     }
   }
   const numericFormatter = (value) => {
-    // Remove non-numeric characters
     return value.replace(/[^0-9.]/g, '');
   };
-
-  // const numericParser = (value) => {
-  //   // Parse numeric value
-  //   return parseFloat(value);
-  // };
-
-
 
   const initialServiceCost = {
     servicePerWO: null,
@@ -800,7 +737,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   localStorage.setItem("discountValue", discountValue?.taxValue);
 
-  // const [subItemCount, setSubItemCount] = useState(0);
 
   const [ShowServiceId, setShowServiceId] = useState(initialShowServiceId);
 
@@ -815,49 +751,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setSubscriptionCount(temp.length);
   };
 
-
-  // useEffect(() => {
-  //   const calculateCosts = () => {
-  //     const discountValueParsed = parseFloat(discountValue) || 0;
-  //     let subscriptionsArray = []
-  //     console.log(subscriptionsArray)
-
-  //     let newServiceCost = { ...initialServiceCost };
-  //     let CustomsubscriptionArray = [];
-  //     ShowServiceId?.forEach(subscriptionObj => {
-  //       subscriptionObj.data?.forEach(dataObj => {
-  //         console.log(dataObj._id, "dataObj_id")
-  //         if (subscriptionIds.includes(dataObj._id)) {
-  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
-  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-  //           const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
-
-  //           newServiceCost = {
-  //             servicePerWO,
-  //             discount,
-  //             subTotal,
-  //             tax: taxAmount,
-  //             totalPackageCost,
-  //           };
-
-  //           subscriptionsArray.push({
-  //             subscription: subscriptionObj.subscription._id,
-  //             subModule: dataObj._id,
-  //             serviceCost: newServiceCost,
-  //           });
-  //         }
-  //       });
-  //     });
-
-  //     setServiceCost({ ...initialServiceCost });
-  //     localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
-  //   };
-
-  //   calculateCosts();
-  // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
@@ -892,7 +785,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       ShowServiceList.map((element, _id) => (
         element.subscriptions.map((subscriptions, __id) => (
           subscriptions.data.map((subscription, ___id) => {
-            console.log(subscription, "dataObj_id")
+         
 
             let package_divider = parseFloat(subscriptions.subscription.package_divider);
             subscritionAmount = parseFloat(subscription.price / package_divider)
@@ -951,8 +844,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
               localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
 
-              // }
-              // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitwm))
+             
               return (
                 <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                   <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
@@ -998,14 +890,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           }
           if (subscriptionIds.includes(subscription._id)) {
             subscriptionSubTotal = subTotal + taxValue;
-            console.log(subscriptionSubTotal)
+           
             let itemPrice = 0;
             let itemMPrice = 0;
             let discount = 0;
             let taxValue1 = 0;
             let subITotal = 0;
             let taxValue2 = 0;
-            console.log(subITotal);
+      
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                 <ul
@@ -1018,7 +910,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       marginTop: '-22px',
                       color: 'rgb(49,91,140)',
                       height: '105px',
-                      // border: "2px solid black",
                       overflowY: 'auto',
                     }}
                   >
@@ -1036,16 +927,16 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       }
                       if (tax.taxValue) {
                         taxValue2 = subITotal * (parseFloat(tax.taxValue) / 100);
-                      } console.log(taxValue2)
+                      }
+                
 
-                      // subITotal + taxValue
+            
                       localStorage.setItem(
                         'jv1GYkk6plxCpgx',
                         parseFloat(subscriptionSubTotal + subITotal + taxValue).toFixed(2)
                       );
                       additionalCost.subTotal = parseFloat(subITotal).toFixed(2);
                       additionalCost.tax = parseFloat(taxValue2).toFixed(2);
-                      // additionalCost.totalPackageCost = parseFloat(itemPrice + taxValue1).toFixed(2);
                       additionalCost.totalPackageCost = parseFloat(subITotal + taxValue2).toFixed(2);
                       additionalCost.itemTotal = parseFloat(itemMPrice / package_divider).toFixed(2);
                       additionalCost.discount = parseFloat(discount).toFixed(2);
@@ -1079,29 +970,24 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setadjustment(event.target.value || 0)
     let subTotal = document.getElementById("subTotal")
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
-    console.log({ subTotal });
+  
   }
-  // const [customItems, setCustomItems] = useState([]);
+
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
 
   const handleSelectChange = (value) => {
-    // setadjustment(null);
-    // setdiscount(null);
     setSubscriptionIds([]);
     setSubscriptionCount(0);
     setSubItemId([])
     setItems([])
     if (value === 'custom') {
-      // Handle custom option selection
       IsActiveness(2);
       IsActiveSelect(1);
       setIsCustom(true)
     } else {
       setIsCustom(false)
-      // setShowServiceList([])
       const option = ShowServiceList?.find((option) => option._id === value);
       if (option) {
-        // Show all subscriptions corresponding to the selected option
         setShowServiceId(option.subscriptions);
         IsActiveSelect(2);
         IsActiveness(1);
@@ -1109,12 +995,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         IsActiveness(0);
         IsActiveSelect(0);
       }
-
-      // Clear previous subscription selection when switching options
-      // setadjustment(null);
-      // setdiscount(null);
     }
-    console.log({ ShowServiceList });
+
 
   };
 
@@ -1122,7 +1004,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [quantities, setQuantities] = useState({});
 
   const [totals, setTotals] = useState({});
-  // console.log(totals)
+
 
   useEffect(() => {
     const initialPrices = {};
@@ -1142,7 +1024,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [productList]);
 
   const updateQuantity = (productId, value) => {
-    ///123
+
     if (Subitems.length) {
       Subitems?.map((item) => {
         if (item._id == productId) {
@@ -1151,20 +1033,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
         }
       })
 
-
-      // const MyiTems = Subitems.map((items) => (
-      //   {
-      //     item: items._id,
-      //     qty: items.qty,
-      //     price: items.price,
-      //     total: items.total,
-      //     remarks: items.remarks
-      //   }
-      // ))
-
-      // console.log(MyiTems)
-      // localStorage.setItem('myItems', JSON.stringify(MyiTems));
-      // console.log({ Subitems, productId });
     }
 
 
@@ -1200,7 +1068,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       temp.map((element, _id) => {
         element.subscriptions.map((subscriptions, __id) => {
           subscriptions.data.map((subscription, ___id) => {
-            console.log({ subscription });
+          
             subscription.name = name;
           });
         });
@@ -1330,12 +1198,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="sendQuotationEmail"
             label={translate('Send Quotation Email')}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: 'Please select a Send Quotation Email:',
-          //   },
-          // ]}
+      
           >
             <Radio.Group style={{ display: "flex", gap: "20px" }}>
               <Radio value="1" selected>Yes</Radio>
@@ -1429,7 +1292,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
               optionFilterProp="children"
               onChange={(event) => setSelectedSalesPerson(event)}
-              // notFoundContent={loading ? <Spin size="small" /> : null} 
               notFoundContent={loading ? <Spin size="small" /> : 'No data found'}
               filterSort={(optionA, optionB) =>
                 (optionA.children ?? '').toLowerCase().localeCompare((optionB.children ?? '').toLowerCase())
@@ -1446,11 +1308,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   </Select.Option>
                 ))
               )}
-              {/* {SalesPerson?.map((option, index) => (
-                <Select.Option key={option._id} value={option._id}>
-                  {option.name}
-                </Select.Option>
-              ))} */}
+              
             </Select>
           </Form.Item>
         </Col>
@@ -1499,11 +1357,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                 width: '100%',
               }}
               onChange={getCategorySubscriptionHandler}
-            // notFoundContent={loading ? <Spin size="small" /> : null}
+      
             >
               {serviceCategoryOptions?.map((option, index) => (
                 <Select.Option key={option._id} value={option._id}>
-                  {/* {option.name} */}
+               
                   {option.name ? option.name : 'Loading...'}
                 </Select.Option>
               ))}
@@ -1528,7 +1386,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}
               value={selectedOption}
               onChange={handleSelectChange}
-              // disabled={!selectedValue} 
               subscriptionOneTime
               notFoundContent={loading ? <Spin size="small" /> : null}
             >
@@ -1663,8 +1520,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   </Row>
                   <div key={`${i}`}>
 
-                    {/* <Form.List name="items" >
-                        <> */}
                     {mainData.products?.map((data, index) => (
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
                         <Col className="gutter-row mt-2">
@@ -1694,7 +1549,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
-                            // name={['items', index, 'price']}
+                        
                             initialValue={prices[data._id]}
                           >
                             <InputNumber
@@ -1719,7 +1574,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={3}>
                           <Form.Item
-                            // name={['items', index, 'quantity']}
+                          
                             initialValue={1}
                           >
                             <InputNumber
@@ -1737,43 +1592,25 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           </Form.Item>
                         </Col>
                         <Col className="gutter-row" span={7}>
-                          <Form.Item
-                          //  name={[`items`, `${index}`, 'remarks']}
-                          >
+                          <Form.Item>
                             <Input
                               placeholder=" Remarks for Workorder"
-                              // defaultValue={data.description}
-                              // onChange={(e) => {
-                              //   const remarks = e.target.value;
-                              //   ItemHandler(data, remarks);
-                              // }}
                               onChange={(e) => handleRemarkChange(data._id, e.target.value)}
-
                             />
                           </Form.Item>
                         </Col>
                       </Row>
                     ))}
-                    {/* </>
-                      </Form.List> */}
-
                   </div >
                 </Collapse.Panel>
-
               ))}
             </Collapse>
           </>
         )
       }
-
-
-
-   {
+      {
         activeSelect == 2 && (
           <>
-          {
-             productList ?
-            <>
             <Col className="gutter-row" span={24}>
               <Form.Item label={translate('Service Description')} name="ServiceDescription">
                 <Input.TextArea />
@@ -1787,17 +1624,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     dataSource={generateTableData()}
                     pagination={false}
                   />
-                 </Col>
+                </Col>
               </Row>
             </Col>
-                  
-          
-            <Collapse
-              accordion
-              activeKey={accordionActiveKey}
-              onChange={handleChange}
-              style={{ marginTop: '5%' }}
-            >
+            <Collapse accordion activeKey={accordionActiveKey} onChange={handleChange} style={{ marginTop: '5%' }}>
               <Collapse.Panel header="Custom Item" key="custom-item">
                 <Row gutter={[12, 12]} style={{ position: 'relative' }} key="ci-11">
                   <Col className="gutter-row" span={4}>
@@ -1822,7 +1652,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                     {
                       itemName: '',
                       price: '',
-                      quantity: 1, // Ensure initial quantity is set to 1
+                      quantity: 1, 
                       total: '',
                       remarks: '',
                     },
@@ -1837,12 +1667,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                           field={field}
                           current={current}
                           isFirstRow={index === 0}
-                          onChange={{
-                            CustomItemNameHandler,
-                            CustomItemPriceHandler,
-                            CustomItemQTYHandler,
-                            CustomItemRemarksHandler,
-                          }}
+                          onChange={{ CustomItemNameHandler, CustomItemPriceHandler, CustomItemQTYHandler, CustomItemRemarksHandler }}
                         />
                       ))}
                       <Form.Item>
@@ -1860,26 +1685,28 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                   )}
                 </Form.List>
               </Collapse.Panel>
-          
               {productList?.map((mainData, i) => (
                 <Collapse.Panel header={mainData.name} key={mainData._id}>
+                  <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
+                    <Col className="gutter-row" span={4}>
+                      <p>{translate('Sub-Item')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
+                      <p>{translate('Price')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={3}>
+                      <p>{translate('Quantity')}</p>{' '}
+                    </Col>
+                    <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
+                      <p>{translate('Total')}</p>
+                    </Col>
+                    <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
+                      <p>{translate('Remarks')}</p>
+                    </Col>
+                  </Row>
                   <div key={`${i}`}>
                     <Row gutter={[12, 12]} style={{ position: 'relative' }} key={i}>
-                      <Col className="gutter-row" span={4}>
-                        <p>{translate('Sub-Item')}</p>
-                      </Col>
-                      <Col className="gutter-row" span={4} style={{ marginLeft: '34px' }}>
-                        <p>{translate('Price')}</p>
-                      </Col>
-                      <Col className="gutter-row" span={3}>
-                        <p>{translate('Quantity')}</p>{' '}
-                      </Col>
-                      <Col className="gutter-row" span={4} style={{ marginLeft: '20px' }}>
-                        <p>{translate('Total')}</p>
-                      </Col>
-                      <Col className="gutter-row" span={6} style={{ marginLeft: '-21px' }}>
-                        <p>{translate('Remarks')}</p>
-                      </Col>
+                      {/* Column headers */}
                     </Row>
                     {mainData.products?.map((data, index) => (
                       <Row gutter={[12, 12]} style={{ position: 'relative' }} key={`${data._id}`}>
@@ -1910,7 +1737,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={4}>
                           <Form.Item
-                            // name={['items', index, 'price']}
                             initialValue={prices[data._id]}
                           >
                             <InputNumber
@@ -1935,7 +1761,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={3}>
                           <Form.Item
-                            // name={['items', index, 'quantity']}
                             initialValue={1}
                           >
                             <InputNumber
@@ -1954,16 +1779,13 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                         </Col>
                         <Col className="gutter-row" span={7}>
                           <Form.Item
-                          //  name={[`items`, `${index}`, 'remarks']}
+                       
                           >
                             <Input
                               placeholder=" Remarks for Workorder"
-                              // defaultValue={data.description}
-                              // onChange={(e) => {
-                              //   const remarks = e.target.value;
-                              //   ItemHandler(data, remarks);
-                              // }}
+
                               onChange={(e) => handleRemarkChange(data._id, e.target.value)}
+
                             />
                           </Form.Item>
                         </Col>
@@ -1974,14 +1796,8 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               ))}
             </Collapse>
           </>
-             :
-             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-             <Spin size="small" />
-           </div>
-          }
-          </>
         )
-       }
+      }
 
 
 
@@ -1997,12 +1813,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <Form.Item
             name="Adjustment"
             label={translate('Adjustment')}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: 'Please select a Adjustment Type:',
-          //   },
-          // ]}
+         
           >
             <Radio.Group style={{ display: 'flex', gap: '20px' }}>
               {optionsss.map((option, index) => (
@@ -2053,11 +1864,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
         <Col className="gutter-row" span={12}>
           <Form.Item label={translate('Initial Remarks')} name="InitialRemarks"
-          // rules={[
-          //   {
-          //     required: true,
-          //   },
-          // ]}
+          
           >
             <Input />
           </Form.Item>
@@ -2067,28 +1874,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       </Row>
 
       <Row gutter={[12, 12]} style={{ position: 'relative', marginTop: "13px" }}>
-        {/* <Col className="gutter-row" span={12}>
-          <Form.Item
-            name="discount"
-            label={translate('Discount')}
-            rules={[
-              {
-                validator: (rule, value) => {
-                  if (isNaN(value)) {
-                    return Promise.reject('Only numeric value is accepted.');
-                  }
-                  return Promise.resolve();
-                },
-              },
-            ]}
-          >
-            <InputNumber
-              style={{ width: '100%' }}
-              defaultValue={0.0}
-              onChange={DiscountValueHandler}
-            />
-          </Form.Item>
-        </Col> */}
+      
 
         <Col className="gutter-row" span={12}>
           <Form.Item
@@ -2097,20 +1883,17 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             rules={[
               {
                 validator: async (rule, value) => {
-                  // if (isNaN(value)) {
-                  //   return Promise.reject('Only numeric values are accepted.');
-                  // }
-                  // return Promise.resolve();
+          
                 },
               },
             ]}
           >
             <InputNumber
               style={{ width: '100%' }}
-              // defaultValue={0.0}
+              
               onChange={DiscountValueHandler}
               formatter={numericFormatter}
-              // parser={numericParser}
+           
               onKeyPress={handleKeyPress}
             />
           </Form.Item>
@@ -2128,9 +1911,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
             width: "100%", height: "220px", marginTop: "3%",
           }}>
             <tbody style={{
-              // maxWidth: '1000px',
-              // overflowX: 'auto',  
-              // display: 'block',  
+          
             }}>
               <tr>
                 <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
@@ -2156,20 +1937,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
               }}>
 
                 <tbody style={{
-                  // maxWidth: '1000px',
-                  // overflowX: 'auto',  
-                  // display: 'block',  
+                 
                 }}>
                   <tr style={{ fontSize: '1.2rem', marginTop: '-9px;', marginBottom: '20px' }}>
                     {translate('Additional Service Items')}
                   </tr>
                   {/* <tr>Additional Service Items</tr> */}
                   <tr
-                  // style={{
-                  //   maxWidth: '1000px',
-                  //   overflowX: 'auto',
-                  //   display: 'block',
-                  // }}
+                 
                   >
                     <th style={{ border: '0.2px solid #000', background: 'rgb(248,248,255)', color: 'rgb(31,31,31)', padding: '10px', borderRight: "none" }}>
                       <ul className='calculatorFilled' style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.1" }}>

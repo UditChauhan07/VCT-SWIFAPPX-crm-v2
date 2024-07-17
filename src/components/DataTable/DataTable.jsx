@@ -38,6 +38,16 @@ function AddNewItem({ config }) {
 
  
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if config.ADD_NEW_ENTITY is available
+    if (ADD_NEW_ENTITY) {
+      setLoading(false);
+    }
+  }, [config]);
+
+
 
   const handleClick = () => {
     if (entity == 'customer') {
@@ -46,16 +56,31 @@ function AddNewItem({ config }) {
     panel.open();
     collapsedBox.close();
   };
+   useEffect(() => {
+  //  Check if config.ADD_NEW_ENTITY is available
+       if (ADD_NEW_ENTITY) {
+        setLoading(false);
+      }
+  }, [config]);
 
   return (
-    <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
-      {ADD_NEW_ENTITY}
+    // <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+    //   {ADD_NEW_ENTITY}
 
-    </Button>
+    // </Button>
+
+    <div>
+    {loading ? (
+      <Spin  /> // Show loader while loading
+    ) : (
+      <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+        {ADD_NEW_ENTITY}
+      </Button>
+    )}
+  </div>
  
   );
 }
-
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE, fields } = config;
   const { crudContextAction } = useCrudContext();
@@ -84,7 +109,6 @@ export default function DataTable({ config, extra = [] }) {
   }, [user]);
 
 
- 
 
   let items = [];
   if (permissions?.[entity + '_read'] || isSAAS === true) {
@@ -95,13 +119,6 @@ export default function DataTable({ config, extra = [] }) {
     });
   }
 
-  // if (!(entity === 'client' && 'quote') && (permissions?.[entity + '_edit'] || isSAAS === true)) {
-  //   items.push({
-  //     label: translate('Edit'),
-  //     key: 'edit',
-  //     icon: <EditOutlined />,
-  //   });
-  // }
 
   if ((permissions?.[entity + '_edit'] === true || isSAAS === true) && entity !== 'workorder' && entity !== 'contract' && entity !== 'quote' &&  entity !== 'client') {
     items.push({
@@ -111,13 +128,6 @@ export default function DataTable({ config, extra = [] }) {
     })
   }
 
-  // if (entity !== 'quote'&& 'client' ) && (permissions?.[entity + '_edit'] || isSAAS === true)) {
-  //   items.push({
-  //     label: translate('Edit'),
-  //     key: 'edit',
-  //     icon: <EditOutlined />,
-  //   });
-  // }
 
   if (permissions?.[entity + 'address_list'] || isSAAS === true) {
     items.push({
@@ -163,11 +173,11 @@ export default function DataTable({ config, extra = [] }) {
   };
 
   const handleDelete = (record) => {
-    console.log(record)
+
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));
     modal.open();
     // dispatch(crud.list({ entity }));
-    console.log("ddddddddddddddddddddddddd")
+
   };
 
 
@@ -323,3 +333,7 @@ export default function DataTable({ config, extra = [] }) {
     </>
   );
 }
+
+
+
+
