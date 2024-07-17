@@ -452,7 +452,6 @@ if (entity === 'contract') {
 
       const subsdata = JSON.parse(WorkOrderstoredId);
         const subFinalData = subsdata[0];
-
         let additionalCost = {};
         let serviceCostObj = {};
 
