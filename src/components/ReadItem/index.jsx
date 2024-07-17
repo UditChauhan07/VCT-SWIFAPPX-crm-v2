@@ -12,13 +12,14 @@ import { useDate } from '@/settings';
 export default function ReadItem({ config }) {
   const { dateFormat } = useDate();
   let { readColumns, fields } = config;
+  console.log(config)
 
   const translate = useLanguage();
   const { result: currentResult } = useSelector(selectCurrentItem);
   const { state } = useCrudContext();
   const { isReadBoxOpen } = state;
   const [listState, setListState] = useState([]);
-
+  
   const readFields = !readColumns ? fields : readColumns;
   if (fields) readColumns = [...dataForRead({ fields: readFields, translate: translate })];
   useEffect(() => {
@@ -37,8 +38,8 @@ export default function ReadItem({ config }) {
   const show = isReadBoxOpen ? { display: 'block', opacity: 1 } : { display: 'none', opacity: 0 };
 
   const itemsList = listState?.map((item) => {
-    // console.log(item)
-    // console.log({ listState })
+    
+
     return (
       <Row key={item.propsKey} gutter={12}>
         <Col className="gutter-row" span={12}>
@@ -48,8 +49,7 @@ export default function ReadItem({ config }) {
           <p> : </p>
         </Col>
         <Col className="gutter-row" span={10}>
-          {/* <p>{translate(item.value)}</p> */}
-          {/* <p>{item.value}</p> */}
+   
           <p> 
   {item.value === 'true' 
     ? 'Active' 

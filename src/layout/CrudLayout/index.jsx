@@ -31,7 +31,7 @@ const ContentBox = ({ children }) => {
   }, [isPanelClose]);
 
   // useEffect(() => {
-  //   if (!isNavMenuClose) {
+  //   if (!isNavMenu) {
   //     panel.close();
   //   }
   // }, [isNavMenuClose]);

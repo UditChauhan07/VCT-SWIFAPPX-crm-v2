@@ -16,14 +16,12 @@ const CertificateSection = ({ field, remove, current = null }) => {
                         name={[field.name, 'certification[name]']}
                         rules={[
                             {
-                                pattern: /^(?!\s*$)[\s\S]+$/, // Regular expression to allow spaces, alphanumeric, and special characters, but not just spaces
-                                message: 'Only spaces not allowed',
-                                // message: 'Certificate Name must contain alphanumeric or special characters',
+                                pattern: /^(?!\s*$)[\s\S]+$/, 
+                                
                             },
                         ]}
                     >
                         <Input placeholder='Enter Company Certificate Name' />
-
                     </Form.Item>
                 </Col>
                 <Col className="gutter-row" span={12}>

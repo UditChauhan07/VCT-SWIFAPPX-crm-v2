@@ -151,6 +151,8 @@ export default function ItemRow({
   response,
   isFirstRow,
   onChange = {},
+  Value
+
 }) {
   const {
     CustomItemNameHandler,
@@ -158,6 +160,9 @@ export default function ItemRow({
     CustomItemQTYHandler,
     CustomItemRemarksHandler,
   } = onChange || null;
+
+
+
 
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
@@ -361,7 +366,7 @@ export default function ItemRow({
           >
             <InputNumber
               style={{ width: '100%' }}
-              //  min={0}
+               min={1}
               formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
               onChange={(value) => updateQt(value, `CI-${field.key}`)}
             />

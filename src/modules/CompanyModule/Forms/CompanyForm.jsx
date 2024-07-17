@@ -39,9 +39,7 @@ function LoadCompanyForm() {
   const { id } = useParams();
   const [visible, setVisible] = useState(false);
 
-
-
-  const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
+const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
   const resetErp = {
     status: '',
     client: {
@@ -145,14 +143,21 @@ function LoadCompanyForm() {
       <Row gutter={[12, 0]} justify="center">
         <Col className="gutter-row" span={4}>
           <Form.Item >
-            <Button type="primary" htmlType="submit" icon={<PlusOutlined />} block onClick={onSubmit}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              icon={<PlusOutlined />}
+              block
+              onClick={onSubmit}
+               // Adjust the value as needed
+            >
               {translate('Save')}
             </Button>
           </Form.Item>
         </Col>
         <Col className="gutter-row" span={4}>
           <Form.Item >
-            <Button htmlType="submit" icon={<CloseCircleOutlined />} block onClick={() => navigate("/company")}>
+            <Button htmlType="submit" icon={<CloseCircleOutlined />} block onClick={() => navigate("/company")} >
               {translate('Cancel')}
             </Button>
           </Form.Item>

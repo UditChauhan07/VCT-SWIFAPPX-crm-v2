@@ -13,12 +13,16 @@ export default function AutoCompleteAsync({
   outputValue = '_id',  
   value, /// this is for update
   onChange, /// this is for update
-  client
+  client,
+  defaultValue
+
 }) 
 
+
+
 { 
- 
-  
+ console.log(defaultValue)
+
   const [selectOptions, setOptions] = useState([]);
   const [currentValue, setCurrentValue] = useState(undefined);
   const isUpdating = useRef(true);
@@ -33,7 +37,7 @@ export default function AutoCompleteAsync({
 
 const [, cancel] = useDebounce(
     () => {
-      //  setState("Typing stopped");
+     
       setDebouncedValue(valToSearch);
     },
     500,
@@ -98,7 +102,7 @@ const [, cancel] = useDebounce(
     }
   }, [isSuccess, result]);
   useEffect(() => {
-    // this for update Form , it's for setField
+
     if (value && isUpdating.current) {
       if (!isSearching.current) {
         setOptions([value]);
@@ -116,13 +120,13 @@ const [, cancel] = useDebounce(
       allowClear
       placeholder={'Search Here'}
       defaultActiveFirstOption={false}
+      defaultValue={defaultValue}
       filterOption={false}
-      // notFoundContent={searching ? '... Searching' : <Empty />} <Spin size="small" /> Loading...
       notFoundContent={searching ? <Spin size="small" />  : <Empty />}
       // value={currentValue}
       onSearch={onSearch}
       onChange={(newValue) => {
-        // console.log('107', { newValue });
+    
         if (onChange) {
           if (newValue) onChange(newValue[outputValue] || newValue);
         }

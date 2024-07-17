@@ -126,7 +126,9 @@ export const erp = {
     },
   read:
     ({ entity, id }) =>
+  
     async (dispatch) => {
+   
       dispatch({
         type: actionTypes.REQUEST_LOADING,
         keyState: 'read',
@@ -162,7 +164,7 @@ export const erp = {
         payload: null,
       });
 
-      console.log({ jsonData });
+     
 
       let data = await request.update({ entity, id, jsonData });
 

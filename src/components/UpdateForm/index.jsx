@@ -12,7 +12,7 @@ import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
 export default function UpdateForm({ config, formElements, withUpload = false }) {
-  // console.log({ config, formElements, withUpload });
+
   let { entity } = config;
   const translate = useLanguage();
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export default function UpdateForm({ config, formElements, withUpload = false })
 
   const { state, crudContextAction } = useCrudContext();
 
-  /////
+
 
   const { panel, collapsedBox, readBox } = crudContextAction;
 
@@ -28,7 +28,7 @@ export default function UpdateForm({ config, formElements, withUpload = false })
     readBox.open();
   };
 
-  /////
+
   const [form] = Form.useForm();
 
   const onSubmit = (fieldsValue) => {
@@ -60,7 +60,7 @@ export default function UpdateForm({ config, formElements, withUpload = false })
       if (newValues.date) {
         newValues = {
           ...newValues,
-          // date: dayjs(newValues['date']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+       
           date: dayjs(newValues['date']),
         };
       }
