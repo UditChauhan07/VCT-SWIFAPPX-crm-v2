@@ -33,7 +33,7 @@ export default function QuotionForm({ subTotal = 0, current = null }) {
 
   return <LoadQuoteForm subTotal={subTotal} current={current} />;
 }
-// ..... ininitialShowServiceId............
+
 
 const initialShowServiceId = [
   {
@@ -75,7 +75,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [active, IsActive] = useState(1)
   const [activeness, IsActiveness] = useState(1)
   const [activeSelect, IsActiveSelect] = useState(1)
-  // console.log(activeSelect)
+  console.log(activeSelect)
 
   const handelTaxChange = (value) => {
     setTaxRate(value / 100)
@@ -93,7 +93,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [Workers, setWorkers] = useState()
 
   // console.log(CheckedId)
- 
+  const [customerAddress, setCustomerAddress] = useState([])
 
   const [subscriptionData, setSubscriptionData] = useState({})
   const [accordionData, setAccordionData] = useState([])
@@ -139,6 +139,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   // console.log({ serviceOptions });
 
+  const [productList, setProductList] = useState([])
   const [tax, setTax] = useState({})
 
   localStorage.setItem("TaxPercentage", tax?.taxValue);
@@ -146,14 +147,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     getProductHandler()
     // getClientHandler()
   }, [])
-  // ......... productList..............
-  const [productList, setProductList] = useState([])
   const getProductHandler = async () => {
     try {
       const productListRes = await request.getProductList();
       if (productListRes.success) {
         const taxHandller = await request.getTax();
-        // console.log(taxHandller)
+        console.log(taxHandller)
         if (taxHandller.success) {
           setTax(taxHandller.result)
         }
@@ -175,8 +174,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   const [subItemCount, setSubItemCount] = useState(0);
   // const [ShowServiceId, setShowServiceId] = useState();
   const [isFirstServiceCategorySelect, setIsFirstServiceCategorySelect] = useState(true);
-
-  // ........getCategorySubscriptionHandler...........
   const getCategorySubscriptionHandler = (value) => {
     setSelectedValue(value);
     setItems([]);
@@ -196,7 +193,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions({ id: value });
-        // console.log(response)
+        console.log(response)
         if (response.success) {
           setServiceOptions(response.result);
           getProductHandler();
@@ -214,7 +211,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       setLoading(true);
       try {
         const response = await request.getServiceListShows({ id: value });
-        // console.log(response)
+        console.log(response)
         if (response.success) {
           setShowServiceList(response.result);
           setProductList(ShowServiceList)
@@ -232,14 +229,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     fetchData2();
     fetchData3();
   }
-  // .....customerAddress............
-  const [customerAddress, setCustomerAddress] = useState([])
+
   const handleFirstDropdownChange = async (event) => {
- setLoading(true);
+
+    setLoading(true);
 
     try {
       const response = await request.getSearchClientAddress(event);
-      // console.log('response', response);
+      console.log('response', response);
       if (response.success) {
         setCustomerAddress(response.result);
         // setCustomerAddressEvent(event);
@@ -257,7 +254,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
   };
 
-  // customerAddress...................
+
   const getServicesSubAndItems = async (event) => {
     // const selectedValue = event.target.value;
     // setSelectedOption(selectedValue);
@@ -278,13 +275,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       console.error('Error fetching data:', error);
     }
   }
-
-  // .........accordionActiveKey...........
   const [accordionActiveKey, setAccordionActiveKey] = useState([])
   const handleChange = (key) => {
     setAccordionActiveKey(key);
   }
-  // ....price Quantity...........
   // const translate = useLanguage()
   const [totalState, setTotal2] = useState(undefined);
   const [price, setPrice] = useState();
@@ -296,7 +290,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setQuantity(value);
   };
   const updatePrice = (value) => {
-    // console.log(value)
+    console.log(value)
     setPrice(value);
   };
   const updateName = (value) => {
@@ -307,7 +301,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   useEffect(() => {
     if (current) {
       const { items, invoice } = current;
-      // console.log(items)
+      console.log(items)
       if (invoice) {
         const item = invoice[field.fieldKey];
         if (item) {
@@ -326,16 +320,15 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   useEffect(() => {
     const currentTotal = calculate.multiply(price, quantity);
-    // console.log(currentTotal)
+    console.log(currentTotal)
     setTotal2(currentTotal);
   }, [price, quantity]);
-  // .............setserviceCategoryOptions.......
   useEffect(() => {
     const fetchData = async () => {
       // setLoading(true);
       try {
         const response = await request.getServiceCategoryOptions();
-        // console.log(response)
+        console.log(response)
         if (response.success) {
           setserviceCategoryOptions(response.result);
         }
@@ -349,8 +342,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   }, [])
 
 
-  // --------- Quotation MODULE -----------
-  // ..........SalesPerson......
+  // --------- WORK ORDER MODULE -----------
   useEffect(() => {
 
     const fetchData1 = async () => {
@@ -368,7 +360,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     fetchData1()
   }, [])
-  // ..........serviceCategory...........
+
   useEffect(() => {
     const fetchData3 = async () => {
       try {
@@ -383,8 +375,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     fetchData3()
   }, [])
-
-  // ..SubcriptionOneTime.......
   useEffect(() => {
     const hendleOneTime = async () => {
       try {
@@ -400,7 +390,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     };
     hendleOneTime();
   }, []);
-  // ............ServiceCategoryName.........
+
   const handleserviceId = async (event) => {
     try {
       const response = await request.getServiceCategoryName(event);
@@ -415,7 +405,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     }
 
   }
-  // ..............Salespersoncontact.............
+
   const [salesContactNumber, setSalesContactNumber] = useState();
 
 
@@ -467,17 +457,36 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           <p style={{ padding: '0px 0px 0px 14px', marginTop: '4px' }}>{salesContactNumber}</p>
         </div>
       </Form.Item>
-     
+      // <Form.Item
+      //   label={translate('Sales Person Contact')}
+      //   name="SalesPersonContact"
+      //   rules={[
+      //     {
+      //       required: true,
+      //     },
+      //   ]}
+      //   initialValue={salesContactNumber}
+      // >
+      //   <Input
+      //     style={{
+      //       width: '100%',
+      //     }}
+      //     placeholder=""
+      //     id="salesContactNumber"
+      //     // value={salesContactNumber}
+
+      //   />
+      // </Form.Item>
     );
   };
   ;
 
   const filteredWorkLead = WorkLead?.filter((item) => item._id !== Workers)
-  // ...............subscriptionNames............
+
   const getUniqueSubscriptionNames = () => {
     const subscriptionNames = [];
     ShowServiceId?.forEach((ele) => {
-      // console.log(ele)
+      console.log(ele)
       ele.data?.forEach((item) => {
         if (!subscriptionNames.includes(item.name)) {
           subscriptionNames.push(item.name);
@@ -506,7 +515,11 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
     return columns;
   };
- const [isSubscriptionID, seTisSubscriptionID] = useState(null);
+
+
+  // const [subscriptionIds, setSubscriptionIds] = useState([]);
+  // const [subscriptionCount, setSubscriptionCount] = useState(0);
+  const [isSubscriptionID, seTisSubscriptionID] = useState(null);
 
   const [adjustmentvalue, setadjustment] = useState(null);
   // const [discountValue, setdiscount] = useState(null);
@@ -520,8 +533,6 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   let subscriptionSubTotal = 0;
 
   let subscritionAmount = 0;
-
-  // ..........remarks............
   const [Newiitems, setNewiitems] = useState([]);
   const [remarks, setRemarks] = useState([]);
 
@@ -584,12 +595,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     setItems(temp);
     setSubItemCount(temp.length);
   };
-  // console.log({ Subitems });
+  console.log({ Subitems });
 
   const [customItems, setCustomItems] = useState([]);
   const [Iscustomm, setIscustomm] = useState(false);
 
-  // console.log(customItems)
+  console.log(customItems)
 
   localStorage.setItem('CustomItems', JSON.stringify(customItems));
 
@@ -631,7 +642,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           remarks,
         };
 
-        // console.warn({ element });
+        console.warn({ element });
         tempId.push(_id);
         temp.push(element);
         tempcustom.push(element);
@@ -709,7 +720,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           item.remarks = remarks;
         }
       });
-      // console.log(temp)
+      console.log(temp)
     } else {
       let element = {
         _id,
@@ -752,7 +763,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   //   return parseFloat(value);
   // };
 
-// /........... serviceperviwe............
+
 
   const initialServiceCost = {
     servicePerWO: null,
@@ -805,48 +816,48 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
   };
 
 
-  useEffect(() => {
-    const calculateCosts = () => {
-      const discountValueParsed = parseFloat(discountValue) || 0;
-      let subscriptionsArray = []
-      // console.log(subscriptionsArray)
+  // useEffect(() => {
+  //   const calculateCosts = () => {
+  //     const discountValueParsed = parseFloat(discountValue) || 0;
+  //     let subscriptionsArray = []
+  //     console.log(subscriptionsArray)
 
-      let newServiceCost = { ...initialServiceCost };
-      let CustomsubscriptionArray = [];
-      ShowServiceId?.forEach(subscriptionObj => {
-        subscriptionObj.data?.forEach(dataObj => {
-          // console.log(dataObj._id, "dataObj_id")/
-          if (subscriptionIds.includes(dataObj._id)) {
-            const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
-            const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
-            const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
-            const taxValueParsed = parseFloat(tax.taxValue) || 0;
-            const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
-            const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
+  //     let newServiceCost = { ...initialServiceCost };
+  //     let CustomsubscriptionArray = [];
+  //     ShowServiceId?.forEach(subscriptionObj => {
+  //       subscriptionObj.data?.forEach(dataObj => {
+  //         console.log(dataObj._id, "dataObj_id")
+  //         if (subscriptionIds.includes(dataObj._id)) {
+  //           const servicePerWO = parseFloat(dataObj.price / subscriptionObj.subscription.package_divider).toFixed(2);
+  //           const discount = parseFloat(servicePerWO * (discountValueParsed / 100)).toFixed(2);
+  //           const subTotal = parseFloat(servicePerWO - discount).toFixed(2);
+  //           const taxValueParsed = parseFloat(tax.taxValue) || 0;
+  //           const taxAmount = parseFloat(subTotal * (taxValueParsed / 100)).toFixed(2);
+  //           const totalPackageCost = parseFloat(subTotal + taxAmount).toFixed(2);
 
-            newServiceCost = {
-              servicePerWO,
-              discount,
-              subTotal,
-              tax: taxAmount,
-              totalPackageCost,
-            };
+  //           newServiceCost = {
+  //             servicePerWO,
+  //             discount,
+  //             subTotal,
+  //             tax: taxAmount,
+  //             totalPackageCost,
+  //           };
 
-            subscriptionsArray.push({
-              subscription: subscriptionObj.subscription._id,
-              subModule: dataObj._id,
-              serviceCost: newServiceCost,
-            });
-          }
-        });
-      });
+  //           subscriptionsArray.push({
+  //             subscription: subscriptionObj.subscription._id,
+  //             subModule: dataObj._id,
+  //             serviceCost: newServiceCost,
+  //           });
+  //         }
+  //       });
+  //     });
 
-      setServiceCost({ ...initialServiceCost });
-      localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
-    };
+  //     setServiceCost({ ...initialServiceCost });
+  //     localStorage.setItem('Subscriptions', JSON.stringify(subscriptionsArray.length > 0 ? subscriptionsArray : CustomsubscriptionArray));
+  //   };
 
-    calculateCosts();
-  }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
+  //   calculateCosts();
+  // }, [subscriptionIds, discountValue, ShowServiceList, ShowServiceId, tax]);
 
   const generateTableData = () => {
     const subscriptionNames = getUniqueSubscriptionNames();
@@ -876,138 +887,93 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   let subcostData = []
 
-  //  service perview
   const CalculatorFilled = () => {
-    return ShowServiceList.map((element, _id) =>
-      element.subscriptions.map((subscriptions, __id) =>
-        subscriptions.data.map((subscription, ___id) => {
-          // console.log({ subscriptions });
+    return (
+      ShowServiceList.map((element, _id) => (
+        element.subscriptions.map((subscriptions, __id) => (
+          subscriptions.data.map((subscription, ___id) => {
+            console.log(subscription, "dataObj_id")
 
-          let package_divider = parseFloat(subscriptions.subscription.package_divider);
-          subscritionAmount = parseFloat(subscription.price / package_divider);
-          let subTotal = parseFloat(subscription.price / package_divider);
-          if (active == 2) {
-            subTotal += parseFloat(adjustmentvalue);
-          }
-          if (active == 3) {
-            subTotal -= parseFloat(adjustmentvalue);
-          }
-          let discount = 0;
-          if (discountValue) {
-            discount = subTotal * (parseFloat(discountValue) / 100);
-            subTotal -= subTotal * (parseFloat(discountValue) / 100);
-          }
-          let taxValue = 0;
-          if (tax.taxValue) {
-            taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
-          }
-          if (subscriptionIds.includes(subscription._id)) {
-            subscriptionSubTotal = subTotal + taxValue;
-            // serviceCost.servicePerWO = parseFloat(subscription.price / package_divider).toFixed(2);
-            // serviceCost.discount = parseFloat(discount || 0).toFixed(2);
-            // serviceCost.subTotal = parseFloat(subTotal).toFixed(2);
-            // serviceCost.tax = parseFloat(taxValue).toFixed(2);
-            // serviceCost.totalPackageCost = parseFloat(subTotal + taxValue).toFixed(2);
-            // localStorage.setItem("jv1GYkk6plxCpgx", parseFloat(subTotal + taxValue).toFixed(2))
+            let package_divider = parseFloat(subscriptions.subscription.package_divider);
+            subscritionAmount = parseFloat(subscription.price / package_divider)
+            let subTotal = parseFloat(subscription.price / package_divider);
+            if (active == 2) {
+              subTotal += parseFloat(adjustmentvalue);
+            }
+            if (active == 3) {
+              subTotal -= parseFloat(adjustmentvalue);
+            }
+            let discount = 0;
+            if (discountValue) {
+              discount = (subTotal * (parseFloat(discountValue) / 100))
+              subTotal -= (subTotal * (parseFloat(discountValue) / 100))
+            }
+            let taxValue = 0;
+            if (tax.taxValue) {
+              taxValue = (subTotal * (parseFloat(tax.taxValue) / 100))
+            }
+            if (subscriptionIds.includes(subscription._id)) {
+              subscriptionSubTotal = subTotal + taxValue;
 
-            const ServiceCostitem = {
-              servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
-              discount: parseFloat(discount || 0).toFixed(2),
-              subTotal: parseFloat(subTotal).toFixed(2),
-              tax: parseFloat(taxValue).toFixed(2),
-              totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
-            };
+              subcostData.push(
+                {
+                  subscription: subscriptions.subscription._id,
+                  subModule: subscription._id,
+                  serviceCost: {
+                    servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+                    discount: parseFloat(discount || 0).toFixed(2),
+                    subTotal: parseFloat(subTotal).toFixed(2),
+                    tax: parseFloat(taxValue).toFixed(2),
+                    totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+                  }
+                }
+              )
 
-            //  console.log({ServiceCostitem})
-            localStorage.setItem('ServiceCostitem', JSON.stringify(ServiceCostitem));
+              let abc = [
+                {
+                  subscription: subscriptionOneTime,
+                  serviceCost: {
+                    servicePerWO: parseFloat(subscription.price / package_divider).toFixed(2),
+                    discount: parseFloat(discount || 0).toFixed(2),
+                    subTotal: parseFloat(subTotal).toFixed(2),
+                    tax: parseFloat(taxValue).toFixed(2),
+                    totalPackageCost: parseFloat(subTotal + taxValue).toFixed(2),
+                  }
+                }
+              ]
 
-            localStorage.setItem('ZeFnMqDC7ktkKDB', JSON.stringify(serviceCost));
-            return (
-              <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
-                <ul
-                  style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: '2.3' }}
-                >
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '-1px',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {subscription.name}:{subscriptions.subscription.name}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(adjustmentvalue || 0).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(discount || 0).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(subTotal).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(taxValue).toFixed(2)}
-                  </li>
-                  <li
-                    style={{
-                      borderBottom: '1px solid rgb(217,217,217)',
-                      fontSize: '15px',
-                      marginTop: '',
-                      color: 'rgb(49,91,140)',
-                    }}
-                  >
-                    {parseFloat(subTotal + taxValue).toFixed(2)}
-                  </li>
-                </ul>
-              </td>
-            );
+              if (isCustom == true) {
+                localStorage.setItem('Subscriptions', JSON.stringify(abc))
+              }
+              else {
+                localStorage.setItem('Subscriptions', JSON.stringify(subcostData))
+              }
+
+              localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCost))
+
+              // }
+              // localStorage.setItem("ServiceCostitem", JSON.stringify(ServiceCostitwm))
+              return (
+                <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+                  <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)", }}>{subscription.name}:{subscriptions.subscription.name}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)", }}>{parseFloat(subscription.price / package_divider).toFixed(2)}/Workorder</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(adjustmentvalue || 0).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(discount || 0).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(taxValue).toFixed(2)}</li>
+                    <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "", color: "rgb(49,91,140)" }}>{parseFloat(subTotal + taxValue).toFixed(2)}</li>
+                  </ul>
+                </td>)
+            }
           }
-        })
-      )
-    );
-  };
-
+          )
+        ))
+      ))
+    )
+  }
   const [isCustom, setIsCustom] = useState(false)
-  // additionalCost perview.............
+
   const CalculatorFilledItem = () => {
     return ShowServiceList?.map((element, _id) =>
       element.subscriptions?.map((subscriptions, __id) =>
@@ -1032,14 +998,14 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
           }
           if (subscriptionIds.includes(subscription._id)) {
             subscriptionSubTotal = subTotal + taxValue;
-            // console.log(subscriptionSubTotal)
+            console.log(subscriptionSubTotal)
             let itemPrice = 0;
             let itemMPrice = 0;
             let discount = 0;
             let taxValue1 = 0;
             let subITotal = 0;
             let taxValue2 = 0;
-            // console.log(subITotal);
+            console.log(subITotal);
             return (
               <td style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
                 <ul
@@ -1070,8 +1036,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
                       }
                       if (tax.taxValue) {
                         taxValue2 = subITotal * (parseFloat(tax.taxValue) / 100);
-                      }
-                      //  console.log(taxValue2)
+                      } console.log(taxValue2)
 
                       // subITotal + taxValue
                       localStorage.setItem(
@@ -1109,12 +1074,12 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       )
     );
   };
-  // ..........AdjustmentValueHandler...........
+
   const AdjustmentValueHandler = (event) => {
     setadjustment(event.target.value || 0)
     let subTotal = document.getElementById("subTotal")
     subTotal.value = parseFloat(subscritionAmount + parseFloat(event.target.value))
-    // console.log({ subTotal });
+    console.log({ subTotal });
   }
   // const [customItems, setCustomItems] = useState([]);
   localStorage.setItem('IssCustomm', JSON.stringify(isCustom));
@@ -1149,10 +1114,10 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       // setadjustment(null);
       // setdiscount(null);
     }
-    // console.log({ ShowServiceList });
+    console.log({ ShowServiceList });
 
   };
-// item product .............
+
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
 
@@ -1187,7 +1152,19 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       })
 
 
-   
+      // const MyiTems = Subitems.map((items) => (
+      //   {
+      //     item: items._id,
+      //     qty: items.qty,
+      //     price: items.price,
+      //     total: items.total,
+      //     remarks: items.remarks
+      //   }
+      // ))
+
+      // console.log(MyiTems)
+      // localStorage.setItem('myItems', JSON.stringify(MyiTems));
+      // console.log({ Subitems, productId });
     }
 
 
@@ -1223,7 +1200,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       temp.map((element, _id) => {
         element.subscriptions.map((subscriptions, __id) => {
           subscriptions.data.map((subscription, ___id) => {
-            // console.log({ subscription });
+            console.log({ subscription });
             subscription.name = name;
           });
         });
@@ -2197,7 +2174,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: "23px" }}>
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
-            <Form.Item style={{ marginTop: '16px' }}>
+            <Form.Item>
               <Button type="primary" htmlType="submit" icon={<PlusOutlined />} block>
                 {translate('Save')}
               </Button>

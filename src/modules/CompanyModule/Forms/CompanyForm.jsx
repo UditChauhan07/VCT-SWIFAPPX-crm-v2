@@ -39,9 +39,7 @@ function LoadCompanyForm() {
   const { id } = useParams();
   const [visible, setVisible] = useState(false);
 
-
-
-  const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
+const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
   const resetErp = {
     status: '',
     client: {

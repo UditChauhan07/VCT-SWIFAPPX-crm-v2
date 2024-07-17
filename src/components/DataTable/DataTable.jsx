@@ -36,10 +36,8 @@ function AddNewItem({ config }) {
   const { ADD_NEW_ENTITY, entity } = config;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
- 
-
-
-  const handleClick = () => {
+  
+ const handleClick = () => {
     if (entity == 'customer') {
       setIsVisible(true);
     }
