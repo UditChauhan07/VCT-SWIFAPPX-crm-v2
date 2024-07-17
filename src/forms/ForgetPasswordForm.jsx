@@ -11,9 +11,11 @@ export default function ForgetPasswordForm() {
       rules={[
         {
           required: true,
+         
         },
         {
           type: 'email',
+          message: "Please enter a valid email"
         },
       ]}
     >

@@ -43,11 +43,8 @@ export default function DeleteModal({ config }) {
       setDisplayItem(labels);
     }
   }, [isSuccess, current]); 
-
-
   
-
-  const handleOk = () => {
+const handleOk = () => {
     const id = current._id;
     dispatch(crud.delete({ entity, id }));
     readBox.close();

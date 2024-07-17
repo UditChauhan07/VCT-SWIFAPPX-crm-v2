@@ -366,7 +366,7 @@ export default function ItemRow({
           >
             <InputNumber
               style={{ width: '100%' }}
-              //  min={0}
+               min={1}
               formatter={(value) => (value ? `${value}`.slice(0, 10) : '')}
               onChange={(value) => updateQt(value, `CI-${field.key}`)}
             />

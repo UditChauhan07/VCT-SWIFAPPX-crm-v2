@@ -54,16 +54,19 @@ export default function Workorder() {
     // },
     {
       title: translate('grand_total'),
-      dataIndex: 'grandTotal',
-      onCell: () => {
-        return {
-          style: {
-            textAlign: 'right',
-            whiteSpace: 'nowrap',
-          },
-        };
+      dataIndex: 'serviceCost',
+      onCell: () => ({
+        style: {
+          textAlign: 'right',
+          whiteSpace: 'nowrap',
+        },
+      }),
+      render: (serviceCost, record) => {
+        // Assuming serviceCost and additionalCost are keys in your data record
+        const { additionalCost } = record;
+        const total = additionalCost?.totalPackageCost + serviceCost?.totalPackageCost;
+        return moneyFormatter({ amount: total });
       },
-      render: (total) => moneyFormatter({ amount: total }),
     },
 
     // {

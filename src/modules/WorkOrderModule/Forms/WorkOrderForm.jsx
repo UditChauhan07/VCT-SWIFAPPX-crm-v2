@@ -665,6 +665,40 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     localStorage.setItem('WorkOrderSubId', id);
   };
 
+ 
+  const DiscountValueHandler = (value) => {
+    setdiscount(value ?? 0);
+  };
+
+  const generateTableData = () => {
+    const subscriptionNames = getUniqueSubscriptionNames();
+    const tableData = [];
+    ShowServiceId?.forEach((ele) => {
+      const rowData = {
+        Subscription: ele.subscription.name,
+      };
+
+      subscriptionNames?.forEach((name) => {
+        const matchingItem = ele.data.find((item) => item.name === name);
+
+        rowData[name] = matchingItem ? (
+          <Radio.Group
+            key={matchingItem._id}
+            // value={isSubId[matchingItem._id]}
+            value={isSubId === matchingItem._id ? matchingItem._id : null}
+            onChange={(e) => handleCheckboxClick(e, matchingItem._id)}
+          >
+            <Radio value={matchingItem._id}>
+              {`${matchingItem.price}.00 /${ele.subscription.name}`}
+            </Radio>
+          </Radio.Group>
+        ) : null;
+      });
+
+      tableData.push(rowData);
+    });
+    return tableData;
+  };
   useEffect(() => {
     const calculateCosts = () => {
       const discountValueParsed = parseFloat(discountValue) || 0;
@@ -717,39 +751,134 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
     calculateCosts();
   }, [subscriptionIds, discountValue, ShowServiceId, tax]);
 
-  const DiscountValueHandler = (value) => {
-    setdiscount(value ?? 0);
-  };
+  let subcostData = []
 
-  const generateTableData = () => {
-    const subscriptionNames = getUniqueSubscriptionNames();
-    const tableData = [];
-    ShowServiceId?.forEach((ele) => {
-      const rowData = {
-        Subscription: ele.subscription.name,
-      };
+  // const CalculatorFilled = () => {
+  //   const subcostData = [];
+  //   const serviceCostData = [];
 
-      subscriptionNames?.forEach((name) => {
-        const matchingItem = ele.data.find((item) => item.name === name);
+  //   const sendServiceCostToBackend = async (serviceCostItem) => {
+  //     try {
+  //       // Use axios for a POST request
+  //       const response = await axios.post('your-backend-url', serviceCostItem);
+  //       console.log('Response from backend:', response.data);
+  //     } catch (error) {
+  //       console.error('Error sending service cost to backend:', error);
+  //     }
 
-        rowData[name] = matchingItem ? (
-          <Radio.Group
-            key={matchingItem._id}
-            // value={isSubId[matchingItem._id]}
-            value={isSubId === matchingItem._id ? matchingItem._id : null}
-            onChange={(e) => handleCheckboxClick(e, matchingItem._id)}
-          >
-            <Radio value={matchingItem._id}>
-              {`${matchingItem.price}.00 /${ele.subscription.name}`}
-            </Radio>
-          </Radio.Group>
-        ) : null;
-      });
+  //     // Alternatively, use fetch
+  //     // try {
+  //     //   const response = await fetch('your-backend-url', {
+  //     //     method: 'POST',
+  //     //     headers: {
+  //     //       'Content-Type': 'application/json',
+  //     //     },
+  //     //     body: JSON.stringify(serviceCostItem),
+  //     //   });
+  //     //   const data = await response.json();
+  //     //   console.log('Response from backend:', data);
+  //     // } catch (error) {
+  //     //   console.error('Error sending service cost to backend:', error);
+  //     // }
+  //   };
 
-      tableData.push(rowData);
-    });
-    return tableData;
-  };
+  //   return (
+  //     ShowServiceList.map((element, _id) => (
+  //       element.subscriptions.map((subscriptions, __id) => (
+  //         subscriptions.data.map((subscription, ___id) => {
+  //           console.log(subscription, "dataObj_id");
+
+  //           let package_divider = parseFloat(subscriptions.subscription.package_divider);
+  //           let subscriptionAmount = parseFloat(subscription.price / package_divider);
+  //           let subTotal = subscriptionAmount;
+
+  //           if (active == 2) {
+  //             subTotal += parseFloat(adjustmentvalue);
+  //           }
+  //           if (active == 3) {
+  //             subTotal -= parseFloat(adjustmentvalue);
+  //           }
+
+  //           let discount = 0;
+  //           if (discountValue) {
+  //             discount = subTotal * (parseFloat(discountValue) / 100);
+  //             subTotal -= discount;
+  //           }
+
+  //           let taxValue = 0;
+  //           if (tax.taxValue) {
+  //             taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
+  //           }
+
+  //           if (subscriptionIds.includes(subscription._id)) {
+  //             const subscriptionSubTotal = subTotal + taxValue;
+
+  //             subcostData.push({
+  //               subscription: subscriptions.subscription._id,
+  //               subModule: subscription._id,
+  //             });
+
+  //             const serviceCostItem = {
+  //               servicePerWO: subscriptionAmount.toFixed(2),
+  //               discount: discount.toFixed(2),
+  //               subTotal: subTotal.toFixed(2),
+  //               tax: taxValue.toFixed(2),
+  //               totalPackageCost: subscriptionSubTotal.toFixed(2),
+  //             };
+
+  //             serviceCostData.push(serviceCostItem);
+
+  //             sendServiceCostToBackend(serviceCostItem); // Send service cost to backend
+
+  //             let abc = [
+  //               {
+  //                 subscription: subscriptionOneTime,
+  //                 serviceCost: serviceCostItem,
+  //               }
+  //             ];
+
+  //             if (isCustom) {
+  //               localStorage.setItem('Subscriptions', JSON.stringify(abc));
+  //             } else {
+  //               localStorage.setItem('Subscriptions', JSON.stringify(subcostData));
+  //             }
+
+  //             localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCostData));
+
+  //             return (
+  //               <td key={`${_id}-${__id}-${___id}`} style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+  //                 <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)" }}>
+  //                     {subscription.name}: {subscriptions.subscription.name}
+  //                   </li>
+  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                     {subscriptionAmount.toFixed(2)}/Workorder
+  //                   </li>
+  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                     {parseFloat(adjustmentvalue || 0).toFixed(2)}
+  //                   </li>
+  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                     {discount.toFixed(2)}
+  //                   </li>
+  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                     {subTotal.toFixed(2)}
+  //                   </li>
+  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                     {taxValue.toFixed(2)}
+  //                   </li>
+  //                   <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                     {subscriptionSubTotal.toFixed(2)}
+  //                   </li>
+  //                 </ul>
+  //               </td>
+  //             );
+  //           }
+  //         })
+  //       ))
+  //     ))
+  //   );
+  // };
+
 
   const CalculatorFilled = () => {
     return ShowServiceList.map((element, _id) =>
@@ -876,6 +1005,107 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       )
     );
   };
+
+  // const CalculatorFilled = () => {
+  //   const subcostData = [];
+  //   const serviceCostData = [];
+
+  //   ShowServiceList.forEach((element, _id) => {
+  //     element.subscriptions.forEach((subscriptions, __id) => {
+  //       subscriptions.data.forEach((subscription, ___id) => {
+  //         console.log(subscription, "dataObj_id");
+
+  //         let package_divider = parseFloat(subscriptions.subscription.package_divider);
+  //         let subscriptionAmount = parseFloat(subscription.price / package_divider);
+  //         let subTotal = subscriptionAmount;
+
+  //         if (active === 2) {
+  //           subTotal += parseFloat(adjustmentvalue);
+  //         } else if (active === 3) {
+  //           subTotal -= parseFloat(adjustmentvalue);
+  //         }
+
+  //         let discount = 0;
+  //         if (discountValue) {
+  //           discount = subTotal * (parseFloat(discountValue) / 100);
+  //           subTotal -= discount;
+  //         }
+
+  //         let taxValue = 0;
+  //         if (tax.taxValue) {
+  //           taxValue = subTotal * (parseFloat(tax.taxValue) / 100);
+  //         }
+
+  //         if (subscriptionIds.includes(subscription._id)) {
+  //           const subscriptionSubTotal = subTotal + taxValue;
+
+  //           subcostData.push({
+  //             subscription: subscriptions.subscription._id,
+  //             subModule: subscription._id,
+  //             // Removed serviceCost from subcostData
+  //           });
+
+  //           const serviceCostItem = {
+  //             servicePerWO: subscriptionAmount.toFixed(2),
+  //             discount: discount.toFixed(2),
+  //             subTotal: subTotal.toFixed(2),
+  //             tax: taxValue.toFixed(2),
+  //             totalPackageCost: subscriptionSubTotal.toFixed(2),
+  //           };
+
+  //           serviceCostData.push(serviceCostItem);
+
+  //           let abc = [
+  //             {
+  //               subscription: subscriptionOneTime,
+  //               serviceCost: serviceCostItem,
+  //             }
+  //           ];
+
+  //           if (isCustom) {
+  //             localStorage.setItem('Subscriptions', JSON.stringify(abc));
+  //           } else {
+  //             localStorage.setItem('Subscriptions', JSON.stringify(subcostData));
+  //           }
+
+  //           localStorage.setItem("ZeFnMqDC7ktkKDB", JSON.stringify(serviceCostData));
+
+  //           return (
+  //             <td key={`${_id}-${__id}-${___id}`} style={{ border: '0.2px solid #000', padding: '10px', borderLeft: 'none' }}>
+  //               <ul style={{ listStyle: 'none', textAlign: 'start', padding: '0', lineHeight: "2.3" }}>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", marginTop: "-1px", color: "rgb(49,91,140)" }}>
+  //                   {subscription.name}: {subscriptions.subscription.name}
+  //                 </li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                   {subscriptionAmount.toFixed(2)}/Workorder
+  //                 </li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                   {parseFloat(adjustmentvalue || 0).toFixed(2)}
+  //                 </li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                   {discount.toFixed(2)}
+  //                 </li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                   {subTotal.toFixed(2)}
+  //                 </li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                   {taxValue.toFixed(2)}
+  //                 </li>
+  //                 <li style={{ borderBottom: '1px solid rgb(217,217,217)', fontSize: "15px", color: "rgb(49,91,140)" }}>
+  //                   {subscriptionSubTotal.toFixed(2)}
+  //                 </li>
+  //               </ul>
+  //             </td>
+  //           );
+  //         }
+  //       });
+  //     });
+  //   });
+
+  //   return null; // Return null if you don't want to render anything
+  // };
+
+  const [isCustom, setIsCustom] = useState(false)
 
   const CalculatorFilledItem = () => {
     return ShowServiceList?.map((element, _id) =>
@@ -2727,7 +2957,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
       <div style={{ position: 'relative', width: ' 100%', float: 'right', marginTop: '23px' }}>
         <Row gutter={[12, -5]}>
           <Col className="gutter-row" span={5}>
-            <Form.Item>
+            <Form.Item style={{ marginTop: '16px' }}>
               <Button type="primary" htmlType="submit" icon={<PlusOutlined />} block>
                 {translate('Save')}
               </Button>

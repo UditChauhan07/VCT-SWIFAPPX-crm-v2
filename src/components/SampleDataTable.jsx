@@ -36,15 +36,24 @@ function AddNewItem({ config }) {
     if (entity == 'customer') {
       setIsVisible(true);
     }
-
     panel.open();
     collapsedBox.close();
   };
 
   return (
-    <Button onClick={handelClick} type="primary" icon={<PlusOutlined />}>
-      {ADD_NEW_ENTITY}
-    </Button>
+    <>
+      {loading ? (
+        <Spin>
+          <Button type="primary" icon={<PlusOutlined />} disabled>
+            {ADD_NEW_ENTITY}
+          </Button>
+        </Spin>
+      ) : (
+        <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+          {ADD_NEW_ENTITY}
+        </Button>
+      )}
+    </>
   );
 }
 

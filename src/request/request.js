@@ -39,7 +39,7 @@ axios.interceptors.request.use(
 const request = {
   create: async ({ entity, id, jsonData }) => {
     try {
-      let url = entity + '/create';
+      let url = `${entity}/create`;
       if (entity === 'clientaddress' && id) {
         url = `${entity}/create/${id}`;
       }
@@ -50,6 +50,7 @@ const request = {
         notifyOnSuccess: true,
         notifyOnFailed: true,
       });
+
       return response.data;
     } catch (error) {
       return errorHandler(error);

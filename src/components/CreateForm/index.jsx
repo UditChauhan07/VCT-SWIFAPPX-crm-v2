@@ -60,7 +60,7 @@ export default function CreateForm({ config, formElements, withUpload = false  }
     <Loading isLoading={isLoading}>
       <Form form={form} layout="vertical"  onFinish={onSubmit}>
         {formElements}
-        <Form.Item>
+        <Form.Item style={{ marginTop: '12%' }} >
           <Button type="primary" htmlType="submit" >
             {translate('Submit')}
           </Button>
