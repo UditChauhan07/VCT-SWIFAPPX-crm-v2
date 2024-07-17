@@ -1,9 +1,5 @@
 import { Avatar, Popover, Button, Badge } from 'antd';
-
-// import Notifications from '@/components/Notification';
-
 import { RocketOutlined } from '@ant-design/icons';
-
 import useLanguage from '@/locale/useLanguage';
 
 export default function UpgradeButton() {
@@ -42,6 +38,3 @@ export default function UpgradeButton() {
   );
 }
 
-//  console.log(
-//    '🚀 Welcome to IDURAR ERP CRM! Did you know that we also offer commercial customization services? Contact us at hello@idurarapp.com for more information.'
-//  );

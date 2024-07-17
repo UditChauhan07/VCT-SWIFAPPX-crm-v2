@@ -95,7 +95,7 @@ function SearchItemComponent({ config, onRerender }) {
       loading={isLoading}
       showSearch
       allowClear
-      // placeholder={<SearchOutlined style={{ float: 'right', padding: '8px 0' }} />}
+     
       placeholder="Search"
       defaultActiveFirstOption={false}
       filterOption={false}

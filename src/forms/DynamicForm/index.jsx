@@ -27,7 +27,7 @@ import { useParams } from 'react-router-dom';
 
 
 export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
-     
+
   const [feedback, setFeedback] = useState();
   const [selectedRole, setSelectedRole] = useState('');
   const [roles, setRoles] = useState([]);
@@ -75,7 +75,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
     //     } catch (error) {
     //       console.error('Error fetching data:', error);
     //     }
-        
+
     //   };
 
     //   fetchData();
@@ -85,22 +85,22 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
         try {
           const response = await request.getCategorySubscription();
           if (response.success) {
-            console.log({ response });
+      
             setCheckBoxes(response.result);
           } else {
-            // Handle error notification or UI changes
+          
             console.error('Request error:', response.message);
           }
         } catch (error) {
           console.error('Error fetching data:', error);
         } finally {
-          setLoading(false); // Set loading to false once data fetching is done
+          setLoading(false); 
         }
       };
-  
+
       fetchData();
     }, []);
-  
+
   }
 
 
@@ -122,21 +122,21 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
             return (
 
               <>
-        
-            <Spin spinning={loading}>
-        {checkboxes.length > 0 && (
-          <FormElement
-            setFeedback={setFeedback}
-            field={field}
-            checkboxes={checkboxes}
-          />
-        )}
-      </Spin>
-      
-            </>
+
+                <Spin spinning={loading}>
+                  {checkboxes.length > 0 && (
+                    <FormElement
+                      setFeedback={setFeedback}
+                      field={field}
+                      checkboxes={checkboxes}
+                    />
+                  )}
+                </Spin>
+
+              </>
 
 
-              
+
               // <FormElement
               //   setFeedback={setcheckedOption}
               //   key={key}
@@ -148,7 +148,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
             if (feedback == field.feedback) return <FormElement key={key} field={field} />;
           } else {
             return <FormElement key={key} field={field} entity={entity} />;
-            // return <FormElement key={key} field={field} entity={entity} />;
+        
           }
         }
       })}
@@ -157,7 +157,7 @@ export default function DynamicForm({ fields, entity, isUpdateForm = false }) {
 }
 
 function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }) {
-  
+
   const placeholderText = field.name === 'package_divider' ? 'Please enter package divider' : 'Please enter Name';
 
   const translate = useLanguage();
@@ -181,7 +181,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
     password: <Input.Password autoComplete="new-password" />,
     boolean: <Switch defaultValue={true} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />,
-    // getclientId : <Input defaultValue={id} />,   
+    
     date: (
       <DatePicker
         placeholder={translate('select_date')}
@@ -211,7 +211,7 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         style={{
           width: '100%',
         }}
-         placeholder="Please select Type"
+        placeholder="Please select Type"
       >
         {field.options?.map((option) => {
           return (
@@ -431,14 +431,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     textarea: 'string',
     number: 'number',
     phone: 'phone',
-    //boolean: 'boolean',
-    // method: 'method',
-    // regexp: 'regexp',
-    // integer: 'integer',
-    // float: 'float',
-    // array: 'array',
-    // object: 'object',
-    // enum: 'enum',
     date: 'date',
     url: 'url',
     website: 'url',
@@ -446,13 +438,153 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];
-  
 
+  const [phoneError, setPhoneError] = useState(null);
+
+  const handlePhoneBlur = (event) => {
+    const value = event.target.value;
+    const phoneRegex = /^\d{10}$/; // Regular expression to match exactly 10 digits
+    if (!phoneRegex.test(value)) {
+      setPhoneError('Please enter a valid 10-digit mobile number');
+    } else {
+      setPhoneError(null);
+    }
+  };
+
+  const getValidator = (field) => {
+    if (field.type === 'phone' && entity !== 'people') {
+      return (rule, value) => {
+        if (phoneError) {
+          return Promise.reject(phoneError);
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'package_divider') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please enter package divider');
+        }
+        if (isNaN(value)) {
+          return Promise.reject('Only numeric value is accepted');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'price') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please enter package divider');
+        }
+        if (isNaN(value)) {
+          return Promise.reject('Only numeric value is accepted');
+        }
+        if (value.length > 5) {
+          return Promise.reject('Price can have a maximum of 10 values');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'type') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please select type');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'role') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please select role');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'people') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please select people');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'productCategory') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please select productCategory');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'color') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please select color');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'state') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please enter State');
+        }
+        if (value.length > 10) {
+          return Promise.reject('State can have a maximum of 10 values');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'zipCode') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please select postal_code');
+        }
+        if (isNaN(value)) {
+          return Promise.reject('Only numeric value is accepted');
+        }
+        if (value.length > 10) {
+          return Promise.reject('ZipCode can have a maximum of 10 values');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    if (field.name === 'package_type') {
+      return (rule, value) => {
+        if (!value || value === '') {
+          return Promise.reject('Please select package type');
+        }
+        return Promise.resolve();
+      };
+    }
+
+    return undefined;
+  };
 
   return (
- 
+
 
     // <Form.Item
+    //   : field.name === 'block' ? (rule, value) => {
+    // if (!value || value === '') {
+    //   return Promise.reject('Please select Block');
+    // }
+    // if (value.length > 10) {
+    //   return Promise.reject('Block can have a maximum of 10 values');
+    // }
+    // return Promise.resolve();
+    // { renderComponent }
     //   label={translate(field.label)}
     //   name={field.name}
     //   rules={[
@@ -489,7 +621,6 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     // {renderComponent}
     // </Form.Item>
 
-
     <Form.Item
       label={translate(field.label)}
       name={field.name}
@@ -497,107 +628,29 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
         {
           required: field.required || false,
           type: filedType[field.type] ?? 'any',
-          validator: field.type === 'phone'  && entity !== 'people' ? (rule, value) => {
-            const phoneRegex = /^\d{10}$/; // Regular expression to match exactly 10 digits
-            if (!phoneRegex.test(value)) {
-              return Promise.reject('Please enter a valid 10-digit mobile number.');
-            }
-            return Promise.resolve();
-          } : 
-          
-          field.name === 'package_divider' ? (rule, value) => {
-            if (!value || value === '') { 
-              return Promise.reject('Please enter package divider.');
-            }
-            if (isNaN(value)) { 
-              return Promise.reject('Only numeric value is accepted.');
-
-            }
-
-            return Promise.resolve();
-          } 
-          : field.name === 'price' ? (rule, value) => {
-            if (isNaN(value)) { // Check if value is not a number
-              return Promise.reject('Only numeric value is accepted.');
-            }
-            if (value.length > 5) {
-              return Promise.reject('Price can have a maximum of 10  values.');
-            }
-            return Promise.resolve();
-          } : field.name === 'type' ? (rule, value) => {
-            if (field.name === 'type' && (!value || value === '')) {
-              return Promise.reject('Please select type.');
-            }
-            return Promise.resolve();
-          } 
-          // : field.name === 'company' ? (rule, value) => {
-          //   if (field.name === 'company' && (!value || value === '')) {
-          //     return Promise.reject('Please select company.');
-          //   }
-          // }
-           : field.name === 'role' ? (rule, value) => {
-            if (field.name === 'role' && (!value || value === '')) {
-              return Promise.reject('Please select role.');
-            }
-            return Promise.resolve();
-          } : field.name === 'productCategory' ? (rule, value) => {
-            if (field.name === 'productCategory' && (!value || value === '')) {
-              return Promise.reject('Please select productCategory.');
-            }
-            return Promise.resolve();
-          } : field.name === 'color' ? (rule, value) => {
-            if (field.name === 'color' && (!value || value === '')) {
-              return Promise.reject('Please select color.');
-            }
-            return Promise.resolve();
-          } : field.name === 'block' ? (rule, value) => {
-            if (value.length > 10) {
-              return Promise.reject('Block can have a maximum of 10 values.');
-            }
-            return Promise.resolve();
-          } : field.name === 'state' ? (rule, value) => {
-            if (value.length > 10) {
-              return Promise.reject('State can have a maximum of 10 values.');
-            }
-            return Promise.resolve();
-          } : field.name === 'country'  && entity !== 'people' ? (rule, value) => {
-            if (value.length > 10) {
-              return Promise.reject('Country can have a maximum of 10  values.');
-            }
-            return Promise.resolve();
-          } : field.name === 'zipCode' ? (rule, value) => {
-            if (value.length > 10) {
-              return Promise.reject('ZipCode can have a maximum of 10  values.');
-            }
-            return Promise.resolve();
-          } :  field.name === 'package_type' ? (rule, value) => {
-            if (!value || value === '') {
-              return Promise.reject('Please select package type.');
-            }
-            return Promise.resolve();
-          } : undefined,
+          validator: getValidator(field),
         },
-
-        // ...(field.name === 'name' || 'firstname'   ? [  
-        //     // { required: true, message: 'Name is required' },
-        //     { min: 3, message: 'Name must be at least 3 characters.' },
-        //     { max: 30, message: 'Name must be in 30 characters.' },
-        //   ]
-        //   : []),
-
-        ...(field.name === 'name' || field.name === 'firstname' || field.name === 'label' || field.name === 'contactPerson' || field.name === 'contactPerson' || field.name === "street" || field.name === "unit" ? (
-          entity === 'people' || 'subscriptiontype' || "clientaddress" ? [
-            // { required: true, message: 'Name is required' },
-
-            { min: 3, message: 'Name must be at least 3 characters.' },
-            { max: 30, message: 'Name must be in 30 characters.' },
+        ...(field.name === 'name' ||
+          field.name === 'firstname' ||
+          field.name === 'label' ||
+          field.name === 'contactPerson' ||
+          field.name === 'street' ||
+          field.name === 'unit' ||
+          field.name === 'block' ? (
+          entity === 'people' || entity === 'subscriptiontype' || entity === 'clientaddress' ? [
+            { min: 3, message: 'Name must be at least 3 characters' },
+            { max: 30, message: 'Name must be in 30 characters' },
           ] : []
         ) : []),
       ]}
       valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
     >
-      {renderComponent}
+      {field.type === 'phone' && entity !== 'people' ? (
+        <Input onBlur={handlePhoneBlur} />
+      ) : (
+        renderComponent
+      )}
     </Form.Item>
-
+   
   );
 }

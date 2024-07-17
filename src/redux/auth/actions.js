@@ -9,7 +9,7 @@ export const login =
       type: actionTypes.REQUEST_LOADING,
     });
     const data = await authService.login({ loginData });
-
+    
     if (data.success === true) {
       const auth_state = {
         current: data.result,
