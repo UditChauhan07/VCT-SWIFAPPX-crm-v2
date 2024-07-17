@@ -13,6 +13,7 @@ import UpgradeButton from './UpgradeButton';
 
 
 
+
 export default function HeaderContent() {
   const currentAdmin = useSelector(selectCurrentAdmin);
   const { Header } = Layout;
@@ -60,20 +61,15 @@ export default function HeaderContent() {
     return <span style={{}}>{text}</span>;
   };
 
-  const settings = {
-    method: 'POST',
-  
-  };
 
 
-const Loogout = async () =>{
-  const response = await request.Loogout();
-  console.log(response)
-  // const res = await fetch(`http://localhost:8001/api/logout`, settings )
-  //  console.log(res)
-  // localStorage.clear();
-  navigate('/logout')
-}
+
+//   const Loogout = async () =>{
+//   const response = await request.Loogout();
+//   console.log(response)
+//   localStorage.clear();
+//   navigate('/logout')
+// }
 
   const items = [
     {
@@ -107,7 +103,7 @@ const Loogout = async () =>{
       key: 'logout',
       // label: <Link to={'/logout'}>{translate('logout')}</Link>,
       label:  translate('logout') ,
-      onClick: () => Loogout() 
+      onClick: () => request.Loogout(navigate) 
     },
   ];
   return (

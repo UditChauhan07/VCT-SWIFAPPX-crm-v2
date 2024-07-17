@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 const Logout = lazy(() => import('@/pages/Logout.jsx'));
@@ -67,8 +67,35 @@ const Contracts = lazy(() => import('@/pages/Contracts'));
 const ContractCreate = lazy(() => import('@/pages/Contracts/ContractCreate'));
 const ContractRead = lazy(() => import('@/pages/Contracts/ContractRead'));
 const ConvertQt_To_Contract = lazy(() => import('@/pages/Convert_QT_to_Contract/CreateContract'));
+// import { checkLoginDuration } from '../auth/auth.service';
+import {  request } from '@/request';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function AppRouter() {
+
+  const navigate = useNavigate();
+
+  const checkLoginDuration = () => {
+  const loginTime = localStorage.getItem('loginTime');
+  if (!loginTime) {
+    return;
+  }
+  const currentTime = new Date().getTime();
+  const timeElapsed = currentTime - loginTime;
+
+  if (timeElapsed >= 86400000) {
+     request.Loogout(navigate)
+    // window.location.href = '/login';
+  }
+};
+
+  useEffect(() => {
+    const interval = setInterval(checkLoginDuration, 30000); // Check every minute
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
+
+
   let element = useRoutes([
     {
       path: '/login',

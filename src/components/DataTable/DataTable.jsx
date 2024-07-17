@@ -38,6 +38,16 @@ function AddNewItem({ config }) {
 
  
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if config.ADD_NEW_ENTITY is available
+    if (ADD_NEW_ENTITY) {
+      setLoading(false);
+    }
+  }, [config]);
+
+
 
   const handleClick = () => {
     if (entity == 'customer') {
@@ -48,10 +58,20 @@ function AddNewItem({ config }) {
   };
 
   return (
-    <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
-      {ADD_NEW_ENTITY}
+    // <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+    //   {ADD_NEW_ENTITY}
 
-    </Button>
+    // </Button>
+
+    <div>
+    {loading ? (
+      <Spin  /> // Show loader while loading
+    ) : (
+      <Button onClick={handleClick} type="primary" icon={<PlusOutlined />}>
+        {ADD_NEW_ENTITY}
+      </Button>
+    )}
+  </div>
  
   );
 }

@@ -1683,7 +1683,7 @@ function LoadQuoteForm({ subTotal = 0, current = null, selectedItem }) {
       {/* NEW CODE */}
 
       {activeness == 2 ||
-        (ConvertQuote.customService.name && (
+        (ConvertQuote.customService?.name && (
           <>
             <Row gutter={[12, 12]} style={{ position: 'relative' }}>
               <Col className="gutter-row" span={12}>
@@ -1997,6 +1997,7 @@ function LoadQuoteForm({ subTotal = 0, current = null, selectedItem }) {
             </Collapse>
           </>
         ))}
+
 
       {activeSelect == 2 && (
         <>

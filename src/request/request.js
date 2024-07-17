@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '@/config/serverApiConfig';
 import errorHandler from './errorHandler';
 import successHandler from './successHandler';
+import { useNavigate } from 'react-router-dom';
 // import { useEffect, useState } from 'react'
 // import { useParams } from 'react-router-dom'
 
@@ -15,6 +16,7 @@ const getToken = () => {
 
   return token;
 };
+
 
 // Adding a request interceptor
 
@@ -511,7 +513,8 @@ const request = {
     }
   },
 
-   Loogout : async () => {
+   Loogout : async (navigate) => {
+
     try {
       const token = getToken();
       const response = await axios.post('logout', {}, {
@@ -519,6 +522,11 @@ const request = {
           Authorization: `Bearer ${token}`
         }
       });
+      successHandler(response, {
+        notifyOnSuccess: true,
+        notifyOnFailed: true,
+      });
+     navigate('/login')
       return response.data;
     } catch (error) {
       return errorHandler(error);
