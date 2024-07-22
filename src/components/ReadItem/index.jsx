@@ -12,23 +12,29 @@ import { useDate } from '@/settings';
 export default function ReadItem({ config }) {
   const { dateFormat } = useDate();
   let { readColumns, fields } = config;
-  console.log(config)
+
+
 
   const translate = useLanguage();
   const { result: currentResult } = useSelector(selectCurrentItem);
+  console.log(currentResult)
   const { state } = useCrudContext();
   const { isReadBoxOpen } = state;
   const [listState, setListState] = useState([]);
   
   const readFields = !readColumns ? fields : readColumns;
+
   if (fields) readColumns = [...dataForRead({ fields: readFields, translate: translate })];
+  console.log(readColumns)
+ 
   useEffect(() => {
     const list = [];
-    readColumns?.map((props) => {
+    readColumns?.map((props) => {    
       const propsKey = props.dataIndex;
       const propsTitle = props.title;
       const isDate = props.isDate || false;
       let value = valueByString(currentResult, propsKey);
+            
       value = isDate ? dayjs(value).format(dateFormat) : value;
       list.push({ propsKey, label: propsTitle, value: value });
     });
@@ -38,6 +44,7 @@ export default function ReadItem({ config }) {
   const show = isReadBoxOpen ? { display: 'block', opacity: 1 } : { display: 'none', opacity: 0 };
 
   const itemsList = listState?.map((item) => {
+    console.log(item)
     
 
     return (

@@ -18,7 +18,7 @@ export const fields = {
     entity: 'company',
     displayLabels: ['name'],
     searchFields:[ 'name'],
-    dataIndex: ['company', 'name'],
+    dataIndex: ['company','name'],
     disableForTable: true,
     feedback: 'Company',
     required: true,
@@ -44,7 +44,7 @@ export const fields = {
     displayLabels: ['email'],
     dataIndex: ['userAdmin', 'email'],
     hasFeedback: true,
-     disableForForm:false,
+    //  disableForForm:false,
   },
   password: {
     type: 'password',

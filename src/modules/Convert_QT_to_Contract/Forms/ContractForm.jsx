@@ -98,7 +98,7 @@ function LoadQuoteForm({ subTotal = 0, current = null, selectedItem }) {
   const [activeness, IsActiveness] = useState(1);
   const [activeSelect, IsActiveSelect] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  
   const handelTaxChange = (value) => {
     setTaxRate(value / 100);
   };
@@ -236,7 +236,7 @@ function LoadQuoteForm({ subTotal = 0, current = null, selectedItem }) {
     setSubItemId([]);
     setSubItemCount(0);
     setSelectedOption(true);
-    // Show all subscriptions corresponding to the selected option
+
     setShowServiceId();
     IsActiveness(0);
     IsActiveSelect(0);
@@ -248,7 +248,7 @@ function LoadQuoteForm({ subTotal = 0, current = null, selectedItem }) {
     const fetchData2 = async () => {
       try {
         const response = await request.getServiceCategoryOptions({ id: value });
-      
+        console.log(response)
         if (response.success) {
           setServiceOptions(response.result);
           getProductHandler();
@@ -291,12 +291,12 @@ function LoadQuoteForm({ subTotal = 0, current = null, selectedItem }) {
 
     try {
       const response = await request.getSearchClientAddress(event);
-      
+        console.log(response)
       if (response.success) {
         setCustomerAddress(response.result);
-        // setCustomerAddressEvent(event);
+      
         form.setFieldsValue({ clientAddress: null });
-        // Set options state based on API response
+       
       } else {
         setCustomerAddress([]);
         form.setFieldsValue({ clientAddress: null });
@@ -315,26 +315,7 @@ function LoadQuoteForm({ subTotal = 0, current = null, selectedItem }) {
     setCustomerAddress([]); 
   };
 
-  const getServicesSubAndItems = async (event) => {
-    try {
-     
-      const data = [
-        { value: '1', label: 'Home' },
-        { value: '3', label: 'Billing' },
-        { value: '4', label: 'Shipping' },
-      ];
-     
-      const extractedOptions = data?.map((item) => ({
-        value: item.value,
-        label: item.label,
-      }));
 
-     
-      setSecondDropdownOptions(extractedOptions);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
   const [accordionActiveKey, setAccordionActiveKey] = useState([]);
   const handleChange = (key) => {
     setAccordionActiveKey(key);

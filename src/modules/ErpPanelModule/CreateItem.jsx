@@ -45,11 +45,6 @@ export default function CreateItem({ config, CreateForm }) {
 localStorage.removeItem('ZeFnMqDC7ktkKDB');
       }, []);
 
-  // useEffect(() => {
-  //   localStorage.removeItem('ServiceCostitem');
-
-  // }, [])
-  
 
 
   useEffect(() => {
@@ -146,7 +141,7 @@ localStorage.removeItem('ZeFnMqDC7ktkKDB');
             data: [],
           };
           for (let j = 0; j < Object.keys(option).length - 1; j++) {
-            console.log('jiji', j);
+  
             let price = option[`price${j}`];
             let name =
               fieldsValue[Object.keys(fieldsValue).filter((ele) => ele === `name${j}`)?.[0]];
@@ -180,6 +175,7 @@ localStorage.removeItem('ZeFnMqDC7ktkKDB');
             startTime: fieldsValue.startTime,
             endTime: fieldsValue.endTime,
           }));
+          console.log(Worker)
 
 
           const fielduser = [Leader, ...Worker];

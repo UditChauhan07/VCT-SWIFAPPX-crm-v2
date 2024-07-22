@@ -40,6 +40,7 @@ export default function ReadRoleItem({ config, selectedItem }) {
 
   // const [itemslist, setItemsList] = useState([]);
   const [currentErp, setCurrentErp] = useState(selectedItem);
+  console.log(currentErp)
 
   return (
     <>
