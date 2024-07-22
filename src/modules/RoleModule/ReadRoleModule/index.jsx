@@ -1,7 +1,6 @@
 import NotFound from '@/components/NotFound';
 import { ErpLayout } from '@/layout';
 import ReadRoleItem from './ReadRoleItem';
-
 import PageLoader from '@/components/PageLoader';
 import { erp } from '@/redux/erp/actions';
 import useLanguage from '@/locale/useLanguage';
@@ -9,6 +8,7 @@ import { selectReadItem } from '@/redux/erp/selectors';
 import { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
+
 
 export default function ReadRoleModule({ config }) {
   const dispatch = useDispatch();
@@ -20,6 +20,7 @@ export default function ReadRoleModule({ config }) {
   }, [id]);
 
   const { result: currentResult, isSuccess, isLoading = true } = useSelector(selectReadItem);
+
 
   if (isLoading) {
     return (

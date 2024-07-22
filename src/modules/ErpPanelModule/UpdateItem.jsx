@@ -29,6 +29,7 @@ function SaveForm({ form, translate }) {
 
 export default function UpdateItem({ config, UpdateForm }) {
 
+
   const translate = useLanguage();
   let { entity } = config;
 

@@ -435,6 +435,8 @@ function FormElement({ field, entity, setFeedback, roles = [], checkboxes = [] }
     url: 'url',
     website: 'url',
     email: 'email',
+
+    
   };
 
   const renderComponent = compunedComponent[field.type] ?? compunedComponent['string'];

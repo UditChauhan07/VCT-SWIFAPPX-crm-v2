@@ -634,7 +634,10 @@ export default function ReadItem({ config, selectedItem }) {
                         marginTop: '19px',
                       }}
                     >
-                      {currentErp.salesPerson.name} <br></br>
+                      {/* {currentErp.salesPerson.name}  */}
+                      {currentErp && currentErp.salesPerson && currentErp.salesPerson.name ? currentErp.salesPerson.name : ""}
+
+                      <br></br>
                     </p>
                   </Col>
                 </Row>
@@ -1375,7 +1378,9 @@ export default function ReadItem({ config, selectedItem }) {
                       <Row style={{ padding: '0px 0px 0px 20px' }}>
                         <Col span={6}>
                           <p style={{ fontSize: '15px', fontWeight: '600' }}>
-                            {translate(ele.user.name)} <br></br>
+                            {translate(ele.user?.name)} 
+                            
+                            <br></br>
                             {ele.isLeader && (
                               <span style={{ fontSize: '12px', color: '#7928dd' }}>Leader</span>
                             )}

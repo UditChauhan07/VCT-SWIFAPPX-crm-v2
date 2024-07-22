@@ -389,6 +389,7 @@ import styles from './styles.module.css'; // Import the CSS module
 let data = JSON.parse(localStorage.getItem('auth'));
 let user = data.current;
 
+
 var role = user?.role_id;
 var adminLevel = role?.admin_level;
 var isSAAS = role?.is_saas;
@@ -407,6 +408,11 @@ function LoadRoleForm({ isUpdateForm = false }) {
   const [form] = Form.useForm(); // Ensure useForm is properly used
   const { id } = useParams();
   const { current, isLoading, isSuccess } = useSelector(selectUpdatedItem);
+ 
+  console.log(current)
+
+
+
   const resetErp = {
     status: '',
   };
@@ -434,6 +440,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
     if (current) {
       setCurrentErp(current);
       let formData = { ...current };
+ 
       if (formData.date) {
         formData.date = dayjs(formData.date);
       }
@@ -445,6 +452,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
       form.setFieldsValue(formData);
     }
   }, [current]);
+
 
   let entities = [
     'people', 'api_access', 'company', 'lead', 'client', 'client_address', 'offer', 'invoice', 'quote', 'contract', 'workorder', 'payment', 'product', 'product_category', 'expense', 'expense_category', 'admin', 'roles', 'payment_mode', 'taxes', 'pricing_model', 'subscription_type', 'service_category', 'service_list', 'public_holiday', 'worker'
@@ -458,7 +466,7 @@ function LoadRoleForm({ isUpdateForm = false }) {
   const userLevels = [
     { value: "1", label: 'Swif SAAS Level' },
     { value: "2", label: 'Service Provider' },
-    { value: "3", label: 'End Customer' }
+    { value: "3", label: 'End Customer'}
   ];
 
   return (
@@ -487,7 +495,9 @@ function LoadRoleForm({ isUpdateForm = false }) {
           </Form.Item>
         </Col>
 
-        <Col className="gutter-row" span={adminLevel == 1 ? 12 : 12}>
+        <Col className="gutter-row" 
+        span={adminLevel == 1 ? 12 : 12}
+        >
           <Form.Item
             label={translate('User Level')}
             name="admin_level"
@@ -498,9 +508,12 @@ function LoadRoleForm({ isUpdateForm = false }) {
               },
             ]}
           >
-            <Select>
+            <Select >
+              
               {userLevels.map(({ value, label }) => (
-                <Select.Option key={value} value={value}>{translate(label)}</Select.Option>
+                <Select.Option key={value} 
+                value={value}
+                >{translate(label)}</Select.Option>
               ))}
             </Select>
           </Form.Item>

@@ -5,6 +5,7 @@ import { Grid, Layout, Drawer } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import CollapseBox from '../CollapseBox';
 import { Form } from 'antd';
+import { useLocation } from 'react-router-dom';
 const { useBreakpoint } = Grid;
 const { Sider } = Layout;
 
@@ -21,7 +22,7 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
   const [leftSider, setLeftSider] = useState('-1px');
   const [opacitySider, setOpacitySider] = useState(0);
   const [paddingTopSider, setPaddingTopSider] = useState('20px');
-
+  const [isCollapseOpen, setIsCollapseOpen] = useState(false);
 
   useEffect(() => {
     let timer = [];
@@ -45,10 +46,13 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
     return () => clearTimeout(timer);
   }, [isPanelClose]);
 
+
   const collapsePanel = () => {
     form.resetFields();
     panel.collapse();
   };
+
+
 
   const collapsePanelBox = () => {
     collapsedBox.close();
@@ -82,6 +86,7 @@ export default function SidePanel({ config, topContent, bottomContent, fixHeader
 
   );
 }
+
 
 // import { useState, useEffect } from 'react';
 // import { useCrudContext } from '@/context/crud';

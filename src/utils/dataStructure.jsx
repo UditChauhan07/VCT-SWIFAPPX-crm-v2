@@ -10,12 +10,14 @@ export const dataForRead = ({ fields, translate }) => {
 
   Object.keys(fields)?.forEach((key) => {
     let field = fields[key];
+    
     columns.push({
       title: field.label ? field.label : key,
       dataIndex: Array.isArray(field.dataIndex) ? field.dataIndex.join('.') : key,
       isDate: field.type === 'date',
     });
   });
+  //  console.log(columns)
 
   return columns;
 };

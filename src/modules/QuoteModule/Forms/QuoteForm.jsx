@@ -1002,7 +1002,7 @@ function LoadQuoteForm({ subTotal = 0, current = null }) {
 
   const [prices, setPrices] = useState({});
   const [quantities, setQuantities] = useState({});
-
+   console.log(prices,quantities)
   const [totals, setTotals] = useState({});
 
 
